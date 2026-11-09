@@ -68,6 +68,38 @@ def contrast_transfer(rows, arm, reps=5000, seed=20261109):
     return r
 
 
+def shortcut_baselines(salt: str, indices: list[int]) -> dict:
+    """Trivial/surface baselines on the same S3 items (no model): always the most common verdict, and a
+    surface rule (observation budget, horizon, intervention kind) -> most common verdict, fit on even world
+    indices and evaluated on odd ones.  Detects label shortcuts in the task construction."""
+    from collections import Counter, defaultdict
+
+    from ..s3_tasks import make_s3_items
+    items = []
+    for i in indices:
+        d = make_s3_items(salt, i)
+        for it in d["private"]["items"]:
+            q = it["query"]
+            items.append((i, (d["private"]["budget"], q["horizon"], q["intervention"]["kind"]), it["verdict"]))
+    train = [x for x in items if x[0] % 2 == 0]
+    test = [x for x in items if x[0] % 2 == 1]
+    maj = Counter(v for _, _, v in train).most_common(1)[0][0]
+    table = defaultdict(Counter)
+    for _, f, v in train:
+        table[f][v] += 1
+    rule = {f: c.most_common(1)[0][0] for f, c in table.items()}
+
+    def score(pred):
+        by = {c: [0, 0] for c in VERDICT_LABELS}
+        for (_, _f, v), p in zip(test, pred):
+            by[v][0] += 1
+            by[v][1] += int(p == v)
+        rec = [by[c][1] / by[c][0] for c in VERDICT_LABELS if by[c][0]]
+        return {"accuracy": sum(b[1] for b in by.values()) / len(test), "balanced_accuracy": sum(rec) / len(rec)}
+    return {"n_test_items": len(test), "majority_verdict": maj, "majority": score([maj] * len(test)),
+            "surface_rule": score([rule.get(f, maj) for _, f, _ in test])}
+
+
 def analyze(run_ids: list[str], out_dir: Path, reps: int = 5000) -> dict:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -95,6 +127,20 @@ def analyze(run_ids: list[str], out_dir: Path, reps: int = 5000) -> dict:
         # natural verdict distribution of the items actually asked
         res["verdict_distribution"] = {c: int(sum(r["arms"]["A"]["by_class"][c][0] for r in rows if "A" in r["arms"]))
                                        for c in VERDICT_LABELS}
+        # verdict/probability coherence per call kind (a model may use the probability channel as
+        # P(claim true/false) instead of confidence over the three statuses; Brier is then not calibration)
+        from collections import Counter
+        coh = {}
+        for r in recs:
+            calls = r["calls"].values() if isinstance(r["calls"], dict) else r["calls"]
+            for c in calls:
+                kind = c["call_id"].split("/")[-1].split("#")[0]
+                p = c.get("parsed") or {}
+                if p.get("probs_valid") and p.get("verdict_valid"):
+                    coh.setdefault(kind, Counter())["mismatch" if "verdict_prob_mismatch" in p.get("flags", []) else "coherent"] += 1
+        res["verdict_probability_coherence_by_call"] = {k: {**dict(v), "mismatch_rate": v["mismatch"] / sum(v.values())}
+                                                       for k, v in sorted(coh.items())}
+        res["shortcut_baselines"] = shortcut_baselines(recs[0]["salt"], sorted(r["world_index"] for r in recs))
         result[rid] = res
     (out_dir / "s3_summary.json").write_text(json.dumps(result, indent=1, sort_keys=True, default=str))
     digest = hashlib.sha256((out_dir / "s3_summary.json").read_bytes()).hexdigest()
