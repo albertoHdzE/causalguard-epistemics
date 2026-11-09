@@ -76,7 +76,9 @@ INSTRUCTIONS = (
     "- underdetermined: some consistent systems make it true and others make it false.\n"
     "Respond with ONLY a JSON object: {\"verdict\": \"entailed\"|\"refuted\"|\"underdetermined\", "
     "\"probabilities\": {\"entailed\": p1, \"refuted\": p2, \"underdetermined\": p3}, \"reason\": \"<one short "
-    "sentence>\"} where the probabilities are your confidence and sum to 1.")
+    "sentence>\"}. The three probabilities are your confidence that each of the three STATUSES is the correct "
+    "status (they are not probabilities that the claim is true or false); they must sum to 1 and the largest "
+    "should correspond to your verdict.")
 
 
 def describe_network(net: Network) -> str:

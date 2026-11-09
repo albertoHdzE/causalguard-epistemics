@@ -1,0 +1,52 @@
+{
+  "study": "S3",
+  "mode": "development",
+  "purpose": "S3 development pilot (exploratory)",
+  "salt": "dev-v1",
+  "world_index_start": 0,
+  "world_index_stop": 80,
+  "task": {
+    "n": 4,
+    "k": 2,
+    "items_per_world": 4
+  },
+  "provider": {
+    "kind": "openai_compatible",
+    "backend": "ollama",
+    "base_url": "http://127.0.0.1:11434/v1",
+    "model": "qwen2.5:7b",
+    "temperature": 0.0,
+    "sample_temperature": 0.7,
+    "max_tokens": 400,
+    "seed": 20261109,
+    "timeout_s": 120,
+    "max_transport_retries": 2,
+    "allow_remote": false
+  },
+  "harness": {
+    "arms": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "D_label",
+      "E",
+      "T_A",
+      "T_D"
+    ],
+    "feedback_rounds": 2,
+    "c_extra_samples": 2,
+    "transfer": {
+      "source_item": 0,
+      "target_item": 1
+    }
+  },
+  "caps": {
+    "calls_per_world": 40,
+    "calls_total": 4000
+  },
+  "runner": {
+    "workers": 1,
+    "world_timeout_s": 3600
+  }
+}
