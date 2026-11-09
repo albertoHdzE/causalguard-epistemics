@@ -24,16 +24,20 @@ _Last updated: 2026-11-09 (implementation iteration 1). Resume protocol: read th
 |---|---|
 | S2-smoke-tmp | 3-item smoke, directory deleted after the check (registry lines kept) |
 | S2-dev-v1 | complete, 420 worlds, 0 failures |
-| S1-dev-v1 | running/complete — check RUNS.jsonl end event |
-| S1-dev-v1-satproof | to run after S1-dev-v1 (index_sat certificate levels with the fixed checker, D16) |
+| S1-dev-v1 | complete: 2,344 ok, 1 recorded failure (dd assertion, D20) |
+| S1-dev-v1-rerun | complete: 670 ok (index_sat + bdd_ref, D16/D20); source for those backends |
+| S2-dev-null-v1 | complete: 250 null worlds (D21) |
 | s3-pilot-qwen25-7b-dev-v1, s3-pilot-gemma3-12b-dev-v1 | stopped, **invalidated** (B truncated; D19); kept |
-| s3-pilot-qwen25-7b-dev-v2, s3-pilot-gemma3-12b-dev-v2 | running (resumable: rerun the same command with the same run id) |
+| s3-pilot-qwen25-7b-dev-v2 | complete: 80 worlds, 2,400 physical calls, 0 failures (interrupted once and resumed, D22) |
+| s3-pilot-gemma3-12b-dev-v2 | running (resumable: `python -m causalguard.experiments.s3 --config configs/s3_pilot_gemma3_12b.json --run-id s3-pilot-gemma3-12b-dev-v2 --worlds 80 --quiet`) |
 
 ## Blocked / external input needed
 - Sprint start date (for pre-sprint vs sprint labelling).
 - Review approval and a FREEZE_RECORD before any confirmatory run.
 
+Public repository: https://github.com/albertoHdzE/causalguard-epistemics (CI green).
+
 ## Next exact actions
-1. When S1-dev-v1 ends: `python -m causalguard run --config configs/s1_dev_satproof.json --quiet`, then `python -m causalguard analyze-s1 --run-id S1-dev-v1 --run-id S1-dev-v1-satproof`.
-2. When both v2 pilots end: `python -c "from causalguard.analysis.s3_analysis import analyze; ..."` (see README) and write the S3 section.
-3. Finalize DEVELOPMENT_REPORT, DESIGN_SIZING, confirmatory.json, claim ledger, release.
+1. When the gemma v2 pilot ends: run the S3 analysis on both v2 runs (README), write the S3 sections of DEVELOPMENT_REPORT / DESIGN_SIZING / REVIEW_READY, add the S3 block to configs/confirmatory.json.
+2. Build artifacts/manifest.json (`scripts/build_manifest.py <run ids>`), save reports/test-output.txt, commit, tag `v0.1.0-dev`, push, upload the release asset, verify CI and clone.
+3. Stop at the review boundary (no confirmatory run).
