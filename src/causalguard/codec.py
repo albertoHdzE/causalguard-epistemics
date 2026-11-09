@@ -456,15 +456,31 @@ def _constructive_formula(table: int, d: int):
     return out
 
 
+def _xor_chain(d: int, negate: bool):
+    e = ("LEAF", 0)
+    for i in range(1, d):
+        e = ("XOR", e, ("LEAF", i))
+    return ("NOT", e) if negate else e
+
+
 def circuit_formula(rule: Rule) -> tuple[tuple | None, bool]:
-    """(formula, exact_minimum) for a canonical rule.  formula None for d=0."""
+    """(formula, exact_minimum) for a canonical rule.  formula None for d=0.
+
+    d <= 3: exhaustive minimum under this code.  d > 3: the shortest of three declared
+    constructions (on-set DNF, NOT of off-set DNF, XOR chain when the function is a parity),
+    an UPPER BOUND, flagged exact=False."""
     r = rule.canonical()
     d = r.arity
     if d == 0:
         return None, True
     if d <= 3:
         return _min_formulas(d)[r.table], True
-    return _constructive_formula(r.table, d), False
+    full = (1 << (1 << d)) - 1
+    cands = [_constructive_formula(r.table, d), ("NOT", _constructive_formula(full ^ r.table, d))]
+    par = sum(1 << y for y in range(1 << d) if bin(y).count("1") % 2)
+    if r.table in (par, full ^ par):
+        cands.append(_xor_chain(d, r.table != par))
+    return min(cands, key=lambda e: _formula_bits(e, d)), False
 
 
 def _write_formula(w: BitWriter, e, d: int) -> None:

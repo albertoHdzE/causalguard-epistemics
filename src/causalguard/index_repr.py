@@ -274,7 +274,7 @@ def _lift(local: tuple[int, int], inputs: tuple[int, ...]) -> Family:
     return Family(F, A)
 
 
-def from_rule(rule: Rule, n: int, polarity: str | int = "auto", cover_budget: int = 200000) -> NodeIndex:
+def from_rule(rule: Rule, n: int, polarity: str | int = "auto", cover_budget: int = 20000) -> NodeIndex:
     """Index representation of a local rule, lifted to the n-bit space.
 
     polarity='auto' chooses the polarity with fewer families (then fewer
