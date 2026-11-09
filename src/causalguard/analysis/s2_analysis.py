@@ -47,6 +47,11 @@ def _query_scores(rows: list[dict], kind: str) -> dict:
     out["uniform"] = sum((q["p_uniform"] if q["truth"] else 1 - q["p_uniform"]) for q in qs
                          if q["p_uniform"] is not None) / N
     out["uniform_missing"] = sum(1 for q in qs if q["p_uniform"] is None)
+    # Bayes predictor under a uniform prior on V(D): predict the majority answer of the compatible set
+    # (p > 0.5 -> 1; exact tie -> 0, counted).  Post-hoc richest control (DECISIONS D21).
+    out["vs_majority"] = sum(1 for q in qs if q["p_uniform"] is not None and int(q["p_uniform"] > 0.5) == q["truth"]) / N
+    out["vs_majority_ties"] = sum(1 for q in qs if q["p_uniform"] == 0.5)
+    out["truth_prevalence"] = sum(q["truth"] for q in qs) / N
     out["uniform_mc_se_mean"] = float(np.mean([q["uniform_se"] or 0.0 for q in qs]))
     out["uniform_mc_fraction"] = sum(1 for q in qs if q.get("uniform_method") == "monte_carlo") / N
     out["majority"] = sum(1 for q in qs if q["majority"] == q["truth"]) / N
@@ -129,7 +134,9 @@ def analyze(run_ids: list[str], out_dir: Path, reps_primary: int = 5000, reps_se
     prim_rows = _select(rows, population="realizable", regime="uniform_states", budget=16, kind="intervention")
     # restrict to the main realizable corpus (exclude the noise-stress worlds, which only ran uniform_states)
     noise_ids = {r["world_id"] for r in rows if "noise" in r["regime"]}
-    prim_rows = [r for r in prim_rows if r["world_id"] not in noise_ids]
+    prim_rows = [r for r in prim_rows if r["world_id"] not in noise_ids and r["family"] != "uniform_H"]
+    null_ids = {r["world_id"] for r in rows if r["family"] == "uniform_H"}
+    noise_ids = noise_ids | null_ids   # keep the null population out of every main-corpus table
     result["primary"] = contrast(prim_rows, "index", "uniform", reps_primary)
     result["primary_complete_case"] = contrast(prim_rows, "index", "uniform", reps_primary, complete_case=True)
     # ---------------- secondary / exploratory curves
@@ -147,7 +154,7 @@ def analyze(run_ids: list[str], out_dir: Path, reps_primary: int = 5000, reps_se
                              "empty_vs_rate": float(np.mean([r["empty_vs"] for r in sel])),
                              "mean_log10_vs": float(np.mean([r["log10_vs"] for r in sel if r["log10_vs"] != float("-inf")]
                                                             or [float("nan")]))}
-                    for m in CODECS + ("uniform", "majority", "consensus_coverage", "consensus_correct",
+                    for m in CODECS + ("uniform", "vs_majority", "majority", "truth_prevalence", "consensus_coverage", "consensus_correct",
                                        "consensus_wrong_hidden"):
                         vals = np.array([r[m] for r in sel if r.get(m) is not None], dtype=float)
                         entry[m] = stratified_mean(vals, s[[r.get(m) is not None for r in sel]]) if len(vals) else None
@@ -162,16 +169,18 @@ def analyze(run_ids: list[str], out_dir: Path, reps_primary: int = 5000, reps_se
         sec[f"uniform_states|B{B}|index-circuit"] = contrast(base, "index", "circuit", reps_secondary)
         sec[f"uniform_states|B{B}|index-majority"] = contrast(base, "index", "majority", reps_secondary)
     for regime in ("observational", "clamp_interventions", "active"):
-        base = _select(rows, population="realizable", regime=regime, budget=16, kind="intervention")
+        base = [r for r in _select(rows, population="realizable", regime=regime, budget=16, kind="intervention")
+                if r["world_id"] not in noise_ids]
         sec[f"{regime}|B16|index-uniform"] = contrast(base, "index", "uniform", reps_secondary)
     st = [r for r in _select(rows, population="realizable", regime="uniform_states", budget=16, kind="state")
           if r["world_id"] not in noise_ids]
     sec["uniform_states|B16|STATE-holdout|index-uniform"] = contrast(st, "index", "uniform", reps_secondary)
     # active vs random designed measurements at equal budgets (index accuracy and consensus coverage)
     for B in (4, 8, 16):
-        a = {r["world_id"]: r for r in _select(rows, population="realizable", regime="active", budget=B, kind="intervention")}
+        a = {r["world_id"]: r for r in _select(rows, population="realizable", regime="active", budget=B, kind="intervention")
+             if r["world_id"] not in noise_ids}
         u = {r["world_id"]: r for r in _select(rows, population="realizable", regime="uniform_states", budget=B,
-                                               kind="intervention")}
+                                               kind="intervention") if r["world_id"] not in noise_ids}
         ids = sorted(set(a) & set(u))
         if ids:
             for m in ("index", "consensus_coverage"):
@@ -185,7 +194,24 @@ def analyze(run_ids: list[str], out_dir: Path, reps_primary: int = 5000, reps_se
             sec[f"{pop}|uniform_states|B16|index-uniform(missing=0)"] = contrast(base, "index", "uniform", reps_secondary)
             sec[f"{pop}|uniform_states|B16|index-uniform(complete-case)"] = contrast(base, "index", "uniform",
                                                                                    reps_secondary, complete_case=True)
+    for B in (8, 16, 32):
+        base = [r for r in _select(rows, population="realizable", regime="uniform_states", budget=B, kind="intervention")
+                if r["world_id"] not in noise_ids]
+        for cd in ("index", "circuit"):
+            sec[f"POSTHOC|uniform_states|B{B}|{cd}-vs_majority"] = contrast(base, cd, "vs_majority", reps_secondary)
+        sec[f"POSTHOC|uniform_states|B{B}|vs_majority-uniform"] = contrast(base, "vs_majority", "uniform", reps_secondary)
     result["secondary_exploratory"] = sec
+    # ---------------- NULL population: worlds drawn uniformly from H (no simplicity in the generator)
+    null = {}
+    for regime in ("uniform_states", "observational", "clamp_interventions", "active"):
+        for B in (4, 8, 16, 32):
+            nr = _select(rows, family="uniform_H", regime=regime, budget=B, kind="intervention")
+            if not nr:
+                continue
+            for a, b in (("index", "uniform"), ("circuit", "uniform"), ("vs_majority", "uniform"),
+                         ("index", "vs_majority"), ("circuit", "vs_majority")):
+                null[f"{regime}|B{B}|{a}-{b}"] = contrast(nr, a, b, reps_secondary)
+    result["null_uniform_H"] = null
     # ---------------- noise stress (separate MDL experiment)
     noise = []
     for rate in ("0.01", "0.05", "0.1"):

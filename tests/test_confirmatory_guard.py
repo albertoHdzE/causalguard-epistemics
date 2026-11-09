@@ -64,6 +64,6 @@ def test_confirmatory_s2_plan_unique_items_and_worlds():
     cfg = json.loads((ROOT / "configs" / "confirmatory.json").read_text())
     items, excluded = rc.plan_s2_items(cfg["S2"], "dummy-not-confirmatory", None)
     ids = [i for i, _ in items]
-    assert len(ids) == len(set(ids)) == 1000 + 250 + 250 + 250
+    assert len(ids) == len(set(ids)) == 1000 + 250 + 250 + 250 + 250
     keys = {(p["population"], p["family"], p["index"]) for _, p in items}
     assert len(keys) == len(items)

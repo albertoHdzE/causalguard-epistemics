@@ -1,0 +1,3436 @@
+{
+ "amortized_totals": {
+  "bounded_random|n10": {
+   "bdd": {
+    "amortized_total": 70056,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 8296
+   },
+   "circuit": {
+    "amortized_total": 72200,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 10440
+   },
+   "dnf": {
+    "amortized_total": 70832,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 9072
+   },
+   "full": {
+    "amortized_total": 165280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103520
+   },
+   "gate": {
+    "amortized_total": 65992,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4232
+   },
+   "index": {
+    "amortized_total": 68720,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 6960
+   },
+   "lut": {
+    "amortized_total": 65592,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3832
+   }
+  },
+  "bounded_random|n128": {
+   "bdd": {
+    "amortized_total": 85656,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 23896
+   },
+   "circuit": {
+    "amortized_total": 91496,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 29736
+   },
+   "dnf": {
+    "amortized_total": 91920,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 30160
+   },
+   "gate": {
+    "amortized_total": 75256,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 13496
+   },
+   "index": {
+    "amortized_total": 93056,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 31296
+   },
+   "lut": {
+    "amortized_total": 74232,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 12472
+   }
+  },
+  "bounded_random|n16": {
+   "bdd": {
+    "amortized_total": 68296,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 6536
+   },
+   "circuit": {
+    "amortized_total": 69976,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8216
+   },
+   "dnf": {
+    "amortized_total": 68608,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 6848
+   },
+   "full": {
+    "amortized_total": 5305240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5243480
+   },
+   "gate": {
+    "amortized_total": 65200,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3440
+   },
+   "index": {
+    "amortized_total": 68024,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 6264
+   },
+   "lut": {
+    "amortized_total": 64880,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3120
+   }
+  },
+  "bounded_random|n256": {
+   "bdd": {
+    "amortized_total": 111000,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 49240
+   },
+   "circuit": {
+    "amortized_total": 122152,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 60392
+   },
+   "dnf": {
+    "amortized_total": 125896,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 64136
+   },
+   "gate": {
+    "amortized_total": 91096,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 29336
+   },
+   "index": {
+    "amortized_total": 130264,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 68504
+   },
+   "lut": {
+    "amortized_total": 89056,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 27296
+   }
+  },
+  "bounded_random|n32": {
+   "bdd": {
+    "amortized_total": 75240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 13480
+   },
+   "circuit": {
+    "amortized_total": 78208,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 16448
+   },
+   "dnf": {
+    "amortized_total": 76320,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 14560
+   },
+   "gate": {
+    "amortized_total": 69016,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 7256
+   },
+   "index": {
+    "amortized_total": 75968,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 14208
+   },
+   "lut": {
+    "amortized_total": 68376,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 6616
+   }
+  },
+  "bounded_random|n4": {
+   "bdd": {
+    "amortized_total": 65184,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3424
+   },
+   "circuit": {
+    "amortized_total": 65944,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4184
+   },
+   "dnf": {
+    "amortized_total": 64992,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3232
+   },
+   "full": {
+    "amortized_total": 63360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1600
+   },
+   "gate": {
+    "amortized_total": 63672,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1912
+   },
+   "index": {
+    "amortized_total": 64160,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2400
+   },
+   "lut": {
+    "amortized_total": 63512,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1752
+   }
+  },
+  "bounded_random|n6": {
+   "bdd": {
+    "amortized_total": 66680,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4920
+   },
+   "circuit": {
+    "amortized_total": 67824,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 6064
+   },
+   "dnf": {
+    "amortized_total": 66712,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4952
+   },
+   "full": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4880
+   },
+   "gate": {
+    "amortized_total": 64392,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2632
+   },
+   "index": {
+    "amortized_total": 65456,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3696
+   },
+   "lut": {
+    "amortized_total": 64152,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2392
+   }
+  },
+  "bounded_random|n64": {
+   "bdd": {
+    "amortized_total": 89896,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 28136
+   },
+   "circuit": {
+    "amortized_total": 96296,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 34536
+   },
+   "dnf": {
+    "amortized_total": 94624,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 32864
+   },
+   "gate": {
+    "amortized_total": 77336,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 15576
+   },
+   "index": {
+    "amortized_total": 94856,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 33096
+   },
+   "lut": {
+    "amortized_total": 76056,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 14296
+   }
+  },
+  "bounded_random|n8": {
+   "bdd": {
+    "amortized_total": 68304,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 6544
+   },
+   "circuit": {
+    "amortized_total": 70088,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 8328
+   },
+   "dnf": {
+    "amortized_total": 68336,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 6576
+   },
+   "full": {
+    "amortized_total": 83360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21600
+   },
+   "gate": {
+    "amortized_total": 65256,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3496
+   },
+   "index": {
+    "amortized_total": 67256,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5496
+   },
+   "lut": {
+    "amortized_total": 64944,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3184
+   }
+  },
+  "canalizing|n10": {
+   "bdd": {
+    "amortized_total": 67568,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5808
+   },
+   "circuit": {
+    "amortized_total": 67024,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5264
+   },
+   "dnf": {
+    "amortized_total": 66392,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4632
+   },
+   "full": {
+    "amortized_total": 165280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103520
+   },
+   "gate": {
+    "amortized_total": 66528,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4768
+   },
+   "index": {
+    "amortized_total": 65624,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3864
+   },
+   "lut": {
+    "amortized_total": 66224,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4464
+   }
+  },
+  "canalizing|n128": {
+   "bdd": {
+    "amortized_total": 79152,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 17392
+   },
+   "circuit": {
+    "amortized_total": 77976,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 16216
+   },
+   "dnf": {
+    "amortized_total": 74768,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 13008
+   },
+   "gate": {
+    "amortized_total": 76904,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 15144
+   },
+   "index": {
+    "amortized_total": 75552,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 13792
+   },
+   "lut": {
+    "amortized_total": 76136,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 14376
+   }
+  },
+  "canalizing|n16": {
+   "bdd": {
+    "amortized_total": 66616,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4856
+   },
+   "circuit": {
+    "amortized_total": 66208,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4448
+   },
+   "dnf": {
+    "amortized_total": 65264,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3504
+   },
+   "full": {
+    "amortized_total": 5305240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5243480
+   },
+   "gate": {
+    "amortized_total": 65944,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4184
+   },
+   "index": {
+    "amortized_total": 65056,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3296
+   },
+   "lut": {
+    "amortized_total": 65712,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3952
+   }
+  },
+  "canalizing|n256": {
+   "bdd": {
+    "amortized_total": 99376,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 37616
+   },
+   "circuit": {
+    "amortized_total": 96560,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 34800
+   },
+   "dnf": {
+    "amortized_total": 90296,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 28536
+   },
+   "gate": {
+    "amortized_total": 94440,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 32680
+   },
+   "index": {
+    "amortized_total": 92928,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 31168
+   },
+   "lut": {
+    "amortized_total": 92936,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 31176
+   }
+  },
+  "canalizing|n32": {
+   "bdd": {
+    "amortized_total": 72040,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 10280
+   },
+   "circuit": {
+    "amortized_total": 70920,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 9160
+   },
+   "dnf": {
+    "amortized_total": 68896,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 7136
+   },
+   "gate": {
+    "amortized_total": 70368,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8608
+   },
+   "index": {
+    "amortized_total": 68856,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 7096
+   },
+   "lut": {
+    "amortized_total": 69880,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8120
+   }
+  },
+  "canalizing|n4": {
+   "bdd": {
+    "amortized_total": 63912,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2152
+   },
+   "circuit": {
+    "amortized_total": 63720,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1960
+   },
+   "dnf": {
+    "amortized_total": 63552,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1792
+   },
+   "full": {
+    "amortized_total": 63360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1600
+   },
+   "gate": {
+    "amortized_total": 63424,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1664
+   },
+   "index": {
+    "amortized_total": 63344,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1584
+   },
+   "lut": {
+    "amortized_total": 63328,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1568
+   }
+  },
+  "canalizing|n6": {
+   "bdd": {
+    "amortized_total": 65256,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3496
+   },
+   "circuit": {
+    "amortized_total": 64944,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3184
+   },
+   "dnf": {
+    "amortized_total": 64552,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2792
+   },
+   "full": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4880
+   },
+   "gate": {
+    "amortized_total": 64664,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2904
+   },
+   "index": {
+    "amortized_total": 64016,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2256
+   },
+   "lut": {
+    "amortized_total": 64472,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2712
+   }
+  },
+  "canalizing|n64": {
+   "bdd": {
+    "amortized_total": 82928,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 21168
+   },
+   "circuit": {
+    "amortized_total": 81104,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 19344
+   },
+   "dnf": {
+    "amortized_total": 77024,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 15264
+   },
+   "gate": {
+    "amortized_total": 79512,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 17752
+   },
+   "index": {
+    "amortized_total": 77528,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 15768
+   },
+   "lut": {
+    "amortized_total": 78568,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 16808
+   }
+  },
+  "canalizing|n8": {
+   "bdd": {
+    "amortized_total": 66464,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4704
+   },
+   "circuit": {
+    "amortized_total": 66040,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4280
+   },
+   "dnf": {
+    "amortized_total": 65224,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3464
+   },
+   "full": {
+    "amortized_total": 83360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21600
+   },
+   "gate": {
+    "amortized_total": 65744,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3984
+   },
+   "index": {
+    "amortized_total": 64832,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3072
+   },
+   "lut": {
+    "amortized_total": 65512,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3752
+   }
+  },
+  "dense_random|n10": {
+   "bdd": {
+    "amortized_total": 485264,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 423504
+   },
+   "circuit": {
+    "amortized_total": 1357632,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1295872
+   },
+   "dnf": {
+    "amortized_total": 866632,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 804872
+   },
+   "full": {
+    "amortized_total": 165280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103520
+   },
+   "gate": {
+    "amortized_total": 166080,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 104320
+   },
+   "index": {
+    "amortized_total": 369744,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 307984
+   },
+   "lut": {
+    "amortized_total": 165680,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103920
+   }
+  },
+  "dense_random|n4": {
+   "bdd": {
+    "amortized_total": 65224,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3464
+   },
+   "circuit": {
+    "amortized_total": 65976,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4216
+   },
+   "dnf": {
+    "amortized_total": 64960,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3200
+   },
+   "full": {
+    "amortized_total": 63360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1600
+   },
+   "gate": {
+    "amortized_total": 63664,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1904
+   },
+   "index": {
+    "amortized_total": 64184,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2424
+   },
+   "lut": {
+    "amortized_total": 63504,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1744
+   }
+  },
+  "dense_random|n6": {
+   "bdd": {
+    "amortized_total": 79416,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 17656
+   },
+   "circuit": {
+    "amortized_total": 93376,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 31616
+   },
+   "dnf": {
+    "amortized_total": 81840,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 20080
+   },
+   "full": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4880
+   },
+   "gate": {
+    "amortized_total": 67040,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5280
+   },
+   "index": {
+    "amortized_total": 72120,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 10360
+   },
+   "lut": {
+    "amortized_total": 66800,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5040
+   }
+  },
+  "dense_random|n8": {
+   "bdd": {
+    "amortized_total": 144304,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 82544
+   },
+   "circuit": {
+    "amortized_total": 261968,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 200208
+   },
+   "dnf": {
+    "amortized_total": 178856,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 117096
+   },
+   "full": {
+    "amortized_total": 83360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21600
+   },
+   "gate": {
+    "amortized_total": 84000,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 22240
+   },
+   "index": {
+    "amortized_total": 119280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 57520
+   },
+   "lut": {
+    "amortized_total": 83680,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21920
+   }
+  },
+  "modular|n10": {
+   "bdd": {
+    "amortized_total": 66784,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5024
+   },
+   "circuit": {
+    "amortized_total": 65616,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3856
+   },
+   "dnf": {
+    "amortized_total": 67160,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5400
+   },
+   "full": {
+    "amortized_total": 165280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103520
+   },
+   "gate": {
+    "amortized_total": 64952,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3192
+   },
+   "index": {
+    "amortized_total": 66152,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4392
+   },
+   "lut": {
+    "amortized_total": 64720,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2960
+   }
+  },
+  "modular|n128": {
+   "bdd": {
+    "amortized_total": 76280,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 14520
+   },
+   "circuit": {
+    "amortized_total": 73232,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 11472
+   },
+   "dnf": {
+    "amortized_total": 76928,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 15168
+   },
+   "gate": {
+    "amortized_total": 71616,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 9856
+   },
+   "index": {
+    "amortized_total": 78192,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 16432
+   },
+   "lut": {
+    "amortized_total": 70960,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 9200
+   }
+  },
+  "modular|n16": {
+   "bdd": {
+    "amortized_total": 65824,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4064
+   },
+   "circuit": {
+    "amortized_total": 64848,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3088
+   },
+   "dnf": {
+    "amortized_total": 65744,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3984
+   },
+   "full": {
+    "amortized_total": 5305240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5243480
+   },
+   "gate": {
+    "amortized_total": 64328,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 2568
+   },
+   "index": {
+    "amortized_total": 65600,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3840
+   },
+   "lut": {
+    "amortized_total": 64120,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 2360
+   }
+  },
+  "modular|n256": {
+   "bdd": {
+    "amortized_total": 92416,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 30656
+   },
+   "circuit": {
+    "amortized_total": 86536,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 24776
+   },
+   "dnf": {
+    "amortized_total": 93832,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 32072
+   },
+   "gate": {
+    "amortized_total": 83272,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 21512
+   },
+   "index": {
+    "amortized_total": 97544,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 35784
+   },
+   "lut": {
+    "amortized_total": 81968,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 20208
+   }
+  },
+  "modular|n32": {
+   "bdd": {
+    "amortized_total": 69968,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8208
+   },
+   "circuit": {
+    "amortized_total": 68064,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 6304
+   },
+   "dnf": {
+    "amortized_total": 69880,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8120
+   },
+   "gate": {
+    "amortized_total": 66992,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5232
+   },
+   "index": {
+    "amortized_total": 69952,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8192
+   },
+   "lut": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4880
+   }
+  },
+  "modular|n4": {
+   "bdd": {
+    "amortized_total": 64072,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2312
+   },
+   "circuit": {
+    "amortized_total": 63656,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1896
+   },
+   "dnf": {
+    "amortized_total": 63856,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2096
+   },
+   "full": {
+    "amortized_total": 63360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1600
+   },
+   "gate": {
+    "amortized_total": 63400,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1640
+   },
+   "index": {
+    "amortized_total": 63568,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1808
+   },
+   "lut": {
+    "amortized_total": 63280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1520
+   }
+  },
+  "modular|n6": {
+   "bdd": {
+    "amortized_total": 65072,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3312
+   },
+   "circuit": {
+    "amortized_total": 64288,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2528
+   },
+   "dnf": {
+    "amortized_total": 64984,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3224
+   },
+   "full": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4880
+   },
+   "gate": {
+    "amortized_total": 63840,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2080
+   },
+   "index": {
+    "amortized_total": 64424,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2664
+   },
+   "lut": {
+    "amortized_total": 63680,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1920
+   }
+  },
+  "modular|n64": {
+   "bdd": {
+    "amortized_total": 78880,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 17120
+   },
+   "circuit": {
+    "amortized_total": 75080,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 13320
+   },
+   "dnf": {
+    "amortized_total": 79088,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 17328
+   },
+   "gate": {
+    "amortized_total": 72992,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 11232
+   },
+   "index": {
+    "amortized_total": 79952,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 18192
+   },
+   "lut": {
+    "amortized_total": 72240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 10480
+   }
+  },
+  "modular|n8": {
+   "bdd": {
+    "amortized_total": 65864,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4104
+   },
+   "circuit": {
+    "amortized_total": 64984,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3224
+   },
+   "dnf": {
+    "amortized_total": 65568,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3808
+   },
+   "full": {
+    "amortized_total": 83360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21600
+   },
+   "gate": {
+    "amortized_total": 64408,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2648
+   },
+   "index": {
+    "amortized_total": 65112,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3352
+   },
+   "lut": {
+    "amortized_total": 64240,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2480
+   }
+  },
+  "parity|n10": {
+   "bdd": {
+    "amortized_total": 69272,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 7512
+   },
+   "circuit": {
+    "amortized_total": 66080,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4320
+   },
+   "dnf": {
+    "amortized_total": 95720,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 33960
+   },
+   "full": {
+    "amortized_total": 165280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103520
+   },
+   "gate": {
+    "amortized_total": 64328,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2568
+   },
+   "index": {
+    "amortized_total": 81544,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 19784
+   },
+   "lut": {
+    "amortized_total": 66048,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4288
+   }
+  },
+  "parity|n128": {
+   "bdd": {
+    "amortized_total": 85064,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 23304
+   },
+   "circuit": {
+    "amortized_total": 76096,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 14336
+   },
+   "dnf": {
+    "amortized_total": 208112,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 146352
+   },
+   "gate": {
+    "amortized_total": 71000,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 9240
+   },
+   "index": {
+    "amortized_total": 195432,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 133672
+   },
+   "lut": {
+    "amortized_total": 76200,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 14440
+   }
+  },
+  "parity|n16": {
+   "bdd": {
+    "amortized_total": 68528,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 6768
+   },
+   "circuit": {
+    "amortized_total": 65592,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3832
+   },
+   "dnf": {
+    "amortized_total": 94232,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 32472
+   },
+   "full": {
+    "amortized_total": 5305240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5243480
+   },
+   "gate": {
+    "amortized_total": 63888,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 2128
+   },
+   "index": {
+    "amortized_total": 85880,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 24120
+   },
+   "lut": {
+    "amortized_total": 65616,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3856
+   }
+  },
+  "parity|n256": {
+   "bdd": {
+    "amortized_total": 111680,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 49920
+   },
+   "circuit": {
+    "amortized_total": 93304,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 31544
+   },
+   "dnf": {
+    "amortized_total": 385104,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 323344
+   },
+   "gate": {
+    "amortized_total": 82848,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 21088
+   },
+   "index": {
+    "amortized_total": 368456,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 306696
+   },
+   "lut": {
+    "amortized_total": 93320,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 31560
+   }
+  },
+  "parity|n32": {
+   "bdd": {
+    "amortized_total": 75184,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 13424
+   },
+   "circuit": {
+    "amortized_total": 69520,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 7760
+   },
+   "dnf": {
+    "amortized_total": 131128,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 69368
+   },
+   "gate": {
+    "amortized_total": 66336,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4576
+   },
+   "index": {
+    "amortized_total": 119048,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 57288
+   },
+   "lut": {
+    "amortized_total": 69504,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 7744
+   }
+  },
+  "parity|n4": {
+   "bdd": {
+    "amortized_total": 64424,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2664
+   },
+   "circuit": {
+    "amortized_total": 63576,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1816
+   },
+   "dnf": {
+    "amortized_total": 65816,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4056
+   },
+   "full": {
+    "amortized_total": 63360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1600
+   },
+   "gate": {
+    "amortized_total": 63080,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1320
+   },
+   "index": {
+    "amortized_total": 64392,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2632
+   },
+   "lut": {
+    "amortized_total": 63312,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1552
+   }
+  },
+  "parity|n6": {
+   "bdd": {
+    "amortized_total": 66832,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5072
+   },
+   "circuit": {
+    "amortized_total": 64656,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2896
+   },
+   "dnf": {
+    "amortized_total": 82904,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21144
+   },
+   "full": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4880
+   },
+   "gate": {
+    "amortized_total": 63376,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1616
+   },
+   "index": {
+    "amortized_total": 70816,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 9056
+   },
+   "lut": {
+    "amortized_total": 64680,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2920
+   }
+  },
+  "parity|n64": {
+   "bdd": {
+    "amortized_total": 89608,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 27848
+   },
+   "circuit": {
+    "amortized_total": 78432,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 16672
+   },
+   "dnf": {
+    "amortized_total": 220944,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 159184
+   },
+   "gate": {
+    "amortized_total": 72016,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 10256
+   },
+   "index": {
+    "amortized_total": 201960,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 140200
+   },
+   "lut": {
+    "amortized_total": 78400,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 16640
+   }
+  },
+  "parity|n8": {
+   "bdd": {
+    "amortized_total": 68304,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 6544
+   },
+   "circuit": {
+    "amortized_total": 65520,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3760
+   },
+   "dnf": {
+    "amortized_total": 87504,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 25744
+   },
+   "full": {
+    "amortized_total": 83360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21600
+   },
+   "gate": {
+    "amortized_total": 63880,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2120
+   },
+   "index": {
+    "amortized_total": 77392,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 15632
+   },
+   "lut": {
+    "amortized_total": 65488,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3728
+   }
+  },
+  "sparse_conj|n10": {
+   "bdd": {
+    "amortized_total": 68112,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 6352
+   },
+   "circuit": {
+    "amortized_total": 67176,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5416
+   },
+   "dnf": {
+    "amortized_total": 66248,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4488
+   },
+   "full": {
+    "amortized_total": 165280,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 103520
+   },
+   "gate": {
+    "amortized_total": 64312,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2552
+   },
+   "index": {
+    "amortized_total": 64832,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3072
+   },
+   "lut": {
+    "amortized_total": 70984,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 9224
+   }
+  },
+  "sparse_conj|n128": {
+   "bdd": {
+    "amortized_total": 81720,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 19960
+   },
+   "circuit": {
+    "amortized_total": 79360,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 17600
+   },
+   "dnf": {
+    "amortized_total": 74592,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 12832
+   },
+   "gate": {
+    "amortized_total": 72208,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 10448
+   },
+   "index": {
+    "amortized_total": 73488,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 11728
+   },
+   "lut": {
+    "amortized_total": 88192,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 26432
+   }
+  },
+  "sparse_conj|n16": {
+   "bdd": {
+    "amortized_total": 66984,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5224
+   },
+   "circuit": {
+    "amortized_total": 66232,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 4472
+   },
+   "dnf": {
+    "amortized_total": 65064,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 3304
+   },
+   "full": {
+    "amortized_total": 5305240,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5243480
+   },
+   "gate": {
+    "amortized_total": 63952,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 2192
+   },
+   "index": {
+    "amortized_total": 64360,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 2600
+   },
+   "lut": {
+    "amortized_total": 69888,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 8128
+   }
+  },
+  "sparse_conj|n256": {
+   "bdd": {
+    "amortized_total": 104192,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 42432
+   },
+   "circuit": {
+    "amortized_total": 99496,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 37736
+   },
+   "dnf": {
+    "amortized_total": 89552,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 27792
+   },
+   "gate": {
+    "amortized_total": 85384,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 23624
+   },
+   "index": {
+    "amortized_total": 87912,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 26152
+   },
+   "lut": {
+    "amortized_total": 119888,
+    "decoder_bits": 61760,
+    "objects": 2,
+    "payload_sum": 58128
+   }
+  },
+  "sparse_conj|n32": {
+   "bdd": {
+    "amortized_total": 73056,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 11296
+   },
+   "circuit": {
+    "amortized_total": 71472,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 9712
+   },
+   "dnf": {
+    "amortized_total": 68776,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 7016
+   },
+   "gate": {
+    "amortized_total": 66768,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5008
+   },
+   "index": {
+    "amortized_total": 67608,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 5848
+   },
+   "lut": {
+    "amortized_total": 78640,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 16880
+   }
+  },
+  "sparse_conj|n4": {
+   "bdd": {
+    "amortized_total": 63760,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2000
+   },
+   "circuit": {
+    "amortized_total": 63568,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1808
+   },
+   "dnf": {
+    "amortized_total": 63448,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1688
+   },
+   "full": {
+    "amortized_total": 63360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1600
+   },
+   "gate": {
+    "amortized_total": 63088,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1328
+   },
+   "index": {
+    "amortized_total": 63200,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1440
+   },
+   "lut": {
+    "amortized_total": 63304,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1544
+   }
+  },
+  "sparse_conj|n6": {
+   "bdd": {
+    "amortized_total": 64984,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3224
+   },
+   "circuit": {
+    "amortized_total": 64584,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2824
+   },
+   "dnf": {
+    "amortized_total": 64240,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2480
+   },
+   "full": {
+    "amortized_total": 66640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4880
+   },
+   "gate": {
+    "amortized_total": 63368,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1608
+   },
+   "index": {
+    "amortized_total": 63600,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1840
+   },
+   "lut": {
+    "amortized_total": 64640,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2880
+   }
+  },
+  "sparse_conj|n64": {
+   "bdd": {
+    "amortized_total": 85120,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 23360
+   },
+   "circuit": {
+    "amortized_total": 82152,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 20392
+   },
+   "dnf": {
+    "amortized_total": 76504,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 14744
+   },
+   "gate": {
+    "amortized_total": 73176,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 11416
+   },
+   "index": {
+    "amortized_total": 74776,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 13016
+   },
+   "lut": {
+    "amortized_total": 94432,
+    "decoder_bits": 61760,
+    "objects": 5,
+    "payload_sum": 32672
+   }
+  },
+  "sparse_conj|n8": {
+   "bdd": {
+    "amortized_total": 66920,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 5160
+   },
+   "circuit": {
+    "amortized_total": 66136,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 4376
+   },
+   "dnf": {
+    "amortized_total": 65224,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 3464
+   },
+   "full": {
+    "amortized_total": 83360,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 21600
+   },
+   "gate": {
+    "amortized_total": 63752,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 1992
+   },
+   "index": {
+    "amortized_total": 64200,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 2440
+   },
+   "lut": {
+    "amortized_total": 70448,
+    "decoder_bits": 61760,
+    "objects": 10,
+    "payload_sum": 8688
+   }
+  }
+ },
+ "amortized_totals_note": "decoder charged once per cell = gzip-9 size of codec.py (all codecs share one decoder module, so the charge is identical across codecs)",
+ "certificate_levels": {
+  "bdd_ref|independent_exact": 2505,
+  "bdd_ref|none": 485,
+  "bdd_ref|solver_only": 5050,
+  "index_cube|none": 885,
+  "index_cube|solver_only": 2486,
+  "index_cube|witness_replayed": 4669,
+  "index_enum|exhaustive": 1938,
+  "index_enum|witness_replayed": 3822,
+  "index_sat|checked_proof": 2569,
+  "index_sat|solver_only": 4,
+  "index_sat|witness_replayed": 5467,
+  "literal|exhaustive": 2116,
+  "literal|witness_replayed": 4244,
+  "reference|exhaustive": 1938,
+  "reference|witness_replayed": 3822
+ },
+ "codec_roundtrip_failures": 0,
+ "completion": {
+  "bdd_ref|n10": {
+   "completed": 1440
+  },
+  "bdd_ref|n128": {
+   "completed": 170,
+   "timeout": 22,
+   "unknown_resource": 48
+  },
+  "bdd_ref|n16": {
+   "completed": 561,
+   "unknown_resource": 39
+  },
+  "bdd_ref|n256": {
+   "completed": 146,
+   "timeout": 29,
+   "unknown_resource": 65
+  },
+  "bdd_ref|n32": {
+   "completed": 485,
+   "timeout": 34,
+   "unknown_resource": 81
+  },
+  "bdd_ref|n4": {
+   "completed": 1440
+  },
+  "bdd_ref|n6": {
+   "completed": 1440
+  },
+  "bdd_ref|n64": {
+   "completed": 433,
+   "timeout": 62,
+   "unknown_resource": 105
+  },
+  "bdd_ref|n8": {
+   "completed": 1440
+  },
+  "index_cube|n10": {
+   "completed": 1405,
+   "timeout": 35
+  },
+  "index_cube|n128": {
+   "completed": 119,
+   "timeout": 11,
+   "unknown_resource": 110
+  },
+  "index_cube|n16": {
+   "completed": 539,
+   "timeout": 60,
+   "unknown_resource": 1
+  },
+  "index_cube|n256": {
+   "completed": 114,
+   "timeout": 8,
+   "unknown_resource": 118
+  },
+  "index_cube|n32": {
+   "completed": 361,
+   "timeout": 43,
+   "unknown_resource": 196
+  },
+  "index_cube|n4": {
+   "completed": 1440
+  },
+  "index_cube|n6": {
+   "completed": 1440
+  },
+  "index_cube|n64": {
+   "completed": 297,
+   "timeout": 31,
+   "unknown_resource": 272
+  },
+  "index_cube|n8": {
+   "completed": 1440
+  },
+  "index_enum|n10": {
+   "completed": 1440
+  },
+  "index_enum|n128": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n16": {
+   "excluded_by_design": 600
+  },
+  "index_enum|n256": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n32": {
+   "excluded_by_design": 600
+  },
+  "index_enum|n4": {
+   "completed": 1440
+  },
+  "index_enum|n6": {
+   "completed": 1440
+  },
+  "index_enum|n64": {
+   "excluded_by_design": 600
+  },
+  "index_enum|n8": {
+   "completed": 1440
+  },
+  "index_sat|n10": {
+   "completed": 1440
+  },
+  "index_sat|n128": {
+   "completed": 240
+  },
+  "index_sat|n16": {
+   "completed": 600
+  },
+  "index_sat|n256": {
+   "completed": 240
+  },
+  "index_sat|n32": {
+   "completed": 600
+  },
+  "index_sat|n4": {
+   "completed": 1440
+  },
+  "index_sat|n6": {
+   "completed": 1440
+  },
+  "index_sat|n64": {
+   "completed": 600
+  },
+  "index_sat|n8": {
+   "completed": 1440
+  },
+  "literal|n10": {
+   "completed": 1440
+  },
+  "literal|n128": {
+   "excluded_by_design": 240
+  },
+  "literal|n16": {
+   "completed": 600
+  },
+  "literal|n256": {
+   "excluded_by_design": 240
+  },
+  "literal|n32": {
+   "excluded_by_design": 600
+  },
+  "literal|n4": {
+   "completed": 1440
+  },
+  "literal|n6": {
+   "completed": 1440
+  },
+  "literal|n64": {
+   "excluded_by_design": 600
+  },
+  "literal|n8": {
+   "completed": 1440
+  },
+  "reference|n10": {
+   "completed": 1440
+  },
+  "reference|n128": {
+   "excluded_by_design": 240
+  },
+  "reference|n16": {
+   "excluded_by_design": 600
+  },
+  "reference|n256": {
+   "excluded_by_design": 240
+  },
+  "reference|n32": {
+   "excluded_by_design": 600
+  },
+  "reference|n4": {
+   "completed": 1440
+  },
+  "reference|n6": {
+   "completed": 1440
+  },
+  "reference|n64": {
+   "excluded_by_design": 600
+  },
+  "reference|n8": {
+   "completed": 1440
+  }
+ },
+ "construction_seconds_median": {
+  "bdd_ref|n10": 0.06447983299949556,
+  "bdd_ref|n128": 0.09727591650062095,
+  "bdd_ref|n16": 0.05821749999995518,
+  "bdd_ref|n256": 0.15006416649976018,
+  "bdd_ref|n32": 0.05763170799946238,
+  "bdd_ref|n4": 0.07034570799987705,
+  "bdd_ref|n6": 0.0737939999999071,
+  "bdd_ref|n64": 0.07395658399946115,
+  "bdd_ref|n8": 0.07074808350080275,
+  "index_cube|n10": 0.002094208501148387,
+  "index_cube|n128": 0.01996422899992467,
+  "index_cube|n16": 0.0037646670007234206,
+  "index_cube|n256": 0.03698941600032413,
+  "index_cube|n32": 0.006254750000152853,
+  "index_cube|n4": 0.0002625209999678191,
+  "index_cube|n6": 0.0007881664996602922,
+  "index_cube|n64": 0.011352958001225488,
+  "index_cube|n8": 0.0015932500009512296,
+  "index_enum|n10": 0.002130687500539352,
+  "index_enum|n4": 0.00025606300005165394,
+  "index_enum|n6": 0.000802812500296568,
+  "index_enum|n8": 0.0015690000000176951,
+  "index_sat|n10": 0.0021456670001498424,
+  "index_sat|n128": 0.017057292000572488,
+  "index_sat|n16": 0.0030462499998975545,
+  "index_sat|n256": 0.0365641250009503,
+  "index_sat|n32": 0.005314375001034932,
+  "index_sat|n4": 0.00026087499918503454,
+  "index_sat|n6": 0.0007928125005491893,
+  "index_sat|n64": 0.009230083000147715,
+  "index_sat|n8": 0.0016148750009961077,
+  "literal|n10": 0.02367181299996446,
+  "literal|n16": 0.029430250000586966,
+  "literal|n4": 0.026966603999426297,
+  "literal|n6": 0.02713464600037696,
+  "literal|n8": 0.02653600000030565,
+  "reference|n10": 4.580006134347059e-07,
+  "reference|n4": 5.830006557516754e-07,
+  "reference|n6": 5.420006345957518e-07,
+  "reference|n8": 4.5899923861725256e-07
+ },
+ "correctness": {
+  "bdd_answers_excluded_post_interrupt_legacy": 0,
+  "compared_with_exhaustive_reference": {
+   "bdd_ref": 5760,
+   "index_cube": 5725,
+   "index_enum": 5760,
+   "index_sat": 5760,
+   "literal": 5760
+  },
+  "cross_backend_disagreements_total": 0,
+  "disagreement_examples": [],
+  "mismatches_vs_reference": {},
+  "unsat_proofs_checked_ok": 2569,
+  "unsat_proofs_not_certified": 4,
+  "witness_replay_failures": 0
+ },
+ "decoder": {
+  "codec_version": 1,
+  "decoder": "causalguard.codec",
+  "gzip_bytes": 7720,
+  "sha256": "b24d42b0615cc3c06f5d1e3761907a9746e62657c3a9d64944f3dededb687190",
+  "source_bytes": 25638
+ },
+ "failures_by_run": {
+  "S1-dev-v1": [
+   {
+    "error": "AssertionError('node index 6051185 is already used. self._succ = {1: (32, None, None), 2: (13, -1, 1), 3: (18, -1, 1), 4: (19, -1, 1), 5: (27, -1, 1), 6: (19, 5, 1), 7: (19, -5, 1), 8: (18, -7, 6), 9: (18, 5, 4), 10: (13, -9, 8), 11: (2, -1, 1), 12: (3, -1, 1), 13: (6, -1, 1), 14: (16, -1, 1), 15: (",
+    "item_id": "bounded_random|n32|2|bdd_ref",
+    "status": "error"
+   }
+  ],
+  "S1-dev-v1-rerun": []
+ },
+ "independent_worlds": 335,
+ "index_cover_exact_worlds": {
+  "False": 20,
+  "True": 315
+ },
+ "large_n_unsat_type_validation": {
+  "independently_confirmed_by_bdd_ref": 42,
+  "independently_confirmed_by_bdd_ref+index_cube": 348,
+  "independently_confirmed_by_bdd_ref+index_cube+literal": 175,
+  "independently_confirmed_by_bdd_ref+literal": 2,
+  "independently_confirmed_by_index_cube": 24,
+  "independently_confirmed_by_index_cube+literal": 1,
+  "no_independent_exact_method_completed": 43,
+  "total": 635
+ },
+ "latency_completed_queries": {
+  "bdd_ref|n10": {
+   "max_s": 0.32657074999951874,
+   "median_s": 0.00041816650082182605,
+   "n": 1440,
+   "p90_s": 0.028069295899877042
+  },
+  "bdd_ref|n128": {
+   "max_s": 13.13949566699921,
+   "median_s": 0.01796381250005652,
+   "n": 170,
+   "p90_s": 0.7385125164000776
+  },
+  "bdd_ref|n16": {
+   "max_s": 3.3049272089992883,
+   "median_s": 0.0005770829993707594,
+   "n": 561,
+   "p90_s": 0.016350083000361337
+  },
+  "bdd_ref|n256": {
+   "max_s": 10.47586479200072,
+   "median_s": 0.06087129150000692,
+   "n": 146,
+   "p90_s": 0.43440452100003313
+  },
+  "bdd_ref|n32": {
+   "max_s": 4.353283499998724,
+   "median_s": 0.0013269999999465654,
+   "n": 485,
+   "p90_s": 0.07697001720043774
+  },
+  "bdd_ref|n4": {
+   "max_s": 0.0003845830015052343,
+   "median_s": 8.452099973510485e-05,
+   "n": 1440,
+   "p90_s": 0.00013117109865561362
+  },
+  "bdd_ref|n6": {
+   "max_s": 0.001751874999172287,
+   "median_s": 0.00014312500024971087,
+   "n": 1440,
+   "p90_s": 0.00044554969954333515
+  },
+  "bdd_ref|n64": {
+   "max_s": 5.414423291000276,
+   "median_s": 0.0036446250014705583,
+   "n": 433,
+   "p90_s": 0.13891698360057494
+  },
+  "bdd_ref|n8": {
+   "max_s": 0.016819125001347857,
+   "median_s": 0.0002784375001283479,
+   "n": 1440,
+   "p90_s": 0.0030666749998999932
+  },
+  "index_cube|n10": {
+   "max_s": 19.99965650000013,
+   "median_s": 0.0010292500010109507,
+   "n": 1405,
+   "p90_s": 0.6362016340001012
+  },
+  "index_cube|n128": {
+   "max_s": 18.232700583001133,
+   "median_s": 0.002297667000675574,
+   "n": 119,
+   "p90_s": 0.39636240860018007
+  },
+  "index_cube|n16": {
+   "max_s": 18.78691274999983,
+   "median_s": 0.0011307080003462033,
+   "n": 539,
+   "p90_s": 3.653518216800875
+  },
+  "index_cube|n256": {
+   "max_s": 12.997211290999985,
+   "median_s": 0.0026040414995804895,
+   "n": 114,
+   "p90_s": 0.5342773249987665
+  },
+  "index_cube|n32": {
+   "max_s": 18.171371124999496,
+   "median_s": 0.000813291999293142,
+   "n": 361,
+   "p90_s": 0.27817462500024703
+  },
+  "index_cube|n4": {
+   "max_s": 0.001428290999683668,
+   "median_s": 7.812500007275958e-05,
+   "n": 1440,
+   "p90_s": 0.0002767078000033511
+  },
+  "index_cube|n6": {
+   "max_s": 0.022641417001068476,
+   "median_s": 0.00017297900012636092,
+   "n": 1440,
+   "p90_s": 0.0034089170007064254
+  },
+  "index_cube|n64": {
+   "max_s": 14.77673091699944,
+   "median_s": 0.0012107499987905612,
+   "n": 297,
+   "p90_s": 0.36438581680085935
+  },
+  "index_cube|n8": {
+   "max_s": 0.5337146669990034,
+   "median_s": 0.00039733349967718823,
+   "n": 1440,
+   "p90_s": 0.07384322469952168
+  },
+  "index_enum|n10": {
+   "max_s": 0.007334583999181632,
+   "median_s": 0.00043770850061264355,
+   "n": 1440,
+   "p90_s": 0.0008514964991263697
+  },
+  "index_enum|n4": {
+   "max_s": 0.00013212500016379636,
+   "median_s": 4.052050098835025e-05,
+   "n": 1440,
+   "p90_s": 5.1754199375864125e-05
+  },
+  "index_enum|n6": {
+   "max_s": 0.0006449580014304956,
+   "median_s": 7.491650012525497e-05,
+   "n": 1440,
+   "p90_s": 0.00011781690027419249
+  },
+  "index_enum|n8": {
+   "max_s": 0.0008223749991884688,
+   "median_s": 0.0001634165000723442,
+   "n": 1440,
+   "p90_s": 0.0003412247004234814
+  },
+  "index_sat|n10": {
+   "max_s": 1.436641749998671,
+   "median_s": 0.0028436459997465136,
+   "n": 1440,
+   "p90_s": 0.12968274110025962
+  },
+  "index_sat|n128": {
+   "max_s": 4.823613791000753,
+   "median_s": 0.015157833500779816,
+   "n": 240,
+   "p90_s": 0.08447484519983846
+  },
+  "index_sat|n16": {
+   "max_s": 0.5141899169993849,
+   "median_s": 0.0026252709994878387,
+   "n": 600,
+   "p90_s": 0.014745016600500096
+  },
+  "index_sat|n256": {
+   "max_s": 7.702072166999642,
+   "median_s": 0.030671792000248388,
+   "n": 240,
+   "p90_s": 0.30903417049976256
+  },
+  "index_sat|n32": {
+   "max_s": 0.14463187499859487,
+   "median_s": 0.004683416998886969,
+   "n": 600,
+   "p90_s": 0.020370724400527267
+  },
+  "index_sat|n4": {
+   "max_s": 0.014472333999947296,
+   "median_s": 0.0012390419997245772,
+   "n": 1440,
+   "p90_s": 0.006025287499141999
+  },
+  "index_sat|n6": {
+   "max_s": 0.14185249999900407,
+   "median_s": 0.0028686044997812132,
+   "n": 1440,
+   "p90_s": 0.018855074701059498
+  },
+  "index_sat|n64": {
+   "max_s": 0.45290625000052387,
+   "median_s": 0.01065377100076148,
+   "n": 600,
+   "p90_s": 0.058400132999850037
+  },
+  "index_sat|n8": {
+   "max_s": 0.8475525839985494,
+   "median_s": 0.005439375000605651,
+   "n": 1440,
+   "p90_s": 0.039419683700180036
+  },
+  "literal|n10": {
+   "max_s": 0.0025300839988631196,
+   "median_s": 0.00010133299929293571,
+   "n": 1440,
+   "p90_s": 0.0002870295002139757
+  },
+  "literal|n16": {
+   "max_s": 0.008845458001815132,
+   "median_s": 0.0004858960001001833,
+   "n": 600,
+   "p90_s": 0.0007703169001615607
+  },
+  "literal|n4": {
+   "max_s": 0.0007032499997876585,
+   "median_s": 4.6084000132395886e-05,
+   "n": 1440,
+   "p90_s": 5.7796100008999936e-05
+  },
+  "literal|n6": {
+   "max_s": 0.00045229199895402417,
+   "median_s": 6.54579998808913e-05,
+   "n": 1440,
+   "p90_s": 0.00010087499886139995
+  },
+  "literal|n8": {
+   "max_s": 0.00474637499974051,
+   "median_s": 8.522949974576477e-05,
+   "n": 1440,
+   "p90_s": 0.00024909230050980163
+  },
+  "reference|n10": {
+   "max_s": 0.006109375000960426,
+   "median_s": 0.00043793749955511885,
+   "n": 1440,
+   "p90_s": 0.0010057996998511954
+  },
+  "reference|n4": {
+   "max_s": 0.0001454579996789107,
+   "median_s": 4.095800068171229e-05,
+   "n": 1440,
+   "p90_s": 6.17122004769044e-05
+  },
+  "reference|n6": {
+   "max_s": 0.00026774999969347846,
+   "median_s": 7.48330003261799e-05,
+   "n": 1440,
+   "p90_s": 0.00014025000018591527
+  },
+  "reference|n8": {
+   "max_s": 0.00539516599928902,
+   "median_s": 0.0001642500001253211,
+   "n": 1440,
+   "p90_s": 0.0004017704992293148
+  }
+ },
+ "median_archive_bits": {
+  "bounded_random|n10": {
+   "bdd": 820.0,
+   "best_codec": "lut",
+   "circuit": 1036.0,
+   "dnf": 900.0,
+   "full": 10352.0,
+   "gate": 424.0,
+   "generic_gzip": 1068.0,
+   "generic_lzma": 1004.0,
+   "generic_raw": 1568.0,
+   "index": 692.0,
+   "index_rank_among_codecs": 3,
+   "lut": 384.0,
+   "worlds": 10
+  },
+  "bounded_random|n128": {
+   "bdd": 11948.0,
+   "best_codec": "lut",
+   "circuit": 14868.0,
+   "dnf": 15080.0,
+   "gate": 6748.0,
+   "generic_gzip": 10084.0,
+   "generic_lzma": 9876.0,
+   "generic_raw": 22984.0,
+   "index": 15648.0,
+   "index_rank_among_codecs": 8,
+   "lut": 6236.0,
+   "worlds": 2
+  },
+  "bounded_random|n16": {
+   "bdd": 1296.0,
+   "best_codec": "lut",
+   "circuit": 1608.0,
+   "dnf": 1352.0,
+   "full": 1048696.0,
+   "gate": 688.0,
+   "generic_gzip": 1472.0,
+   "generic_lzma": 1512.0,
+   "generic_raw": 2616.0,
+   "index": 1232.0,
+   "index_rank_among_codecs": 3,
+   "lut": 624.0,
+   "worlds": 5
+  },
+  "bounded_random|n256": {
+   "bdd": 24620.0,
+   "best_codec": "lut",
+   "circuit": 30196.0,
+   "dnf": 32068.0,
+   "gate": 14668.0,
+   "generic_gzip": 21156.0,
+   "generic_lzma": 19576.0,
+   "generic_raw": 49648.0,
+   "index": 34252.0,
+   "index_rank_among_codecs": 8,
+   "lut": 13648.0,
+   "worlds": 2
+  },
+  "bounded_random|n32": {
+   "bdd": 2680.0,
+   "best_codec": "lut",
+   "circuit": 3208.0,
+   "dnf": 2864.0,
+   "gate": 1448.0,
+   "generic_gzip": 2616.0,
+   "generic_lzma": 2712.0,
+   "generic_raw": 5424.0,
+   "index": 2808.0,
+   "index_rank_among_codecs": 6,
+   "lut": 1320.0,
+   "worlds": 5
+  },
+  "bounded_random|n4": {
+   "bdd": 344.0,
+   "best_codec": "full",
+   "circuit": 416.0,
+   "dnf": 320.0,
+   "full": 160.0,
+   "gate": 192.0,
+   "generic_gzip": 596.0,
+   "generic_lzma": 516.0,
+   "generic_raw": 708.0,
+   "index": 240.0,
+   "index_rank_among_codecs": 4,
+   "lut": 176.0,
+   "worlds": 10
+  },
+  "bounded_random|n6": {
+   "bdd": 500.0,
+   "best_codec": "lut",
+   "circuit": 624.0,
+   "dnf": 504.0,
+   "full": 488.0,
+   "gate": 264.0,
+   "generic_gzip": 808.0,
+   "generic_lzma": 696.0,
+   "generic_raw": 992.0,
+   "index": 372.0,
+   "index_rank_among_codecs": 3,
+   "lut": 240.0,
+   "worlds": 10
+  },
+  "bounded_random|n64": {
+   "bdd": 5616.0,
+   "best_codec": "lut",
+   "circuit": 6920.0,
+   "dnf": 6600.0,
+   "gate": 3112.0,
+   "generic_gzip": 4952.0,
+   "generic_lzma": 4968.0,
+   "generic_raw": 10928.0,
+   "index": 6600.0,
+   "index_rank_among_codecs": 6,
+   "lut": 2856.0,
+   "worlds": 5
+  },
+  "bounded_random|n8": {
+   "bdd": 664.0,
+   "best_codec": "lut",
+   "circuit": 840.0,
+   "dnf": 656.0,
+   "full": 2160.0,
+   "gate": 352.0,
+   "generic_gzip": 948.0,
+   "generic_lzma": 864.0,
+   "generic_raw": 1280.0,
+   "index": 556.0,
+   "index_rank_among_codecs": 3,
+   "lut": 320.0,
+   "worlds": 10
+  },
+  "canalizing|n10": {
+   "bdd": 592.0,
+   "best_codec": "index",
+   "circuit": 548.0,
+   "dnf": 468.0,
+   "full": 10352.0,
+   "gate": 480.0,
+   "generic_gzip": 1152.0,
+   "generic_lzma": 1168.0,
+   "generic_raw": 1732.0,
+   "index": 396.0,
+   "index_rank_among_codecs": 1,
+   "lut": 452.0,
+   "worlds": 10
+  },
+  "canalizing|n128": {
+   "bdd": 8696.0,
+   "best_codec": "dnf",
+   "circuit": 8108.0,
+   "dnf": 6504.0,
+   "gate": 7572.0,
+   "generic_gzip": 11084.0,
+   "generic_lzma": 10856.0,
+   "generic_raw": 24884.0,
+   "index": 6896.0,
+   "index_rank_among_codecs": 2,
+   "lut": 7188.0,
+   "worlds": 2
+  },
+  "canalizing|n16": {
+   "bdd": 960.0,
+   "best_codec": "index",
+   "circuit": 920.0,
+   "dnf": 712.0,
+   "full": 1048696.0,
+   "gate": 832.0,
+   "generic_gzip": 1696.0,
+   "generic_lzma": 1784.0,
+   "generic_raw": 2952.0,
+   "index": 672.0,
+   "index_rank_among_codecs": 1,
+   "lut": 776.0,
+   "worlds": 5
+  },
+  "canalizing|n256": {
+   "bdd": 18808.0,
+   "best_codec": "dnf",
+   "circuit": 17400.0,
+   "dnf": 14268.0,
+   "gate": 16340.0,
+   "generic_gzip": 23080.0,
+   "generic_lzma": 21692.0,
+   "generic_raw": 53224.0,
+   "index": 15584.0,
+   "index_rank_among_codecs": 2,
+   "lut": 15588.0,
+   "worlds": 2
+  },
+  "canalizing|n32": {
+   "bdd": 2064.0,
+   "best_codec": "index",
+   "circuit": 1816.0,
+   "dnf": 1392.0,
+   "gate": 1728.0,
+   "generic_gzip": 3032.0,
+   "generic_lzma": 3208.0,
+   "generic_raw": 6200.0,
+   "index": 1384.0,
+   "index_rank_among_codecs": 1,
+   "lut": 1624.0,
+   "worlds": 5
+  },
+  "canalizing|n4": {
+   "bdd": 216.0,
+   "best_codec": "full",
+   "circuit": 196.0,
+   "dnf": 180.0,
+   "full": 160.0,
+   "gate": 172.0,
+   "generic_gzip": 584.0,
+   "generic_lzma": 500.0,
+   "generic_raw": 600.0,
+   "index": 160.0,
+   "index_rank_among_codecs": 1,
+   "lut": 160.0,
+   "worlds": 10
+  },
+  "canalizing|n6": {
+   "bdd": 356.0,
+   "best_codec": "index",
+   "circuit": 324.0,
+   "dnf": 288.0,
+   "full": 488.0,
+   "gate": 284.0,
+   "generic_gzip": 804.0,
+   "generic_lzma": 732.0,
+   "generic_raw": 984.0,
+   "index": 228.0,
+   "index_rank_among_codecs": 1,
+   "lut": 260.0,
+   "worlds": 10
+  },
+  "canalizing|n64": {
+   "bdd": 4272.0,
+   "best_codec": "dnf",
+   "circuit": 3856.0,
+   "dnf": 3104.0,
+   "gate": 3560.0,
+   "generic_gzip": 5544.0,
+   "generic_lzma": 5680.0,
+   "generic_raw": 12176.0,
+   "index": 3208.0,
+   "index_rank_among_codecs": 2,
+   "lut": 3384.0,
+   "worlds": 5
+  },
+  "canalizing|n8": {
+   "bdd": 472.0,
+   "best_codec": "index",
+   "circuit": 428.0,
+   "dnf": 348.0,
+   "full": 2160.0,
+   "gate": 400.0,
+   "generic_gzip": 1024.0,
+   "generic_lzma": 980.0,
+   "generic_raw": 1416.0,
+   "index": 316.0,
+   "index_rank_among_codecs": 1,
+   "lut": 376.0,
+   "worlds": 10
+  },
+  "dense_random|n10": {
+   "bdd": 42288.0,
+   "best_codec": "full",
+   "circuit": 129568.0,
+   "dnf": 80460.0,
+   "full": 10352.0,
+   "gate": 10432.0,
+   "generic_gzip": 13412.0,
+   "generic_lzma": 11752.0,
+   "generic_raw": 26824.0,
+   "index": 30784.0,
+   "index_rank_among_codecs": 6,
+   "lut": 10392.0,
+   "worlds": 10
+  },
+  "dense_random|n4": {
+   "bdd": 344.0,
+   "best_codec": "full",
+   "circuit": 436.0,
+   "dnf": 328.0,
+   "full": 160.0,
+   "gate": 192.0,
+   "generic_gzip": 608.0,
+   "generic_lzma": 524.0,
+   "generic_raw": 700.0,
+   "index": 244.0,
+   "index_rank_among_codecs": 4,
+   "lut": 176.0,
+   "worlds": 10
+  },
+  "dense_random|n6": {
+   "bdd": 1796.0,
+   "best_codec": "full",
+   "circuit": 3192.0,
+   "dnf": 2012.0,
+   "full": 488.0,
+   "gate": 528.0,
+   "generic_gzip": 1088.0,
+   "generic_lzma": 1084.0,
+   "generic_raw": 1884.0,
+   "index": 1036.0,
+   "index_rank_among_codecs": 4,
+   "lut": 504.0,
+   "worlds": 10
+  },
+  "dense_random|n8": {
+   "bdd": 8256.0,
+   "best_codec": "full",
+   "circuit": 19868.0,
+   "dnf": 11584.0,
+   "full": 2160.0,
+   "gate": 2224.0,
+   "generic_gzip": 3168.0,
+   "generic_lzma": 3012.0,
+   "generic_raw": 6404.0,
+   "index": 5740.0,
+   "index_rank_among_codecs": 6,
+   "lut": 2192.0,
+   "worlds": 10
+  },
+  "modular|n10": {
+   "bdd": 508.0,
+   "best_codec": "lut",
+   "circuit": 384.0,
+   "dnf": 540.0,
+   "full": 10352.0,
+   "gate": 320.0,
+   "generic_gzip": 880.0,
+   "generic_lzma": 784.0,
+   "generic_raw": 1228.0,
+   "index": 440.0,
+   "index_rank_among_codecs": 4,
+   "lut": 296.0,
+   "worlds": 10
+  },
+  "modular|n128": {
+   "bdd": 7260.0,
+   "best_codec": "lut",
+   "circuit": 5736.0,
+   "dnf": 7584.0,
+   "gate": 4928.0,
+   "generic_gzip": 6728.0,
+   "generic_lzma": 6596.0,
+   "generic_raw": 17640.0,
+   "index": 8216.0,
+   "index_rank_among_codecs": 8,
+   "lut": 4600.0,
+   "worlds": 2
+  },
+  "modular|n16": {
+   "bdd": 824.0,
+   "best_codec": "lut",
+   "circuit": 616.0,
+   "dnf": 824.0,
+   "full": 1048696.0,
+   "gate": 512.0,
+   "generic_gzip": 1192.0,
+   "generic_lzma": 1120.0,
+   "generic_raw": 2024.0,
+   "index": 776.0,
+   "index_rank_among_codecs": 4,
+   "lut": 472.0,
+   "worlds": 5
+  },
+  "modular|n256": {
+   "bdd": 15328.0,
+   "best_codec": "lut",
+   "circuit": 12388.0,
+   "dnf": 16036.0,
+   "gate": 10756.0,
+   "generic_gzip": 13500.0,
+   "generic_lzma": 12504.0,
+   "generic_raw": 37776.0,
+   "index": 17892.0,
+   "index_rank_among_codecs": 8,
+   "lut": 10104.0,
+   "worlds": 2
+  },
+  "modular|n32": {
+   "bdd": 1656.0,
+   "best_codec": "lut",
+   "circuit": 1256.0,
+   "dnf": 1648.0,
+   "gate": 1056.0,
+   "generic_gzip": 1984.0,
+   "generic_lzma": 1992.0,
+   "generic_raw": 4160.0,
+   "index": 1640.0,
+   "index_rank_among_codecs": 4,
+   "lut": 976.0,
+   "worlds": 5
+  },
+  "modular|n4": {
+   "bdd": 236.0,
+   "best_codec": "lut",
+   "circuit": 192.0,
+   "dnf": 212.0,
+   "full": 160.0,
+   "gate": 164.0,
+   "generic_gzip": 568.0,
+   "generic_lzma": 480.0,
+   "generic_raw": 576.0,
+   "index": 184.0,
+   "index_rank_among_codecs": 4,
+   "lut": 152.0,
+   "worlds": 10
+  },
+  "modular|n6": {
+   "bdd": 328.0,
+   "best_codec": "lut",
+   "circuit": 256.0,
+   "dnf": 312.0,
+   "full": 488.0,
+   "gate": 208.0,
+   "generic_gzip": 704.0,
+   "generic_lzma": 592.0,
+   "generic_raw": 792.0,
+   "index": 256.0,
+   "index_rank_among_codecs": 3,
+   "lut": 192.0,
+   "worlds": 10
+  },
+  "modular|n64": {
+   "bdd": 3400.0,
+   "best_codec": "lut",
+   "circuit": 2664.0,
+   "dnf": 3440.0,
+   "gate": 2224.0,
+   "generic_gzip": 3472.0,
+   "generic_lzma": 3440.0,
+   "generic_raw": 8432.0,
+   "index": 3576.0,
+   "index_rank_among_codecs": 8,
+   "lut": 2096.0,
+   "worlds": 5
+  },
+  "modular|n8": {
+   "bdd": 412.0,
+   "best_codec": "lut",
+   "circuit": 320.0,
+   "dnf": 368.0,
+   "full": 2160.0,
+   "gate": 264.0,
+   "generic_gzip": 800.0,
+   "generic_lzma": 688.0,
+   "generic_raw": 1008.0,
+   "index": 336.0,
+   "index_rank_among_codecs": 4,
+   "lut": 248.0,
+   "worlds": 10
+  },
+  "parity|n10": {
+   "bdd": 752.0,
+   "best_codec": "gate",
+   "circuit": 432.0,
+   "dnf": 3260.0,
+   "full": 10352.0,
+   "gate": 256.0,
+   "generic_gzip": 1060.0,
+   "generic_lzma": 1012.0,
+   "generic_raw": 1676.0,
+   "index": 1924.0,
+   "index_rank_among_codecs": 7,
+   "lut": 428.0,
+   "worlds": 10
+  },
+  "parity|n128": {
+   "bdd": 11652.0,
+   "best_codec": "gate",
+   "circuit": 7168.0,
+   "dnf": 73176.0,
+   "gate": 4620.0,
+   "generic_gzip": 8412.0,
+   "generic_lzma": 8428.0,
+   "generic_raw": 25736.0,
+   "index": 66836.0,
+   "index_rank_among_codecs": 7,
+   "lut": 7220.0,
+   "worlds": 2
+  },
+  "parity|n16": {
+   "bdd": 1328.0,
+   "best_codec": "gate",
+   "circuit": 760.0,
+   "dnf": 6056.0,
+   "full": 1048696.0,
+   "gate": 424.0,
+   "generic_gzip": 1472.0,
+   "generic_lzma": 1520.0,
+   "generic_raw": 3032.0,
+   "index": 4512.0,
+   "index_rank_among_codecs": 7,
+   "lut": 744.0,
+   "worlds": 5
+  },
+  "parity|n256": {
+   "bdd": 24960.0,
+   "best_codec": "gate",
+   "circuit": 15772.0,
+   "dnf": 161672.0,
+   "gate": 10544.0,
+   "generic_gzip": 17396.0,
+   "generic_lzma": 16744.0,
+   "generic_raw": 55472.0,
+   "index": 153348.0,
+   "index_rank_among_codecs": 7,
+   "lut": 15780.0,
+   "worlds": 2
+  },
+  "parity|n32": {
+   "bdd": 2592.0,
+   "best_codec": "gate",
+   "circuit": 1528.0,
+   "dnf": 12104.0,
+   "gate": 912.0,
+   "generic_gzip": 2400.0,
+   "generic_lzma": 2504.0,
+   "generic_raw": 5736.0,
+   "index": 10120.0,
+   "index_rank_among_codecs": 7,
+   "lut": 1464.0,
+   "worlds": 5
+  },
+  "parity|n4": {
+   "bdd": 268.0,
+   "best_codec": "gate",
+   "circuit": 180.0,
+   "dnf": 412.0,
+   "full": 160.0,
+   "gate": 132.0,
+   "generic_gzip": 568.0,
+   "generic_lzma": 488.0,
+   "generic_raw": 584.0,
+   "index": 268.0,
+   "index_rank_among_codecs": 5,
+   "lut": 156.0,
+   "worlds": 10
+  },
+  "parity|n6": {
+   "bdd": 528.0,
+   "best_codec": "gate",
+   "circuit": 296.0,
+   "dnf": 2272.0,
+   "full": 488.0,
+   "gate": 160.0,
+   "generic_gzip": 840.0,
+   "generic_lzma": 756.0,
+   "generic_raw": 1200.0,
+   "index": 964.0,
+   "index_rank_among_codecs": 8,
+   "lut": 304.0,
+   "worlds": 10
+  },
+  "parity|n64": {
+   "bdd": 5576.0,
+   "best_codec": "gate",
+   "circuit": 3328.0,
+   "dnf": 34352.0,
+   "gate": 2048.0,
+   "generic_gzip": 4320.0,
+   "generic_lzma": 4488.0,
+   "generic_raw": 12408.0,
+   "index": 30104.0,
+   "index_rank_among_codecs": 7,
+   "lut": 3408.0,
+   "worlds": 5
+  },
+  "parity|n8": {
+   "bdd": 668.0,
+   "best_codec": "gate",
+   "circuit": 380.0,
+   "dnf": 2904.0,
+   "full": 2160.0,
+   "gate": 212.0,
+   "generic_gzip": 992.0,
+   "generic_lzma": 944.0,
+   "generic_raw": 1492.0,
+   "index": 1720.0,
+   "index_rank_among_codecs": 7,
+   "lut": 396.0,
+   "worlds": 10
+  },
+  "sparse_conj|n10": {
+   "bdd": 644.0,
+   "best_codec": "gate",
+   "circuit": 544.0,
+   "dnf": 456.0,
+   "full": 10352.0,
+   "gate": 256.0,
+   "generic_gzip": 1548.0,
+   "generic_lzma": 1552.0,
+   "generic_raw": 2812.0,
+   "index": 308.0,
+   "index_rank_among_codecs": 2,
+   "lut": 880.0,
+   "worlds": 10
+  },
+  "sparse_conj|n128": {
+   "bdd": 9980.0,
+   "best_codec": "gate",
+   "circuit": 8800.0,
+   "dnf": 6416.0,
+   "gate": 5224.0,
+   "generic_gzip": 11244.0,
+   "generic_lzma": 10916.0,
+   "generic_raw": 37760.0,
+   "index": 5864.0,
+   "index_rank_among_codecs": 2,
+   "lut": 13216.0,
+   "worlds": 2
+  },
+  "sparse_conj|n16": {
+   "bdd": 992.0,
+   "best_codec": "gate",
+   "circuit": 856.0,
+   "dnf": 632.0,
+   "full": 1048696.0,
+   "gate": 432.0,
+   "generic_gzip": 2272.0,
+   "generic_lzma": 2312.0,
+   "generic_raw": 4488.0,
+   "index": 512.0,
+   "index_rank_among_codecs": 2,
+   "lut": 1496.0,
+   "worlds": 5
+  },
+  "sparse_conj|n256": {
+   "bdd": 21216.0,
+   "best_codec": "gate",
+   "circuit": 18868.0,
+   "dnf": 13896.0,
+   "gate": 11812.0,
+   "generic_gzip": 22064.0,
+   "generic_lzma": 20840.0,
+   "generic_raw": 79296.0,
+   "index": 13076.0,
+   "index_rank_among_codecs": 2,
+   "lut": 29064.0,
+   "worlds": 2
+  },
+  "sparse_conj|n32": {
+   "bdd": 2184.0,
+   "best_codec": "gate",
+   "circuit": 1880.0,
+   "dnf": 1368.0,
+   "gate": 992.0,
+   "generic_gzip": 3608.0,
+   "generic_lzma": 3696.0,
+   "generic_raw": 9600.0,
+   "index": 1152.0,
+   "index_rank_among_codecs": 2,
+   "lut": 3216.0,
+   "worlds": 5
+  },
+  "sparse_conj|n4": {
+   "bdd": 200.0,
+   "best_codec": "gate",
+   "circuit": 184.0,
+   "dnf": 168.0,
+   "full": 160.0,
+   "gate": 136.0,
+   "generic_gzip": 568.0,
+   "generic_lzma": 496.0,
+   "generic_raw": 584.0,
+   "index": 144.0,
+   "index_rank_among_codecs": 2,
+   "lut": 156.0,
+   "worlds": 10
+  },
+  "sparse_conj|n6": {
+   "bdd": 328.0,
+   "best_codec": "gate",
+   "circuit": 284.0,
+   "dnf": 252.0,
+   "full": 488.0,
+   "gate": 160.0,
+   "generic_gzip": 820.0,
+   "generic_lzma": 736.0,
+   "generic_raw": 1072.0,
+   "index": 184.0,
+   "index_rank_among_codecs": 2,
+   "lut": 280.0,
+   "worlds": 10
+  },
+  "sparse_conj|n64": {
+   "bdd": 4664.0,
+   "best_codec": "gate",
+   "circuit": 4056.0,
+   "dnf": 2944.0,
+   "gate": 2280.0,
+   "generic_gzip": 6072.0,
+   "generic_lzma": 6048.0,
+   "generic_raw": 17864.0,
+   "index": 2600.0,
+   "index_rank_among_codecs": 2,
+   "lut": 6936.0,
+   "worlds": 5
+  },
+  "sparse_conj|n8": {
+   "bdd": 496.0,
+   "best_codec": "gate",
+   "circuit": 428.0,
+   "dnf": 336.0,
+   "full": 2160.0,
+   "gate": 200.0,
+   "generic_gzip": 1316.0,
+   "generic_lzma": 1320.0,
+   "generic_raw": 2464.0,
+   "index": 244.0,
+   "index_rank_among_codecs": 2,
+   "lut": 844.0,
+   "worlds": 10
+  }
+ },
+ "n_records": 2345,
+ "outcome_balance_by_construction": {
+  "clamp_exists": {
+   "false": 298,
+   "true": 393
+  },
+  "clamp_forall": {
+   "false": 369,
+   "true": 280
+  },
+  "exists_free": {
+   "false": 657,
+   "true": 683
+  },
+  "exists_planted": {
+   "true": 1340
+  },
+  "forall_free": {
+   "false": 677,
+   "true": 663
+  },
+  "forall_planted_counterexample": {
+   "false": 1340
+  },
+  "membership": {
+   "false": 675,
+   "true": 665
+  }
+ },
+ "peak_rss_mib_median": {
+  "bdd_ref|n10": 44.7109375,
+  "bdd_ref|n128": 1497.7421875,
+  "bdd_ref|n16": 60.828125,
+  "bdd_ref|n256": 2517.4765625,
+  "bdd_ref|n32": 1428.671875,
+  "bdd_ref|n4": 40.59375,
+  "bdd_ref|n6": 41.0546875,
+  "bdd_ref|n64": 1487.453125,
+  "bdd_ref|n8": 41.7890625,
+  "codecs|n10": 90.484375,
+  "codecs|n128": 91.203125,
+  "codecs|n16": 120.1875,
+  "codecs|n256": 92.375,
+  "codecs|n32": 90.703125,
+  "codecs|n4": 90.1328125,
+  "codecs|n6": 90.21875,
+  "codecs|n64": 90.9375,
+  "codecs|n8": 90.390625,
+  "index_cube|n10": 25.7578125,
+  "index_cube|n128": 36.5703125,
+  "index_cube|n16": 31.09375,
+  "index_cube|n256": 37.6171875,
+  "index_cube|n32": 34.796875,
+  "index_cube|n4": 25.40625,
+  "index_cube|n6": 25.4375,
+  "index_cube|n64": 36.453125,
+  "index_cube|n8": 25.5859375,
+  "index_enum|n10": 25.5390625,
+  "index_enum|n4": 25.40625,
+  "index_enum|n6": 25.453125,
+  "index_enum|n8": 25.5078125,
+  "index_sat|n10": 30.1796875,
+  "index_sat|n128": 38.0625,
+  "index_sat|n16": 30.609375,
+  "index_sat|n256": 46.9609375,
+  "index_sat|n32": 31.5625,
+  "index_sat|n4": 29.5859375,
+  "index_sat|n6": 29.8984375,
+  "index_sat|n64": 33.953125,
+  "index_sat|n8": 30.0078125,
+  "literal|n10": 33.84375,
+  "literal|n16": 36.640625,
+  "literal|n4": 33.8671875,
+  "literal|n6": 33.8046875,
+  "literal|n8": 33.84375,
+  "reference|n10": 25.4375,
+  "reference|n4": 25.3828125,
+  "reference|n6": 25.390625,
+  "reference|n8": 25.421875
+ },
+ "record_sources": {
+  "bdd_ref<-S1-dev-v1-rerun": 335,
+  "codecs<-S1-dev-v1": 335,
+  "index_cube<-S1-dev-v1": 335,
+  "index_enum<-S1-dev-v1": 335,
+  "index_sat<-S1-dev-v1-rerun": 335,
+  "literal<-S1-dev-v1": 335,
+  "reference<-S1-dev-v1": 335
+ },
+ "run_ids": [
+  "S1-dev-v1",
+  "S1-dev-v1-rerun"
+ ],
+ "worlds_by_cell": {
+  "bounded_random|n10": 10,
+  "bounded_random|n128": 2,
+  "bounded_random|n16": 5,
+  "bounded_random|n256": 2,
+  "bounded_random|n32": 5,
+  "bounded_random|n4": 10,
+  "bounded_random|n6": 10,
+  "bounded_random|n64": 5,
+  "bounded_random|n8": 10,
+  "canalizing|n10": 10,
+  "canalizing|n128": 2,
+  "canalizing|n16": 5,
+  "canalizing|n256": 2,
+  "canalizing|n32": 5,
+  "canalizing|n4": 10,
+  "canalizing|n6": 10,
+  "canalizing|n64": 5,
+  "canalizing|n8": 10,
+  "dense_random|n10": 10,
+  "dense_random|n4": 10,
+  "dense_random|n6": 10,
+  "dense_random|n8": 10,
+  "modular|n10": 10,
+  "modular|n128": 2,
+  "modular|n16": 5,
+  "modular|n256": 2,
+  "modular|n32": 5,
+  "modular|n4": 10,
+  "modular|n6": 10,
+  "modular|n64": 5,
+  "modular|n8": 10,
+  "parity|n10": 10,
+  "parity|n128": 2,
+  "parity|n16": 5,
+  "parity|n256": 2,
+  "parity|n32": 5,
+  "parity|n4": 10,
+  "parity|n6": 10,
+  "parity|n64": 5,
+  "parity|n8": 10,
+  "sparse_conj|n10": 10,
+  "sparse_conj|n128": 2,
+  "sparse_conj|n16": 5,
+  "sparse_conj|n256": 2,
+  "sparse_conj|n32": 5,
+  "sparse_conj|n4": 10,
+  "sparse_conj|n6": 10,
+  "sparse_conj|n64": 5,
+  "sparse_conj|n8": 10
+ }
+}

@@ -81,6 +81,15 @@
     "verdicts": false,
     "label": "noise_stress (separate MDL experiment; indices offset by population label in the seed)",
     "start": 3000
+   },
+   {
+    "population": "realizable",
+    "families": [
+     "uniform_H"
+    ],
+    "start": 4000,
+    "worlds_per_family": 250,
+    "label": "NULL control (DECISIONS D21): rules drawn uniformly from H; analysed separately, never pooled into the primary. Proposed pending review."
    }
   ],
   "primary": {
@@ -96,6 +105,8 @@
    "minimum_meaningful_difference": 0.05
   },
   "registered_secondary": [
+   "KEY (proposed, D21): index - vs_majority and circuit - vs_majority (majority answer of V(D) = Bayes under uniform prior)",
+   "KEY (proposed, D21): primary contrast evaluated on the uniform_H null population; report the structured-minus-null difference descriptively",
    "index - circuit (same cell)",
    "index - uniform on state-holdout queries",
    "index - uniform per family (exploratory)",
@@ -427,5 +438,10 @@
   ],
   "note": "engineering/formal-correctness study; caps fixed from development; timeouts kept in completion curves"
  },
- "S3": "TO BE FILLED FROM THE V2 PILOT (see reports/DESIGN_SIZING.md)"
+ "S3": "TO BE FILLED FROM THE V2 PILOT (see reports/DESIGN_SIZING.md)",
+ "resource_estimate": {
+  "S2": "~2,000 worlds x 3.6 s mean = ~120 CPU-min; ~5 min wall on 24 workers; ~350 MB raw records",
+  "S1": "1,950 worlds x 7 backends; ~132,000 CPU-s estimated from development per-cell item means; ~2.3 h wall on 16 workers; largest dev item 349 s",
+  "S3": "see S3 section"
+ }
 }
