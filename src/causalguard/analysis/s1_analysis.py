@@ -22,14 +22,23 @@ TRUTH = ("true", "false")
 def analyze(run_ids: list[str], out_dir: Path) -> dict:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    recs, fails = [], []
+    # later runs override earlier ones for the same (world, backend): reruns replace, never merge
+    by_item: dict = {}
+    fails, failures_by_run, source = [], {}, Counter()
     for rid in run_ids:
-        recs += read_jsonl(ROOT / "runs" / rid / "records.jsonl")
-        fails += read_jsonl(ROOT / "runs" / rid / "failures.jsonl")
+        for r in read_jsonl(ROOT / "runs" / rid / "records.jsonl"):
+            by_item[(r["world_id"], r["backend"])] = r
+        fl = read_jsonl(ROOT / "runs" / rid / "failures.jsonl")
+        failures_by_run[rid] = [{"item_id": f["item_id"], "status": f.get("status"), "error": str(f.get("error"))[:300]}
+                                for f in fl]
+        fails += fl
+    recs = list(by_item.values())
+    for r in recs:
+        source[f"{r['backend']}<-{r['run_id']}"] += 1
     if not recs:
         raise SystemExit("no records")
-    res: dict = {"run_ids": run_ids, "n_records": len(recs), "n_failures": len(fails),
-                 "failures": Counter(f.get("status") for f in fails)}
+    res: dict = {"run_ids": run_ids, "n_records": len(recs), "record_sources": dict(source),
+                 "failures_by_run": failures_by_run}
     worlds = {(r["family"], r["n"], r["world_id"]) for r in recs}
     res["independent_worlds"] = len(worlds)
     res["worlds_by_cell"] = {f"{f}|n{n}": c for (f, n), c in sorted(Counter((f, n) for f, n, _ in worlds).items())}

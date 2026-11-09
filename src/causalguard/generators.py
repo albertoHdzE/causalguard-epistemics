@@ -152,7 +152,14 @@ def make_s2_world(salt: str, index: int, family: str, population: str = "realiza
     rng = random.Random(seed)
     irregular = []
     rules = []
-    if population == "shift":
+    if family == "uniform_H":
+        # NULL population for the simplicity hypothesis: every node rule drawn uniformly from the complete
+        # hypothesis class itself (no simplicity bias in the generator).  Development control (DECISIONS D21).
+        from .versionspace import candidate_class
+        cls = candidate_class(n, kmax)
+        for _j in range(n):
+            rules.append(cls.rules[rng.randrange(cls.size)])
+    elif population == "shift":
         # distribution shift: every node in-degree exactly kmax, composed gates with negations,
         # family mixed per node
         for _j in range(n):

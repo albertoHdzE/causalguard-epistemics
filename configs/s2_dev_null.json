@@ -1,0 +1,36 @@
+{
+ "study": "S2",
+ "mode": "development",
+ "run_id": "S2-dev-null-v1",
+ "description": "NULL control for the simplicity hypothesis (post-hoc development control, DECISIONS D21): worlds whose node rules are drawn uniformly from the complete hypothesis class H (n=7, k<=3). Same evidence regimes, budgets and queries as S2-dev-v1.",
+ "salt": "dev-v1",
+ "n": 7,
+ "kmax": 3,
+ "budgets": [
+  2,
+  4,
+  8,
+  16,
+  32,
+  64
+ ],
+ "regimes": [
+  "uniform_states",
+  "observational",
+  "clamp_interventions",
+  "active"
+ ],
+ "mc_samples": 4096,
+ "workers": 24,
+ "item_timeout_s": 900,
+ "populations": [
+  {
+   "population": "realizable",
+   "families": [
+    "uniform_H"
+   ],
+   "start": 4000,
+   "worlds_per_family": 250
+  }
+ ]
+}
