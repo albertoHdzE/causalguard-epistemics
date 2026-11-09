@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "causalguard"
+version = "0.1.0.dev0"
+description = "Compressed symbolic models for auditable epistemic improvement: index-family Boolean network representations, incomplete-evidence inference and controlled LLM evaluation."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Alberto Hernández Espinosa" }]
+dependencies = [
+  "numpy>=2.0,<3",
+]
+
+[project.optional-dependencies]
+solvers = ["python-sat==1.9.dev21", "dd==0.6.0"]
+plots = ["matplotlib>=3.9,<4"]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+causalguard = "causalguard.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/causalguard"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+  "upstream: parity tests that need a pinned CausalBool checkout (CAUSALBOOL_ROOT)",
+  "slow: longer exhaustive checks",
+]
+
+[tool.ruff]
+line-length = 160
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I"]
+ignore = ["E741", "E731", "B023", "B905"]

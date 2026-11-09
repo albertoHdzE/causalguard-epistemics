@@ -1,0 +1,21 @@
+{
+  "study": "S2",
+  "mode": "development",
+  "run_id": "S2-dev-v1",
+  "description": "S2 development corpus (sprint implementation iteration 1). Primary population realizable; misspecified, shift and noise are separately labelled stress populations.",
+  "salt": "dev-v1",
+  "n": 7,
+  "kmax": 3,
+  "budgets": [2, 4, 8, 16, 32, 64],
+  "regimes": ["uniform_states", "observational", "clamp_interventions", "active"],
+  "mc_samples": 4096,
+  "workers": 24,
+  "item_timeout_s": 900,
+  "populations": [
+    {"population": "realizable", "families": ["conjunctive", "canalizing", "parity", "random_lookup", "modular"], "start": 0, "worlds_per_family": 50},
+    {"population": "misspecified", "families": ["conjunctive", "canalizing", "parity", "random_lookup", "modular"], "start": 1000, "worlds_per_family": 12},
+    {"population": "shift", "families": ["composed_mixed"], "start": 2000, "worlds_per_family": 60},
+    {"population": "realizable", "families": ["conjunctive", "canalizing", "parity", "random_lookup", "modular"], "start": 3000, "worlds_per_family": 10,
+     "regimes": ["uniform_states"], "noise_rates": [0.01, 0.05, 0.1], "noise_budgets": [16, 32, 64], "verdicts": false}
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "conventions": "States are LSB-first: state x has node i at bit i. Rule tables index local inputs LSB-first (y = sum_t bit(inputs[t]) << t). Update is synchronous. h counts updates.",
+  "model_fixtures": [
+    {
+      "id": "F01_and_point",
+      "network": {"n": 3, "rules": [{"inputs": [0], "table": 2}, {"inputs": [1], "table": 2}, {"inputs": [0, 1], "table": 8}]},
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 1, "value": 1}, {"op": "lit", "node": 2, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "lit", "node": 2, "value": 1}},
+      "expected": "true",
+      "explanation": "x2' = x0 AND x1 (table 8 = only local index 3 -> 1). From (1,1,0), x2 becomes 1."
+    },
+    {
+      "id": "F02_xor_forall",
+      "network": {"n": 3, "rules": [{"inputs": [0], "table": 2}, {"inputs": [1], "table": 2}, {"inputs": [0, 1], "table": 6}]},
+      "query": {"quantifier": "forall", "domain": {"op": "true"}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "or", "args": [{"op": "and", "args": [{"op": "lit", "node": 2, "value": 1}, {"op": "not", "args": [{"op": "and", "args": [{"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 1, "value": 1}]}]}]}, {"op": "and", "args": [{"op": "lit", "node": 2, "value": 0}, {"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 1, "value": 1}]}, {"op": "and", "args": [{"op": "lit", "node": 2, "value": 0}, {"op": "lit", "node": 0, "value": 0}, {"op": "lit", "node": 1, "value": 0}]}]}},
+      "expected": "true",
+      "explanation": "x2' = x0 XOR x1 (table 6: local 1,2 -> 1); x0,x1 are copies so after one step x2 = x0 XOR x1 of the new state; the target enumerates exactly the XOR truth table, hence universal."
+    },
+    {
+      "id": "F03_not_horizon2",
+      "network": {"n": 1, "rules": [{"inputs": [0], "table": 1}]},
+      "query": {"quantifier": "exists", "domain": {"op": "lit", "node": 0, "value": 0}, "intervention": {"kind": "none", "assign": []}, "horizon": 2, "target": {"op": "lit", "node": 0, "value": 1}},
+      "expected": "false",
+      "explanation": "x0' = NOT x0 oscillates with period 2; from 0 after two updates it is 0 again."
+    },
+    {
+      "id": "F04_zero_horizon_initial_edit",
+      "network": {"n": 2, "rules": [{"inputs": [0], "table": 1}, {"inputs": [1], "table": 2}]},
+      "query": {"quantifier": "forall", "domain": {"op": "true"}, "intervention": {"kind": "initial_edit", "assign": [[0, 1]]}, "horizon": 0, "target": {"op": "lit", "node": 0, "value": 1}},
+      "expected": "true",
+      "explanation": "h=0 reads the intervened initial state; the edit sets x0=1 at t=0 regardless of the network."
+    },
+    {
+      "id": "F05_edit_vs_clamp_edit",
+      "network": {"n": 2, "rules": [{"inputs": [0], "table": 1}, {"inputs": [0], "table": 2}]},
+      "query": {"quantifier": "exists", "domain": {"op": "true"}, "intervention": {"kind": "initial_edit", "assign": [[0, 1]]}, "horizon": 2, "target": {"op": "lit", "node": 1, "value": 1}},
+      "expected": "false",
+      "explanation": "x0'=NOT x0, x1'=x0. Edit x0=1 at t=0: t1 x0=0,x1=1; t2 x0=1,x1=0. So x1=0 at h=2 for every start."
+    },
+    {
+      "id": "F06_edit_vs_clamp_clamp",
+      "network": {"n": 2, "rules": [{"inputs": [0], "table": 1}, {"inputs": [0], "table": 2}]},
+      "query": {"quantifier": "exists", "domain": {"op": "true"}, "intervention": {"kind": "persistent_clamp", "assign": [[0, 1]]}, "horizon": 2, "target": {"op": "lit", "node": 1, "value": 1}},
+      "expected": "true",
+      "explanation": "Same network, but x0 is clamped to 1 after every update, so x1 = 1 at every t >= 1. Distinguishes clamp from edit."
+    },
+    {
+      "id": "F07_impossible_domain",
+      "network": {"n": 2, "rules": [{"inputs": [0], "table": 2}, {"inputs": [1], "table": 2}]},
+      "query": {"quantifier": "forall", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 0, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "false"}},
+      "expected": "invalid_domain",
+      "explanation": "Domain x0=1 AND x0=0 is empty; forall over it is NOT reported as a vacuous truth but as invalid_domain."
+    },
+    {
+      "id": "F08_implies_order",
+      "network": {"n": 3, "rules": [{"inputs": [0], "table": 2}, {"inputs": [1], "table": 2}, {"inputs": [0, 1], "table": 13}]},
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 1, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "lit", "node": 2, "value": 1}},
+      "expected": "false",
+      "explanation": "x2' = x0 -> x1 (table 13 = 0b1101: local (x0=1,x1=0) i.e. y=1 is 0). Antecedent true, consequent false gives 0. The swapped gate x1 -> x0 would give 1: input order matters."
+    },
+    {
+      "id": "F09_sync_vs_sequential",
+      "network": {"n": 2, "rules": [{"inputs": [1], "table": 2}, {"inputs": [0], "table": 2}]},
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 1, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 0}, {"op": "lit", "node": 1, "value": 1}]}},
+      "expected": "true",
+      "explanation": "Swap network x0'=x1, x1'=x0. Synchronous: (1,0) -> (0,1). A sequential in-place update would give (0,0) and answer false."
+    }
+  ],
+  "evidence_fixtures": [
+    {
+      "id": "E01_and_or_indistinguishable",
+      "explanation": "Hypothesis class: n=3, k=2. Observations only at states where AND and OR of (x0,x1) agree (00 and 11) cannot separate them; the query at (1,0,*) is underdetermined (AND->0, OR->1).",
+      "n": 3, "k": 2,
+      "observations": [
+        {"state": 0, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 0], [1, 0], [2, 0]]},
+        {"state": 3, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 1], [1, 1], [2, 1]]}
+      ],
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 1}, {"op": "lit", "node": 1, "value": 0}, {"op": "lit", "node": 2, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "lit", "node": 2, "value": 1}},
+      "expected": "underdetermined"
+    },
+    {
+      "id": "E02_inconsistent_observations",
+      "explanation": "The same input state observed with two different values of x0 after one update: no deterministic mechanism fits; V(D) is empty -> inconsistent_evidence_or_class, never 'refuted'.",
+      "n": 2, "k": 2,
+      "observations": [
+        {"state": 1, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 0]]},
+        {"state": 1, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 1]]}
+      ],
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 0}, {"op": "lit", "node": 1, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "lit", "node": 0, "value": 1}},
+      "expected": "inconsistent_evidence_or_class"
+    },
+    {
+      "id": "E03_entailed_after_full_table",
+      "explanation": "k=1, n=2: observing all 4 states fully identifies every node; any point query is then entailed or refuted.",
+      "n": 2, "k": 1,
+      "observations": [
+        {"state": 0, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 1], [1, 0]]},
+        {"state": 1, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 0], [1, 1]]},
+        {"state": 2, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 1], [1, 0]]},
+        {"state": 3, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[0, 0], [1, 1]]}
+      ],
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 0}, {"op": "lit", "node": 1, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 2, "target": {"op": "lit", "node": 1, "value": 1}},
+      "expected": "entailed",
+      "explanation_detail": "x0'=NOT x0, x1'=x0. From (0,0): t1=(1,0), t2=(0,1) so x1=1."
+    },
+    {
+      "id": "E04_misspecified_class",
+      "explanation": "Hidden world x2' = XOR(x0,x1,x2) has 3 essential inputs; class k=2 cannot express it. With all 8 states observed V(D) is empty (inconsistent_evidence_or_class), which reports the class misspecification instead of a wrong answer.",
+      "n": 3, "k": 2,
+      "observations": [
+        {"state": 0, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 0]]},
+        {"state": 1, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 1]]},
+        {"state": 2, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 1]]},
+        {"state": 3, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 0]]},
+        {"state": 4, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 1]]},
+        {"state": 5, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 0]]},
+        {"state": 6, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 0]]},
+        {"state": 7, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "observed": [[2, 1]]}
+      ],
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 0}, {"op": "lit", "node": 1, "value": 0}, {"op": "lit", "node": 2, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "lit", "node": 2, "value": 1}},
+      "expected": "inconsistent_evidence_or_class"
+    },
+    {
+      "id": "E05_clamped_observation_uninformative",
+      "explanation": "Observing a clamped node tells nothing about its rule; observing it at a value other than its clamp is impossible for every model -> V(D) empty.",
+      "n": 2, "k": 1,
+      "observations": [
+        {"state": 0, "intervention": {"kind": "persistent_clamp", "assign": [[0, 1]]}, "horizon": 1, "observed": [[0, 0]]}
+      ],
+      "query": {"quantifier": "exists", "domain": {"op": "and", "args": [{"op": "lit", "node": 0, "value": 0}, {"op": "lit", "node": 1, "value": 0}]}, "intervention": {"kind": "none", "assign": []}, "horizon": 1, "target": {"op": "lit", "node": 1, "value": 1}},
+      "expected": "inconsistent_evidence_or_class"
+    }
+  ]
+}
