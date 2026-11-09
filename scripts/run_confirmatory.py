@@ -128,12 +128,14 @@ def main():
         from causalguard.experiments.s3 import build_payload
         from causalguard.experiments.s3 import run_world as s3_world
         s3 = cfg["S3"]
+        if str(s3.get("status", "")).startswith("NOT READY"):
+            raise SystemExit("REFUSED: S3 is marked NOT READY TO FREEZE in configs/confirmatory.json")
         mcfg = {"salt": salt, "task": s3["task"], "harness": s3["harness"], "caps": s3["caps"],
                 "provider": s3["models"][args.model]}
         run = Run(run_id, {"S3": s3, "model": args.model, "salt": salt, "mode": "confirmatory",
                            "freeze_commit": args.freeze_commit})
         ledger = str(run.dir / "call_ledger.jsonl")
-        items = [(f"s3-{salt}-w{i}", build_payload(mcfg, i, ledger)) for i in range(s3["worlds"])]
+        items = [(f"s3-{salt}-w{i}", build_payload(mcfg, i, ledger)) for i in range(s3.get("worlds_by_model", {}).get(args.model, s3["worlds"]))]
         end = run.execute(items, s3_world, workers=1, timeout_s=3600, mode="confirmatory")
     with access.open("a") as fh:
         fh.write(json.dumps({"event": "run_end", "time": now(), **end}) + "\n")

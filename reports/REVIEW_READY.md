@@ -19,16 +19,16 @@ State: **review-ready development package; not accepted; no confirmatory data ex
 | WP2 independent reference + certificates | pass | reference.py (import-guarded, verified by planting), bdd_ref.py, proofcheck.py (RUP) |
 | WP3 index representation, codec, queries, upstream parity | pass | index_repr.py, codec.py (7 codecs, framing + CRC), query.py, upstream_adapter.py; parity vs pinned upstream |
 | WP4 version spaces / selection | pass | versionspace.py: complete class, SAT quantification, enumeration + brute-force cross-checks, isolation test |
-| WP5 generators / audits | pass (no surface-feature baseline for S3 — noted) | generators.py, dedup.py, s3_tasks.py |
+| WP5 generators / audits | pass | generators.py, dedup.py, s3_tasks.py |
 | WP6 runner / analysis / statistics | pass | runner.py, stats.py (coverage-validated bootstrap), analysis/*.py, byte-identical re-analysis |
 | WP7 LLM harness | pass | llm/*, experiments/s3.py, 35 harness tests, real pilots on two local families |
-| WP8 development experiments + freeze proposal | pass for S1/S2; S3 see §8 | DEVELOPMENT_REPORT.md, DESIGN_SIZING.md, configs/confirmatory.json |
+| WP8 development experiments + freeze proposal | pass; S3 pilot complete but **not ready to freeze** (floor) | DEVELOPMENT_REPORT.md, DESIGN_SIZING.md, configs/confirmatory.json |
 | WP9 public release | pass | RELEASE_CHECK.md, CI green on ubuntu + macOS + upstream parity |
 | WP10 / WP11 | not_run (subsequent iterations by design) | — |
 
 ## 3. Commands, environment, tests
 - Environment: ENVIRONMENT.md. Python 3.12.13, numpy 2.5.4, python-sat 1.9.dev21, dd 0.6.0; M3 Ultra (28 cores, 96 GiB). Local model servers: Ollama 0.40.15 (qwen2.5:7b Q4_K_M, digest 845dbda0…) and LM Studio (gemma-3-12b-it MLX 4-bit).
-- Tests: `reports/test-output.txt` (full `pytest -rs` output at the review commit). CI run IDs are in RELEASE_CHECK.md. The upstream-parity tests (5) are skipped without `CAUSALBOOL_ROOT` and pass in the dedicated CI job.
+- Tests: `reports/test-output.txt` (full `pytest -v -rs` output at the review commit): **138 passed** with the pinned upstream checkout (fetched by `scripts/fetch_upstream.sh`); **133 passed, 5 skipped** without it; ruff clean. CI run IDs are in RELEASE_CHECK.md. The upstream-parity tests (5) are skipped without `CAUSALBOOL_ROOT` and pass in the dedicated CI job.
 - Executed runs (RUNS.jsonl):
   - `S2-dev-v1` — 420 worlds;
   - `S2-dev-null-v1` — 250 worlds;
@@ -112,13 +112,19 @@ Every codec decodes back to the identical canonical network. Amortized totals (d
 - At budget ≤ 4, index equals a trivial baseline.
 - Misspecification makes V(D) empty (92% at budget 16) after a few wrong certified answers. The two-part MDL code is robust to noise where exact matching collapses.
 
-**S3:** {{S3_SUMMARY}}
+**S3:** 80 worlds × 4 items for each of qwen2.5:7b and gemma-3-12b-it (2,400 physical calls each, 0 failures).
+- **Floor pilot.** Initial accuracy is 0.478 (qwen) and 0.588 (gemma), against 0.569 for always answering "underdetermined" and 0.656 for a 3-feature surface rule. Refuted recall is 0.00 for both models.
+- **Registered S3 contrast D − B (balanced accuracy):** +0.514 [0.452, 0.567] for qwen and +0.418 [0.352, 0.482] for gemma. The gain is label-revealing witness choice on entailed/refuted items, not reasoning improvement.
+- **Self-critique:** no benefit, with many correct→wrong revisions (56 for qwen, 37 for gemma).
+- **Transfer:** null for both models; the intervals include 0.
+- **Probabilities:** qwen's vectors contradict its own verdicts in 30–80% of answers, so its Brier scores are not calibration. gemma's vectors are coherent.
+- S3 is **not ready to freeze**.
 
 **Failures and exclusions:**
 - 1 S1 item failed (dd assertion after an interrupt, D20), then rerun.
 - Pilot v1 invalidated (B truncated, D19).
 - No performance-based exclusions.
-- Compute: S2 ≈ 42 CPU-min; S1 ≈ 23 min wall on 16 workers plus an 8 min rerun; S3 pilots ≈ {{S3_COMPUTE}}.
+- Compute: S2 ≈ 42 CPU-min; S1 ≈ 23 min wall on 16 workers plus an 8 min rerun; S3 pilots ≈ 1.3 h (qwen) + 2.3 h (gemma) of local inference on the shared machine; no paid inference.
 
 ## 9. Sizing and proposed confirmatory run (DESIGN_SIZING.md, configs/confirmatory.json, docs/PROTOCOL.md)
 **S2:**
@@ -128,7 +134,7 @@ Every codec decodes back to the identical canonical network. Amortized totals (d
 
 **S1:** as protocol (1,200 small + 750 large worlds). Estimated ≈ 2.3 h wall on 16 workers.
 
-**S3:** {{S3_SIZING}}
+**S3:** **not ready to freeze** (floor pilot and leaking D feedback). After refinement: qwen 500 worlds and gemma 300 worlds, sized so the transfer contrast has a half-width ≤ 0.05; ≈ 8.2 h + 8.7 h of local inference. The runner refuses S3 while it is marked NOT READY.
 
 **Frozen-run commands** (after review writes `docs/FREEZE_RECORD.json` with the config SHA-256 and an authorization phrase at the freeze commit):
 ```
@@ -137,7 +143,7 @@ Every codec decodes back to the identical canonical network. Amortized totals (d
 .venv/bin/python scripts/run_confirmatory.py --study S3 --model qwen25_7b --freeze-commit <sha> --authorization "<phrase>"
 .venv/bin/python scripts/run_confirmatory.py --study S3 --model gemma3_12b --freeze-commit <sha> --authorization "<phrase>"
 ```
-Configuration hash of the proposal: {{CONF_HASH}}.
+Configuration hash of the proposal: `sha256(configs/confirmatory.json) = b1f9978dba484484e73fe88c418a8a3065a341ae660a0588bb00e0e928e774fb`. This is the proposal at the review commit; the freeze will record its own hash.
 
 The runner refuses on: a dirty tree, HEAD ≠ freeze commit, a missing or mismatched freeze record, a wrong phrase, or an existing run id (tested).
 

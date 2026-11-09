@@ -146,8 +146,7 @@
    "wp": "WP5",
    "criterion": "trivial/majority and surface baselines",
    "status": "pass",
-   "evidence": "S2 observed-majority baseline; majority-of-V(D) control (post-hoc)",
-   "note": "S3 surface-feature baseline not implemented"
+   "evidence": "S2 observed-majority baseline; majority-of-V(D) control (post-hoc); S3 always-majority and surface-rule baselines (s3_summary.json shortcut_baselines)"
   },
   {
    "wp": "WP6",
@@ -200,8 +199,9 @@
   {
    "wp": "WP8",
    "criterion": "S3 pilot 60-100 worlds, two local model families",
-   "status": "see_REVIEW_READY",
-   "evidence": "s3-pilot-qwen25-7b-dev-v2, s3-pilot-gemma3-12b-dev-v2"
+   "status": "pass",
+   "evidence": "s3-pilot-qwen25-7b-dev-v2 (80 worlds) and s3-pilot-gemma3-12b-dev-v2 (80 worlds), real local models, 0 failures",
+   "note": "floor pilot: S3 not ready to freeze (DESIGN_SIZING.md)"
   },
   {
    "wp": "WP8",
@@ -238,12 +238,18 @@
    "criterion": "weight evolution",
    "status": "not_run",
    "evidence": "subsequent work package by design"
+  },
+  {
+   "wp": "WP8",
+   "criterion": "ceiling/floor pilot refined before freeze",
+   "status": "not_run",
+   "evidence": "S3 marked NOT READY in configs/confirmatory.json; refinements listed in DESIGN_SIZING.md",
+   "note": "deliberately left for the next iteration after review"
   }
  ],
  "counts": {
   "blocked": 1,
-  "not_run": 2,
-  "pass": 35,
-  "see_REVIEW_READY": 1
+  "not_run": 3,
+  "pass": 36
  }
 }

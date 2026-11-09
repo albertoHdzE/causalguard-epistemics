@@ -67,3 +67,9 @@ def test_confirmatory_s2_plan_unique_items_and_worlds():
     assert len(ids) == len(set(ids)) == 1000 + 250 + 250 + 250 + 250
     keys = {(p["population"], p["family"], p["index"]) for _, p in items}
     assert len(keys) == len(items)
+
+
+def test_s3_not_ready_is_refused_by_config():
+    cfg = json.loads((ROOT / "configs" / "confirmatory.json").read_text())
+    assert cfg["S3"]["status"].startswith("NOT READY")
+    assert "NOT READY" in (ROOT / "scripts" / "run_confirmatory.py").read_text()

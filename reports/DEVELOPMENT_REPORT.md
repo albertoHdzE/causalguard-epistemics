@@ -133,6 +133,49 @@ The hidden truth prevalence of these queries is 0.507, and the plot is `s2_accur
 
 ---
 
-## S3 — LLM reasoning pilot (secondary, exploratory)
+## S3 — LLM reasoning pilot (secondary, exploratory, real local models)
 
-_Section filled from the v2 pilots below._
+**Design.** 80 development worlds per model; n = 4 variables, class k ≤ 2 (70 functions per node); 3, 5 or 8 uniformly chosen observations per world; 4 linked point queries per world (320 items per model). The natural verdict distribution is 68 entailed / 72 refuted / 180 underdetermined; ground truth comes from the exact symbolic solver (arm E). Models:
+- **qwen2.5:7b** on Ollama 0.40.15 (Q4_K_M, digest 845dbda0…);
+- **gemma-3-12b-it** on LM Studio (MLX 4-bit; no digest or server version exposed — recorded as a limitation).
+
+Temperature 0 for A/B/D/D-label, 0.7 for C's extra draws; token cap 1,500 for every arm; seeds sent but honouring not verified. Each model made 2,400 physical calls; sharing the first answer saved 1,600 logical calls. 0 runner failures; all 80 worlds completed. Mock outputs appear only in tests.
+
+The pilot v1 runs were invalidated because arm B was truncated at a 400-token cap (D19); they are kept and excluded. The v2 qwen run was interrupted once and resumed (D22). Source: `reports/development/s3_summary.json`.
+
+| arm | qwen accuracy / balanced | gemma accuracy / balanced | per-class recall (E / R / U), qwen · gemma |
+|---|---|---|---|
+| A initial | 0.478 / 0.405 | 0.588 / 0.379 | 0.59 / 0.00 / 0.63 · 0.15 / 0.00 / 0.99 |
+| B self-critique | 0.456 / 0.369 (22% invalid JSON or probabilities) | 0.572 / 0.435 | 0.25 / 0.24 / 0.62 · 0.22 / 0.25 / 0.83 |
+| C majority of 3 | 0.503 / 0.426 | 0.584 / 0.374 | — |
+| D witness feedback (≤2 rounds) | 0.803 / 0.883 | 0.906 / 0.853 | 1.00 / 1.00 / 0.65 · 0.56 / 1.00 / 1.00 |
+| D-label (privileged control) | 1.000 / 1.000 | 1.000 / 1.000 | — |
+| E symbolic solver | 1.000 / 1.000 | 1.000 / 1.000 | — |
+| trivial: always "underdetermined" | 0.569 / 0.333 (held-out odd worlds) | same | — |
+| surface rule (budget, horizon, intervention kind) | 0.656 / 0.528 (fit on even, tested on odd worlds) | same | — |
+
+**Contrasts** (balanced accuracy unless stated; world-clustered bootstrap, 5,000 replicates):
+
+| contrast | qwen | gemma |
+|---|---|---|
+| **D − B (registered primary S3 contrast)** | **+0.514 [0.452, 0.567]** | **+0.418 [0.352, 0.482]** |
+| B − A (self-critique) | −0.036 [−0.105, 0.038] | +0.056 [−0.001, 0.117] |
+| C − B | +0.057 [−0.015, 0.125] | −0.061 [−0.121, −0.004] |
+| D-label − B | +0.631 [0.570, 0.683] | +0.565 [0.515, 0.613] |
+| transfer T_D − A, accuracy on a fresh related item | +0.013 [−0.113, 0.138] | +0.025 [−0.037, 0.100] |
+| control T_A − A | +0.075 [−0.037, 0.188] | 0.000 [−0.062, 0.075] |
+
+**Revisions relative to A** (items; correct→correct / correct→wrong / wrong→correct / wrong→wrong):
+
+| arm | qwen | gemma |
+|---|---|---|
+| B | 97 / **56** / 49 / 118 | 151 / **37** / 32 / 100 |
+| D | 112 / **41** / 145 / 22 | 188 / **0** / 102 / 30 |
+
+**Probability channel.** qwen's stated verdict disagrees with the argmax of its own probability vector in 30–80% of valid answers, depending on the call. It uses the vector as P(claim true/false) despite the clarified instruction (D14), so its Brier scores (A: 1.315, worse than the 0.667 of a uniform vector) measure misuse, not calibration. gemma's vectors are coherent (mismatch ≤ 2%); its Brier scores are A 0.580, D 0.150, D-label 0.091.
+
+**Reading (exploratory).**
+1. **Floor pilot.** Both models' initial answers are at or below trivial baselines. Neither model ever identified a *refuted* claim (recall 0.00). Self-critique and majority voting do not help; B also causes many correct→wrong revisions.
+2. **D's gain is witness-assisted correction that leaks the label**, as the protocol anticipated. On entailed and refuted items every compatible mechanism shown points the same way, so recall jumps to ≈1.0. On underdetermined items qwen stays at 0.65. D is not evidence of reasoning improvement, and certainly not of learning.
+3. **No transfer.** Neither model shows a transfer benefit on a fresh related item.
+4. **The task carries surface structure.** A three-feature rule beats both models. Before any S3 freeze, the item generator should be refined: balance verdicts within feature cells and diversify query templates. The D feedback should be made less label-revealing, for example by always showing two mechanisms (one fitting the claim and one not) when they exist, and reporting that this is impossible otherwise. A surface-rule baseline must be registered.

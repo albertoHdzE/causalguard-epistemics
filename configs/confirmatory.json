@@ -438,10 +438,79 @@
   ],
   "note": "engineering/formal-correctness study; caps fixed from development; timeouts kept in completion curves"
  },
- "S3": "TO BE FILLED FROM THE V2 PILOT (see reports/DESIGN_SIZING.md)",
+ "S3": {
+  "status": "NOT READY TO FREEZE: floor pilot and label-revealing D feedback; refine and re-pilot first (reports/DESIGN_SIZING.md). Block kept so the runner path is exercised.",
+  "worlds_by_model": {
+   "qwen25_7b": 500,
+   "gemma3_12b": 300
+  },
+  "worlds": 500,
+  "task": {
+   "n": 4,
+   "k": 2,
+   "items_per_world": 4
+  },
+  "harness": {
+   "arms": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "D_label",
+    "E",
+    "T_A",
+    "T_D"
+   ],
+   "feedback_rounds": 2,
+   "c_extra_samples": 2,
+   "transfer": {
+    "source_item": 0,
+    "target_item": 1
+   }
+  },
+  "caps": {
+   "calls_per_world": 40,
+   "calls_total": 20000
+  },
+  "models": {
+   "qwen25_7b": {
+    "kind": "openai_compatible",
+    "backend": "ollama",
+    "base_url": "http://127.0.0.1:11434/v1",
+    "model": "qwen2.5:7b",
+    "temperature": 0.0,
+    "sample_temperature": 0.7,
+    "max_tokens": 1500,
+    "seed": 20261109,
+    "timeout_s": 120,
+    "max_transport_retries": 2,
+    "allow_remote": false
+   },
+   "gemma3_12b": {
+    "kind": "openai_compatible",
+    "backend": "lmstudio",
+    "base_url": "http://127.0.0.1:1234/v1",
+    "model": "gemma-3-12b-it",
+    "temperature": 0.0,
+    "sample_temperature": 0.7,
+    "max_tokens": 1500,
+    "seed": 20261109,
+    "timeout_s": 120,
+    "max_transport_retries": 2,
+    "allow_remote": false
+   }
+  },
+  "primary": "D - B final-verdict balanced accuracy, world-clustered bootstrap 5000 replicates",
+  "key_secondary": [
+   "transfer T_D - A(target item)",
+   "B - A and correct->wrong revisions",
+   "surface-rule baseline",
+   "verdict-probability coherence"
+  ]
+ },
  "resource_estimate": {
   "S2": "~2,000 worlds x 3.6 s mean = ~120 CPU-min; ~5 min wall on 24 workers; ~350 MB raw records",
   "S1": "1,950 worlds x 7 backends; ~132,000 CPU-s estimated from development per-cell item means; ~2.3 h wall on 16 workers; largest dev item 349 s",
-  "S3": "see S3 section"
+  "S3": "qwen 500 worlds x 59 s ~ 8.2 h; gemma 300 x 104 s ~ 8.7 h; ~24,000 local calls; no paid inference"
  }
 }

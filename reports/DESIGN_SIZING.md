@@ -40,6 +40,24 @@ Sized as specified in the protocol rather than by power, because S1 is a correct
 
 Exact-mismatch counts must be 0, so the useful quantity is coverage. With 0 mismatches observed in M comparisons, a 95% upper bound on the per-comparison mismatch rate is ≈ 3/M (≈ 3 × 10⁻⁵ for the expected M ≈ 1.1 × 10⁵ reference comparisons). Caps were fixed from development: 20 s per query, 20,000 cubes, 2 × 10⁶ BDD nodes, and a RUP check budget of 2 × 10⁶ steps. Estimated cost: about 132,000 CPU-s, ≈ 2.3 h wall on 16 workers, from per-cell development item means.
 
-## S3 (secondary)
+## S3 (secondary) — NOT READY TO FREEZE
 
-See the S3 section appended below once the v2 pilots complete.
+The v2 pilot (80 worlds per model) is a **floor pilot**: initial answers are at or below trivial and surface-feature baselines, and the D arm leaks labels through witness choice (DEVELOPMENT_REPORT §S3). The protocol requires development refinement before freezing such a pilot. S3 is therefore proposed for freeze only after the refinements listed below have been re-piloted.
+
+**Development variability** (80 worlds, world-clustered bootstrap SE):
+- D − B balanced accuracy: SE 0.029 (qwen), 0.033 (gemma). The registered primary is resolved by N ≈ 100, but it is dominated by leakage.
+- Transfer T_D − A (item-level accuracy): SE 0.063 (qwen), 0.036 (gemma).
+- A 95% half-width ≤ 0.05 for transfer needs about 80·(0.063/0.0255)² ≈ 490 worlds for qwen and ≈ 160 for gemma. This makes transfer the binding endpoint.
+
+**Proposed sizes after refinement:**
+- primary model qwen2.5:7b: 500 worlds;
+- replication gemma-3-12b-it: 300 worlds (within the protocol's 300–500 replication range; wider intervals acknowledged).
+
+The protocol's ≥1,000-world target is not warranted by the measured precision.
+
+**Cost** at pilot rates (≈30 physical calls per world): qwen 59 s per world → 500 worlds ≈ 8.2 h; gemma 104 s per world → 300 worlds ≈ 8.7 h. That is 15,000 + 9,000 local calls and no paid inference.
+
+**Required refinements before freeze** (to be proposed in the next iteration and reviewed):
+1. Item generator: balance verdicts within (budget, horizon, intervention) cells, and register the surface-rule baseline.
+2. D feedback: show two mechanisms (one fitting the claim and one not) whenever both exist, and an explicit "no compatible mechanism disagrees" statement otherwise. This must be labelled, because it is close to label disclosure.
+3. Keep the probability-coherence diagnostic. Treat Brier as uninterpretable for any model with a high mismatch rate.

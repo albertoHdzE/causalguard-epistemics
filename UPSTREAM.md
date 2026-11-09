@@ -24,6 +24,8 @@ Unresolved question for the owner (does not block this release): whether to add 
 | `src/description_lengths.py` | 9edabfa4…a4e | Variant E `schema_normal_form_length` (a floating log2 *proxy*, not an archive length) |
 | `papers/method/manuscript_formal/method_paper.tex` | 04ea352c…366 | Dec(L,S) operator, gate-family one-set formulae, Rule 110 remark |
 
+The temporary review checkout (`/tmp/epistemics-causalbool-review`) was purged by the OS during this iteration; the parity tests now use `scripts/fetch_upstream.sh ~/.cache/causalguard/CausalBool` (revision re-verified). Nothing depends on `/tmp`.
+
 ## Measured parity (tests/test_upstream_parity.py, 2026-11-09)
 
 - Repertoires: 150 random networks (n ≤ 7, in-degree ≤ 3) — identical next-state rows for every state.
