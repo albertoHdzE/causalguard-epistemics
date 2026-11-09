@@ -8,7 +8,9 @@ State: **review-ready development package; not accepted; no confirmatory data ex
 - Branch `main`; review commit and tag: **see the final lines of this section** (filled at release).
 - Dirty state at the review commit: clean (`git status --porcelain` empty). Ignored by design: `runs/` (raw records; release asset), `.venv/`, `dist/`, `doc/Gemini-Talk.txt`.
 
-{{RELEASE_COMMIT}}
+- **Reviewed content commit: `371b04ec5be9023c9536e7088064896105eaea13`.** CI run 42675501260 succeeded on it: ubuntu, macOS and upstream-parity jobs.
+- The tag **`v0.1.0-dev`** points to the immediately following docs-only commit. That commit records this hash, the CI run and the manifest digests; code, configs and data are identical to 371b04e (`git diff 371b04e v0.1.0-dev -- src tests configs scripts data` is empty).
+- GitHub release `v0.1.0-dev` carries the raw development records `causalguard-dev-runs-v0.1.0-dev.tar.gz` (SHA-256 in `artifacts/manifest.json`).
 
 ## 2. Work-package acceptance (machine-readable: `reports/acceptance.json`)
 

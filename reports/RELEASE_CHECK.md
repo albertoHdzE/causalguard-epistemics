@@ -13,5 +13,6 @@
 | Provenance audit | 90+ tracked files listed with `git ls-files`; secret-pattern scan: no hits; absolute local paths only in the owner's dated pre-sprint design documents (`delegation/`, `preparation/`), which describe the local project root by design |
 | Excluded | `doc/Gemini-Talk.txt` (local idea source), `.venv`, `runs/` (raw records → release asset + manifest), `dist/`, `sealed/` (nothing exists), model weights/caches |
 | Raw records | release asset `causalguard-dev-runs-v0.1.0-dev.tar.gz` attached to tag `v0.1.0-dev`; SHA-256 of the asset and of every file in `artifacts/manifest.json`; verify with `python scripts/verify_artifacts.py` |
+| CI on the review commit | run 42675501260 on 371b04e: ubuntu, macOS and upstream-parity all **success** |
 | Test count at the review commit | 138 passed with the pinned upstream checkout; 133 passed + 5 skipped without it (later commits added tests after the first CI run) |
 | Sealed confirmatory material | none generated; the confirmatory salt is derived from the future freeze commit; `docs/FREEZE_RECORD.json` absent (test-enforced) |

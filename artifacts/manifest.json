@@ -124,13 +124,13 @@
   },
   {
    "path": "reports/RELEASE_CHECK.md",
-   "bytes": 2623,
-   "sha256": "476027f7bdb1530a13e5653ae8d17fd87559c160881065cb5b566f3de62c794b"
+   "bytes": 2731,
+   "sha256": "a363826b56f23217b143c31fcba1116f1018cdd590a2c10998046f3bcd60b85d"
   },
   {
    "path": "reports/REVIEW_READY.md",
-   "bytes": 14686,
-   "sha256": "42400eeae86960be184e1cf0fe0b795c0a0de45bfacb16178a0e46961b392eb2"
+   "bytes": 15238,
+   "sha256": "5d5a1d333ebe507884082123e82efa8ee15a3349186d68c9320d7fe39c33ae51"
   },
   {
    "path": "reports/acceptance.json",
