@@ -36,8 +36,8 @@ from .providers import BaseProvider, CapExceeded
 ARMS = ("A", "B", "C", "D", "D_label", "E", "T_A", "T_D")
 LLM_ITEM_ARMS = ("A", "B", "C", "D", "D_label")
 CRITIQUE_PROMPT = ("Critically review your previous answer. Check it step by step against every observation and "
-                   "against the definitions given above, and look for mistakes. Then give your final answer again "
-                   "in the same JSON format.")
+                   "against the definitions given above, and look for mistakes. Keep the review concise, then END your "
+                   "reply with your final answer as a single JSON object in the same format.")
 _LABEL_RE = re.compile(r"\b(" + "|".join(VERDICT_LABELS) + r")\b", re.IGNORECASE)
 
 

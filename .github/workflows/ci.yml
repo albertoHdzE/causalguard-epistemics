@@ -1,0 +1,43 @@
+name: ci
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        python: ["3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install (clean, from lock)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-lock.txt
+          pip install --no-deps -e .
+      - name: Lint
+        run: ruff check --output-format=concise src tests
+      - name: Offline tests (no models, no upstream checkout, no network)
+        run: python -m pytest -o addopts="" -q -rs
+      - name: Fast smoke path (S2, 3 worlds) and fixture table
+        run: |
+          python -m causalguard fixtures
+          python -m causalguard run --config configs/s2_dev.json --run-id ci-smoke --limit 3 --workers 2 --quiet
+  upstream-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          pip install -r requirements-lock.txt && pip install --no-deps -e .
+          scripts/fetch_upstream.sh "$RUNNER_TEMP/causalbool"
+          CAUSALBOOL_ROOT="$RUNNER_TEMP/causalbool" python -m pytest -o addopts="" -q -m upstream tests/test_upstream_parity.py

@@ -173,3 +173,32 @@ def holm(pvalues: dict[str, float]) -> dict[str, float]:
         running = max(running, min(1.0, (m - i) * p))
         out[k] = running
     return out
+
+
+def cluster_bootstrap(stat_fn, n_clusters: int, replicates: int = 5000, seed: int = 20261109,
+                      alpha: float = 0.05) -> dict:
+    """Generic world-clustered bootstrap for statistics that are not per-world means
+    (e.g. balanced accuracy pooled over items).  ``stat_fn(idx)`` receives an index array of
+    resampled worlds (with repetition) and returns a float; NaN replicates are counted and dropped."""
+    rng = np.random.default_rng(seed)
+    est = float(stat_fn(np.arange(n_clusters)))
+    vals = []
+    nan = 0
+    for _ in range(replicates):
+        v = stat_fn(rng.integers(0, n_clusters, n_clusters))
+        if v is None or not np.isfinite(v):
+            nan += 1
+            continue
+        vals.append(v)
+    vals = np.array(vals)
+    lo, hi = np.quantile(vals, [alpha / 2, 1 - alpha / 2])
+    return {"estimate": est, "ci95": [float(lo), float(hi)], "se": float(vals.std(ddof=1)), "n_worlds": n_clusters,
+            "replicates": replicates, "dropped_nan_replicates": nan, "seed": seed}
+
+
+def balanced_accuracy_from_counts(by_class: np.ndarray) -> float:
+    """by_class: (K, 2) array of [n_items, n_correct] per class; mean recall over classes present."""
+    present = by_class[:, 0] > 0
+    if not present.any():
+        return float("nan")
+    return float(np.mean(by_class[present, 1] / by_class[present, 0]))

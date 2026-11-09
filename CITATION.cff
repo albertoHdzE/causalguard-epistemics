@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Development release; not a final study release. Cite the exact commit."
+title: "CausalGuard: compressed symbolic models for auditable epistemic improvement"
+version: 0.1.0-dev
+date-released: 2026-11-09
+license: MIT
+repository-code: "https://github.com/albertoHdzE/causalguard-epistemics"
+authors:
+  - family-names: "Hernández Espinosa"
+    given-names: "Alberto"
+references:
+  - type: software
+    title: "CausalBool"
+    url: "https://github.com/albertoHdzE/CausalBool"
+    commit: "376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43"
+    notes: "Upstream index-set method; used read-only for parity checks; not redistributed."

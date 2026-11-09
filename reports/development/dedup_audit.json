@@ -1,0 +1,21 @@
+{
+ "S2_dev": {
+  "networks": 420,
+  "invariant_classes": 420,
+  "exact_isomorphism_checks": 0,
+  "exact_infeasible": 0,
+  "duplicate_groups": [],
+  "cross_split_duplicates": 0,
+  "method": "invariant prefilter + exact minimum over all n! relabellings (n <= 8)"
+ },
+ "S3_dev": {
+  "networks": 80,
+  "invariant_classes": 75,
+  "exact_isomorphism_checks": 8,
+  "exact_infeasible": 0,
+  "duplicate_groups": [],
+  "cross_split_duplicates": 0,
+  "method": "invariant prefilter + exact minimum over all n! relabellings (n <= 8)"
+ },
+ "seconds": 1.0
+}

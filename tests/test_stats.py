@@ -69,3 +69,12 @@ def test_planning_formula_matches_protocol():
 def test_holm_hand():
     out = holm({"a": 0.01, "b": 0.04, "c": 0.03})
     assert out == {"a": 0.03, "c": 0.06, "b": 0.06}
+
+
+def test_cluster_bootstrap_balanced_accuracy_hand():
+    from causalguard.stats import balanced_accuracy_from_counts, cluster_bootstrap
+    bc = np.array([[2, 2], [2, 1], [0, 0]])          # recall 1.0 and 0.5; third class absent
+    assert balanced_accuracy_from_counts(bc) == 0.75
+    worlds = np.array([[[1, 1], [1, 0], [0, 0]], [[1, 1], [1, 1], [0, 0]]], dtype=float)
+    r = cluster_bootstrap(lambda idx: balanced_accuracy_from_counts(worlds[idx].sum(axis=0)), 2, replicates=200)
+    assert r["estimate"] == 0.75 and 0.5 <= r["ci95"][0] <= r["ci95"][1] <= 1.0

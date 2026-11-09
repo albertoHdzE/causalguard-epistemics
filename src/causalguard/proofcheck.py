@@ -10,8 +10,15 @@ solver; deletion steps are honoured.
 from __future__ import annotations
 
 
-def check_rup_refutation(clauses: list[list[int]], proof: list[str], budget: int = 2_000_000
-                         ) -> tuple[bool, dict]:
+def check_rup_refutation(clauses: list[list[int]], proof: list[str], budget: int = 2_000_000,
+                         honor_deletions: bool = False) -> tuple[bool, dict]:
+    """Check that ``proof`` derives the empty clause by reverse unit propagation.
+
+    Deletion steps are IGNORED by default: every clause kept in the database is either an
+    input clause or a lemma already verified to be implied by the inputs, so checking
+    against the larger database is still sound (deletions exist only for speed).  Solvers
+    with in-processing (e.g. Glucose simplification) delete input clauses that a later lemma's
+    RUP check can need; honouring those deletions makes a pure-RUP checker incomplete."""
     db: list[list[int]] = []
     alive: list[bool] = []
     watches: dict[int, list[int]] = {}
@@ -105,6 +112,8 @@ def check_rup_refutation(clauses: list[list[int]], proof: list[str], budget: int
             if not toks:
                 continue
             if toks[0] == "d":
+                if not honor_deletions:
+                    continue
                 lits = [int(t) for t in toks[1:] if t != "0"]
                 ids = index.get(tuple(sorted(dict.fromkeys(lits))), [])
                 for cid in ids:

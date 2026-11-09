@@ -9,8 +9,11 @@ Deterministic extraction (the ONLY transformations applied before ``json.loads``
   1. ``<think>...</think>`` blocks are removed (an unclosed ``<think>`` removes everything after
      it); flag ``think_stripped``.
   2. If the whole remaining text (whitespace-trimmed) is valid JSON it is used as is.
-  3. Otherwise the FIRST balanced ``{...}`` substring is extracted by a brace scanner that respects
-     JSON string literals and escapes; this covers ```json fences and surrounding prose.
+  3. Otherwise the LAST top-level balanced ``{...}`` substring is extracted by a brace scanner that
+     respects JSON string literals and escapes; this covers ```json fences and surrounding prose, and
+     takes the FINAL answer when a reply (e.g. a self-critique) quotes an earlier answer first.  If that
+     last object does not parse, the answer is invalid_json (no fallback to earlier objects).
+     (Changed from FIRST to LAST before the v2 pilot; see DECISIONS.md D19.)
      Flag ``extracted_object``.  Nothing else (no quote fixing, no trailing-comma removal, ...).
 
 Status taxonomy (one value per answer; precedence top to bottom):
@@ -98,6 +101,35 @@ def check_probabilities(p) -> tuple[dict | None, str | None]:
     return {k: float(p[k]) for k in VERDICT_LABELS}, None
 
 
+def last_balanced_object(text: str) -> str | None:
+    """Return the last top-level balanced {...} substring (string-literal aware), or None."""
+    last = None
+    depth = 0
+    in_str = False
+    esc = False
+    start = -1
+    for j, ch in enumerate(text):
+        if depth > 0 and in_str:
+            if esc:
+                esc = False
+            elif ch == "\\":
+                esc = True
+            elif ch == '"':
+                in_str = False
+            continue
+        if depth > 0 and ch == '"':
+            in_str = True
+        elif ch == "{":
+            if depth == 0:
+                start = j
+            depth += 1
+        elif ch == "}" and depth > 0:
+            depth -= 1
+            if depth == 0:
+                last = text[start:j + 1]
+    return last
+
+
 def parse_answer(raw: str | None, provider_ok: bool = True) -> dict:
     out = {"status": None, "verdict": None, "verdict_valid": False, "probabilities": None, "probs_valid": False,
            "prob_error": None, "reason": None, "flags": []}
@@ -112,7 +144,7 @@ def parse_answer(raw: str | None, provider_ok: bool = True) -> dict:
     try:
         obj = json.loads(text)
     except (json.JSONDecodeError, ValueError):
-        sub = first_balanced_object(text)
+        sub = last_balanced_object(text)
         if sub is not None:
             try:
                 obj = json.loads(sub)

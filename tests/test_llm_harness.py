@@ -357,3 +357,12 @@ def test_resume_does_not_duplicate(tmp_path):
     assert all(r["provider_kind"] == "mock" for r in recs)
     with pytest.raises(RuntimeError):
         Run("t", {**cfg, "salt": "other"}, **kw)
+
+
+def test_parser_takes_last_object_when_critique_quotes_old_answer():
+    old = json.dumps({"verdict": "entailed", "probabilities": {"entailed": 1, "refuted": 0, "underdetermined": 0}, "reason": "a"})
+    new = json.dumps({"verdict": "refuted", "probabilities": {"entailed": 0.1, "refuted": 0.8, "underdetermined": 0.1}, "reason": "b"})
+    p = parse_answer(f"Earlier I said {old}. Step 1 ... so the final answer is:\n```json\n{new}\n```")
+    assert p["status"] == "ok" and p["verdict"] == "refuted" and "extracted_object" in p["flags"]
+    # a broken final object is invalid_json: no fallback to the earlier (quoted) answer
+    assert parse_answer(f"Earlier {old}. Final: {{\"verdict\": \"refuted\", }}")["status"] == "invalid_json"
