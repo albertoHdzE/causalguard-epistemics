@@ -268,6 +268,7 @@ def analyze(run_ids: list[str], out_dir: Path, reps_primary: int = 5000, reps_se
     (out_dir / "s2_summary.json").write_text(json.dumps(result, indent=1, sort_keys=True, default=float))
     result["digest"] = hashlib.sha256((out_dir / "s2_summary.json").read_bytes()).hexdigest()
     try:
+        _per_world_figure(rows, noise_ids - {r["world_id"] for r in rows if r["family"] == "uniform_H"}, out_dir)
         _figures(result, out_dir)
     except Exception as e:  # figures are optional; numbers are in the JSON
         result["figure_error"] = repr(e)
@@ -313,4 +314,33 @@ def _figures(result: dict, out_dir: Path) -> None:
         ax.set_title(f"{pop} worlds (DEVELOPMENT)", fontsize=9)
     fig.tight_layout()
     fig.savefig(out_dir / "s2_consensus_risk_coverage.png", dpi=130)
+    plt.close(fig)
+
+
+def _per_world_figure(rows, exclude_ids, out_dir: Path) -> None:
+    """Every world rendered (budget 16, uniform designs, intervention queries); null worlds in red."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    sel = [r for r in rows if r["regime"] == "uniform_states" and r["kind"] == "intervention" and r["budget"] == 16
+           and r["population"] == "realizable" and r["world_id"] not in exclude_ids]
+    fams = [f for f in ("conjunctive", "canalizing", "parity", "random_lookup", "modular", "uniform_H")
+            if any(r["family"] == f for r in sel)]
+    fig, axes = plt.subplots(1, 3, figsize=(16, 4.5), sharey=True)
+    rng = np.random.default_rng(0)
+    for ax, (a, b) in zip(axes, (("index", "uniform"), ("index", "vs_majority"), ("circuit", "vs_majority"))):
+        for k, f in enumerate(fams):
+            d = np.array([r[a] - r[b] for r in sel if r["family"] == f])
+            ax.scatter(k + rng.uniform(-0.25, 0.25, len(d)), d, s=6, alpha=0.5,
+                       color="tab:red" if f == "uniform_H" else "tab:blue")
+            ax.plot([k - 0.3, k + 0.3], [d.mean()] * 2, color="k", lw=2)
+        ax.axhline(0, color="gray", lw=0.8)
+        ax.set_xticks(range(len(fams)))
+        ax.set_xticklabels([f.replace("_", "\n") for f in fams], fontsize=8)
+        ax.set_title(f"per-world {a} - {b} (budget 16, 16 intervention queries)", fontsize=9)
+    axes[0].set_ylabel("per-world accuracy difference")
+    fig.suptitle("S2 DEVELOPMENT, every world shown (blue: structured families; red: NULL worlds drawn uniformly "
+                 "from H). Bars = means.", fontsize=9)
+    fig.tight_layout()
+    fig.savefig(out_dir / "s2_per_world_deltas.png", dpi=130)
     plt.close(fig)

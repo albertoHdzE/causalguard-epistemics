@@ -1,0 +1,210 @@
+{
+ "n_per_stratum_50": {
+  "coverage": 0.93,
+  "sims": 300,
+  "replicates": 1000,
+  "n_per_stratum": 50,
+  "mean_width": 0.021789451953524937,
+  "truth": 0.06387351860295082
+ },
+ "n_per_stratum_200": {
+  "coverage": 0.9466666666666667,
+  "sims": 300,
+  "replicates": 1000,
+  "n_per_stratum": 200,
+  "mean_width": 0.011013962841688221,
+  "truth": 0.06387351860295082
+ },
+ "design_index_minus_vs_majority": {
+  "assumptions": {
+   "strata": [
+    "canalizing",
+    "conjunctive",
+    "modular",
+    "parity",
+    "random_lookup"
+   ],
+   "dev_worlds": 250,
+   "dev_stratified_mean": 0.006500000000000001,
+   "dev_sd_per_stratum": {
+    "canalizing": 0.10022296571715916,
+    "conjunctive": 0.09573993526257281,
+    "modular": 0.12407823404314436,
+    "parity": 0.1199489687410476,
+    "random_lookup": 0.09981647700471427
+   },
+   "effect": 0.05,
+   "variance_inflation": 1.25,
+   "sims": 2000,
+   "allocation": "equal per stratum",
+   "interval": "normal with stratified SE",
+   "seed": 11
+  },
+  "grid": [
+   {
+    "N_total": 250,
+    "n_per_stratum": 50,
+    "observed": {
+     "median_half_width": 0.013321658222848384,
+     "p90_half_width": 0.014272804670125202,
+     "p_lower_gt_0": 0.1485,
+     "p_upper_lt_0": 0.0025,
+     "mean_estimate": 0.0062733749999999994
+    },
+    "null": {
+     "median_half_width": 0.013281598809258662,
+     "p90_half_width": 0.014233098543955758,
+     "p_lower_gt_0": 0.032,
+     "p_upper_lt_0": 0.0235,
+     "mean_estimate": 4.1625000000002896e-05
+    },
+    "effect": {
+     "median_half_width": 0.013303807537781726,
+     "p90_half_width": 0.014242356007154185,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.050009
+    },
+    "effect_conservative": {
+     "median_half_width": 0.01660580251990518,
+     "p90_half_width": 0.017756957415037872,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.05006765625000001
+    }
+   },
+   {
+    "N_total": 500,
+    "n_per_stratum": 100,
+    "observed": {
+     "median_half_width": 0.009409826652622723,
+     "p90_half_width": 0.009866515093569448,
+     "p_lower_gt_0": 0.2785,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.0066454375
+    },
+    "null": {
+     "median_half_width": 0.00941076086183007,
+     "p90_half_width": 0.009859405918566141,
+     "p_lower_gt_0": 0.0225,
+     "p_upper_lt_0": 0.0235,
+     "mean_estimate": 0.00010837500000000413
+    },
+    "effect": {
+     "median_half_width": 0.009423974875974114,
+     "p90_half_width": 0.009872523008548063,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.049968000000000005
+    },
+    "effect_conservative": {
+     "median_half_width": 0.011763813468834919,
+     "p90_half_width": 0.012308397203247954,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.049957890625000015
+    }
+   },
+   {
+    "N_total": 1000,
+    "n_per_stratum": 200,
+    "observed": {
+     "median_half_width": 0.00665265641208175,
+     "p90_half_width": 0.006877776214165071,
+     "p_lower_gt_0": 0.4745,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.00646478125
+    },
+    "null": {
+     "median_half_width": 0.0066561663958357616,
+     "p90_half_width": 0.006889581055765164,
+     "p_lower_gt_0": 0.0285,
+     "p_upper_lt_0": 0.032,
+     "mean_estimate": -1.0874999999995765e-05
+    },
+    "effect": {
+     "median_half_width": 0.006663890899380182,
+     "p90_half_width": 0.006885797449705032,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.04997728125
+    },
+    "effect_conservative": {
+     "median_half_width": 0.008337367389545042,
+     "p90_half_width": 0.008616681329972,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.05014199218750001
+    }
+   },
+   {
+    "N_total": 1500,
+    "n_per_stratum": 300,
+    "observed": {
+     "median_half_width": 0.005435336255161759,
+     "p90_half_width": 0.005583217666299459,
+     "p_lower_gt_0": 0.655,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.0064341875
+    },
+    "null": {
+     "median_half_width": 0.005439663939448411,
+     "p90_half_width": 0.005588465841913783,
+     "p_lower_gt_0": 0.028,
+     "p_upper_lt_0": 0.0275,
+     "mean_estimate": -8.583333333332998e-05
+    },
+    "effect": {
+     "median_half_width": 0.005436589790934499,
+     "p90_half_width": 0.005581308122961784,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.049950291666666674
+    },
+    "effect_conservative": {
+     "median_half_width": 0.006796539794980373,
+     "p90_half_width": 0.006989386931700632,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.049894583333333346
+    }
+   },
+   {
+    "N_total": 2000,
+    "n_per_stratum": 400,
+    "observed": {
+     "median_half_width": 0.004706786664366452,
+     "p90_half_width": 0.00482376332864791,
+     "p_lower_gt_0": 0.789,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.00659871875
+    },
+    "null": {
+     "median_half_width": 0.004708882133082576,
+     "p90_half_width": 0.004822964220969954,
+     "p_lower_gt_0": 0.0265,
+     "p_upper_lt_0": 0.0185,
+     "mean_estimate": 0.0001151875000000042
+    },
+    "effect": {
+     "median_half_width": 0.004710819997380449,
+     "p90_half_width": 0.004821352256077767,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.050019125
+    },
+    "effect_conservative": {
+     "median_half_width": 0.005888996497358766,
+     "p90_half_width": 0.006023835200856929,
+     "p_lower_gt_0": 1.0,
+     "p_upper_lt_0": 0.0,
+     "mean_estimate": 0.04990417968750001
+    }
+   }
+  ]
+ },
+ "dev_sd": {
+  "index-uniform": 0.09541334636350385,
+  "index-vs_majority": 0.11056853804959937
+ }
+}
