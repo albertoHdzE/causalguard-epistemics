@@ -38,12 +38,22 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
     answers = defaultdict(dict)   # (world, q) -> backend -> answer
     levels = Counter()
     replay_fail = 0
+    excluded_post_interrupt = [0]
     proof_checked = proof_failed = 0
     tags = {}
     for r in recs:
         if r.get("status") != "ok" or "queries" not in r:
             continue
+        interrupted = False
         for q in r["queries"]:
+            if (r["backend"] == "bdd_ref" and interrupted and not any(x.get("manager_rebuilt_after_interrupt")
+                                                                      for x in r["queries"])):
+                # legacy records (before the rebuild fix): BDD answers after an in-item timeout may come
+                # from a corrupted dd manager; excluded from correctness comparisons and counted
+                excluded_post_interrupt[0] += 1
+                continue
+            if r["backend"] == "bdd_ref" and q["answer"] == "timeout":
+                interrupted = True
             answers[(r["world_id"], q["q"])][r["backend"]] = q["answer"]
             tags[(r["world_id"], q["q"])] = (q["tag"], r["family"], r["n"])
             levels[(r["backend"], q["level"])] += 1
@@ -72,7 +82,8 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
     res["correctness"] = {
         "compared_with_exhaustive_reference": dict(compared_ref), "mismatches_vs_reference": dict(mismatch_ref),
         "cross_backend_disagreements_total": len(disagreements), "disagreement_examples": disagreements[:10],
-        "witness_replay_failures": replay_fail, "unsat_proofs_checked_ok": proof_checked,
+        "witness_replay_failures": replay_fail,
+        "bdd_answers_excluded_post_interrupt_legacy": excluded_post_interrupt[0], "unsat_proofs_checked_ok": proof_checked,
         "unsat_proofs_not_certified": proof_failed}
     # UNSAT-type answers at n > 10: how were they validated?
     unsat_val = Counter()

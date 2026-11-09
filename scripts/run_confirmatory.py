@@ -68,6 +68,28 @@ def dev_canonical_forms() -> set[str]:
     return forms
 
 
+def plan_s2_items(s2: dict, salt: str, dev_forms: set[str] | None) -> tuple[list, list]:
+    """Item list for the S2 study; worlds isomorphic to a development world are excluded and logged."""
+    from causalguard.dedup import canonical_form
+    from causalguard.generators import make_s2_world
+    items, excluded = [], []
+    for pop in s2["populations"]:
+        tag = "noise" if pop.get("noise_rates") else pop["population"]
+        for fam in pop["families"]:
+            for i in range(pop.get("start", 0), pop.get("start", 0) + pop["worlds_per_family"]):
+                w = make_s2_world(salt, i, fam, pop["population"], s2["n"], s2["kmax"])
+                if dev_forms is not None and canonical_form(w.net) in dev_forms:
+                    excluded.append({"population": pop["population"], "family": fam, "index": i,
+                                     "reason": "isomorphic to a development world"})
+                    continue
+                items.append((f"{tag}|{fam}|{i}", {
+                    "salt": salt, "index": i, "family": fam, "population": pop["population"], "n": s2["n"],
+                    "kmax": s2["kmax"], "budgets": s2["budgets"], "regimes": pop.get("regimes", s2["regimes"]),
+                    "mc_samples": s2["mc_samples"], "noise_rates": pop.get("noise_rates", []),
+                    "noise_budgets": pop.get("noise_budgets", [16, 32, 64]), "verdicts": pop.get("verdicts", True)}))
+    return items, excluded
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--study", required=True, choices=["S1", "S2", "S3"])
@@ -88,25 +110,9 @@ def main():
     access.write_text(json.dumps({"event": "seal_opened", "time": now(), "freeze_commit": args.freeze_commit,
                                   "study": args.study}) + "\n")
     if args.study == "S2":
-        from causalguard.dedup import canonical_form
         from causalguard.experiments.s2 import run_world
-        from causalguard.generators import make_s2_world
         s2 = cfg["S2"]
-        dev = dev_canonical_forms()
-        items, excluded = [], []
-        for pop in s2["populations"]:
-            for fam in pop["families"]:
-                for i in range(pop["worlds_per_family"]):
-                    w = make_s2_world(salt, i, fam, pop["population"], s2["n"], s2["kmax"])
-                    if canonical_form(w.net) in dev:
-                        excluded.append({"population": pop["population"], "family": fam, "index": i,
-                                         "reason": "isomorphic to a development world"})
-                        continue
-                    items.append((f"{pop['population']}|{fam}|{i}", {
-                        "salt": salt, "index": i, "family": fam, "population": pop["population"], "n": s2["n"],
-                        "kmax": s2["kmax"], "budgets": s2["budgets"], "regimes": pop.get("regimes", s2["regimes"]),
-                        "mc_samples": s2["mc_samples"], "noise_rates": pop.get("noise_rates", []),
-                        "noise_budgets": pop.get("noise_budgets", [16, 32, 64]), "verdicts": pop.get("verdicts", True)}))
+        items, excluded = plan_s2_items(s2, salt, dev_canonical_forms())
         (ROOT / "runs" / run_id / "EXCLUSIONS.json").write_text(json.dumps(excluded, indent=1))
         run = Run(run_id, {**s2, "salt": salt, "mode": "confirmatory", "freeze_commit": args.freeze_commit})
         end = run.execute(items, run_world, workers=args.workers or s2.get("workers", 24), timeout_s=900,

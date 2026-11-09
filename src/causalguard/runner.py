@@ -177,7 +177,7 @@ def _call(fn, payload, timeout_s=None):
     except MemoryError:
         out, status = {"error": "MemoryError"}, "oom"
     except Exception as e:  # recorded as a failure, never dropped
-        out, status = {"error": repr(e), "traceback": traceback.format_exc()[-4000:]}, "error"
+        out, status = {"error": repr(e)[:2000], "traceback": traceback.format_exc()[-4000:]}, "error"
     finally:
         if timeout_s:
             signal.setitimer(signal.ITIMER_REAL, 0)

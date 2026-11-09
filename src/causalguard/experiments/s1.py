@@ -146,6 +146,12 @@ def run_item(p: dict) -> dict:
         row = {"q": qi, "tag": tags[qi], "seconds": secs}
         if err:
             row.update(answer=err, level="none")
+            if "bdd" in state:
+                # an asynchronous interrupt can leave the dd manager inconsistent: never reuse it
+                state["bdd"].close()
+                from ..bdd_ref import BDDModel
+                state["bdd"] = BDDModel(net, lim["bdd_node_budget"])
+                row["manager_rebuilt_after_interrupt"] = True
         else:
             row.update(answer=res.answer.value, level=res.certificate.level.value)
             if res.certificate.witness_state is not None:

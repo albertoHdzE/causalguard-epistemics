@@ -1,0 +1,431 @@
+{
+ "status": "PROPOSED - not frozen, not run. Freeze requires review and docs/FREEZE_RECORD.json at the frozen commit.",
+ "mode": "confirmatory",
+ "salt_rule": "confirm- + sha256('<freeze commit>|causalguard-confirmatory-v1')[:16] (scripts/run_confirmatory.py)",
+ "S2": {
+  "study": "S2",
+  "n": 7,
+  "kmax": 3,
+  "budgets": [
+   2,
+   4,
+   8,
+   16,
+   32,
+   64
+  ],
+  "regimes": [
+   "uniform_states",
+   "observational",
+   "clamp_interventions",
+   "active"
+  ],
+  "mc_samples": 4096,
+  "workers": 24,
+  "populations": [
+   {
+    "population": "realizable",
+    "families": [
+     "conjunctive",
+     "canalizing",
+     "parity",
+     "random_lookup",
+     "modular"
+    ],
+    "worlds_per_family": 200,
+    "start": 0
+   },
+   {
+    "population": "misspecified",
+    "families": [
+     "conjunctive",
+     "canalizing",
+     "parity",
+     "random_lookup",
+     "modular"
+    ],
+    "worlds_per_family": 50,
+    "start": 1000
+   },
+   {
+    "population": "shift",
+    "families": [
+     "composed_mixed"
+    ],
+    "worlds_per_family": 250,
+    "start": 2000
+   },
+   {
+    "population": "realizable",
+    "families": [
+     "conjunctive",
+     "canalizing",
+     "parity",
+     "random_lookup",
+     "modular"
+    ],
+    "worlds_per_family": 50,
+    "regimes": [
+     "uniform_states"
+    ],
+    "noise_rates": [
+     0.01,
+     0.05,
+     0.1
+    ],
+    "noise_budgets": [
+     16,
+     32,
+     64
+    ],
+    "verdicts": false,
+    "label": "noise_stress (separate MDL experiment; indices offset by population label in the seed)",
+    "start": 3000
+   }
+  ],
+  "primary": {
+   "population": "realizable",
+   "regime": "uniform_states",
+   "budget": 16,
+   "queries": "16 hidden intervention queries per world",
+   "contrast": "accuracy(min index-code model) - expected accuracy(uniform compatible model)",
+   "aggregation": "equal-weight mean over the 5 family strata of per-world paired differences",
+   "interval": "stratified paired cluster bootstrap over worlds, 5000 replicates, seed 20261109, percentile 95%",
+   "missing": "empty V(D) -> 0 correctness (primary); complete-case sensitivity",
+   "decision_rule": "report estimate and 95% CI; 'supported' if CI lower bound > 0; equivalence is NOT tested; a wide-interval null is inconclusive",
+   "minimum_meaningful_difference": 0.05
+  },
+  "registered_secondary": [
+   "index - circuit (same cell)",
+   "index - uniform on state-holdout queries",
+   "index - uniform per family (exploratory)",
+   "consensus false-certification rate in realizable (must be 0) and misspecified worlds",
+   "active - random measurement policy at budgets 4/8/16"
+  ],
+  "multiplicity": "S2 has one primary contrast; secondaries exploratory (no p-values). If S3 is promoted to co-primary in a paper, Holm over the two primary p-values from the bootstrap (two-sided, percentile inversion).",
+  "stopping": "stop only for oracle/codec defect, corrupted logs or resource exhaustion; no interim looks; failed records retained"
+ },
+ "S1": {
+  "study": "S1",
+  "backends": [
+   "reference",
+   "literal",
+   "index_enum",
+   "index_cube",
+   "index_sat",
+   "bdd_ref",
+   "codecs"
+  ],
+  "query_timeout_s": 20,
+  "limits": {
+   "reference_max_n": 10,
+   "literal_max_n": 16,
+   "index_enum_max_n": 12,
+   "full_codec_max_n": 16,
+   "cube_budget": 20000,
+   "bdd_node_budget": 2000000,
+   "proof_check_max_n": 256
+  },
+  "workers": 16,
+  "maxtasks": 1,
+  "item_timeout_s": 1200,
+  "cells": [
+   {
+    "family": "sparse_conj",
+    "n": 4,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "canalizing",
+    "n": 4,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "parity",
+    "n": 4,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "modular",
+    "n": 4,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "bounded_random",
+    "n": 4,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "dense_random",
+    "n": 4,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 6,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "canalizing",
+    "n": 6,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "parity",
+    "n": 6,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "modular",
+    "n": 6,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "bounded_random",
+    "n": 6,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "dense_random",
+    "n": 6,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 8,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "canalizing",
+    "n": 8,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "parity",
+    "n": 8,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "modular",
+    "n": 8,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "bounded_random",
+    "n": 8,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "dense_random",
+    "n": 8,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 10,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "canalizing",
+    "n": 10,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "parity",
+    "n": 10,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "modular",
+    "n": 10,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "bounded_random",
+    "n": 10,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "dense_random",
+    "n": 10,
+    "seeds": 50,
+    "grid": "small"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 16,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "canalizing",
+    "n": 16,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "parity",
+    "n": 16,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "modular",
+    "n": 16,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "bounded_random",
+    "n": 16,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 32,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "canalizing",
+    "n": 32,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "parity",
+    "n": 32,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "modular",
+    "n": 32,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "bounded_random",
+    "n": 32,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 64,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "canalizing",
+    "n": 64,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "parity",
+    "n": 64,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "modular",
+    "n": 64,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "bounded_random",
+    "n": 64,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 128,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "canalizing",
+    "n": 128,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "parity",
+    "n": 128,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "modular",
+    "n": 128,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "bounded_random",
+    "n": 128,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "sparse_conj",
+    "n": 256,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "canalizing",
+    "n": 256,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "parity",
+    "n": 256,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "modular",
+    "n": 256,
+    "seeds": 30,
+    "grid": "large"
+   },
+   {
+    "family": "bounded_random",
+    "n": 256,
+    "seeds": 30,
+    "grid": "large"
+   }
+  ],
+  "note": "engineering/formal-correctness study; caps fixed from development; timeouts kept in completion curves"
+ },
+ "S3": "TO BE FILLED FROM THE V2 PILOT (see reports/DESIGN_SIZING.md)"
+}

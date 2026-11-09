@@ -1,11 +1,12 @@
 {
  "study": "S1",
  "mode": "development",
- "run_id": "S1-dev-v1-satproof",
- "description": "Rerun of the index_sat backend of S1-dev-v1 with the fixed RUP checker (DECISIONS D16); same worlds, same queries. Source of certificate-level statistics for index_sat.",
+ "run_id": "S1-dev-v1-rerun",
+ "description": "Rerun of index_sat (fixed RUP checker, D16) and bdd_ref (manager rebuilt after interrupts, D20) on the same S1-dev-v1 worlds and queries. Source for those two backends.",
  "salt": "dev-v1",
  "backends": [
-  "index_sat"
+  "index_sat",
+  "bdd_ref"
  ],
  "query_timeout_s": 20,
  "limits": {
