@@ -1,0 +1,249 @@
+{
+ "generated": "2026-11-09",
+ "criteria": [
+  {
+   "wp": "WP0",
+   "criterion": "clean install independent of monorepo path; no /tmp dependency in ordinary commands",
+   "status": "pass",
+   "evidence": "reports/RELEASE_CHECK.md (clean clone /tmp/cg-clean, CI ubuntu+macos)"
+  },
+  {
+   "wp": "WP0",
+   "criterion": "upstream origin/revision verifiable; pinned file hashes",
+   "status": "pass",
+   "evidence": "UPSTREAM.md; src/causalguard/upstream_adapter.py; CI upstream-parity job fetched 376a11dd"
+  },
+  {
+   "wp": "WP0",
+   "criterion": "ENVIRONMENT, UPSTREAM, DECISIONS, PREEXISTING_WORK, STATUS, lock",
+   "status": "pass",
+   "evidence": "repository root; requirements-lock.txt"
+  },
+  {
+   "wp": "WP0",
+   "criterion": "sprint vs pre-sprint dating",
+   "status": "blocked",
+   "evidence": "PREEXISTING_WORK.md",
+   "note": "sprint start date not provided; git timestamps authoritative"
+  },
+  {
+   "wp": "WP1",
+   "criterion": "typed validated immutable types; invalid/unknown statuses cannot be coerced",
+   "status": "pass",
+   "evidence": "src/causalguard/schema.py; tests/test_schema.py"
+  },
+  {
+   "wp": "WP1",
+   "criterion": "serialization round-trips without changing meaning",
+   "status": "pass",
+   "evidence": "tests/test_schema.py::test_json_roundtrip"
+  },
+  {
+   "wp": "WP1",
+   "criterion": "hand-derived fixture table (AND/OR, XOR, NOT, Rule 110, overlap, IMPLIES order, edit vs clamp, sync vs sequential, h=0, impossible domain, inconsistent obs, resource-unknown, misspecification)",
+   "status": "pass",
+   "evidence": "data/fixtures/semantic_fixtures.json; tests/test_fixtures.py; tests/test_index_repr.py; tests/test_query_backends.py::test_resource_unknown_is_not_false"
+  },
+  {
+   "wp": "WP2",
+   "criterion": "reference independent of production index code (guard verified by planting)",
+   "status": "pass",
+   "evidence": "tests/test_structure.py"
+  },
+  {
+   "wp": "WP2",
+   "criterion": "witnesses replayable; corrupted witness, ordering flip, sequential update and quantifier swap detected",
+   "status": "pass",
+   "evidence": "tests/test_query_backends.py; tests/test_fixtures.py::test_sequential_update_differs"
+  },
+  {
+   "wp": "WP2",
+   "criterion": "UNSAT/universal answers carry exhaustive domain size or independent evidence",
+   "status": "pass",
+   "evidence": "certificate levels: exhaustive, checked_proof (RUP), independent_exact (BDD); s1_summary.json",
+   "note": "4 of 2,573 UNSAT answers budget-limited -> solver_only (labelled)"
+  },
+  {
+   "wp": "WP3",
+   "criterion": "index-family method preserved (connected-input don't-cares, symbolic J, no hidden materialization)",
+   "status": "pass",
+   "evidence": "src/causalguard/index_repr.py; tests/test_index_repr.py::test_no_hidden_materialization_at_large_n"
+  },
+  {
+   "wp": "WP3",
+   "criterion": "compatible implementation compared with upstream on fixtures",
+   "status": "pass",
+   "evidence": "tests/test_upstream_parity.py (repertoires, horizon convention, covers, Rule 110); CI upstream-parity job"
+  },
+  {
+   "wp": "WP3",
+   "criterion": "independently decodable versioned codec; corrupted/truncated/trailing rejected; full metadata charged",
+   "status": "pass",
+   "evidence": "src/causalguard/codec.py; docs/CODEC.md; tests/test_codec.py"
+  },
+  {
+   "wp": "WP3",
+   "criterion": "exact round trips; queries agree with reference; Rule 110; OR vs parity scaling; overlap counts",
+   "status": "pass",
+   "evidence": "S1: 0 mismatches / ~28,700 comparisons; 0 round-trip failures; tests"
+  },
+  {
+   "wp": "WP3",
+   "criterion": "BDD/SAT supplement, not replace, the index method; hybrid labelled",
+   "status": "pass",
+   "evidence": "query.py index_sat records representation_backend=index_families, query_backend=sat_hybrid"
+  },
+  {
+   "wp": "WP4",
+   "criterion": "complete bounded classes, version spaces, consensus, selectors, random and disagreement policies with equal budgets",
+   "status": "pass",
+   "evidence": "src/causalguard/versionspace.py; experiments/s2.py"
+  },
+  {
+   "wp": "WP4",
+   "criterion": "incomplete evidence does not collapse; incomplete search cannot certify; misspecified world can be wrong-but-consistent and is reported",
+   "status": "pass",
+   "evidence": "tests/test_versionspace.py; S2 misspecified population"
+  },
+  {
+   "wp": "WP4",
+   "criterion": "small classes cross-checked against independent full enumeration",
+   "status": "pass",
+   "evidence": "tests/test_versionspace.py (enumeration + brute force over networks)"
+  },
+  {
+   "wp": "WP4",
+   "criterion": "selection API cannot access hidden labels/repertoires",
+   "status": "pass",
+   "evidence": "tests/test_s2_isolation.py"
+  },
+  {
+   "wp": "WP5",
+   "criterion": "deterministic regeneration (byte-identical under fixed environment)",
+   "status": "pass",
+   "evidence": "clean-clone regeneration of 12 S2 worlds identical excluding timing fields (RELEASE_CHECK.md)"
+  },
+  {
+   "wp": "WP5",
+   "criterion": "opaque IDs; no label in public payload/path/ID",
+   "status": "pass",
+   "evidence": "generators.opaque_id; tests/test_llm_harness.py label-leak tests"
+  },
+  {
+   "wp": "WP5",
+   "criterion": "isomorphic duplicate audit",
+   "status": "pass",
+   "evidence": "reports/development/dedup_audit.json; tests/test_dedup.py",
+   "note": "exact for n<=8; confirmatory S2 checked against development before running"
+  },
+  {
+   "wp": "WP5",
+   "criterion": "natural vs balanced distributions; generator failures tracked",
+   "status": "pass",
+   "evidence": "natural distributions only; degenerate rules and redraws logged (s2_summary.json generator_irregularities)"
+  },
+  {
+   "wp": "WP5",
+   "criterion": "trivial/majority and surface baselines",
+   "status": "pass",
+   "evidence": "S2 observed-majority baseline; majority-of-V(D) control (post-hoc)",
+   "note": "S3 surface-feature baseline not implemented"
+  },
+  {
+   "wp": "WP6",
+   "criterion": "resumable append-only runs; mixed configs refused; failures retained",
+   "status": "pass",
+   "evidence": "src/causalguard/runner.py; RUNS.jsonl"
+  },
+  {
+   "wp": "WP6",
+   "criterion": "all metrics and denominators; paired cluster bootstrap; power simulation; validation with manufactured records",
+   "status": "pass",
+   "evidence": "src/causalguard/stats.py; tests/test_stats.py; bootstrap coverage 0.930/0.947"
+  },
+  {
+   "wp": "WP6",
+   "criterion": "repeated analysis gives identical tables",
+   "status": "pass",
+   "evidence": "S2 analysis re-run: identical SHA-256 of s2_summary.json and s2_per_world.csv"
+  },
+  {
+   "wp": "WP7",
+   "criterion": "local HTTP adapter with metadata; mock/replay only for tests",
+   "status": "pass",
+   "evidence": "src/causalguard/llm/providers.py; docs/S3_HARNESS.md"
+  },
+  {
+   "wp": "WP7",
+   "criterion": "arms A/B/C/D/D-label/E exactly; arm isolation, call caps, shared first answer, no label in D, D-label labelled, deterministic aggregation",
+   "status": "pass",
+   "evidence": "tests/test_llm_harness.py (35 tests)"
+  },
+  {
+   "wp": "WP7",
+   "criterion": "real pilot distinguished from transport smoke",
+   "status": "pass",
+   "evidence": "s3-pilot-*-dev-v2 (real, provider_kind=real); transport smoke kept under /tmp only"
+  },
+  {
+   "wp": "WP8",
+   "criterion": "S2 on >=200 independent worlds",
+   "status": "pass",
+   "evidence": "S2-dev-v1: 250 realizable + 60 misspecified + 60 shift + 50 noise; S2-dev-null-v1: 250"
+  },
+  {
+   "wp": "WP8",
+   "criterion": "S1 minimum development execution",
+   "status": "pass",
+   "evidence": "S1-dev-v1 + rerun: 335 worlds incl. large grid through n=256"
+  },
+  {
+   "wp": "WP8",
+   "criterion": "S3 pilot 60-100 worlds, two local model families",
+   "status": "see_REVIEW_READY",
+   "evidence": "s3-pilot-qwen25-7b-dev-v2, s3-pilot-gemma3-12b-dev-v2"
+  },
+  {
+   "wp": "WP8",
+   "criterion": "DEVELOPMENT_REPORT, DESIGN_SIZING, confirmatory.json; N from pilot sizing; confirmatory data unused",
+   "status": "pass",
+   "evidence": "reports/; configs/confirmatory.json (salt derived from future freeze commit)"
+  },
+  {
+   "wp": "WP9",
+   "criterion": "separate public GitHub repository with exact commit",
+   "status": "pass",
+   "evidence": "https://github.com/albertoHdzE/causalguard-epistemics"
+  },
+  {
+   "wp": "WP9",
+   "criterion": "clean-clone install and offline reproduction; CI",
+   "status": "pass",
+   "evidence": "reports/RELEASE_CHECK.md; GitHub Actions"
+  },
+  {
+   "wp": "WP9",
+   "criterion": "sealed test material not published; confirmatory not run",
+   "status": "pass",
+   "evidence": "no confirmatory salt exists; tests/test_confirmatory_guard.py"
+  },
+  {
+   "wp": "WP10",
+   "criterion": "persistent prompt improvement",
+   "status": "not_run",
+   "evidence": "subsequent work package by design"
+  },
+  {
+   "wp": "WP11",
+   "criterion": "weight evolution",
+   "status": "not_run",
+   "evidence": "subsequent work package by design"
+  }
+ ],
+ "counts": {
+  "blocked": 1,
+  "not_run": 2,
+  "pass": 35,
+  "see_REVIEW_READY": 1
+ }
+}

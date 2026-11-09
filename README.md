@@ -51,4 +51,4 @@ See `reports/DEVELOPMENT_REPORT.md` (labelled development, not confirmatory), `r
 `docs/` — SEMANTICS, CODEC, S3_HARNESS, PROTOCOL. `delegation/` — dated design history (pre-sprint). `reports/` — development evidence and the review package.
 
 ## Provenance and license
-Original code: MIT (LICENSE). The upstream CausalBool method (pinned `376a11dd`) is cited and used read-only for parity tests; no upstream code is redistributed (UPSTREAM.md). Dating: PREEXISTING_WORK.md.
+Original code: MIT (LICENSE). The license covers only the original CausalGuard code and documentation in this repository, not the upstream CausalBool repository. The upstream CausalBool method (pinned `376a11dd`) is cited and used read-only for parity tests; no upstream code is redistributed (UPSTREAM.md). Dating: PREEXISTING_WORK.md.
