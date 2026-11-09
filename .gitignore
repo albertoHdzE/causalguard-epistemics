@@ -1,0 +1,19 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+.DS_Store
+.env
+.env.*
+# historical idea source kept local (not a scientific authority; omitted from public release)
+doc/Gemini-Talk.txt
+PRIVATE_LOCAL_FILES.md
+# sealed confirmatory material never committed before evaluation
+sealed/
+# large raw run records live outside git (checksummed in artifacts/manifest.json)
+runs/
+*.log

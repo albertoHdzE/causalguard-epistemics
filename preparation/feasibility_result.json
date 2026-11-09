@@ -1,0 +1,44 @@
+{
+  "status": "pre_sprint_feasibility_only",
+  "upstream_revision": "376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43",
+  "networks_checked": 60,
+  "states_checked": 5040,
+  "oracle_parity": "passed for sampled networks and every state within each",
+  "false_universal_claim": {
+    "verdict": "refuted",
+    "counterexample": {
+      "initial": [
+        0,
+        0,
+        0
+      ],
+      "after_setting_A": [
+        1,
+        0,
+        0
+      ],
+      "next": [
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "partial_information_claim": {
+    "verdict": "underdetermined",
+    "compatible_gate_models": [
+      "AND",
+      "OR"
+    ],
+    "possible_outputs": [
+      0,
+      1
+    ]
+  },
+  "limitations": [
+    "No LLM evaluated",
+    "No weights edited",
+    "No clinical claim",
+    "Not a full upstream validation"
+  ]
+}
