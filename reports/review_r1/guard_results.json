@@ -1,0 +1,8 @@
+{
+  "preflight_accepts_S1_despite_record_approving_only_S2": true,
+  "preflight_after_Run_execute_registry_append": "REFUSED: working tree not clean",
+  "torn_then_appended_bytes": "{\"item_id\":\"torn{\"answer\": 1, \"item_id\": \"valid-next\"}\n",
+  "reader_after_appended_valid_record": [],
+  "done_ids_after_appended_valid_record": [],
+  "resume_option_exists": false
+}

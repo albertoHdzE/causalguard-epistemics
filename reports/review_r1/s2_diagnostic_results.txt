@@ -1,0 +1,73 @@
+{
+  "check": "exact_verdict_roundoff",
+  "probability": 0.9999999999999999,
+  "method": "exact_factorized",
+  "fast": "underdetermined",
+  "sat": "entailed",
+  "expected": "entailed",
+  "candidate_counts": [
+    12,
+    7,
+    12
+  ]
+}
+{
+  "check": "hidden_world_dependent_uniform_design",
+  "same_seed": true,
+  "zero_holdout": [
+    7,
+    11,
+    23,
+    35,
+    52,
+    65,
+    73,
+    97
+  ],
+  "identity_holdout": [
+    0,
+    2,
+    11,
+    16,
+    24,
+    35,
+    41,
+    65
+  ],
+  "zero_first_16_measurement_inputs": [
+    25,
+    112,
+    87,
+    79,
+    43,
+    47,
+    21,
+    24,
+    50,
+    115,
+    3,
+    120,
+    76,
+    6,
+    39,
+    94
+  ],
+  "identity_first_16_measurement_inputs": [
+    27,
+    112,
+    88,
+    80,
+    46,
+    50,
+    23,
+    26,
+    53,
+    115,
+    5,
+    120,
+    77,
+    8,
+    42,
+    95
+  ]
+}

@@ -1,0 +1,54 @@
+{
+ "study": "S3",
+ "mode": "development",
+ "task_version": "s3-tasks-v2",
+ "purpose": "S3 iteration-2 development diagnostic panel (exploratory; not confirmatory)",
+ "panel": "diagnostic",
+ "salt": "dev-v2-s3-diag",
+ "world_index_start": 0,
+ "world_index_stop": 20,
+ "task": {
+  "n": 4,
+  "k": 2
+ },
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "ollama",
+  "base_url": "http://127.0.0.1:11434/v1",
+  "model": "qwen2.5:7b",
+  "temperature": 0.0,
+  "sample_temperature": 0.7,
+  "max_tokens": 1500,
+  "seed": 20261109,
+  "timeout_s": 120,
+  "max_transport_retries": 2,
+  "allow_remote": false
+ },
+ "harness": {
+  "arms": [
+   "A",
+   "B2",
+   "C",
+   "D_cert",
+   "D_label",
+   "D_sample",
+   "E",
+   "A_T",
+   "T_A",
+   "T_B2",
+   "T_cert",
+   "T_label",
+   "T_sample"
+  ],
+  "c_extra_samples": 2,
+  "transfer_source_item": 0
+ },
+ "caps": {
+  "calls_per_world": 70,
+  "calls_total": 1400
+ },
+ "runner": {
+  "workers": 1,
+  "world_timeout_s": 3600
+ }
+}

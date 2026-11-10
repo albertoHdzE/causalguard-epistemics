@@ -328,3 +328,153 @@ class WorldHarness:
                 "cost": {"physical": physical, "physical_attempts_counted_by_budget": self.budget.n,
                          "logical_standalone_by_arm": per_arm,
                          "attempts_saved_by_sharing": total_logical - physical["attempts"]}}
+
+
+# =========================================================================== iteration 2 harness (P6)
+#
+# Arms on base items (roles balanced/natural; indices with role in BASE_ROLES):
+#   A        initial answer (shared first turn of every revision arm; sent once)
+#   B2       two self-critique turns                         i{i}/B2_1, i{i}/B2_2
+#   C        A + 2 fresh-context samples at sample_temperature; strict majority of 3 (explicit 2-call budget)
+#   D_cert   turn 1: label + mechanistic certificate (privileged); turn 2: the B2 critique prompt
+#   D_label  turn 1: the same label, no certificate;           turn 2: the B2 critique prompt
+#   D_sample turn 1: K=2 world-level uniformly sampled compatible mechanisms (public); turn 2: critique prompt
+#   E        exact solver answer (oracle ceiling; not an independent validation of the backend)
+# Transformed items (complement_of / renamed_of): A only.
+# Transfer target item (role transfer_target, fresh question): A_T = fresh-context answer; probes
+#   T_A, T_B2, T_cert, T_label, T_sample = the complete source-item conversation of that arm, then the target prompt.
+# Every revision arm has exactly 2 extra turns after A; realized tokens/time are recorded per call.
+
+V2_ARMS = ("A", "B2", "C", "D_cert", "D_label", "D_sample", "E", "A_T", "T_A", "T_B2", "T_cert", "T_label",
+           "T_sample")
+V2_REVISION_ARMS = ("B2", "D_cert", "D_label", "D_sample")
+V2_PROBES = {"T_A": "A", "T_B2": "B2", "T_cert": "D_cert", "T_label": "D_label", "T_sample": "D_sample"}
+BASE_ROLES = ("balanced", "natural")
+V2_DEFAULT = {"arms": list(V2_ARMS), "c_extra_samples": 2, "transfer_source_item": 0}
+
+
+class WorldHarnessV2(WorldHarness):
+    def __init__(self, provider, public, private, hcfg=None, budget=None):
+        h = {**V2_DEFAULT, **(hcfg or {})}
+        bad = set(h["arms"]) - set(V2_ARMS)
+        if bad:
+            raise ValueError(f"unknown v2 arms {bad}")
+        self.p = provider
+        self.public = public
+        self._private = private
+        self.h = h
+        self.budget = budget or CallBudget(None, None)
+        self.world_id = public["world_id"]
+        self.calls, self.order = {}, []
+        self.arms = {a: {} for a in h["arms"]}
+        self.status, self.cap_detail = "complete", None
+
+    def _prompt(self, i):
+        from ..s3_tasks import render_item_prompt_v2
+        return [{"role": "user", "content": render_item_prompt_v2(self.public, i)}]
+
+    def _feedback(self, arm, i):
+        from ..s3_tasks import cert_feedback, label_feedback_v2, sample_feedback
+        if arm == "B2":
+            return CRITIQUE_PROMPT, {"source": "self_critique"}
+        if arm == "D_cert":
+            return cert_feedback(self._private, i)
+        if arm == "D_label":
+            return label_feedback_v2(self._private, i)
+        if arm == "D_sample":
+            text, prov = sample_feedback(self.public, i)
+            if contains_label(text):
+                raise LeakageError("D_sample feedback contains a verdict label")
+            return text, prov
+        raise ValueError(arm)
+
+    def _revise(self, arm, i, a_id):
+        conv = self._conv_after(a_id)
+        if conv is None:
+            self.arms[arm][i] = {"final": _failed("provider_failure", "dependent_on_failed_first_answer"),
+                                 "rounds": [], "calls": [], "logical": [a_id]}
+            return
+        ids, rounds = [], []
+        tag = {"B2": "B2", "D_cert": "DC", "D_label": "DL", "D_sample": "DS"}[arm]
+        last = self.calls[a_id]
+        for r in (1, 2):
+            text, prov = self._feedback(arm, i) if r == 1 else (CRITIQUE_PROMPT, {"source": "self_critique"})
+            cid = f"i{i}/{tag}{r}"
+            self._call(cid, conv + [{"role": "user", "content": text}], self.p.cfg.temperature)
+            ids.append(cid)
+            last = self.calls[cid]
+            rounds.append({"round": r, "call": cid, "feedback_provenance": prov, "feedback_chars": len(text),
+                           "answer": _answer(last["parsed"])})
+            conv = self._conv_after(cid)
+            if conv is None:
+                break
+        self.arms[arm][i] = {"final": _answer(last["parsed"]), "rounds": rounds, "rounds_planned": 2,
+                             "calls": ids, "logical": [a_id] + ids}
+
+    def run(self) -> dict:
+        arms = self.h["arms"]
+        roles = [it["role"] for it in self.public["items"]]
+        base = [i for i, r in enumerate(roles) if r in BASE_ROLES]
+        transformed = [i for i, r in enumerate(roles) if r.startswith(("complement_of", "renamed_of"))]
+        target = [i for i, r in enumerate(roles) if r == "transfer_target"]
+        t0 = self.p.cfg.temperature
+        try:
+            for i in base:
+                a_id = f"i{i}/A"
+                self._call(a_id, self._prompt(i), t0)
+                self.arms["A"][i] = {"final": _answer(self.calls[a_id]["parsed"]), "calls": [a_id], "logical": [a_id]}
+                for arm in V2_REVISION_ARMS:
+                    if arm in arms:
+                        self._revise(arm, i, a_id)
+                if "C" in arms:
+                    self._arm_c_v2(i, a_id)
+            for i in transformed:
+                a_id = f"i{i}/A"
+                self._call(a_id, self._prompt(i), t0)
+                self.arms["A"][i] = {"final": _answer(self.calls[a_id]["parsed"]), "calls": [a_id], "logical": [a_id]}
+            if "E" in arms:
+                for i in range(len(roles)):
+                    sa = solver_answer(self._private, i)
+                    self.arms["E"][i] = {"final": {"status": "ok", "verdict": sa["verdict"], "verdict_valid": True,
+                                                   "probabilities": sa["probabilities"], "probs_valid": True,
+                                                   "flags": ["symbolic_solver_oracle"]}, "calls": [], "logical": []}
+            for tgt in target:
+                if "A_T" in arms:
+                    self._call(f"i{tgt}/A", self._prompt(tgt), t0)
+                    self.arms["A_T"][tgt] = {"final": _answer(self.calls[f"i{tgt}/A"]["parsed"]),
+                                             "calls": [f"i{tgt}/A"], "logical": [f"i{tgt}/A"]}
+                src = base[int(self.h["transfer_source_item"])]
+                for probe, arm in V2_PROBES.items():
+                    if probe not in arms:
+                        continue
+                    srcrec = self.arms.get(arm, {}).get(src)
+                    if srcrec is None:
+                        conv, complete = None, False
+                    elif arm == "A":
+                        conv, complete = self._conv_after(f"i{src}/A"), True
+                    else:
+                        complete = len(srcrec["calls"]) == srcrec["rounds_planned"]
+                        conv = self._conv_after(srcrec["calls"][-1]) if srcrec["calls"] else None
+                    if conv is None or not complete:
+                        fin, calls = _failed("provider_failure", "dependent_on_failed_source_context"), []
+                    else:
+                        cid = f"{probe}"
+                        self._call(cid, conv + self._prompt(tgt), t0)
+                        fin, calls = _answer(self.calls[cid]["parsed"]), [cid]
+                    self.arms[probe][tgt] = {"final": fin, "calls": calls,
+                                             "logical": (srcrec["logical"] if srcrec else []) + calls,
+                                             "source_item": src, "target_item": tgt,
+                                             "context_chars": sum(len(m["content"]) for m in (conv or []))}
+        except CapExceeded as e:
+            self.status = e.scope
+            self.cap_detail = str(e)
+        return self.result()
+
+    def _arm_c_v2(self, i, a_id):
+        ids = [a_id]
+        for s in range(1, int(self.h["c_extra_samples"]) + 1):
+            cid = f"i{i}/C{s}"
+            self._call(cid, self._prompt(i), self.p.cfg.sample_temperature)
+            ids.append(cid)
+        agg = aggregate_c([self.calls[c]["parsed"] for c in ids])
+        self.arms["C"][i] = {"final": agg, "members": ids, "calls": ids[1:], "logical": ids}

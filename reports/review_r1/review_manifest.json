@@ -1,0 +1,17 @@
+{
+  "DECISION.json": "53481385f5b3c916a6cc5bb11b89a3b58d206c2b3c96e354cc8e860e5f137a3a",
+  "EVIDENCE.md": "4e365b1585402aa48567623a1b96cbdc0a614e0a1011744c96241d553b55a8f3",
+  "REPAIR_SPEC.md": "79e2e0d0ee118e787138186f8d561126ab30221b88604deb9a58bc7eec11bce3",
+  "REVIEW.md": "cfd3664e1ce15adf9d527ab67ad1a94ac0cf61c5090cabf309c36be2a396997a",
+  "guard_results.json": "909219cec216fc557280ef7b0921816f0abb3913441c1f31d82af11cfee26a35",
+  "manifest_verification.txt": "e042d8a82fc845144f091ede2e32009587d49fa5fedcd64ba43c4efa3eaa2be8",
+  "repro_guard.py": "855be6acc173c1e83f7c9e414823771092fb136156a85af317d24ec457c38075",
+  "repro_s2.py": "13fe0863dfe84aac20fc25563291e0098ac526f627f521e443e523cab31d42b6",
+  "repro_timeout.py": "3d86022117a2a083464e8f55d5b982380f6a86ef6758a7d3dca742807728e051",
+  "reproduction_checks.json": "4febf80d5c093470734674b029ba900992351f01daf177a1e347e12918ff240a",
+  "s2_diagnostic_results.txt": "83bcb50e91c8a1e08708af98b38bdbfe01694ebb7b5e5d356598519c31ada3fc",
+  "test-output.txt": "f0df4c45417977ebc6ce05a410e56d87da2179b53d9963355634f7e1297d535c",
+  "timeout_results.json": "1ec147fb9843941c83017a85068ea5244ecb39eb218c17a4947e61ca33a62838",
+  "../../delegation/ITERATION_2_CLAUDE_PROMPT.md": "cedcc8c5d742beeb0c51a43680466a9ade64d2c1e4adf5b53b25ba09f91bcce3",
+  "../../delegation/REVIEW_R2_REQUEST_PROMPT.md": "610a6dd818f9bf6b14627940095e7396b52cda3163abe34ada939315ebda7433"
+}

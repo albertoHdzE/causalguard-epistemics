@@ -1,0 +1,10 @@
+{
+  "s1": {
+    "byte_identical": true,
+    "sha256": "169fbd791279ae608de5f91786b1ecb0d3ad440a16b03f6df7c9b12bb99f28a7"
+  },
+  "s2": {
+    "byte_identical": true,
+    "sha256": "1b6f8e8b70b0a30e11824a26e8f6d567908d40966f6c2b48db837e99f209efdd"
+  }
+}

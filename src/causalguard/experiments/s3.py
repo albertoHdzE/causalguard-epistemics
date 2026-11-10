@@ -208,41 +208,63 @@ def score(records: list[dict], allow_mock: bool = False) -> dict:
     return out
 
 
+def run_world_v2(p: dict) -> dict:
+    """One S3 v2 world (task version s3-tasks-v2).  The record SAVES the actual task objects (public payload
+    and private oracle/task record) so analysis never reconstructs assumed defaults."""
+    from ..llm.harness import WorldHarnessV2
+    from ..s3_tasks import make_s3_items_v2
+    provider = make_provider(p["provider"])
+    d = make_s3_items_v2(p["salt"], p["index"], n=p.get("n", 4), k=p.get("k", 2))
+    public, private = d["public"], d["private"]
+    try:
+        md = provider.metadata() if p.get("fetch_metadata", True) else {"provider_kind": provider.kind}
+    except Exception as e:  # metadata is never invented
+        md = {"provider_kind": provider.kind, "error": repr(e)[:200]}
+    caps = p.get("caps", {})
+    budget = CallBudget(caps.get("calls_per_world"), caps.get("calls_total"), p.get("ledger"), public["world_id"])
+    res = WorldHarnessV2(provider, public, private, p.get("harness"), budget).run()
+    return {"study": "S3", "task_version": public["task_version"], "world_id": public["world_id"],
+            "world_index": p["index"], "salt": p["salt"], "panel": p.get("panel"),
+            "provider_kind": provider.kind, "provider_metadata": md,
+            "provider_config": {k: v for k, v in p["provider"].items() if k != "extra"},
+            "harness_config": {**p.get("harness", {})}, "caps": caps, **res,
+            "task_public": public, "task_private": private}
+
+
+def plan_s3(cfg: dict, run_id: str, ledger: str) -> dict:
+    from ..runner import make_plan
+    idx = list(range(cfg["world_index_start"], cfg["world_index_stop"]))
+    items = [(f"s3v2|{cfg['salt']}|{cfg['provider']['model']}|w{i}",
+              {**build_payload(cfg, i, ledger), "panel": cfg.get("panel")}) for i in idx]
+    return make_plan(run_id, "S3", cfg, items, strata_fn=lambda p: {"world_index": p["index"], "panel": p["panel"]})
+
+
 # ---------------------------------------------------------------- CLI
 def main(argv: list[str] | None = None) -> int:
-    from ..runner import Run, read_jsonl
-    ap = argparse.ArgumentParser(description="S3 LLM harness run (resumable)")
+    from ..runner import Run, default_runs_root, load_run
+    ap = argparse.ArgumentParser(description="S3 v2 LLM harness run (resumable, runner v2)")
     ap.add_argument("--config", required=True)
     ap.add_argument("--run-id", required=True)
-    ap.add_argument("--worlds", type=int, default=None, help="first N world indices of the configured range")
     ap.add_argument("--runs-root", default=None)
-    ap.add_argument("--registry", default=None)
+    ap.add_argument("--resume", action="store_true")
+    ap.add_argument("--retry-failed", action="store_true")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args(argv)
     cfg = json.loads(Path(a.config).read_text())
-    run = Run(a.run_id, cfg, runs_root=Path(a.runs_root) if a.runs_root else None,
-              registry=Path(a.registry) if a.registry else None)
-    lo, hi = cfg["world_index_start"], cfg["world_index_stop"]
-    idx = list(range(lo, hi))[: a.worlds] if a.worlds else list(range(lo, hi))
-    ledger = str(run.dir / "call_ledger.jsonl")
-    items = [(f"s3-{cfg['salt']}-w{i}", build_payload(cfg, i, ledger)) for i in idx]
+    if cfg.get("mode") != "development":
+        raise SystemExit("this entry point runs development S3 only")
+    if cfg.get("task_version") != "s3-tasks-v2":
+        raise SystemExit("S3 v1 pilots are historical; reproduce them from tag v0.1.0-dev")
+    root = Path(a.runs_root) if a.runs_root else default_runs_root()
+    ledger = str(root / a.run_id / "call_ledger.jsonl")
+    run = Run(a.run_id, plan_s3(cfg, a.run_id, ledger), runs_root=root, resume=a.resume)
     rcfg = cfg.get("runner", {})
-    end = run.execute(items, run_world, workers=int(rcfg.get("workers", 1)),
-                      timeout_s=float(rcfg.get("world_timeout_s", 3600)), quiet=a.quiet, mode=cfg.get("mode", "development"))
-    recs = read_jsonl(run.records)
-    summary = {"run": end, "world_status": dict(Counter(r.get("world_status") for r in recs))}
-    if recs:
-        try:
-            s = score(recs, allow_mock=recs[0].get("provider_kind") in NON_REAL)
-            summary["provider_kind"] = s["provider_kind"]
-            summary["cost"] = s["cost"]
-            summary["arms"] = {k: {m: (round(v[m], 4) if isinstance(v[m], float) else v[m])
-                                   for m in ("n_items", "accuracy", "balanced_accuracy", "brier_valid_only",
-                                             "validity_coverage", "brier_worst_case")} for k, v in s["arms"].items()}
-        except ValueError as e:
-            summary["score_error"] = str(e)
-    print(json.dumps(summary, indent=1, sort_keys=True))
-    return 0
+    end = run.execute(run_world_v2, workers=int(rcfg.get("workers", 1)), timeout_s=float(rcfg.get("world_timeout_s", 3600)),
+                      quiet=a.quiet, retry_failed=a.retry_failed, mode="development")
+    lr = load_run(run.dir)
+    print(json.dumps({"run": end, "results": len(lr["results"]), "failures": len(lr["failures"]),
+                      "missing": len(lr["missing"])}, sort_keys=True))
+    return 0 if end["status"] == "complete" else 3
 
 
 if __name__ == "__main__":

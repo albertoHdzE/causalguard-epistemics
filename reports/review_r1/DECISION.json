@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "review_id": "R1",
+  "reviewer": "Codex",
+  "date": "2026-11-09",
+  "reviewed_code_commit": "371b04ec5be9023c9536e7088064896105eaea13",
+  "reviewed_release_commit": "967fc9c8130b6d975dfc527df1ba513e38288b6f",
+  "decision": "revise_before_confirmation",
+  "development_contribution": "substantial_and_reproduced",
+  "confirmatory_authorized": false,
+  "approved_studies": [],
+  "production_freeze_record_issued": false,
+  "sprint_start_date": "2026-11-13",
+  "november_9_work_classification": "pre_sprint",
+  "sprint_source": "https://apartresearch.com/sprints/ai-x-epistemics-research-sprint-2026-11-13-to-2026-11-15",
+  "s2_decision": {
+    "prospective_primary": "index_code_selector_minus_compatible_set_majority",
+    "historical_primary": "retain_as_secondary",
+    "uniform_H_null": "required",
+    "exogenous_design_repair": "required",
+    "MC_policy": "must_be_declared_and_validated"
+  },
+  "s3_decision": "development_refinements_authorized_per_REPAIR_SPEC_no_freeze",
+  "authorized_next_work": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6",
+    "P7"
+  ],
+  "findings_requiring_response": [
+    "R01",
+    "R02",
+    "R03",
+    "R04",
+    "R05",
+    "R06",
+    "R07",
+    "R08",
+    "R09",
+    "R10"
+  ],
+  "next_review_handoff": "reports/REVIEW_READY_R2.md",
+  "note": "This is a denied/revise decision, not a freeze authorization. Do not use it as docs/FREEZE_RECORD.json."
+}
