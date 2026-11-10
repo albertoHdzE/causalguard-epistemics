@@ -277,6 +277,168 @@ def make_s2_instance(world: World, n_state_queries: int = 8, n_int_queries: int 
     return S2Instance(world, ev, holdout, sq, iq, irr)
 
 
+# --------------------------------------------------------------------------- S2 design v2 (exogenous; R02)
+#
+# ``make_s2_instance`` above is the HISTORICAL v1 generator (kept byte-stable so v0.1.0-dev results reproduce).
+# Its holdouts and query redraws depend on hidden-world trajectories.  Design v2 fixes, BEFORE the mechanism
+# is evaluated and from a design RNG stream distinct from the mechanism stream:
+#   holdout effective inputs (8 states, reserved: never measured by designed regimes), the ordered uniform
+#   measurement inputs (64 of the remaining states), observational/clamp trajectory START specifications,
+#   the 8 state queries (on the holdouts) and the 16 intervention query specifications.
+# Intervention queries are never redrawn against observations; their novelty is CLASSIFIED (see
+# ``query_novelty``), never used to remove cases.  Duplicate query keys within a world are redrawn
+# (exogenous rule, design RNG only).
+
+S2_DESIGN_VERSION = "s2-design-v2"
+
+
+def s2_design_seed(salt: str, index: int, family: str, population: str, n: int, kmax: int) -> int:
+    return world_seed(salt, "S2-design-v2", index, f"{family}|{population}|{n}|{kmax}")
+
+
+@dataclass
+class S2Design:
+    design_seed: int
+    n: int
+    holdout_states: list[int]
+    uniform_inputs: list[int]
+    obs_starts: list[int]
+    clamp_specs: list[tuple[int, int, int]]          # (start, node, value)
+    state_queries: list[Query]
+    intervention_queries: list[Query]
+    redraws: int
+
+    def to_json(self) -> dict:
+        return {"design_version": S2_DESIGN_VERSION, "design_seed": self.design_seed, "n": self.n,
+                "holdout_states": self.holdout_states, "uniform_inputs": self.uniform_inputs,
+                "obs_starts": self.obs_starts, "clamp_specs": [list(c) for c in self.clamp_specs],
+                "state_queries": [q.to_json() for q in self.state_queries],
+                "intervention_queries": [q.to_json() for q in self.intervention_queries],
+                "within_world_query_redraws": self.redraws}
+
+
+def make_s2_design(design_seed: int, n: int = 7, n_state_queries: int = 8, n_int_queries: int = 16,
+                   horizons: tuple[int, ...] = (1, 2, 3), budget: int = MAX_BUDGET) -> S2Design:
+    """Exogenous design: a pure function of (design_seed, n).  Never sees a mechanism."""
+    rng = random.Random(design_seed)
+    N = 1 << n
+    holdout = sorted(rng.sample(range(N), n_state_queries))
+    pool = [x for x in range(N) if x not in set(holdout)]
+    rng.shuffle(pool)
+    uniform = pool[:budget]
+    obs_starts = [rng.randrange(N) for _ in range(budget)]
+    clamp_specs = [(rng.randrange(N), rng.randrange(n), rng.randint(0, 1)) for _ in range(budget)]
+    sq = [Query.point(x, n, Intervention(), 1, Pred.lit(rng.randrange(n), 1)) for x in holdout]
+    iq: list[Query] = []
+    keys = set()
+    redraws = 0
+    kinds = ["initial_edit", "persistent_clamp"]
+    while len(iq) < n_int_queries:
+        idx = len(iq)
+        kind = kinds[idx % 2]
+        h = horizons[(idx // 2) % len(horizons)]
+        a = rng.randrange(n)
+        iv = Intervention(kind, ((a, rng.randint(0, 1)),))
+        x = rng.randrange(N)
+        b = rng.choice([i for i in range(n) if not (kind == "persistent_clamp" and i == a)])
+        key = (x, iv.kind, iv.assign, h, b)
+        if key in keys:
+            redraws += 1
+            continue
+        keys.add(key)
+        iq.append(Query.point(x, n, iv, h, Pred.lit(b, 1)))
+    return S2Design(design_seed, n, holdout, uniform, obs_starts, clamp_specs, sq, iq, redraws)
+
+
+def trajectory_evidence_v2(net: Network, starts: list[int], clamp_specs: list[tuple[int, int, int]] | None,
+                           budget: int, run_len: int = 8) -> list[Observation]:
+    """Observational (clamp_specs None) or clamp-regime evidence from EX ANTE start specifications.
+    Successive states follow the mechanism (the regime's own acquired public history); a trajectory stops
+    at run_len steps or on a repeated state, then the next pre-drawn start is used."""
+    n = net.n
+    obs: list[Observation] = []
+    si = 0
+    while len(obs) < budget:
+        if si >= len(starts):  # pragma: no cover - budget <= len(starts) by construction
+            raise ValueError("start specifications exhausted")
+        if clamp_specs is None:
+            x, iv = starts[si], Intervention()
+        else:
+            x0, i, val = clamp_specs[si]
+            iv = Intervention("persistent_clamp", ((i, val),))
+            x = (x0 & ~(1 << i)) | (val << i)
+        si += 1
+        seen = set()
+        for _ in range(run_len):
+            if len(obs) >= budget or x in seen:
+                break
+            seen.add(x)
+            obs.append(_full_obs(net, x, iv, skip_clamped=True))
+            x = reference.run(net, x, iv, 1)[-1]
+    return obs
+
+
+@dataclass
+class S2InstanceV2:
+    world: World
+    design: S2Design
+    evidence: dict[str, list[Observation]]
+
+
+def make_s2_instance_v2(world: World, design: S2Design) -> S2InstanceV2:
+    """Evaluate the hidden mechanism on a FIXED exogenous design."""
+    net = world.net
+    if design.n != net.n:
+        raise ValueError("design/world size mismatch")
+    ev = {"uniform_states": [_full_obs(net, x, Intervention(), False) for x in design.uniform_inputs],
+          "observational": trajectory_evidence_v2(net, design.obs_starts, None, MAX_BUDGET),
+          "clamp_interventions": trajectory_evidence_v2(net, [c[0] for c in design.clamp_specs], design.clamp_specs,
+                                                        MAX_BUDGET)}
+    return S2InstanceV2(world, design, ev)
+
+
+def effective_input(state: int, iv: Intervention) -> int:
+    if iv.kind == "none":
+        return state
+    m, v = iv.masks
+    return (state & ~m) | v
+
+
+def query_novelty(q: Query, observations: list[Observation], truth: Network | None = None) -> dict:
+    """Novelty of a point query relative to the evidence actually used (one regime/budget prefix).
+    * syntactic_key_novel: (state, intervention, horizon) differs from every observation key;
+    * effective_input_novel: the target node's output at the query's first effective input was never observed;
+    * all_transitions_observed (needs the hidden world; REPORTING ONLY, after predictions are fixed): every
+      state the true trajectory feeds to the update was observed for all non-clamped nodes ->
+      the query is an interpolation of observed transitions, else it involves an unobserved transition.
+    category: h1_observed_transition | h1_novel_input | multistep_interpolation | multistep_unobserved."""
+    from .semantics import pred_to_cubes
+    x0 = pred_to_cubes(q.domain)[0][1]
+    iv = q.intervention
+    keys = {o.key() for o in observations}
+    qkey = (x0, iv.kind, iv.assign, q.horizon)
+    syn = qkey not in keys
+    seen: dict[int, set[int]] = {}
+    for o in observations:
+        seen.setdefault(effective_input(o.state, o.intervention), set()).update(i for i, _ in o.observed)
+    s0 = effective_input(x0, iv)
+    tn = sorted(q.target.nodes())
+    eff_novel = not all(j in seen.get(s0, set()) for j in tn)
+    out = {"syntactic_key_novel": syn, "effective_input_novel": eff_novel}
+    if truth is not None:
+        clamped = {i for i, _ in iv.assign} if iv.kind == "persistent_clamp" else set()
+        need = [j for j in range(truth.n) if j not in clamped]
+        tr = reference.run(truth, x0, iv, q.horizon)
+        feeds = [s0] + [tr[t] for t in range(1, q.horizon)]
+        allobs = all(all(j in seen.get(s, set()) for j in need) for s in feeds)
+        out["all_transitions_observed"] = allobs
+        if q.horizon == 1:
+            out["category"] = "h1_novel_input" if eff_novel else "h1_observed_transition"
+        else:
+            out["category"] = "multistep_interpolation" if allobs else "multistep_unobserved"
+    return out
+
+
 # --------------------------------------------------------------------------- S3 tasks (small, LLM-facing)
 
 def make_s3_world(salt: str, index: int, n: int = 4, kmax: int = 2) -> World:
@@ -380,4 +542,5 @@ def s1_queries(world: World, count: int = 24) -> tuple[list[Query], list[str]]:
 
 __all__ = ["World", "make_s2_world", "make_s2_instance", "make_s3_world", "make_s1_world", "s1_queries",
            "S2_FAMILIES", "S1_SMALL_FAMILIES", "S1_LARGE_FAMILIES", "REGIMES", "DEV_SALT", "world_seed",
-           "opaque_id", "itertools"]
+           "opaque_id", "itertools", "S2_DESIGN_VERSION", "s2_design_seed", "make_s2_design",
+           "make_s2_instance_v2", "query_novelty", "effective_input"]

@@ -1,0 +1,41 @@
+{
+ "study": "S2-MCDIAG",
+ "mode": "development",
+ "design_version": "s2-design-v2",
+ "run_id": "S2-dev-v2-mcdiag",
+ "description": "Predeclared MC-majority convergence diagnostic on a preselected balanced subset (first 20 worlds per structured family, first 100 null worlds) of S2-dev-v2; budget 16, primary regime, intervention queries. Sample budgets fixed in advance; exact posterior is the reference.",
+ "salt": "dev-v2",
+ "n": 7,
+ "kmax": 3,
+ "budget": 16,
+ "mc_budgets": [
+  4096,
+  16384,
+  65536
+ ],
+ "mc_reps": 4,
+ "workers": 24,
+ "item_timeout_s": 900,
+ "populations": [
+  {
+   "population": "realizable",
+   "families": [
+    "conjunctive",
+    "canalizing",
+    "parity",
+    "random_lookup",
+    "modular"
+   ],
+   "start": 0,
+   "worlds_per_family": 20
+  },
+  {
+   "population": "null",
+   "families": [
+    "uniform_H"
+   ],
+   "start": 0,
+   "worlds_per_family": 100
+  }
+ ]
+}

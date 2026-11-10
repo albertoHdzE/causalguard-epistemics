@@ -509,20 +509,6 @@ def verdict_from_enumeration(vs: VersionSpace, q: Query, limit: int = 200_000) -
     return Verdict.ENTAILED if vals == {True} else Verdict.REFUTED
 
 
-def verdict_fast(vs: VersionSpace, q: Query) -> Verdict:
-    """Exact verdict shortcut for h <= 1 (factorized); otherwise defers to SAT ``verdict``."""
-    if vs.empty:
-        return Verdict.INCONSISTENT
-    if q.horizon <= 1:
-        p, _, _ = uniform_prob_true(vs, q, np.random.default_rng(0))
-        if p == 1.0:
-            return Verdict.ENTAILED
-        if p == 0.0:
-            return Verdict.REFUTED
-        return Verdict.UNDERDETERMINED
-    return verdict(vs, q).verdict
-
-
 # --------------------------------------------------------------------------- measurement policies
 
 def disagreement_score(vs: VersionSpace, x: int) -> float:
@@ -555,4 +541,225 @@ def choose_disagreement_state(vs: VersionSpace, used: set[int], rng: np.random.G
 __all__ = ["CandidateClass", "candidate_class", "expected_class_size", "VersionSpace", "build_version_space",
            "select_min_code", "select_mdl_noisy", "uniform_prob_true", "verdict", "verdict_fast",
            "verdict_from_enumeration", "predict", "true_rank_audit", "network_from_choice",
-           "choose_disagreement_state", "disagreement_score", "Unsupported", "content_hash", "Pred"]
+           "choose_disagreement_state", "disagreement_score", "Unsupported", "content_hash", "Pred",
+           "exact_query_counts", "exact_posterior", "boolean_support", "mc_posterior", "MAJORITY_TIE_RULE"]
+
+
+# --------------------------------------------------------------------------- exact posterior counts (iteration 2)
+#
+# Owner of the EXACT uniform-compatible posterior for point queries (repairs R01, R07).
+# Under M ~ Uniform(V(D)) with V(D) a product of per-node compatible sets, node rules are independent.  The
+# trajectory s0 -> s1 -> ... -> s_h is deterministic given the rules, so
+#     #{M in V(D): q(M) true} = sum over intermediate states (s1..s_{h-1}) of prod_j C_j(...)
+# where C_j counts node-j candidates whose outputs at s0..s_{h-1} reproduce node j's bits of s1..s_h.
+# For h <= 3 this is a sum over at most 2^(2n) intermediate pairs and is computed with INTEGER arithmetic
+# (Python ints; counts from 0/1 matrix products are exact).  The result (num, den) is exact: verdicts are
+# num == 0 / num == den, majority ties are 2*num == den.  No floating tolerance is involved anywhere.
+
+EXACT_MAX_HORIZON = 3
+
+
+def _bits_matrix(n: int) -> np.ndarray:
+    xs = np.arange(1 << n)
+    return ((xs[:, None] >> np.arange(n)[None, :]) & 1).astype(np.int64)  # (N, n)
+
+
+def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
+    """Exact (number of models in V(D) for which q holds, |V(D)|) for a point query with h <= 3."""
+    if vs.empty:
+        raise SemanticsError("empty version space")
+    n = vs.n
+    N = 1 << n
+    x0 = point_query_parts(q, n)
+    m, v = q.intervention.masks
+    s0 = (x0 & ~m) | v if q.intervention.kind != "none" else x0
+    clamp = q.intervention.kind == "persistent_clamp"
+    clamped = [bool(clamp and (m >> j) & 1) for j in range(n)]
+    cval = [(v >> j) & 1 for j in range(n)]
+    sizes = [int(len(c)) for c in vs.compatible]
+    den = math.prod(sizes)
+    h = q.horizon
+    tnodes = sorted(q.target.nodes())
+    combos = []
+    for combo in itertools.product((0, 1), repeat=len(tnodes)):
+        x = sum(b << nd for nd, b in zip(tnodes, combo))
+        if reference.holds(q.target, reference.to_bits(x, n)):
+            combos.append(combo)
+    if h == 0:
+        return (den if reference.holds(q.target, reference.to_bits(s0, n)) else 0), den
+    if h > EXACT_MAX_HORIZON:
+        raise Unsupported(f"exact posterior counts implemented for h <= {EXACT_MAX_HORIZON}")
+    T = vs.cls.tables
+    bits = _bits_matrix(n)                               # bits[s, j]
+    A = [T[vs.compatible[j]] for j in range(n)]          # (|V_j|, N) uint8
+    if h == 1:
+        num = 0
+        for combo in combos:
+            w = 1
+            for j in range(n):
+                if j in tnodes:
+                    c = combo[tnodes.index(j)]
+                    w *= (sizes[j] if c == cval[j] else 0) if clamped[j] else int((A[j][:, s0] == c).sum())
+                else:
+                    w *= sizes[j]
+            num += w
+        return num, den
+    # per node and per a = output at s0: subsets, their sizes and column sums (#{A[m, s] = 1})
+    split = []
+    for j in range(n):
+        a0 = A[j][:, s0]
+        parts = {}
+        for a in (0, 1):
+            Aa = A[j][a0 == a].astype(np.float64)
+            parts[a] = (Aa, int(Aa.shape[0]), Aa.sum(axis=0).astype(np.int64))
+        split.append(parts)
+
+    def obj(x):
+        return np.asarray(x, dtype=np.int64).astype(object)
+
+    if h == 2:
+        # grid over s1 (N,)
+        s1 = np.arange(N)
+        cnt = {}   # cnt[j][c] -> (N,) counts of node j consistent with s1_j and final bit c
+        valid = np.ones(N, dtype=bool)
+        for j in range(n):
+            if clamped[j]:
+                valid &= bits[:, j] == cval[j]
+                cnt[j] = {c: np.full(N, sizes[j] if c == cval[j] else 0) for c in (0, 1)}
+                continue
+            a = bits[:, j]
+            n_a = np.where(a == 1, split[j][1][1], split[j][0][1])
+            col = np.where(a == 1, split[j][1][2][s1], split[j][0][2][s1])
+            cnt[j] = {1: col, 0: n_a - col}
+        base = np.ones(N, dtype=object)
+        for j in range(n):
+            if j not in tnodes:
+                base = base * obj(cnt[j][0] + cnt[j][1])
+        tot = np.zeros(N, dtype=object)
+        for combo in combos:
+            w = base.copy()
+            for nd, c in zip(tnodes, combo):
+                w = w * obj(cnt[nd][c])
+            tot = tot + w
+        num = int(sum(tot[valid]))
+        return num, den
+    # h == 3: grid over (s1, s2), shape (N, N)
+    valid = np.ones((N, N), dtype=bool)
+    base = np.ones((N, N), dtype=object)
+    tcnt = {}
+    for j in range(n):
+        if clamped[j]:
+            valid &= (bits[:, j] == cval[j])[:, None] & (bits[:, j] == cval[j])[None, :]
+            tcnt[j] = {c: np.full((N, N), sizes[j] if c == cval[j] else 0, dtype=np.int64) for c in (0, 1)}
+            if j not in tnodes:
+                base = base * sizes[j]
+            continue
+        a = bits[:, j][:, None]           # bit j of s1 (selects the subset at s0)
+        e = bits[:, j][None, :]           # bit j of s2 (= required output at s1)
+        n_a = np.where(a == 1, split[j][1][1], split[j][0][1])
+        col1 = np.where(a == 1, split[j][1][2][:, None], split[j][0][2][:, None])   # #{A[m,s1]=1} as (N,1)
+        Ne = np.where(e == 1, col1, n_a - col1)                                     # (N, N)
+        if j not in tnodes:
+            base = base * obj(Ne)
+            continue
+        # target node: joint counts at (s1, s2) need G_a = A_a^T A_a
+        K = {}
+        for aa in (0, 1):
+            Aa, na, col = split[j][aa]
+            G = (Aa.T @ Aa).round().astype(np.int64) if na else np.zeros((N, N), dtype=np.int64)
+            ci, cj = col[:, None], col[None, :]
+            K[aa] = {(1, 1): G, (1, 0): ci - G, (0, 1): cj - G, (0, 0): na - ci - cj + G}
+        tc = {}
+        for c in (0, 1):
+            k1 = np.where(e == 1, K[1][(1, c)], K[1][(0, c)])
+            k0 = np.where(e == 1, K[0][(1, c)], K[0][(0, c)])
+            tc[c] = np.where(a == 1, k1, k0)
+        tcnt[j] = tc
+    tot = np.zeros((N, N), dtype=object)
+    for combo in combos:
+        w = base.copy()
+        for nd, c in zip(tnodes, combo):
+            w = w * obj(tcnt[nd][c])
+        tot = tot + w
+    num = int(sum(tot[valid]))
+    return num, den
+
+
+MAJORITY_TIE_RULE = "half_credit"   # an exact tie scores 0.5 (expected accuracy of any tie-break; polarity-free)
+
+
+def exact_posterior(vs: VersionSpace, q: Query) -> dict:
+    """Exact uniform-compatible posterior summary of q: probability, exact majority decision and tie flag."""
+    num, den = exact_query_counts(vs, q)
+    tie = 2 * num == den
+    return {"num": num, "den": den, "p": num / den if den else None, "method": "exact_counts",
+            "majority": None if tie else int(2 * num > den), "tie": tie,
+            "verdict": (Verdict.REFUTED if num == 0 else Verdict.ENTAILED if num == den else Verdict.UNDERDETERMINED).value}
+
+
+def boolean_support(vs: VersionSpace, q: Query) -> set[bool]:
+    """Exact set of possible answers of a ONE-STEP point query over V(D): per-node output supports (sets of
+    attainable bits; clamped nodes fixed) combined by evaluating the predicate on every supported
+    combination.  Pure Boolean evaluation; no probabilities."""
+    n = vs.n
+    if q.horizon != 1:
+        raise Unsupported("boolean_support handles one-step queries")
+    x0 = point_query_parts(q, n)
+    m, v = q.intervention.masks
+    s0 = (x0 & ~m) | v if q.intervention.kind != "none" else x0
+    clamp = q.intervention.kind == "persistent_clamp"
+    tnodes = sorted(q.target.nodes())
+    supp = []
+    for j in tnodes:
+        if clamp and (m >> j) & 1:
+            supp.append(((v >> j) & 1,))
+        else:
+            supp.append(tuple(sorted({int(b) for b in vs.cls.tables[vs.compatible[j], s0]})))
+    out = set()
+    for combo in itertools.product(*supp):
+        x = sum(b << nd for nd, b in zip(tnodes, combo))
+        out.add(bool(reference.holds(q.target, reference.to_bits(x, n))))
+    return out
+
+
+def verdict_fast(vs: VersionSpace, q: Query) -> Verdict:
+    """Exact verdict without SAT: Boolean support for h == 1, exact integer counts for 1 < h <= 3,
+    otherwise the complete SAT ``verdict``.  (The v1 version compared a floating probability with 1.0/0.0.)"""
+    if vs.empty:
+        return Verdict.INCONSISTENT
+    if q.horizon == 0:
+        return verdict(vs, q).verdict
+    if q.horizon == 1:
+        s = boolean_support(vs, q)
+        return Verdict.UNDERDETERMINED if len(s) == 2 else (Verdict.ENTAILED if True in s else Verdict.REFUTED)
+    if q.horizon <= EXACT_MAX_HORIZON:
+        num, den = exact_query_counts(vs, q)
+        return Verdict.REFUTED if num == 0 else Verdict.ENTAILED if num == den else Verdict.UNDERDETERMINED
+    return verdict(vs, q).verdict
+
+
+def mc_posterior(vs: VersionSpace, q: Query, samples: int, rng: np.random.Generator) -> dict:
+    """FINITE-SAMPLE MONTE CARLO majority algorithm (diagnostic only; never called exact): `samples`
+    independent per-node uniform draws from V(D)."""
+    choices = np.stack([rng.choice(c, size=samples) for c in vs.compatible], axis=1)
+    n = vs.n
+    x0 = point_query_parts(q, n)
+    m, v = q.intervention.masks
+    s0 = (x0 & ~m) | v if q.intervention.kind != "none" else x0
+    clamp = q.intervention.kind == "persistent_clamp"
+    T = vs.cls.tables
+    s = np.full(samples, s0, dtype=np.int64)
+    w = (1 << np.arange(n)).astype(np.int64)
+    for _ in range(q.horizon):
+        nb = T[choices, s[:, None]].astype(np.int64)          # (K, n): node j's table at state s
+        s = (nb * w[None, :]).sum(axis=1)
+        if clamp:
+            s = (s & ~m) | v
+    from .semantics import eval_pred
+    uniq, inv = np.unique(s, return_inverse=True)
+    vals = np.array([eval_pred(q.target, int(z)) for z in uniq], dtype=np.int64)[inv]
+    k = int(vals.sum())
+    p = k / samples
+    return {"p": p, "k": k, "samples": samples, "se": math.sqrt(max(p * (1 - p), 0.0) / samples),
+            "majority": None if 2 * k == samples else int(2 * k > samples), "tie": 2 * k == samples,
+            "method": "monte_carlo"}
