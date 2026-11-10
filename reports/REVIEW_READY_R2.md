@@ -129,4 +129,34 @@ Held-out qwen (100 worlds):
 
 ## 8. Release identity
 
-_Filled in at publication: commit, tag `v0.2.0-dev`, release asset digests, CI run, clean-clone check._
+| item | value |
+|---|---|
+| public repository | https://github.com/albertoHdzE/causalguard-epistemics |
+| reviewed content commit | `161123c98f88f78637c81b13b93d0749ae03243f` (main) |
+| tag | `v0.2.0-dev`: the docs-only commit immediately after `161123c`. It fills this section and changes nothing else; this file is excluded from the manifest because it records the release identity. |
+| release | GitHub prerelease `v0.2.0-dev`; `v0.1.0-dev` and its asset are unchanged |
+| raw-run asset | `causalguard-dev-runs-v0.2.0-dev.tar.gz`, 22,445,782 B, sha256 `391ecd326186ffc18faa714ff1800b500ec10c49b887bfce4e8397ef34259bbe` (7 iteration-2 runs + `runs/registry.jsonl`) |
+| manifest | `artifacts/manifest_r2.json`, sha256 `0cad85a0a172dc1ba1b5dbc27d2528a3ad9a52656c0517193f1ea659b769b62e` (2,476 entries: raw_run_v2 2,384, raw_run_v1 21, report 53, config 16, release assets 2) |
+| CI at `161123c` | GitHub Actions run 42865254446: success (tests, smoke, upstream parity) |
+| tests | 164 passed, 0 skipped (`reports/test-output-r2.txt`) |
+
+**Clean public-clone check at `161123c`.** Procedure: fresh `git clone`, documented lockfile install
+(`requirements-lock.txt` + `pip install --no-deps -e .`), both release assets extracted. Results:
+- `verify_artifacts.py artifacts/manifest_r2.json`: COMPLETE, 2,474/2,474 required files verified (exit 0).
+- pytest: 164 passed.
+- Re-running `analyze-s2-v2`, `analyze-s1-v2` and `analyze-s3-v2` reproduces the committed outputs byte-for-byte:
+
+  | file | sha256 prefix |
+  |---|---|
+  | `s2_v2_summary.json` | `f68b683a…` |
+  | `s2_v2_per_world.csv` | `710b6b49…` |
+  | `s1_v2_summary.json` | `e5091113…` |
+  | `s3_v2_summary.json` | `3fac1d6d…` |
+
+- `scripts/reproduce_v1.sh`: both iteration-1 summaries MATCH (`1b6f8e8b…`, `169fbd79…`).
+
+A first clean-clone attempt (D35) found an interruption-test race. The test was fixed and the runner is unchanged.
+It also confirmed that the documented lockfile install is required for the solver and plot extras.
+
+**Confirmatory status: no confirmatory run exists for S1, S2 or S3. There is no `docs/FREEZE_RECORD.json`.
+`confirmatory_authorized: false`.**

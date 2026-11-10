@@ -20,7 +20,7 @@ plan (same config and source-tree digest); long runs execute from an immutable s
 | P4 S2 development (670 worlds + MC diagnostic) | runs complete | runs/S2-dev-v2 (670 ok; D27), runs/S2-dev-v2-mcdiag (200 ok) |
 | P5 S1 repair panel | complete: 686/686 ok, 0 mismatches | runs/S1-dev-v2-panel; reports/development_r2/s1_v2_summary.json |
 | P6 S3 v2 development | complete: qwen diag + held-out (100/100 ok); gemma diag = floor diagnostic (D33); analysis D34 | runs/s3v2-*; reports/development_r2/s3_v2_summary.json |
-| P7 package + release | pending | — |
+| P7 package + release | complete: content 161123c, tag v0.2.0-dev (prerelease) | reports/REVIEW_READY_R2.md §8 |
 
 ## Runs (iteration 2)
 
@@ -34,5 +34,4 @@ plan (same config and source-tree digest); long runs execute from an immutable s
 | S1-dev-v2-panel | dd63670a78b1 | complete: 686 ok |
 
 ## Next exact actions
-1. P7: acceptance_r2.json, test-output-r2.txt, manifest_r2 + release asset, merge to main, tag v0.2.0-dev,
-   GitHub prerelease, CI, clean-clone check, fill REVIEW_READY_R2 §8.
+1. None in iteration 2. Await Codex review R2. Do not create FREEZE_RECORD or run confirmation.
