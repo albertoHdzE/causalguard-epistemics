@@ -22,6 +22,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+MANIFEST_EXCLUDED = {"reports/REVIEW_READY_R2.md"}
+
+
 def sha(p: Path) -> str:
     h = hashlib.sha256()
     with p.open("rb") as fh:
@@ -57,7 +60,10 @@ def main() -> None:
         new_raw.append(reg)
     files += [entry(f, "raw_run_v2") for f in new_raw]
     files += [entry(f, "raw_run_v1") for rid in a.historical_runs for f in run_files(rid)]
-    files += [entry(f, "report") for f in sorted((ROOT / "reports").rglob("*")) if f.is_file()]
+    # The handoff records the release identity (commit, tag, asset digest), which exists only after this
+    # manifest and the asset are built; a document cannot checksum itself, so it is excluded and named.
+    files += [entry(f, "report") for f in sorted((ROOT / "reports").rglob("*"))
+              if f.is_file() and f.relative_to(ROOT).as_posix() not in MANIFEST_EXCLUDED]
     files += [entry(f, "config") for f in sorted((ROOT / "configs").rglob("*.json"))]
     asset = ROOT / a.asset
     asset.parent.mkdir(exist_ok=True)
@@ -71,7 +77,7 @@ def main() -> None:
     assets.append({"path": f"dist/{a.historical_asset}", "bytes": old["release_asset"]["bytes"],
                    "sha256": old["release_asset"]["sha256"], "required": False, "group": "release_asset",
                    "contents": "iteration-1 development runs (release v0.1.0-dev)"})
-    man = {"manifest_version": "r2", "files": files + assets,
+    man = {"manifest_version": "r2", "files": files + assets, "excluded": sorted(MANIFEST_EXCLUDED),
            "historical_manifest": {"path": "artifacts/manifest.json",
                                    "sha256": sha(ROOT / "artifacts" / "manifest.json")},
            "historical_registry": {"path": "RUNS.jsonl", "sha256": sha(ROOT / "RUNS.jsonl")}}
