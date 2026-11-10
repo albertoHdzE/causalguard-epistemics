@@ -1,0 +1,44 @@
+{
+ "S2": {
+  "realizable": {
+   "worlds": 250,
+   "within_label_isomorphic_duplicates": 0,
+   "isomorphic_to_iteration1_dev_world": 0
+  },
+  "null": {
+   "worlds": 250,
+   "within_label_isomorphic_duplicates": 0,
+   "isomorphic_to_iteration1_dev_world": 0
+  },
+  "misspecified": {
+   "worlds": 60,
+   "within_label_isomorphic_duplicates": 0,
+   "isomorphic_to_iteration1_dev_world": 0
+  },
+  "shift": {
+   "worlds": 60,
+   "within_label_isomorphic_duplicates": 0,
+   "isomorphic_to_iteration1_dev_world": 0
+  },
+  "noise_stress": {
+   "worlds": 50,
+   "within_label_isomorphic_duplicates": 0,
+   "isomorphic_to_iteration1_dev_world": 0
+  },
+  "all_v2_within_split_duplicates": 0
+ },
+ "S3": {
+  "dev-v2-s3-diag": {
+   "worlds": 20,
+   "isomorphic_to_baseline_training_world": 0,
+   "within_panel_duplicates": 0
+  },
+  "dev-v2-s3-panel": {
+   "worlds": 100,
+   "isomorphic_to_baseline_training_world": 0,
+   "within_panel_duplicates": 0
+  },
+  "diag_vs_heldout_overlap": 0
+ },
+ "note": "Development audit (reported, no exclusions in development). Isomorphism = canonical form under variable relabelling (dedup.canonical_form). S3 baselines are surface rules over (budget, horizon, intervention kind, target value) fitted on training-world ITEMS; they store no mechanism."
+}

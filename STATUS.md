@@ -34,6 +34,6 @@ plan (same config and source-tree digest); long runs execute from an immutable s
 | S1-dev-v2-panel | dd63670a78b1 | complete: 686 ok |
 
 ## Next exact actions
-1. When the gemma diagnostic completes: apply gate D29; if it passes, launch `s3v2-heldout-gemma3_12b-dev` from snapshot dd63670a78b1 (S3 code byte-identical to 915f089c; task generation hash-checked).
+1. gemma diagnostic complete; gate D29 G3 FAILED (D33) -> no gemma held-out panel. Wait for qwen held-out.
 2. When both held-out panels finish: analyze-s3-v2 over all four S3 v2 runs; write the S3 section.
 3. Build reports/REVIEW_READY_R2.md, acceptance_r2.json, manifest_r2, release v0.2.0-dev.
