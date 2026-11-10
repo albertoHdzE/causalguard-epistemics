@@ -1,9 +1,25 @@
 {
- "status": "PROPOSED - not frozen, not run. Freeze requires review and docs/FREEZE_RECORD.json at the frozen commit.",
+ "status": "PROPOSAL FOR REVIEW R2 \u2014 not frozen, not authorized. Becomes executable only together with a reviewer-issued docs/FREEZE_RECORD.json (schema causalguard-freeze-record-v2) at a clean freeze commit.",
+ "confirmatory_authorized": false,
  "mode": "confirmatory",
- "salt_rule": "confirm- + sha256('<freeze commit>|causalguard-confirmatory-v1')[:16] (scripts/run_confirmatory.py)",
+ "salt_namespace": "confirm",
+ "salt_rule": "salt = 'confirm-' + sha256(freeze_commit|causalguard-confirmatory-v2)[:16]; a public reproducibility identifier, not a secret seal (no-peeking is a process rule).",
+ "development_manifest": "artifacts/manifest_r2.json",
+ "development_corpora": {
+  "S2": [
+   "runs/S2-dev-v1",
+   "runs/S2-dev-null-v1",
+   "runs/S2-dev-v2"
+  ]
+ },
+ "readiness_proposal": {
+  "S1": "proposed_ready_pending_review",
+  "S2": "proposed_ready_pending_review",
+  "S3": "not_ready"
+ },
  "S2": {
   "study": "S2",
+  "design_version": "s2-design-v2",
   "n": 7,
   "kmax": 3,
   "budgets": [
@@ -20,8 +36,10 @@
    "clamp_interventions",
    "active"
   ],
-  "mc_samples": 4096,
+  "endpoint": "configs/endpoints/S2-primary-v2.json",
   "workers": 24,
+  "item_timeout_s": 900,
+  "dedup_rule": "structured populations: a world isomorphic to any development world is excluded and replaced by the next index of the same family (deterministic replenishment); the uniform-H null is IID and NEVER excluded (dev overlap audited and reported, with a grouped sensitivity); within-confirmatory isomorphic duplicates are retained and reported.",
   "populations": [
    {
     "population": "realizable",
@@ -32,8 +50,16 @@
      "random_lookup",
      "modular"
     ],
-    "worlds_per_family": 200,
-    "start": 0
+    "start": 0,
+    "worlds_per_family": 200
+   },
+   {
+    "population": "null",
+    "families": [
+     "uniform_H"
+    ],
+    "start": 0,
+    "worlds_per_family": 1000
    },
    {
     "population": "misspecified",
@@ -44,19 +70,20 @@
      "random_lookup",
      "modular"
     ],
-    "worlds_per_family": 50,
-    "start": 1000
+    "start": 10000,
+    "worlds_per_family": 20
    },
    {
     "population": "shift",
     "families": [
      "composed_mixed"
     ],
-    "worlds_per_family": 250,
-    "start": 2000
+    "start": 20000,
+    "worlds_per_family": 100
    },
    {
     "population": "realizable",
+    "label": "noise_stress",
     "families": [
      "conjunctive",
      "canalizing",
@@ -64,7 +91,8 @@
      "random_lookup",
      "modular"
     ],
-    "worlds_per_family": 50,
+    "start": 30000,
+    "worlds_per_family": 20,
     "regimes": [
      "uniform_states"
     ],
@@ -78,43 +106,11 @@
      32,
      64
     ],
-    "verdicts": false,
-    "label": "noise_stress (separate MDL experiment; indices offset by population label in the seed)",
-    "start": 3000
-   },
-   {
-    "population": "realizable",
-    "families": [
-     "uniform_H"
-    ],
-    "start": 4000,
-    "worlds_per_family": 250,
-    "label": "NULL control (DECISIONS D21): rules drawn uniformly from H; analysed separately, never pooled into the primary. Proposed pending review."
+    "verdicts": false
    }
   ],
-  "primary": {
-   "population": "realizable",
-   "regime": "uniform_states",
-   "budget": 16,
-   "queries": "16 hidden intervention queries per world",
-   "contrast": "accuracy(min index-code model) - expected accuracy(uniform compatible model)",
-   "aggregation": "equal-weight mean over the 5 family strata of per-world paired differences",
-   "interval": "stratified paired cluster bootstrap over worlds, 5000 replicates, seed 20261109, percentile 95%",
-   "missing": "empty V(D) -> 0 correctness (primary); complete-case sensitivity",
-   "decision_rule": "report estimate and 95% CI; 'supported' if CI lower bound > 0; equivalence is NOT tested; a wide-interval null is inconclusive",
-   "minimum_meaningful_difference": 0.05
-  },
-  "registered_secondary": [
-   "KEY (proposed, D21): index - vs_majority and circuit - vs_majority (majority answer of V(D) = Bayes under uniform prior)",
-   "KEY (proposed, D21): primary contrast evaluated on the uniform_H null population; report the structured-minus-null difference descriptively",
-   "index - circuit (same cell)",
-   "index - uniform on state-holdout queries",
-   "index - uniform per family (exploratory)",
-   "consensus false-certification rate in realizable (must be 0) and misspecified worlds",
-   "active - random measurement policy at budgets 4/8/16"
-  ],
-  "multiplicity": "S2 has one primary contrast; secondaries exploratory (no p-values). If S3 is promoted to co-primary in a paper, Holm over the two primary p-values from the bootstrap (two-sided, percentile inversion).",
-  "stopping": "stop only for oracle/codec defect, corrupted logs or resource exhaustion; no interim looks; failed records retained"
+  "multiplicity": "one primary contrast (S2-primary-v2); everything else is a named secondary or exploratory estimate without confirmatory significance claims",
+  "stopping": "no interim looks; stop only for oracle/codec defect, storage corruption or resource exhaustion; failed attempts retained; the primary is complete only when every planned structured world has a terminal ok result"
  },
  "S1": {
   "study": "S1",
@@ -140,6 +136,7 @@
   "workers": 16,
   "maxtasks": 1,
   "item_timeout_s": 1200,
+  "note": "engineering/formal-correctness study; caps fixed from development; timeouts and failed/missing items stay in completion denominators. Zero observed mismatches are reported as counts over world-level comparisons, not as a universal correctness proof.",
   "cells": [
    {
     "family": "sparse_conj",
@@ -435,82 +432,10 @@
     "seeds": 30,
     "grid": "large"
    }
-  ],
-  "note": "engineering/formal-correctness study; caps fixed from development; timeouts kept in completion curves"
- },
- "S3": {
-  "status": "NOT READY TO FREEZE: floor pilot and label-revealing D feedback; refine and re-pilot first (reports/DESIGN_SIZING.md). Block kept so the runner path is exercised.",
-  "worlds_by_model": {
-   "qwen25_7b": 500,
-   "gemma3_12b": 300
-  },
-  "worlds": 500,
-  "task": {
-   "n": 4,
-   "k": 2,
-   "items_per_world": 4
-  },
-  "harness": {
-   "arms": [
-    "A",
-    "B",
-    "C",
-    "D",
-    "D_label",
-    "E",
-    "T_A",
-    "T_D"
-   ],
-   "feedback_rounds": 2,
-   "c_extra_samples": 2,
-   "transfer": {
-    "source_item": 0,
-    "target_item": 1
-   }
-  },
-  "caps": {
-   "calls_per_world": 40,
-   "calls_total": 20000
-  },
-  "models": {
-   "qwen25_7b": {
-    "kind": "openai_compatible",
-    "backend": "ollama",
-    "base_url": "http://127.0.0.1:11434/v1",
-    "model": "qwen2.5:7b",
-    "temperature": 0.0,
-    "sample_temperature": 0.7,
-    "max_tokens": 1500,
-    "seed": 20261109,
-    "timeout_s": 120,
-    "max_transport_retries": 2,
-    "allow_remote": false
-   },
-   "gemma3_12b": {
-    "kind": "openai_compatible",
-    "backend": "lmstudio",
-    "base_url": "http://127.0.0.1:1234/v1",
-    "model": "gemma-3-12b-it",
-    "temperature": 0.0,
-    "sample_temperature": 0.7,
-    "max_tokens": 1500,
-    "seed": 20261109,
-    "timeout_s": 120,
-    "max_transport_retries": 2,
-    "allow_remote": false
-   }
-  },
-  "primary": "D - B final-verdict balanced accuracy, world-clustered bootstrap 5000 replicates",
-  "key_secondary": [
-   "transfer T_D - A(target item)",
-   "B - A and correct->wrong revisions",
-   "surface-rule baseline",
-   "verdict-probability coherence"
   ]
  },
- "resource_estimate": {
-  "S2": "~2,000 worlds x 3.6 s mean = ~120 CPU-min; ~5 min wall on 24 workers; ~350 MB raw records",
-  "S1": "1,950 worlds x 7 backends; ~132,000 CPU-s estimated from development per-cell item means; ~2.3 h wall on 16 workers; largest dev item 349 s",
-  "S3": "qwen 500 worlds x 59 s ~ 8.2 h; gemma 300 x 104 s ~ 8.7 h; ~24,000 local calls; no paid inference"
+ "S3": {
+  "status": "not_ready",
+  "reason": "development only in iteration 2; see reports/REVIEW_READY_R2.md S3 section and the revised S3 sizing"
  }
 }

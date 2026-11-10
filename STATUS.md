@@ -1,42 +1,37 @@
 # STATUS
 
-_Last updated: 2026-11-09 (implementation iteration 1). Resume protocol: read this file, DECISIONS.md, RUNS.jsonl and `git status`; never relaunch a run id that has records — `causalguard run` resumes and skips completed items._
+_Last updated: 2026-11-10 (iteration 2, after Codex review R1). Pre-sprint development (the sprint starts 2026-11-13)._
 
-## Work packages
+**Resume protocol.** Read this file, `DECISIONS.md` (D23+ for iteration 2), `git log` on branch `iteration-2`, and
+`runs/registry.jsonl` (runtime registry; the tracked `RUNS.jsonl` is the frozen iteration-1 registry). Every run is
+reconciled with `causalguard.runner.load_run(<run dir>)`. A run is continued only with `--resume` under an identical
+plan (same config and source-tree digest); long runs execute from an immutable snapshot worktree via
+`scripts/run_from_snapshot.sh <commit> <log> python -m ...`, so the main tree can be edited while they run.
 
-| WP | State | Evidence |
+**Not authorized:** no `docs/FREEZE_RECORD.json`, no confirmatory run, no WP10/WP11 (reports/review_r1/DECISION.json).
+
+## Iteration-2 work items (REPAIR_SPEC P1–P7)
+
+| Item | State | Evidence |
 |---|---|---|
-| WP0 inventory/isolation/provenance | done | ENVIRONMENT.md, UPSTREAM.md, PREEXISTING_WORK.md, requirements-lock.txt |
-| WP1 typed semantics + fixtures | done | src/causalguard/schema.py, semantics.py, data/fixtures/semantic_fixtures.json, tests/test_schema.py, tests/test_fixtures.py |
-| WP2 independent reference + certificates | done | reference.py, bdd_ref.py, proofcheck.py, tests/test_query_backends.py, tests/test_structure.py |
-| WP3 index representation + codec + queries + upstream adapter | done | index_repr.py, codec.py, query.py, upstream_adapter.py, docs/CODEC.md, tests/test_index_repr.py, test_codec.py, test_upstream_parity.py |
-| WP4 version spaces / selection | done | versionspace.py, tests/test_versionspace.py, tests/test_s2_isolation.py |
-| WP5 generators / audit | done | generators.py, dedup.py, s3_tasks.py, reports/development/dedup_audit.json |
-| WP6 runner / analysis / statistics | done | runner.py, stats.py, analysis/*.py, tests/test_stats.py |
-| WP7 LLM harness | done | llm/*.py, experiments/s3.py, tests/test_llm_harness.py, docs/S3_HARNESS.md |
-| WP8 development experiments + freeze proposal | done (S3 floor pilot: not ready to freeze) | reports/DEVELOPMENT_REPORT.md, reports/DESIGN_SIZING.md, configs/confirmatory.json |
-| WP9 public release + review package | done: reports/REVIEW_READY.md, tag v0.1.0-dev | reports/REVIEW_READY.md |
-| WP10 / WP11 | not started (subsequent iterations by design) | — |
+| P1 exactness (R01), strict logs (R04), plan/endpoint binding (R05) | implemented + tested | versionspace.exact_query_counts / boolean_support; runner v2; analysis.s2_analysis.analyze_v2; tests/test_s2_v2.py, test_runner_v2.py |
+| P2 freeze lifecycle (R03), caps (R06), manifests (R08) | implemented + E2E fixture tests | src/causalguard/freeze.py, scripts/run_confirmatory.py, tests/test_freeze_lifecycle.py, scripts/verify_artifacts.py |
+| P3 S2 design v2 + revised primary + MC policy | implemented | generators.make_s2_design, configs/endpoints/S2-primary-v2.json |
+| P4 S2 development (670 worlds + MC diagnostic) | runs complete | runs/S2-dev-v2 (670 ok; D27), runs/S2-dev-v2-mcdiag (200 ok) |
+| P5 S1 repair panel | pending: needs the machine idle (run between S3 panels) | configs/s1_dev_v2_panel.json |
+| P6 S3 v2 development | diagnostic panels running; held-out panels pending gate D29 | runs/s3v2-diag-*-dev |
+| P7 package + release | pending | — |
 
-## Runs (see RUNS.jsonl)
+## Runs (iteration 2)
 
-| run id | state |
-|---|---|
-| S2-smoke-tmp | 3-item smoke, directory deleted after the check (registry lines kept) |
-| S2-dev-v1 | complete, 420 worlds, 0 failures |
-| S1-dev-v1 | complete: 2,344 ok, 1 recorded failure (dd assertion, D20) |
-| S1-dev-v1-rerun | complete: 670 ok (index_sat + bdd_ref, D16/D20); source for those backends |
-| S2-dev-null-v1 | complete: 250 null worlds (D21) |
-| s3-pilot-qwen25-7b-dev-v1, s3-pilot-gemma3-12b-dev-v1 | stopped, **invalidated** (B truncated; D19); kept |
-| s3-pilot-qwen25-7b-dev-v2 | complete: 80 worlds, 2,400 physical calls, 0 failures (interrupted once and resumed, D22) |
-| s3-pilot-gemma3-12b-dev-v2 | complete: 80 worlds, 2,400 physical calls, 0 failures (interrupted once and resumed, D22) |
-
-## Blocked / external input needed
-- Sprint start date (for pre-sprint vs sprint labelling).
-- Review approval and a FREEZE_RECORD before any confirmatory run.
-
-Public repository: https://github.com/albertoHdzE/causalguard-epistemics (CI green).
+| run id | snapshot | state |
+|---|---|---|
+| s3v2-diag-qwen25_7b-dev | 915f089c1db7 | running (20 worlds) |
+| s3v2-diag-gemma3_12b-dev | 915f089c1db7 | running (20 worlds) |
+| S2-dev-v2 | 01ca7072fb09 | complete: 670 ok, 0 failed (no `end` event, D27) |
+| S2-dev-v2-mcdiag | 01ca7072fb09 | complete: 200 ok |
 
 ## Next exact actions
-1. Await review of reports/REVIEW_READY.md (decisions needed: S2 comparator/null population per D21; S3 refinements).
-2. Do NOT run confirmatory studies until docs/FREEZE_RECORD.json exists at a reviewed freeze commit.
+1. When qwen diagnostic completes: apply gate D29; interrupt the gemma diagnostic, run S1 panel on an idle machine, resume gemma diagnostic (same snapshot, `--resume`).
+2. Launch held-out S3 panels (configs/s3v2_heldout_*.json) from a snapshot whose S3 code is byte-identical to 915f089c.
+3. Build reports/REVIEW_READY_R2.md, acceptance_r2.json, manifest_r2, release v0.2.0-dev.

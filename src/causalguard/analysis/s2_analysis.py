@@ -788,3 +788,58 @@ def _figures_v2(rows, result, out_dir: Path, spec: dict) -> None:
     fig.tight_layout()
     fig.savefig(out_dir / "s2_v2_accuracy_vs_budget.png", dpi=130)
     plt.close(fig)
+
+
+def historical_exact_majority_v1(run_ids: list[str], reps: int = 2000) -> dict:
+    """Re-score the iteration-1 S2 runs (v1 design, v1 records) with the EXACT compatible-set posterior at the
+    v1 primary cell (uniform_states, B16, intervention queries), regenerating the public evidence with the
+    historical v1 generator.  Quantifies what the v1 Monte Carlo majority changed.  The v1 design itself
+    (mechanism-dependent holdouts/redraws, R02) is NOT repaired by this re-scoring."""
+    from ..generators import make_s2_instance, make_s2_world
+    from ..schema import Evidence, HypothesisClass
+    from ..versionspace import build_version_space, exact_posterior
+    rows, mismatch_truth, prob_err, mc_q, flips = [], 0, [], 0, 0
+    for rid in run_ids:
+        for r in read_jsonl(ROOT / "runs" / rid / "records.jsonl"):
+            w = r["world"]
+            if w["population"] != "realizable" or w["world_id"] in ():
+                continue
+            if "noise" in r:
+                continue
+            world = make_s2_world("dev-v1", int(r["item_id"].split("|")[-1]), w["family"], w["population"], 7, 3)
+            assert world.world_id == w["world_id"]
+            inst = make_s2_instance(world)
+            ev = Evidence(7, tuple(inst.evidence["uniform_states"][:16]), "uniform_states")
+            vs = build_version_space(ev, HypothesisClass(7, 3))
+            qrows = [q for q in r["regimes"]["uniform_states"]["16"]["queries"] if q["kind"] == "intervention"]
+            acc = {"index": [], "mc_v1": [], "exact_half": [], "exact_tie0": []}
+            for q, rec in zip(inst.intervention_queries, qrows):
+                ex = exact_posterior(vs, q)
+                t = rec["truth"]
+                mismatch_truth += int(predict_truth(world, q) != t)
+                prob_err.append(abs(ex["p"] - rec["p_uniform"]))
+                mc_q += rec.get("uniform_method") == "monte_carlo"
+                mcmaj = int(rec["p_uniform"] > 0.5)
+                exm = ex["majority"]
+                flips += int((mcmaj if rec["p_uniform"] != 0.5 else "tie") != (exm if not ex["tie"] else "tie"))
+                acc["index"].append(int(rec["pred"]["index"] == t))
+                acc["mc_v1"].append(int(mcmaj == t))
+                acc["exact_half"].append(0.5 if ex["tie"] else int(exm == t))
+                acc["exact_tie0"].append(int((0 if ex["tie"] else exm) == t))
+            rows.append({"family": w["family"], **{k: float(np.mean(v)) for k, v in acc.items()},
+                         "ties": sum(1 for q in inst.intervention_queries if exact_posterior(vs, q)["tie"])})
+    fam = np.array([r["family"] for r in rows])
+    out = {"worlds": len(rows), "truth_mismatches": mismatch_truth, "queries": len(prob_err),
+           "queries_mc_in_v1": mc_q, "mean_abs_prob_error_v1_mc": float(np.mean(prob_err)),
+           "max_abs_prob_error_v1_mc": float(np.max(prob_err)), "majority_decision_flips": flips,
+           "exact_ties": int(sum(r["ties"] for r in rows))}
+    for comp in ("mc_v1", "exact_half", "exact_tie0"):
+        d = np.array([r["index"] - r[comp] for r in rows])
+        br = paired_cluster_bootstrap(d, fam, replicates=reps, seed=20261109)
+        out[f"index-{comp}"] = {"estimate": br.estimate, "ci95": [br.lo, br.hi], "n_worlds": br.n_worlds}
+    return out
+
+
+def predict_truth(world, q) -> int:
+    from ..versionspace import predict
+    return int(predict(world.net, q))

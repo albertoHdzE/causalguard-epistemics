@@ -1,0 +1,61 @@
+{
+ "artifact": "s3-baselines-v2",
+ "features": [
+  "budget",
+  "horizon",
+  "intervention_kind",
+  "target_value"
+ ],
+ "majority_verdict": "underdetermined",
+ "surface_rule": {
+  "3|1|initial_edit|0": "underdetermined",
+  "3|1|initial_edit|1": "underdetermined",
+  "3|1|none|0": "underdetermined",
+  "3|1|none|1": "underdetermined",
+  "3|1|persistent_clamp|0": "entailed",
+  "3|1|persistent_clamp|1": "entailed",
+  "3|2|initial_edit|0": "underdetermined",
+  "3|2|initial_edit|1": "underdetermined",
+  "3|2|none|0": "underdetermined",
+  "3|2|none|1": "underdetermined",
+  "3|2|persistent_clamp|0": "entailed",
+  "3|2|persistent_clamp|1": "entailed",
+  "5|1|initial_edit|0": "underdetermined",
+  "5|1|initial_edit|1": "refuted",
+  "5|1|none|0": "refuted",
+  "5|1|none|1": "refuted",
+  "5|1|persistent_clamp|0": "refuted",
+  "5|1|persistent_clamp|1": "entailed",
+  "5|2|initial_edit|0": "refuted",
+  "5|2|initial_edit|1": "refuted",
+  "5|2|none|0": "refuted",
+  "5|2|none|1": "refuted",
+  "5|2|persistent_clamp|0": "refuted",
+  "5|2|persistent_clamp|1": "refuted",
+  "8|1|initial_edit|0": "entailed",
+  "8|1|initial_edit|1": "refuted",
+  "8|1|none|0": "refuted",
+  "8|1|none|1": "refuted",
+  "8|1|persistent_clamp|0": "entailed",
+  "8|1|persistent_clamp|1": "refuted",
+  "8|2|initial_edit|0": "entailed",
+  "8|2|initial_edit|1": "entailed",
+  "8|2|none|0": "refuted",
+  "8|2|none|1": "entailed",
+  "8|2|persistent_clamp|0": "refuted",
+  "8|2|persistent_clamp|1": "refuted"
+ },
+ "tie_break": "most frequent, then alphabetical",
+ "train_items_by_role": {
+  "balanced": 900,
+  "natural": 300,
+  "transfer_target": 300
+ },
+ "train_salt": "dev-v2-s3-train",
+ "train_verdict_counts": {
+  "entailed": 464,
+  "refuted": 498,
+  "underdetermined": 538
+ },
+ "train_worlds": 300
+}

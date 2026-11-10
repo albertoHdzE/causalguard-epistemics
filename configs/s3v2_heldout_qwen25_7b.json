@@ -48,7 +48,7 @@
   "calls_total": 7000
  },
  "runner": {
-  "workers": 1,
+  "workers": 2,
   "world_timeout_s": 3600
  }
 }
