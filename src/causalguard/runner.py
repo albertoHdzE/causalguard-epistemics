@@ -350,7 +350,8 @@ class Run:
             self.ledger.append({"event": "kill", "time": now(), "item_id": e["item_id"], "reason": why})
 
         supervise(todo, fn, workers, timeout_s, on_start, on_end, on_kill, maxtasks)
-        remaining = [e for e in self.plan["items"] if e["item_id"] not in self.terminal(retry_failed=False)]
+        terminal = {i for i, a in atts.items() if a}   # attempts recorded in this process + read at start (O(items))
+        remaining = [e for e in self.plan["items"] if e["item_id"] not in terminal]
         end = {"event": "end", "run_id": self.run_id, "time": now(), "ok": counts["ok"], "failed": counts["failed"],
                "items_without_terminal_attempt": len(remaining),
                "status": ("complete" if not remaining and not counts["failed"] else

@@ -1,0 +1,381 @@
+{
+ "study": "S1",
+ "mode": "development",
+ "run_id": "S1-dev-v2-panel",
+ "description": "S1 iteration-2 repair verification panel: 2 new development worlds per originally studied family/size cell (49 cells), all applicable backends, original caps (20 s/query, 1200 s/item), runner v2 supervisor. Run with the machine otherwise idle (no S2/S3 jobs) for latency.",
+ "salt": "dev-v2-s1",
+ "backends": [
+  "reference",
+  "literal",
+  "index_enum",
+  "index_cube",
+  "index_sat",
+  "bdd_ref",
+  "codecs"
+ ],
+ "query_timeout_s": 20,
+ "limits": {
+  "reference_max_n": 10,
+  "literal_max_n": 16,
+  "index_enum_max_n": 12,
+  "full_codec_max_n": 16,
+  "cube_budget": 20000,
+  "bdd_node_budget": 2000000,
+  "proof_check_max_n": 256
+ },
+ "workers": 8,
+ "maxtasks": 1,
+ "item_timeout_s": 1200,
+ "excluded_by_design": {
+  "dense_random": "n>10 (cannot instantiate a dense 2**n-entry function per node)",
+  "reference": "n>10",
+  "literal": "n>16",
+  "index_enum": "n>12",
+  "full codec": "n>16"
+ },
+ "cells": [
+  {
+   "family": "sparse_conj",
+   "n": 4,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 4,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 4,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 4,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 4,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "dense_random",
+   "n": 4,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 6,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 6,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 6,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 6,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 6,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "dense_random",
+   "n": 6,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 8,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 8,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 8,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 8,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 8,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "dense_random",
+   "n": 8,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 10,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 10,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 10,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 10,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 10,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "dense_random",
+   "n": 10,
+   "seeds": 2,
+   "grid": "small",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 16,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 16,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 16,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 16,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 16,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 32,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 32,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 32,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 32,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 32,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 64,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 64,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 64,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 64,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 64,
+   "seeds": 2,
+   "grid": "large",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 128,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 128,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 128,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 128,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 128,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "sparse_conj",
+   "n": 256,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "canalizing",
+   "n": 256,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "n": 256,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "modular",
+   "n": 256,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  },
+  {
+   "family": "bounded_random",
+   "n": 256,
+   "seeds": 2,
+   "grid": "large_profile",
+   "start": 0
+  }
+ ]
+}

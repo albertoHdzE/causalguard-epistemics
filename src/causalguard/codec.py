@@ -754,8 +754,45 @@ def decoder_identity() -> dict:
             "gzip_bytes": len(gzip.compress(src, compresslevel=9, mtime=0))}
 
 
+def _local_import_closure(start: Path) -> list[Path]:
+    """Package-local modules transitively imported by ``start`` (AST walk; relative imports only)."""
+    import ast
+    pkg = start.parent
+    seen, todo = [], [start]
+    while todo:
+        p = todo.pop()
+        if p in seen:
+            continue
+        seen.append(p)
+        for node in ast.walk(ast.parse(p.read_text())):
+            if isinstance(node, ast.ImportFrom) and node.level == 1:
+                if node.module:
+                    q = pkg / (node.module.replace(".", "/") + ".py")
+                    if q.exists():
+                        todo.append(q)
+                else:
+                    for a in node.names:
+                        q = pkg / f"{a.name}.py"
+                        if q.exists():
+                            todo.append(q)
+    return sorted(seen)
+
+
+def decoder_bundle() -> dict:
+    """COMPLETE decoder dependency bundle (repairs R10): every package-local module the decoder imports,
+    concatenated deterministically (relative path header + bytes), with its gzip-9 size.  Runtime assumed:
+    CPython 3.12 standard library only (no third-party imports in the closure; checked by
+    tests/test_codec_bundle.py, which runs the bundle in an isolated interpreter)."""
+    mods = _local_import_closure(Path(__file__).resolve())
+    blob = b"".join(b"# file: " + m.name.encode() + b"\n" + m.read_bytes() for m in mods)
+    return {"modules": [m.name for m in mods], "bundle_sha256": hashlib.sha256(blob).hexdigest(),
+            "source_bytes": len(blob), "gzip_bytes": len(gzip.compress(blob, compresslevel=9, mtime=0)),
+            "runtime": "CPython 3.12 standard library (+ package __init__ stub)",
+            "codec_version": CODEC_VERSION}
+
+
 ALL_NODE_CODECS = ("index", "dnf", "gate", "circuit", "bdd", "lut", "full")
 
 __all__ = ["encode_network", "decode_network", "node_bits", "encode_node", "decode_node", "Archive",
-           "DecodeError", "generic_bits", "decoder_identity", "ALL_NODE_CODECS", "circuit_formula",
+           "DecodeError", "generic_bits", "decoder_identity", "decoder_bundle", "ALL_NODE_CODECS", "circuit_formula",
            "build_robdd", "rank_subset", "unrank_subset", "itertools"]

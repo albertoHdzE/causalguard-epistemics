@@ -110,7 +110,8 @@ def design_simulation(deltas, strata, n_grid=(200, 400, 600, 800, 1000, 1200, 15
     labels = np.unique(s)
     K = len(labels)
     rng = np.random.default_rng(seed)
-    z = 1.959963984540054
+    from statistics import NormalDist
+    z = NormalDist().inv_cdf(1 - alpha / 2)   # two-sided (1 - alpha) normal interval (alpha was ignored in v1)
     pools = {lab: d[s == lab] for lab in labels}
     obs_mean = stratified_mean(d, s)
 

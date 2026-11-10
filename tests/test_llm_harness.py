@@ -342,21 +342,23 @@ def test_replay_reproduces_record():
 
 
 def test_resume_does_not_duplicate(tmp_path):
+    from causalguard.runner import RunRefused, load_run, make_plan
     cfg = {"salt": SALT, "world_index_start": 0, "world_index_stop": 2,
            "provider": {"kind": "mock", "model": "mock-model", "extra": {"policy": "always_entailed"}},
            "harness": {"arms": ["A", "E"]}, "caps": {"calls_per_world": 10}}
-    kw = dict(runs_root=tmp_path / "runs", registry=tmp_path / "RUNS.jsonl")
     items = [(f"w{i}", s3.build_payload(cfg, i)) for i in range(2)]
-    run = Run("t", cfg, **kw)
-    run.execute(items[:1], s3.run_world, timeout_s=60)
-    run = Run("t", cfg, **kw)
-    end = run.execute(items, s3.run_world, timeout_s=60)
-    assert end["skipped_already_done"] == 1 and end["ok"] == 1
-    recs = read_jsonl(run.records)
-    assert sorted(r["item_id"] for r in recs) == ["w0", "w1"]
-    assert all(r["provider_kind"] == "mock" for r in recs)
-    with pytest.raises(RuntimeError):
-        Run("t", {**cfg, "salt": "other"}, **kw)
+    plan = make_plan("t", "S3", cfg, items)
+    run = Run("t", plan, runs_root=tmp_path / "runs")
+    run.execute(s3.run_world, timeout_s=60, stop_after=1)
+    run = Run("t", plan, runs_root=tmp_path / "runs", resume=True)
+    end = run.execute(s3.run_world, timeout_s=60)
+    assert end["ok"] == 1 and end["status"] == "complete"
+    lr = load_run(run.dir)
+    assert sorted(lr["results"]) == ["w0", "w1"] and lr["attempts_total"] == 2
+    assert all(r["provider_kind"] == "mock" for r in lr["results"].values())
+    other = make_plan("t", "S3", {**cfg, "salt": "other"}, items)
+    with pytest.raises(RunRefused):
+        Run("t", other, runs_root=tmp_path / "runs", resume=True)
 
 
 def test_parser_takes_last_object_when_critique_quotes_old_answer():

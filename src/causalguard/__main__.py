@@ -95,6 +95,11 @@ def main(argv=None):
         a = sub.add_parser(name)
         a.add_argument("--run-id", required=True, action="append")
         a.add_argument("--out", default="reports/development")
+    a2 = sub.add_parser("analyze-s2-v2")
+    a2.add_argument("--run-dir", required=True, action="append")
+    a2.add_argument("--endpoint", default="configs/endpoints/S2-primary-v2.json")
+    a2.add_argument("--mc-run-dir", default=None)
+    a2.add_argument("--out", default="reports/development_r2")
     sub.add_parser("fixtures")
     args = ap.parse_args(argv)
 
@@ -114,6 +119,12 @@ def main(argv=None):
     if args.cmd == "analyze-s2":
         from .analysis.s2_analysis import analyze
         print(json.dumps(analyze(args.run_id, Path(args.out)), indent=1)[:4000])
+        return 0
+    if args.cmd == "analyze-s2-v2":
+        from .analysis.s2_analysis import analyze_v2
+        res = analyze_v2([Path(d) for d in args.run_dir], Path(args.out), Path(args.endpoint),
+                         Path(args.mc_run_dir) if args.mc_run_dir else None)
+        print(json.dumps(res, indent=1, default=float)[:4000])
         return 0
     if args.cmd == "analyze-s1":
         from .analysis.s1_analysis import analyze

@@ -13,7 +13,7 @@ import signal
 import time
 
 from .. import query, reference
-from ..codec import ALL_NODE_CODECS, decode_network, decoder_identity, encode_network, generic_bits
+from ..codec import ALL_NODE_CODECS, decode_network, decoder_bundle, decoder_identity, encode_network, generic_bits
 from ..generators import make_s1_world, s1_queries
 from ..index_repr import MATERIALIZATION_LOG, from_network
 from ..schema import ModelAnswer
@@ -84,6 +84,7 @@ def run_item(p: dict) -> dict:
             bits[f"generic_{m}"] = {"status": "ok", "archive_bits": generic_bits(net, m)}
         out["bits"] = bits
         out["decoder"] = decoder_identity()
+        out["decoder_bundle"] = decoder_bundle()
         out["status"] = "ok"
         return out
 

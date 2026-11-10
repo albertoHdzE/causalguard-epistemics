@@ -39,6 +39,52 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
         raise SystemExit("no records")
     res: dict = {"run_ids": run_ids, "n_records": len(recs), "record_sources": dict(source),
                  "failures_by_run": failures_by_run}
+    return _core(recs, res, out_dir, "s1_summary.json", planned=None)
+
+
+def analyze_v2(run_dirs: list[Path], out_dir: Path) -> dict:
+    """Iteration-2 S1 analysis: runs reconciled to their plans.  Failed and never-returned items stay in the
+    completion denominators (24 queries each, as 'item_failure:<status>' / 'item_missing'); archive sums and
+    payload sums are reported separately; the decoder charge is the complete dependency bundle."""
+    from ..runner import load_run
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    if len({str(Path(d).resolve()) for d in run_dirs}) != len(run_dirs):
+        raise SystemExit("duplicate run arguments")
+    recs, planned, acct = [], [], {}
+    seen = set()
+    for d in run_dirs:
+        lr = load_run(Path(d))
+        if lr["layout"] != "v2":
+            raise SystemExit(f"{d}: legacy layout; use analyze")
+        plan = lr["plan"]
+        rid = plan["run_id"]
+        acct[rid] = {"planned": len(plan["items"]), "ok": len(lr["results"]), "failed": len(lr["failures"]),
+                     "missing": len(lr["missing"]), "attempts_total": lr["attempts_total"],
+                     "failures": {k: {"status": v["status"], "error": str(v["output"].get("error"))[:300]}
+                                  for k, v in lr["failures"].items()},
+                     "plan_sha256": plan["plan_sha256"], "source_tree_sha256": plan["source_tree_sha256"]}
+        for e in plan["items"]:
+            key = (e["payload"]["family"], e["payload"]["n"], e["payload"]["index"], e["payload"]["backend"])
+            if key in seen:
+                raise SystemExit(f"item {key} planned in more than one run (ambiguous combination)")
+            seen.add(key)
+            st = e["strata"]
+            if e["item_id"] in lr["results"]:
+                recs.append({"item_id": e["item_id"], "run_id": rid, **lr["results"][e["item_id"]]})
+            else:
+                f = lr["failures"].get(e["item_id"])
+                planned.append({"backend": st["backend"], "n": st["n"], "family": st["family"],
+                                "status": f"item_failure:{f['status']}" if f else "item_missing"})
+    res = {"analysis_version": "s1-analysis-v2", "run_dirs": [str(d) for d in run_dirs], "runs": acct,
+           "n_records": len(recs), "semantics_changed_from_v1": [
+               "failed/missing planned items counted in completion denominators",
+               "amortized totals: archive_sum (sum of archive bits) and payload_sum reported separately",
+               "decoder charge = gzip-9 of the complete local dependency bundle (codec+index_repr+schema)"]}
+    return _core(recs, res, out_dir, "s1_v2_summary.json", planned=planned)
+
+
+def _core(recs: list[dict], res: dict, out_dir: Path, summary_name: str, planned: list[dict] | None) -> dict:
     worlds = {(r["family"], r["n"], r["world_id"]) for r in recs}
     res["independent_worlds"] = len(worlds)
     res["worlds_by_cell"] = {f"{f}|n{n}": c for (f, n), c in sorted(Counter((f, n) for f, n, _ in worlds).items())}
@@ -147,6 +193,9 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
             c[st] += 1
             if st == "completed":
                 lat.setdefault(key, []).append(q["seconds"])
+    for e in planned or []:
+        if e["backend"] != "codecs":
+            comp.setdefault(f"{e['backend']}|n{e['n']}", Counter())[e["status"]] += 24
     res["completion"] = {k: dict(v) for k, v in sorted(comp.items(), key=lambda kv: (kv[0].split("|")[0], int(kv[0].split("|n")[1])))}
     res["latency_completed_queries"] = {k: {"n": len(v), "median_s": float(np.median(v)), "p90_s": float(np.quantile(v, 0.9)),
                                             "max_s": float(np.max(v))} for k, v in sorted(lat.items())}
@@ -162,6 +211,8 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
 
     # ------------- bits (identical target object per world)
     bits = defaultdict(lambda: defaultdict(list))
+    payload = defaultdict(lambda: defaultdict(list))
+    bundle = None
     rt_fail = 0
     exact_cover = Counter()
     decoder = None
@@ -169,12 +220,15 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
         if r["backend"] != "codecs" or r.get("status") != "ok":
             continue
         decoder = r.get("decoder")
+        bundle = r.get("decoder_bundle", bundle)
         exact_cover[r["index_cover_exact"]] += 1
         for cd, v in r["bits"].items():
             if v.get("status") == "ROUNDTRIP_FAILURE":
                 rt_fail += 1
             if v.get("status") == "ok":
                 bits[(r["family"], r["n"])][cd].append(v["archive_bits"])
+                if "payload_bits" in v:
+                    payload[(r["family"], r["n"])][cd].append(v["payload_bits"])
     res["codec_roundtrip_failures"] = rt_fail
     res["index_cover_exact_worlds"] = {str(k): v for k, v in exact_cover.items()}
     res["decoder"] = decoder
@@ -188,7 +242,7 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
                                                  and isinstance(row[cd], float) and row[cd] < row["index"])
         table[f"{fam}|n{n}"] = row
     res["median_archive_bits"] = table
-    if decoder:
+    if decoder and planned is None:   # legacy v1 accounting (field name kept for byte-level reproduction)
         dec_bits = decoder["gzip_bytes"] * 8
         am = {}
         for (fam, n), d in sorted(bits.items()):
@@ -198,14 +252,32 @@ def analyze(run_ids: list[str], out_dir: Path) -> dict:
         res["amortized_totals_note"] = ("decoder charged once per cell = gzip-9 size of codec.py (all codecs share one "
                                         "decoder module, so the charge is identical across codecs)")
         res["amortized_totals"] = am
-    (out_dir / "s1_summary.json").write_text(json.dumps(res, indent=1, sort_keys=True, default=str))
-    digest = hashlib.sha256((out_dir / "s1_summary.json").read_bytes()).hexdigest()
+    elif planned is not None:
+        dec = bundle or {}
+        dec_bits = dec.get("gzip_bytes", 0) * 8
+        am = {}
+        for (fam, n), d in sorted(bits.items()):
+            am[f"{fam}|n{n}"] = {cd: {"archive_sum_bits": int(np.sum(v)),
+                                      "payload_sum_bits": (int(np.sum(payload[(fam, n)][cd]))
+                                                           if payload[(fam, n)].get(cd) else None),
+                                      "decoder_bundle_bits": dec_bits,
+                                      "amortized_total_bits(archive_sum+decoder_bundle)": int(dec_bits + np.sum(v)),
+                                      "objects": len(v)}
+                                 for cd, v in d.items() if not cd.startswith("generic")}
+        res["decoder_bundle"] = dec
+        res["amortized_totals_note"] = (
+            "archive_sum = sum of complete archives (header+framing+payload); payload_sum is NOT added to it. The "
+            "decoder charge is the gzip-9 size of the complete local dependency bundle under CPython 3.12 stdlib, "
+            "identical for every codec. These are encoder-specific code lengths, not Kolmogorov complexity.")
+        res["amortized_totals"] = am
+    (out_dir / summary_name).write_text(json.dumps(res, indent=1, sort_keys=True, default=str))
+    digest = hashlib.sha256((out_dir / summary_name).read_bytes()).hexdigest()
     try:
         _figures(res, out_dir)
     except Exception as e:
         res["figure_error"] = repr(e)
     return {"digest": digest, "independent_worlds": res["independent_worlds"], "correctness": res["correctness"],
-            "summary": str(out_dir / "s1_summary.json")}
+            "summary": str(out_dir / summary_name)}
 
 
 def _figures(res: dict, out_dir: Path) -> None:
