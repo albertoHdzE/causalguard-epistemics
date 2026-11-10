@@ -114,3 +114,44 @@ retained only as a historical secondary; under the revised primary there is no c
 approximation of v1 did not create the small v1 index − majority estimate. The tie convention mattered about as
 much as the sampling did. (c) The design is now exogenous, so the null comparison has a valid Bayes
 interpretation.
+
+## S1 — repair verification panel (engineering / formal correctness)
+
+**Run.** `S1-dev-v2-panel` (salt `dev-v2-s1`, snapshot `dd63670a`): 2 new worlds in each of the 49 originally
+studied family/size cells (98 worlds), all 7 backends, original caps (20 s per query, 1,200 s per item), runner v2
+supervisor. 686 planned items, 686 ok, 0 failed, 0 missing; 1,028 s wall on 8 workers. It ran with no S2/S3 job
+active (the LLM servers were idle with models loaded; the gemma diagnostic was interrupted for it and later
+resumed).
+
+**Correctness (counts of elementwise comparisons; not a universal proof).** Every truth-valued answer was compared
+with the exhaustive direct-rule reference for n ≤ 10: 1,152 query comparisons each for literal, index_enum,
+index_sat and bdd_ref, and 1,147 for index_cube (48 worlds × 24 queries). 0 mismatches. Across all backends and
+sizes, 0 cross-backend disagreements and 0 witness-replay failures. Of 329 large-n UNSAT-type answers, 296 were
+confirmed by at least one other exact backend; for 33 no independent exact backend completed. Index_sat
+certificate levels: 696 checked RUP proofs, 1 solver-only UNSAT, 1,655 replayed witnesses. Codec round trips: 0
+failures. Exact index covers: 94 of 98 worlds (4 are upper bounds under the declared search budget).
+
+**Scaling (completed queries, caps kept in the denominators).** index_sat completed 240/240 queries at each of
+n = 64, 128 and 256 (median 0.020 s, p90 0.116 s, max 2.3 s at n = 256). At n = 256, index_cube completed 114/240
+(5 timeouts, 121 `unknown_resource`) and bdd_ref 144/240 (23 timeouts, 73 `unknown_resource`). The SAT hybrid's
+advantage belongs to the hybrid (index families → CNF → SAT), not to pure index cube algebra.
+
+**Interrupt cleanup and caps** are validated by the runner tests (`tests/test_runner_v2.py`): a nested per-query
+SIGALRM no longer cancels the item deadline; a hung worker that ignores SIGTERM/SIGALRM, together with its
+child process, is killed and reaped; crashes are recorded. In the panel no item reached the 1,200 s item cap.
+Per-query caps produced the timeouts above.
+
+**Decoder accounting (repaired).** The decoder charge is now the complete local dependency bundle (codec.py +
+index_repr.py + schema.py; 64,841 source bytes; 18,339 bytes gzip-9; sha256 `0128a124…`). It runs under CPython
+3.12 with the standard library only: `tests/test_codec_bundle.py` decodes all 7 codecs in an `-I -S`
+interpreter. The v1 charge measured codec.py alone (8,340 bytes gzip-9). Amortized totals now report
+`archive_sum_bits` (complete archives) and `payload_sum_bits` separately, and add only the archive sum to the
+decoder charge. These are encoder-specific code lengths, not an approximation ordering of Kolmogorov complexity.
+
+**Replayability.** Proof traces and witness states are not stored in the records; the stored certificate level is
+the recorded outcome of the in-run checker. To replay a certificate independently, re-run the item: it is a
+deterministic function of its plan payload (`plan.json`). Iteration-1 statements that zero mismatches bound an
+independent per-query error rate (3/M) are withdrawn.
+
+Iteration-1 S1 findings (`S1-dev-v1` + rerun: 28,765 reference comparisons without disagreement, 2,569 checked
+proofs + 4 uncertified UNSAT) are preserved and reproduce byte-for-byte from the tag.

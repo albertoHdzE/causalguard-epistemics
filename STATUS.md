@@ -18,20 +18,22 @@ plan (same config and source-tree digest); long runs execute from an immutable s
 | P2 freeze lifecycle (R03), caps (R06), manifests (R08) | implemented + E2E fixture tests | src/causalguard/freeze.py, scripts/run_confirmatory.py, tests/test_freeze_lifecycle.py, scripts/verify_artifacts.py |
 | P3 S2 design v2 + revised primary + MC policy | implemented | generators.make_s2_design, configs/endpoints/S2-primary-v2.json |
 | P4 S2 development (670 worlds + MC diagnostic) | runs complete | runs/S2-dev-v2 (670 ok; D27), runs/S2-dev-v2-mcdiag (200 ok) |
-| P5 S1 repair panel | pending: needs the machine idle (run between S3 panels) | configs/s1_dev_v2_panel.json |
-| P6 S3 v2 development | diagnostic panels running; held-out panels pending gate D29 | runs/s3v2-diag-*-dev |
+| P5 S1 repair panel | complete: 686/686 ok, 0 mismatches | runs/S1-dev-v2-panel; reports/development_r2/s1_v2_summary.json |
+| P6 S3 v2 development | qwen diag complete, passes D29; qwen held-out running; gemma diag resumed | runs/s3v2-* |
 | P7 package + release | pending | — |
 
 ## Runs (iteration 2)
 
 | run id | snapshot | state |
 |---|---|---|
-| s3v2-diag-qwen25_7b-dev | 915f089c1db7 | running (20 worlds) |
-| s3v2-diag-gemma3_12b-dev | 915f089c1db7 | running (20 worlds) |
+| s3v2-diag-qwen25_7b-dev | 915f089c1db7 | complete: 20 ok; gate D29 passed |
+| s3v2-diag-gemma3_12b-dev | 915f089c1db7 | interrupted 13:45Z (operator, for S1 isolation; 9/20 done), resumed 14:02Z with --resume |
+| s3v2-heldout-qwen25_7b-dev | dd63670a78b1 | running (100 worlds, 2 workers) |
 | S2-dev-v2 | 01ca7072fb09 | complete: 670 ok, 0 failed (no `end` event, D27) |
 | S2-dev-v2-mcdiag | 01ca7072fb09 | complete: 200 ok |
+| S1-dev-v2-panel | dd63670a78b1 | complete: 686 ok |
 
 ## Next exact actions
-1. When qwen diagnostic completes: apply gate D29; interrupt the gemma diagnostic, run S1 panel on an idle machine, resume gemma diagnostic (same snapshot, `--resume`).
-2. Launch held-out S3 panels (configs/s3v2_heldout_*.json) from a snapshot whose S3 code is byte-identical to 915f089c.
+1. When the gemma diagnostic completes: apply gate D29; if it passes, launch `s3v2-heldout-gemma3_12b-dev` from snapshot dd63670a78b1 (S3 code byte-identical to 915f089c; task generation hash-checked).
+2. When both held-out panels finish: analyze-s3-v2 over all four S3 v2 runs; write the S3 section.
 3. Build reports/REVIEW_READY_R2.md, acceptance_r2.json, manifest_r2, release v0.2.0-dev.
