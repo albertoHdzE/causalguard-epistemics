@@ -757,6 +757,8 @@ def _figures_v2(rows, result, out_dir: Path, spec: dict) -> None:
         for k, (f, lab) in enumerate(groups):
             d = np.array([r[a] - r[b] for r in _sel(rows, label=lab, regime="uniform_states", budget=16,
                                                      kind="intervention", subset="all") if r["family"] == f])
+            if not len(d):
+                continue
             ax.scatter(k + rng.uniform(-0.25, 0.25, len(d)), d, s=6, alpha=0.5,
                        color="tab:red" if lab == "null" else "tab:blue")
             ax.plot([k - 0.3, k + 0.3], [d.mean()] * 2, color="k", lw=2)
@@ -784,7 +786,7 @@ def _figures_v2(rows, result, out_dir: Path, spec: dict) -> None:
         ax.set_title(f"{lab}: uniform designed measurements (n={sel[0]['n_worlds']})", fontsize=9)
         ax.set_xlabel("evidence budget")
     axes[0].set_ylabel("hidden intervention accuracy")
-    axes[1].legend(fontsize=7)
+    axes[0].legend(fontsize=7)
     fig.tight_layout()
     fig.savefig(out_dir / "s2_v2_accuracy_vs_budget.png", dpi=130)
     plt.close(fig)

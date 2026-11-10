@@ -100,6 +100,9 @@ def main(argv=None):
     a2.add_argument("--endpoint", default="configs/endpoints/S2-primary-v2.json")
     a2.add_argument("--mc-run-dir", default=None)
     a2.add_argument("--out", default="reports/development_r2")
+    a1 = sub.add_parser("analyze-s1-v2")
+    a1.add_argument("--run-dir", required=True, action="append")
+    a1.add_argument("--out", default="reports/development_r2")
     a3 = sub.add_parser("analyze-s3-v2")
     a3.add_argument("--run-dir", required=True, action="append")
     a3.add_argument("--baselines", default="reports/development_r2/s3_baselines_v2.json")
@@ -129,6 +132,10 @@ def main(argv=None):
         res = analyze_v2([Path(d) for d in args.run_dir], Path(args.out), Path(args.endpoint),
                          Path(args.mc_run_dir) if args.mc_run_dir else None)
         print(json.dumps(res, indent=1, default=float)[:4000])
+        return 0
+    if args.cmd == "analyze-s1-v2":
+        from .analysis.s1_analysis import analyze_v2 as s1v2
+        print(json.dumps(s1v2([Path(d) for d in args.run_dir], Path(args.out)), indent=1, default=str)[:4000])
         return 0
     if args.cmd == "analyze-s3-v2":
         from .analysis.s3_analysis import analyze_v2 as s3v2
