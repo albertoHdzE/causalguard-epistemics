@@ -159,3 +159,36 @@ Offline scoring:
   per process.
 * **Smoke test is not a pilot.** A transport smoke test (1 world, arm A) is not a pilot and must
   not be reported as one.
+
+---
+
+## Iteration 2 harness (task version `s3-tasks-v2`; `WorldHarnessV2`; development only)
+
+**World.** n=4, k≤2; budget 3/5/8 by world index; observation states, queries and the renaming permutation come
+from an exogenous design stream, and the mechanism is evaluated afterwards.
+
+**Items.** 3 balanced items (target verdicts a random permutation of entailed/refuted/underdetermined, each
+searched in one budget × horizon × intervention cell; ≤400 candidates, else the first candidate is kept and
+flagged), 1 natural item, and 1 fresh transfer-target item (target verdict rotates with the world index). Arm A
+also answers the polarity complements of the 3 balanced items and renamings of balanced items 0–1. These are
+nested diagnostics, not worlds.
+
+**Arms (each revision arm = 2 turns after the shared A answer; turn 2 is the self-critique prompt).**
+
+| Arm | Turn 1 content | Information |
+|---|---|---|
+| A | — | none |
+| B2 | self-critique | none |
+| C | A + 2 fresh samples at T=0.7, strict majority of 3 | none (2 extra calls) |
+| D_cert | label + certificate (replayed compatible systems; UNSAT statement for entailed/refuted) | **privileged: discloses the answer** |
+| D_label | the same label only | **privileged: discloses the answer** |
+| D_sample | 2 uniformly sampled compatible systems (world-level, public evidence only) and what each implies | none beyond public evidence; a finite sample certifies nothing |
+| E | exact solver | oracle ceiling |
+
+**Probes.** A_T is a fresh-context answer to the target question. T_X is the complete source-item conversation
+of arm X (source = balanced item 0) followed by the target question, for X ∈ {A, B2, D_cert, D_label, D_sample}.
+The pilot focus is T_cert − T_label: does mechanistic material help within-world context reuse beyond a disclosed
+source answer? Cross-world or durable improvement is not addressed (WP10/WP11).
+
+**Costs.** 55 calls per world; realized tokens/latency are recorded per call and summed per arm (standalone
+logical cost). Records save the complete public and private task objects.
