@@ -14,7 +14,7 @@
  },
  "tests": {
   "file": "reports/test-output-r2.txt",
-  "result": "163 passed, 0 skipped (CAUSALBOOL_ROOT=376a11dd)"
+  "result": "164 passed, 0 skipped (CAUSALBOOL_ROOT=376a11dd)"
  },
  "work_items": {
   "P1": {
@@ -231,6 +231,7 @@
   "D30 concurrent S3 requests",
   "D32 operator interruption/resume of gemma diagnostic",
   "D33 gemma floor stop",
-  "D34 post-hoc S3 round-path analysis"
+  "D34 post-hoc S3 round-path analysis",
+  "D35 interruption-test race (test fixed; runner unchanged)"
  ]
 }

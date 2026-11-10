@@ -142,10 +142,23 @@ def test_real_interruption_and_resume(tmp_path):
         time.sleep(0.05)
     os.killpg(proc.pid, signal.SIGKILL)
     proc.wait()
-    first = load_run(tmp_path / "r")
-    assert 3 <= len(first["results"]) < 12 and first["missing"]
-    done_before = {k: v["pid"] for k, v in first["results"].items()}
+    # The kill can land inside an atomic attempt write, leaving a *.tmp file.  The read-only loader must then
+    # refuse (fail closed) and only reopening the run may quarantine it; both outcomes are exercised here.
+    stray = list(adir.rglob("*.tmp*"))
+    if stray:
+        with pytest.raises(RunCorruption, match="unquarantined temporary file"):
+            load_run(tmp_path / "r")
+        recs = [json.loads(f.read_bytes()) for f in adir.rglob("*.json")]
+        done_before = {r["item_id"]: r["output"]["pid"] for r in recs if r["status"] == "ok"}
+    else:
+        first = load_run(tmp_path / "r")
+        assert first["missing"]
+        done_before = {k: v["pid"] for k, v in first["results"].items()}
+    assert 3 <= len(done_before) < 12
     subprocess.run([sys.executable, str(script), "resume"], check=True, timeout=120)
+    if stray:
+        q = [e for e in read_jsonl(tmp_path / "r" / "events.jsonl") if e["event"] == "quarantine"]
+        assert len(q) == len(stray)
     lr = load_run(tmp_path / "r")
     assert len(lr["results"]) == 12 and not lr["missing"] and not lr["failures"]
     assert all(lr["results"][k]["pid"] == pid for k, pid in done_before.items())
@@ -155,3 +168,24 @@ def test_real_interruption_and_resume(tmp_path):
     ends = [e["item_id"] for e in ev if e["event"] == "attempt_end"]
     assert sorted(set(starts)) == sorted(set(ends)) and len(ends) == 12  # interrupted starts were re-run
     assert json.loads((tmp_path / "r" / "plan.json").read_text())["plan_sha256"] == lr["plan"]["plan_sha256"]
+
+
+def test_interrupted_attempt_write_fails_closed_then_resume_quarantines(tmp_path):
+    """A SIGKILL inside atomic_write_json leaves NNN.json.tmp<pid>.  Reading refuses; reopening the run
+    quarantines the exact bytes with a ledger event, and the item is re-run under its original identity."""
+    items = [(f"it{i}", {"value": i}) for i in range(3)]
+    plan = make_plan("q", "FIXTURE", {}, items)
+    Run("q", plan, runs_root=tmp_path).execute(fx.echo, workers=1, timeout_s=30)
+    adir = tmp_path / "q" / "attempts"
+    victim = sorted(adir.iterdir())[0]
+    done = json.loads((victim / "001.json").read_bytes())
+    (victim / "001.json").unlink()                                   # the write never reached its rename
+    (victim / "001.json.tmp4242").write_bytes(b'{"schema": "causalguard-attempt-v2", "trunc')
+    with pytest.raises(RunCorruption, match="unquarantined temporary file"):
+        load_run(tmp_path / "q")
+    Run("q", plan, runs_root=tmp_path, resume=True).execute(fx.echo, workers=1, timeout_s=30)
+    ev = [e for e in read_jsonl(tmp_path / "q" / "events.jsonl") if e["event"] == "quarantine"]
+    assert len(ev) == 1 and ev[0]["length"] == 43 and not list(adir.rglob("*.tmp*"))
+    assert (tmp_path / "q" / "quarantine" / ev[0]["quarantine_path"]).read_bytes().endswith(b'"trunc')
+    lr = load_run(tmp_path / "q")
+    assert len(lr["results"]) == 3 and not lr["missing"] and lr["results"][done["item_id"]]["value"] == done["output"]["value"]

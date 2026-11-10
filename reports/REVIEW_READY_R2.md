@@ -21,7 +21,7 @@ are preserved unchanged. `reports/review_r1/` is committed verbatim.
    observed effect).
 4. `configs/confirmatory.json` (proposal, `confirmatory_authorized: false`),
    `configs/endpoints/S2-primary-v2.json`, `src/causalguard/freeze.py`, `scripts/run_confirmatory.py`.
-5. `DECISIONS.md` D23–D33 (iteration 2), including disclosed defects/interruptions D27 and D32.
+5. `DECISIONS.md` D23–D35 (iteration 2), including disclosed defects/interruptions D27, D32 and D35.
 6. `reports/acceptance_r2.json`, `reports/CLAIM_LEDGER_R2.csv`, `artifacts/manifest_r2.json`,
    `reports/test-output-r2.txt`.
 
