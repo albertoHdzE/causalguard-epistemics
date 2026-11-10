@@ -11,8 +11,7 @@ from pathlib import Path
 import pytest
 
 from causalguard import testing_fixtures as fx
-from causalguard.runner import (Ledger, Run, RunCorruption, RunRefused, load_run, make_plan, read_attempts,
-                                read_jsonl)
+from causalguard.runner import Ledger, Run, RunCorruption, RunRefused, load_run, make_plan, read_attempts, read_jsonl
 
 ROOT = Path(__file__).resolve().parents[1]
 

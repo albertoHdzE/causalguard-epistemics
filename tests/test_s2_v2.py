@@ -7,12 +7,22 @@ from fractions import Fraction
 import numpy as np
 
 from causalguard.experiments.s2 import run_world_v2
-from causalguard.generators import (_full_obs, make_s2_design, make_s2_instance_v2, make_s2_world, query_novelty,
-                                    s2_design_seed)
+from causalguard.generators import _full_obs, make_s2_design, make_s2_instance_v2, make_s2_world, query_novelty, s2_design_seed
 from causalguard.schema import Evidence, HypothesisClass, Intervention, Network, Observation, Pred, Query, Rule
-from causalguard.versionspace import (boolean_support, build_version_space, candidate_class, exact_posterior,
-                                      exact_query_counts, mc_posterior, network_from_choice, predict,
-                                      select_min_code, uniform_prob_true, verdict, verdict_fast)
+from causalguard.versionspace import (
+    boolean_support,
+    build_version_space,
+    candidate_class,
+    exact_posterior,
+    exact_query_counts,
+    mc_posterior,
+    network_from_choice,
+    predict,
+    select_min_code,
+    uniform_prob_true,
+    verdict,
+    verdict_fast,
+)
 
 
 def _design_for(w):

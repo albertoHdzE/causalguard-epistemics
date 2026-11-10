@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pytest
 
-from causalguard.freeze import (FIXTURE_NAMESPACE, RECORD_SCHEMA, Refused, sha256_file, validate_record)
+from causalguard.freeze import FIXTURE_NAMESPACE, RECORD_SCHEMA, Refused, sha256_file, validate_record
 from causalguard.runner import Run, load_run, make_plan, source_tree_digest
 
 ROOT = Path(__file__).resolve().parents[1]

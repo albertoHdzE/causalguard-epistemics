@@ -355,7 +355,6 @@ def trajectory_evidence_v2(net: Network, starts: list[int], clamp_specs: list[tu
     """Observational (clamp_specs None) or clamp-regime evidence from EX ANTE start specifications.
     Successive states follow the mechanism (the regime's own acquired public history); a trajectory stops
     at run_len steps or on a repeated state, then the next pre-drawn start is used."""
-    n = net.n
     obs: list[Observation] = []
     si = 0
     while len(obs) < budget:

@@ -29,7 +29,8 @@ jobs:
       - name: Fast smoke path (S2, 3 worlds) and fixture table
         run: |
           python -m causalguard fixtures
-          python -m causalguard run --config configs/s2_dev.json --run-id ci-smoke --limit 3 --workers 2 --quiet
+          python -m causalguard run --config configs/s2_ci_smoke.json --runs-root "$RUNNER_TEMP/runs" --quiet
+          python scripts/verify_artifacts.py artifacts/manifest_r2.json || test $? -eq 2   # raw runs are release assets; reports must match
   upstream-parity:
     runs-on: ubuntu-latest
     steps:

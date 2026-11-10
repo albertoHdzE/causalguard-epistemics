@@ -1,0 +1,38 @@
+{
+ "study": "S2",
+ "mode": "development",
+ "design_version": "s2-design-v2",
+ "run_id": "ci-smoke",
+ "description": "CI smoke path: 3 structured worlds, small budgets (not evidence).",
+ "salt": "ci-smoke",
+ "n": 7,
+ "kmax": 3,
+ "budgets": [
+  4,
+  16
+ ],
+ "regimes": [
+  "uniform_states"
+ ],
+ "endpoint": "configs/endpoints/S2-primary-v2.json",
+ "workers": 2,
+ "item_timeout_s": 900,
+ "populations": [
+  {
+   "population": "realizable",
+   "families": [
+    "parity"
+   ],
+   "start": 0,
+   "worlds_per_family": 2
+  },
+  {
+   "population": "null",
+   "families": [
+    "uniform_H"
+   ],
+   "start": 0,
+   "worlds_per_family": 1
+  }
+ ]
+}

@@ -48,7 +48,7 @@ import time
 import traceback
 from multiprocessing.connection import wait as mp_wait
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Callable
 
 from .schema import canonical_json
 
@@ -158,7 +158,8 @@ def read_jsonl(path: Path) -> list[dict]:
         return []
     data = path.read_bytes()
     if data and not data.endswith(b"\n"):
-        raise RunCorruption(f"{path}: torn final line at offset {data.rfind(b'\n') + 1} (recover via Ledger.recover)")
+        off = data.rfind(b"\n") + 1
+        raise RunCorruption(f"{path}: torn final line at offset {off} (recover via Ledger.recover)")
     out = []
     for no, line in enumerate(data.split(b"\n"), 1):
         if not line.strip():

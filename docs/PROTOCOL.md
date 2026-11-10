@@ -27,3 +27,41 @@ Filled from the v2 development pilot in `reports/DESIGN_SIZING.md` and `configs/
 
 ## Stopping and failures
 Stop only for an oracle/codec defect, corrupted logs or resource exhaustion — never for unfavourable effects. Failed and timed-out items are retained and counted. A defect affecting confirmatory data invalidates that run (kept and disclosed); a revised claim needs a re-freeze and a fresh salt.
+
+---
+
+## Amendments after review R1 (iteration 2, 2026-11-10; pre-sprint; made after development inspection and BEFORE any confirmation)
+
+These amendments follow the Codex R1 decision (`reports/review_r1/DECISION.json`). The text above is preserved
+as the iteration-1 protocol.
+
+1. **S2 primary (amended).** `S2-primary-v2` (`configs/endpoints/S2-primary-v2.json`) is world-level
+   intervention accuracy of the minimum index-code selection minus the compatible-set majority predictor.
+   Population: realizable structured worlds (n=7, k≤3), five families equally weighted. Uniform designed
+   measurements, budget 16, 16 intervention queries (h∈{1,2,3}, both intervention types). Majority ties score
+   0.5; the index code keeps its fixed world-independent tie-break. The question is two-sided superiority with
+   magnitude reported against 0.05; there is no equivalence claim. The analysis executes only this spec
+   (`analysis.s2_analysis.check_endpoint`).
+2. **Historical and named secondaries.** Index − random-compatible (the v1 primary) is a historical secondary.
+   Circuit − majority and index − circuit are named secondaries with per-family breakdowns. h=1 and h>1 are
+   reported separately, as are novelty classes (observed-transition equivalents, novel effective input,
+   multistep interpolation, multistep with an unobserved transition). No confirmatory significance claims are
+   made for exploratory collections.
+3. **Exogenous design (s2-design-v2).** All measurement inputs, holdouts, trajectory start/clamp specifications
+   and queries are drawn from a design RNG before the mechanism is evaluated. Observational/clamp regimes follow
+   only their own acquired public history.
+4. **Comparator numerics.** The posterior is exact by integer counts (h ≤ 3). Monte Carlo is a labelled
+   diagnostic only.
+5. **Mandatory uniform-H null.** IID canonical functions uniformly from the complete class. Development overlap is
+   audited and reported, never excluded (an explicit exception to disjoint-mechanism exclusion). A sensitivity
+   with semantic duplicates grouped is reported where relevant.
+6. **Structured populations at confirmation.** A world isomorphic to any development world is excluded and
+   replaced by the next index (deterministic replenishment, logged in the plan). Within-split duplicates are
+   retained and reported.
+7. **Terminal rule.** Every planned world must reach a terminal ok result. Otherwise the primary is reported as
+   incomplete, with bounded missing-outcome sensitivity and no planned-N claim.
+8. **S3 (development only).** Arms A, B2, C, D_cert, D_label, D_sample and E, plus probes T_A, T_B2, T_cert,
+   T_label and T_sample (D28). The pilot focus is T_cert − T_label target-item accuracy (within-world context
+   reuse beyond a disclosed source answer). No learning or cross-world claims; no S3 freeze.
+9. **Execution.** Runtime records live outside the frozen checkout. Readiness is typed (`freeze.py`). A revise
+   decision cannot authorize anything. A public-commit salt is a reproducibility identifier, not a seal.

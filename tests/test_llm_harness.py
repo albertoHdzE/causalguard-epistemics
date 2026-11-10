@@ -11,7 +11,7 @@ from causalguard.experiments import s3
 from causalguard.llm.harness import CRITIQUE_PROMPT, CallBudget, WorldHarness, aggregate_c, contains_label
 from causalguard.llm.parse import parse_answer
 from causalguard.llm.providers import MockProvider, OpenAICompatibleProvider, ProviderConfig, ReplayProvider, TransportError
-from causalguard.runner import Run, read_jsonl
+from causalguard.runner import Run
 from causalguard.s3_tasks import INSTRUCTIONS, VERDICT_LABELS, make_s3_items, render_item_prompt
 
 SALT = "test-wp7"

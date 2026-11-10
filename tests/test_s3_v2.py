@@ -2,10 +2,9 @@
 import json
 from dataclasses import replace
 
-from causalguard.generators import make_s3_world
 from causalguard.llm.harness import V2_ARMS, WorldHarnessV2, contains_label
 from causalguard.llm.providers import make_provider
-from causalguard.s3_tasks import (COMPLEMENT_VERDICT, make_s3_items_v2, render_item_prompt_v2, sample_feedback)
+from causalguard.s3_tasks import COMPLEMENT_VERDICT, make_s3_items_v2, render_item_prompt_v2, sample_feedback
 from causalguard.schema import Network, Rule
 
 
