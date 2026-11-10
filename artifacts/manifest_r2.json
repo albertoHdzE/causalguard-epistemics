@@ -16880,8 +16880,8 @@
   },
   {
    "path": "reports/R2_EVIDENCE_MATRIX.md",
-   "bytes": 6091,
-   "sha256": "8ea84e61fb52a92ebd27652991fc94d40cff1711360bc028059bd49860b6c4ce",
+   "bytes": 6170,
+   "sha256": "7514d8b02155b5a640d7989267fbd9dab99a75fea26a49512527e28efc506426",
    "required": true,
    "group": "report"
   },
@@ -16908,8 +16908,8 @@
   },
   {
    "path": "reports/acceptance_r2.json",
-   "bytes": 8259,
-   "sha256": "91f12899c2bf9e835fc58e6fd5520ef92735b60b9cb0a3d2ab46a0af02dd5b6c",
+   "bytes": 8322,
+   "sha256": "d441fb5818df19350e556e5384cbd7821acbb191e0944b10a785b477f3c85824",
    "required": true,
    "group": "report"
   },
@@ -17195,8 +17195,8 @@
   },
   {
    "path": "reports/test-output-r2.txt",
-   "bytes": 388,
-   "sha256": "366795ea85f1ac5143eac5e8a602acd416ae9825adc0215c37a1e2fe4f837999",
+   "bytes": 408,
+   "sha256": "3fd1a18b5a6964df0de629416c3a86e6f432ef5893bfcb97021b5256d4b0ae1b",
    "required": true,
    "group": "report"
   },
@@ -17322,7 +17322,7 @@
   {
    "path": "dist/causalguard-dev-runs-v0.2.0-dev.tar.gz",
    "bytes": 22445782,
-   "sha256": "30f9cd8db82cc3246973ab694ba9e0d55551a12737952b5533f2d24ec414d1f1",
+   "sha256": "391ecd326186ffc18faa714ff1800b500ec10c49b887bfce4e8397ef34259bbe",
    "required": false,
    "group": "release_asset",
    "contents": "iteration-2 development runs: S2-dev-v2, S2-dev-v2-repro, S2-dev-v2-mcdiag, S1-dev-v2-panel, s3v2-diag-qwen25_7b-dev, s3v2-diag-gemma3_12b-dev, s3v2-heldout-qwen25_7b-dev + runs/registry.jsonl"
