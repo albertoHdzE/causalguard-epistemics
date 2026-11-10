@@ -155,3 +155,164 @@ independent per-query error rate (3/M) are withdrawn.
 
 Iteration-1 S1 findings (`S1-dev-v1` + rerun: 28,765 reference comparisons without disagreement, 2,569 checked
 proofs + 4 uncertified UNSAT) are preserved and reproduce byte-for-byte from the tag.
+
+## S3 — LM feedback-arm panel (task s3-tasks-v2; development only)
+
+**Runs.** All local models, so no paid calls.
+- `s3v2-diag-qwen25_7b-dev`: 20/20 worlds ok.
+- `s3v2-diag-gemma3_12b-dev`: 20/20 ok, resumed once (D32).
+- `s3v2-heldout-qwen25_7b-dev`: 100/100 ok, 0 failed, 5,500 physical calls, 10,222 s wall, 2 concurrent requests (D30).
+
+Gate D29 passed for qwen and failed G3 for gemma: gemma's arm-A balanced accuracy was 0.319, below chance. So
+there is no gemma held-out panel (D33), and gemma is reported as a 20-world floor diagnostic only. Salts:
+diagnostic `dev-v2-s3-diag`, held-out `dev-v2-s3-panel`. Both are disjoint from the baseline training salt
+`dev-v2-s3-train`, and the analysis refuses overlap. Source: `reports/development_r2/s3_v2_summary.json`.
+
+**Per-world render (G1).** `s3_v2_per_world_<run>.png` has one row per world: balanced items correct (0–3) per item
+arm, target correctness (0/1) per probe, and the surface-rule baseline on the same saved items. In the held-out
+panel:
+- D_cert is an almost uniform 3/3 column.
+- D_label is an almost uniform 2/3 column, explained below.
+- Target correctness forms horizontal bands across all six target probes, so it is driven mainly by the world (its
+  target item), not by the arm. This is why the target contrasts have wide intervals relative to their small
+  discordant counts.
+
+### Held-out panel, qwen2.5:7b (100 worlds; 300 balanced, 100 natural, 100 target items)
+
+| arm | balanced acc (balanced items) | valid | Brier (valid only) | natural-item balanced acc |
+|---|---|---|---|---|
+| A (initial) | 0.433 | 1.000 | 1.060 | 0.395 |
+| B2 (2 self-critique turns) | 0.391 | 0.913 | 0.985 | 0.412 |
+| C (independent resample) | 0.440 | 0.990 | 1.022 | 0.407 |
+| D_sample (K=2 public compatible samples + critique) | 0.465 | 1.000 | 0.763 | 0.487 |
+| D_label (reference label + critique) | 0.570 | 1.000 | 0.697 | 0.526 |
+| D_cert (label + certificate + critique; **privileged**) | 0.970 | 0.997 | 0.356 | 0.965 |
+| E (reference solver) | 1.000 | 1.000 | 0.000 | 1.000 |
+| majority baseline (train-fit) | 0.333 | — | — | 0.333 |
+| surface rule (train-fit; budget/horizon/kind/target value) | 0.374 | — | — | 0.507 |
+
+On balanced items, arm A is above the fitted surface rule by 0.06 balanced accuracy. On natural items it is below
+it (0.395 vs 0.507). The 20-world diagnostic had the surface rule above A on balanced items as well (0.511 vs
+0.429); its balanced set is small (60 items). **A's confusion matrix on balanced items:**
+- entailed: 65 correct, 31 → underdetermined, 2 → refuted.
+- refuted: 1 correct of 108; 58 → entailed, 49 → underdetermined.
+- underdetermined: 59 correct, 34 → entailed, 1 → refuted.
+
+So, without feedback, the model almost never answers "refuted". It is not discriminating refuted from entailed
+claims.
+
+**Round-level paths (post hoc; `round_paths_balanced` in the summary).** Every D arm and B2 has two matched turns
+after A: (feedback, then self-critique), or (critique, critique) for B2.
+- **D_label:** after the label turn the model adopts the stated label on **300/300** balanced items. The second,
+  self-critique turn then reverses **98/98** entailed items to "underdetermined". It also reverses 28/108 refuted
+  items (27 to underdetermined, 1 to entailed) and 3/94 underdetermined items. The reversed answers usually carry
+  probabilities {entailed 0.5, refuted 0.5}, which conflict with the stated verdict.
+- **D_label's final accuracy of 0.57 therefore measures a reversal under critique, not a failure to read the
+  label.**
+- **D_cert:** 300/300 after the certificate turn, and 291/300 still correct after the critique turn.
+- **gemma:** the reversal does not occur; entailed is kept on 17/17 items, and D_label round 2 is correct on 56/60.
+  The reversal is specific to qwen.
+
+This was found after the runs and is reported as a development observation. It was not a planned contrast.
+
+**Probability coherence (construct validity of Brier).** The parser flags `verdict_prob_mismatch` when the stated
+verdict is not the arg-max of the stated probabilities. For qwen, 2,342 of 5,188 parsed answers in the held-out
+panel are mismatched; for gemma, 8 of 1,098 in the diagnostic. By arm on final balanced answers (qwen held-out):
+
+| arm | A | B2 | C | D_cert | D_label | D_sample |
+|---|---|---|---|---|---|---|
+| mismatched | 139/300 | 67/300 | 0/300 | 68/300 | 200/300 | 166/300 |
+
+The dominant pattern is verdict "underdetermined" with probabilities split between entailed and refuted. So qwen's
+probabilities do not express its verdicts, and **Brier scores are not interpreted as calibration** here. Accuracy
+uses the verdict field throughout, the same rule as in iteration 1.
+
+**Transfer and focus contrast (paired, world-clustered bootstrap, 5,000 replicates).** Target accuracy by probe:
+
+| probe | accuracy | valid |
+|---|---|---|
+| A_T (no source context) | 0.39 | 1.00 |
+| T_A | 0.41 | 1.00 |
+| T_B2 | 0.37 | 0.96 |
+| T_sample | 0.36 | 1.00 |
+| T_label | 0.41 | 0.99 |
+| T_cert | 0.33 | 0.97 |
+
+Baselines on the same target items: majority 0.29 (accuracy), surface rule 0.47.
+
+- **Focus T_cert − T_label = −0.08, 95% CI [−0.16, 0.00]; n = 100 worlds.**
+  - 2×2 table: both correct 29, both wrong 55, T_cert only 4, T_label only 12.
+  - Within this development scope no clear certificate-over-label transfer is detected. The point estimate is
+    negative and the interval reaches zero. This is not evidence of no effect.
+  - The diagnostic panels gave −0.15 [−0.35, 0.05] (qwen) and −0.15 [−0.30, 0.00] (gemma).
+- **T_cert − A_T = −0.06 [−0.18, 0.06]; T_A − A_T = +0.02 [−0.09, 0.13].** Seeing solved source items, with or
+  without feedback, gives no clear improvement over answering the target cold.
+- **Median source-context size:**
+
+  | probe | T_A | T_label | T_sample | T_cert | T_B2 |
+  |---|---|---|---|---|---|
+  | chars | 1,859 | 2,725 | 3,561 | 4,088 | 5,298 |
+
+  The probes are matched in turns, not in context length.
+
+**Secondary item contrasts (balanced items, accuracy).**
+
+| contrast | estimate | 95% CI |
+|---|---|---|
+| D_cert − D_label | +0.400 | [0.357, 0.443] |
+| D_cert − B2 | +0.587 | [0.530, 0.643] |
+| D_label − B2 | +0.187 | [0.137, 0.240] |
+| D_sample − B2 | +0.087 | [0.023, 0.150] |
+| B2 − A | −0.033 | [−0.100, 0.033] |
+| C − A | +0.007 | [−0.020, 0.030] |
+
+D_cert is privileged, since it states the label and a replayed certificate, so its accuracy is an upper reference.
+It is not an inference result.
+
+D_sample reveals no label: its two samples come from public evidence only. It gives a small gain over self-critique
+alone. Because K=2 samples cannot certify agreement, this gain could come from copying the samples' shared answer.
+The data here cannot separate the two explanations.
+
+**Coherence under transformations (arm A only; nested under worlds, not independent).**
+- Complement consistency given both answers valid: 0.42 over 300 pairs. gemma: 0.97 over 60.
+- Same verdict under variable renaming: 0.78 over 200 pairs. gemma: 0.93 over 40.
+- So qwen's arm-A answers change under a semantics-preserving renaming in about a fifth of pairs, and are
+  complement-consistent less than half the time.
+
+**Parse and truncation.**
+- Held-out qwen: 90 invalid-JSON and 222 invalid-probability parses out of 5,500 calls. Length truncations: 3, all
+  in the `D_cert` critique turn (`i2/DC2`, worlds 64, 82 and 97; 1,500 completion tokens each). Each counts as
+  invalid in that arm.
+- Diagnostics: 0 truncations; D29 G1 (0 failures, 0 truncations) was applied to the diagnostics, as declared.
+- Balance shortfalls (target verdict unavailable for a cell within the try limit; the item is kept and its realized
+  verdict recorded): 38 items over 100 worlds, listed in the summary by cell.
+
+**Cost.**
+- Held-out qwen, logical standalone tokens: 7.01 M prompt + 1.17 M completion. Physical latency sum: 20,416 s at 2
+  concurrent requests.
+- Diagnostics: qwen 1.40 M + 0.23 M; gemma 1.44 M + 0.31 M.
+- Per-arm costs are in `cost.logical_standalone_by_arm`. B2 is the most expensive item arm (447,825 completion
+  tokens) because critique turns produce long reviews.
+
+**gemma-3-12b-it floor diagnostic (20 worlds).**
+
+| arm | A | B2 | D_sample | D_cert | D_label |
+|---|---|---|---|---|---|
+| balanced acc | 0.319 | 0.394 | 0.373 | 0.790 | 0.933 |
+
+- gemma's D_label score exceeds its D_cert score: certificate text lowers its accuracy relative to the bare label,
+  −0.117 [−0.217, −0.017].
+- Focus: −0.15 [−0.30, 0.00]. Its arm A is at the chance floor, so it is not suitable for transfer measurement
+  under this task.
+
+**What S3 does and does not show (development).**
+1. Without feedback, qwen2.5:7b is above chance on balanced items (0.433). That is barely above a train-fit surface
+   rule, below it on natural items, and the model almost never recognises refuted claims.
+2. Revealed labels are adopted at once. In qwen, a generic self-critique turn then undoes entailed labels, while a
+   certificate keeps them.
+3. No clear transfer of certificate feedback to a fresh target item is detected. The interval is
+   [−0.16, 0.00] for the planned focus contrast.
+4. Coherence diagnostics (complement 0.42, renaming 0.78) and verdict/probability mismatch (45% of parsed answers)
+   limit what any S3 accuracy says about the model's epistemic state.
+
+**S3 is not proposed for freezing.**

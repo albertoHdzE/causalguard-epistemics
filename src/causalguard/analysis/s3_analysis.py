@@ -254,6 +254,20 @@ def per_world_v2(records: list[dict], baselines: dict) -> list[dict]:
                 c[{(0, 1): "wrong_to_correct", (1, 0): "correct_to_wrong", (1, 1): "correct_to_correct",
                    (0, 0): "wrong_to_wrong"}[(ca, cb)]] += 1
             row["revisions"][arm] = c
+        # round-level path on balanced items: truth | arm-A answer | round-1 answer | round-2 answer.  The final
+        # answer alone cannot separate "feedback not taken up" from "taken up, then reversed by the matched turn".
+        paths = {}
+        for arm in ("B2", "D_cert", "D_label", "D_sample"):
+            p = {}
+            for i in bal:
+                a, v = _final_v2(r, "A", i), r["arms"].get(arm, {}).get(str(i))
+                if a is None or v is None:
+                    continue
+                lab = [x["verdict"] if x.get("verdict_valid") else "invalid" for x in [a] + [d["answer"] for d in v["rounds"]]]
+                k = "|".join([y[i]] + lab)
+                p[k] = p.get(k, 0) + 1
+            paths[arm] = p
+        row["round_paths"] = paths
         # transformed items (arm A only, nested under the world)
         comp, ren = [], []
         for i, x in enumerate(role):
@@ -377,7 +391,41 @@ def summarize_v2(records: list[dict], baselines: dict, reps: int = 5000, seed: i
             for k, v in r["confusion"].get(arm, {}).items():
                 tot[k] = tot.get(k, 0) + v
         out["confusion_balanced"][arm] = dict(sorted(tot.items()))
+    out["round_paths_balanced"] = {"key": "truth|A|round1|round2"}
+    for arm in ("B2", "D_cert", "D_label", "D_sample"):
+        tot = {}
+        for r in rows:
+            for k, v in r.get("round_paths", {}).get(arm, {}).items():
+                tot[k] = tot.get(k, 0) + v
+        out["round_paths_balanced"][arm] = dict(sorted(tot.items()))
     return out
+
+
+def figures_v2(records: list[dict], baselines: dict, out_png: Path, title: str) -> None:
+    """Render the per-world object behind every S3 v2 summary: one row per world, number of balanced items
+    correct (0-3) per item arm, and target correctness (0/1) per target probe, beside the surface-rule baseline."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    rows = sorted(per_world_v2(records, baselines), key=lambda w: w["world_index"])
+    item_cols = [a for a in ("A", "B2", "C", "D_sample", "D_label", "D_cert") if f"{a}|balanced" in rows[0]["arms"]]
+    tgt_cols = [a for a in ("A_T", "T_A", "T_B2", "T_sample", "T_label", "T_cert") if a in rows[0]["target"]]
+    M1 = np.array([[w["arms"][f"{a}|balanced"]["correct"] for a in item_cols] +
+                   [w["baselines"]["surface_rule"]["balanced"]["correct"]] for w in rows], float)
+    M2 = np.array([[w["target"][a]["correct"] for a in tgt_cols] + [w["baselines"]["surface_rule"]["target"]["correct"]]
+                   for w in rows], float)
+    fig, ax = plt.subplots(1, 2, figsize=(10, max(4, len(rows) * 0.09)), gridspec_kw={"width_ratios": [7, 7]})
+    for a_, M, cols, vmax, lab in ((ax[0], M1, item_cols, 3, "balanced items correct (of 3)"),
+                                   (ax[1], M2, tgt_cols, 1, "target correct (0/1)")):
+        im = a_.imshow(M, aspect="auto", cmap="viridis", vmin=0, vmax=vmax, interpolation="nearest")
+        a_.set_xticks(range(len(cols) + 1), cols + ["surface"], rotation=45)
+        a_.set_ylabel("world (panel index)")
+        a_.set_title(lab, fontsize=9)
+        fig.colorbar(im, ax=a_, fraction=0.04)
+    fig.suptitle(title, fontsize=10)
+    fig.tight_layout()
+    fig.savefig(out_png, dpi=130)
+    plt.close(fig)
 
 
 def costs_v2(records: list[dict]) -> dict:
@@ -446,6 +494,8 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, baselines_path: Path, reps: 
                "balance_shortfalls": dict(sorted(bal_short.items())),
                "summary": summarize_v2(recs, baselines, reps) if recs else None, "cost": costs_v2(recs) if recs else None}
         result["runs"][rid] = res
+        if recs:
+            figures_v2(recs, baselines, out_dir / f"s3_v2_per_world_{rid}.png", f"{rid} ({model})")
         panels.setdefault((model, panel), []).append(rid)
     (out_dir / "s3_v2_summary.json").write_text(json.dumps(result, indent=1, sort_keys=True, default=str))
     digest = hashlib.sha256((out_dir / "s3_v2_summary.json").read_bytes()).hexdigest()

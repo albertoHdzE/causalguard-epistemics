@@ -19,7 +19,7 @@ plan (same config and source-tree digest); long runs execute from an immutable s
 | P3 S2 design v2 + revised primary + MC policy | implemented | generators.make_s2_design, configs/endpoints/S2-primary-v2.json |
 | P4 S2 development (670 worlds + MC diagnostic) | runs complete | runs/S2-dev-v2 (670 ok; D27), runs/S2-dev-v2-mcdiag (200 ok) |
 | P5 S1 repair panel | complete: 686/686 ok, 0 mismatches | runs/S1-dev-v2-panel; reports/development_r2/s1_v2_summary.json |
-| P6 S3 v2 development | qwen diag complete, passes D29; qwen held-out running; gemma diag resumed | runs/s3v2-* |
+| P6 S3 v2 development | complete: qwen diag + held-out (100/100 ok); gemma diag = floor diagnostic (D33); analysis D34 | runs/s3v2-*; reports/development_r2/s3_v2_summary.json |
 | P7 package + release | pending | — |
 
 ## Runs (iteration 2)
@@ -27,13 +27,12 @@ plan (same config and source-tree digest); long runs execute from an immutable s
 | run id | snapshot | state |
 |---|---|---|
 | s3v2-diag-qwen25_7b-dev | 915f089c1db7 | complete: 20 ok; gate D29 passed |
-| s3v2-diag-gemma3_12b-dev | 915f089c1db7 | interrupted 13:45Z (operator, for S1 isolation; 9/20 done), resumed 14:02Z with --resume |
-| s3v2-heldout-qwen25_7b-dev | dd63670a78b1 | running (100 worlds, 2 workers) |
+| s3v2-diag-gemma3_12b-dev | 915f089c1db7 | complete: 20 ok (interrupted 13:45Z and resumed 14:02Z, D32); gate D29 G3 failed (D33) |
+| s3v2-heldout-qwen25_7b-dev | dd63670a78b1 | complete: 100 ok, 0 failed (16:53Z) |
 | S2-dev-v2 | 01ca7072fb09 | complete: 670 ok, 0 failed (no `end` event, D27) |
 | S2-dev-v2-mcdiag | 01ca7072fb09 | complete: 200 ok |
 | S1-dev-v2-panel | dd63670a78b1 | complete: 686 ok |
 
 ## Next exact actions
-1. gemma diagnostic complete; gate D29 G3 FAILED (D33) -> no gemma held-out panel. Wait for qwen held-out.
-2. When both held-out panels finish: analyze-s3-v2 over all four S3 v2 runs; write the S3 section.
-3. Build reports/REVIEW_READY_R2.md, acceptance_r2.json, manifest_r2, release v0.2.0-dev.
+1. P7: acceptance_r2.json, test-output-r2.txt, manifest_r2 + release asset, merge to main, tag v0.2.0-dev,
+   GitHub prerelease, CI, clean-clone check, fill REVIEW_READY_R2 §8.

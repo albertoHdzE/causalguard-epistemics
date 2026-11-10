@@ -16,7 +16,7 @@ are preserved unchanged. `reports/review_r1/` is committed verbatim.
 
 1. `reports/R2_EVIDENCE_MATRIX.md`: R01–R10, each with repair, regression test and re-run evidence.
 2. `reports/DEVELOPMENT_REPORT_R2.md`: new development evidence (S2 670 worlds + MC diagnostic; S1 repair panel;
-   S3 v2 diagnostic + held-out panels).
+   S3 v2 diagnostics + qwen held-out panel).
 3. `reports/DESIGN_SIZING_R2.md`: revised sizing for the revised endpoint (no promise of power for the small
    observed effect).
 4. `configs/confirmatory.json` (proposal, `confirmatory_authorized: false`),
@@ -49,7 +49,7 @@ are preserved unchanged. `reports/review_r1/` is committed verbatim.
 | S2-dev-v2-mcdiag | 200 worlds | 200 ok |
 | S1-dev-v2-panel | 98 worlds, 686 items | 686 ok |
 | s3v2-diag-{qwen25_7b,gemma3_12b}-dev | 20 + 20 worlds | see §5 |
-| s3v2-heldout-{qwen25_7b,gemma3_12b}-dev | 100 + 100 worlds | see §5 |
+| s3v2-heldout-qwen25_7b-dev | 100 worlds | 100 ok; no gemma held-out panel (gate D29 G3 failed, D33) |
 | Historical byte-level reproduction | v1 S1/S2 summaries | `scripts/reproduce_v1.sh`: both MATCH |
 
 ## 4. Claims that changed
@@ -69,7 +69,37 @@ are preserved unchanged. `reports/review_r1/` is committed verbatim.
 
 ## 5. S3 (development only; no S3 freeze proposed)
 
-_Filled in from `reports/development_r2/s3_v2_summary.json` after the held-out panels; see DEVELOPMENT_REPORT_R2 §S3._
+Runs and gate:
+- qwen2.5:7b passed gate D29: diagnostic 20 worlds plus held-out 100 worlds, all ok.
+- gemma-3-12b-it failed G3 (arm-A balanced accuracy 0.319, below chance). Its expansion stopped, and the 20-world
+  diagnostic is reported as a floor diagnostic (D33).
+- There is no gemma held-out panel. This is a declared scope reduction against the "≥120 worlds/model" target.
+
+Held-out qwen (100 worlds):
+- **Focus T_cert − T_label = −0.08 [−0.16, 0.00]** (discordant pairs 4 vs 12): no clear certificate-over-label
+  transfer detected. This is not evidence of no effect.
+- Balanced-item accuracy:
+
+  | arm | accuracy |
+  |---|---|
+  | A | 0.433 |
+  | C | 0.440 |
+  | B2 | 0.391 |
+  | D_sample | 0.465 |
+  | D_label | 0.570 |
+  | D_cert (privileged) | 0.970 |
+
+- Train-fit surface rule: 0.374 on balanced items, 0.507 on natural items (A: 0.395 on natural items).
+- Unaided, A answers "refuted" correctly on 1 of 108 refuted items.
+- **Post-hoc observation (D34):** qwen adopts revealed labels in round 1 (300/300). Its matched self-critique
+  turn then reverses all 98 entailed labels to "underdetermined". gemma does not reverse them (17/17 kept).
+- Construct-validity limits:
+  - verdict/probability mismatch in 2,342 of 5,188 parsed answers, so Brier is not read as calibration;
+  - complement consistency 0.42;
+  - renaming invariance 0.78.
+- 3 length truncations, all in the D_cert critique turn.
+
+**S3 is not ready for a freeze proposal.** The MDE table is in DESIGN_SIZING_R2 §S3.
 
 ## 6. Proposal for the reviewer's decision
 

@@ -58,7 +58,27 @@ Unchanged from iteration 1 (1,950 worlds over 49 cells, caps fixed). Reporting i
 mismatch counts over world-level comparisons. See the S1 section of `DEVELOPMENT_REPORT_R2.md` for the repair
 panel.
 
-## S3
+## S3 (not proposed for freezing)
 
-Development only; see the S3 section of `DEVELOPMENT_REPORT_R2.md` for the held-out panel and the re-sizing of
-the T_cert − T_label pilot focus.
+The re-sizing uses the qwen2.5:7b held-out panel (100 worlds). The world-level focus difference T_cert − T_label
+takes values in {−1, 0, +1}, and the observed discordance rate is 16/100 (4 vs 12). A paired two-sided test at
+α = 0.05 with 80% power, assuming a discordance rate near 0.16 (SD ≈ 0.39), needs:
+
+| MDE (target accuracy) | worlds per model |
+|---|---|
+| 0.05 | ≈ 480 |
+| 0.10 | ≈ 120 |
+| 0.15 | ≈ 55 |
+
+A real positive effect would raise the discordance rate, and with it these numbers. The observed sign is
+negative: −0.08 [−0.16, 0.00]. These figures are an MDE table, not a forecast of a detectable positive effect.
+S3 is not proposed for confirmation because of the construct-validity findings: qwen almost never answers
+"refuted" unaided, 45% of its parsed answers have verdict/probability mismatches, complement consistency is 0.42,
+and the critique turn reverses revealed labels.
+
+Prerequisites for any future S3 proposal:
+- a model above the D29 floors;
+- a probability-coherence gate;
+- a decision on whether the matched second turn is a self-critique turn at all, given that it changes D_label from
+  1.00 to 0.57 in qwen.
+

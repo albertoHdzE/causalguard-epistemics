@@ -1,0 +1,236 @@
+{
+ "schema": "causalguard-acceptance-r2",
+ "date": "2026-11-10",
+ "dating": "pre-sprint development (sprint 2026-11-13..15)",
+ "authority": "reports/review_r1/REPAIR_SPEC.md (P1-P7), reports/review_r1/REVIEW.md (R01-R10)",
+ "confirmatory_authorized": false,
+ "production_freeze_record_present": false,
+ "confirmatory_runs_executed": [],
+ "wp10_wp11_started": false,
+ "release": {
+  "tag": "v0.2.0-dev",
+  "commit": "see REVIEW_READY_R2.md section 8 (filled at publication)",
+  "previous_tag_preserved": "v0.1.0-dev"
+ },
+ "tests": {
+  "file": "reports/test-output-r2.txt",
+  "result": "163 passed, 0 skipped (CAUSALBOOL_ROOT=376a11dd)"
+ },
+ "work_items": {
+  "P1": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": "regression tests fail on old behaviour and pass on repair",
+     "status": "met",
+     "evidence": "tests/test_s2_v2.py, tests/test_runner_v2.py; R2_EVIDENCE_MATRIX.md R01,R04,R05"
+    },
+    {
+     "c": "strict readers; torn tail quarantined with exact bytes; real interruption tested",
+     "status": "met",
+     "evidence": "test_runner_v2.py::test_torn_tail_quarantined_then_append_is_boundary_safe, ::test_real_interruption_and_resume"
+    },
+    {
+     "c": "historical analyses reproducible via historical version",
+     "status": "met",
+     "evidence": "scripts/reproduce_v1.sh: v1 S1 and S2 summaries MATCH byte-for-byte from tag v0.1.0-dev"
+    },
+    {
+     "c": "new analyses identify changed semantics, no silent overwrite",
+     "status": "met",
+     "evidence": "new summary files *_v2*; reports/development_r2/s2_v1_exact_rescoring.json; iteration-1 reports unchanged"
+    }
+   ]
+  },
+  "P2": {
+   "status": "met (fixture only)",
+   "criteria": [
+    {
+     "c": "E2E subprocess S2->interrupt->resume->S1 at a single frozen fixture commit",
+     "status": "met",
+     "evidence": "tests/test_freeze_lifecycle.py::test_lifecycle_single_freeze_commit"
+    },
+    {
+     "c": "corruption, wrong scope, missing required artifacts, changed endpoint refused before execution",
+     "status": "met",
+     "evidence": "test_freeze_lifecycle.py (3 tests); test_confirmatory_guard.py"
+    },
+    {
+     "c": "parent-enforced caps; noncooperating workers reaped",
+     "status": "met",
+     "evidence": "test_runner_v2.py::test_nested_timer_cannot_cancel_outer_deadline, ::test_hung_noncooperating_worker_and_child_are_reaped"
+    },
+    {
+     "c": "no production freeze record",
+     "status": "met",
+     "evidence": "docs/FREEZE_RECORD.json absent"
+    }
+   ]
+  },
+  "P3": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": "exogenous versioned design; mechanism swap leaves design identical",
+     "status": "met",
+     "evidence": "generators.make_s2_design; test_s2_v2.py::test_review_mechanism_swap_leaves_design_identical"
+    },
+    {
+     "c": "novelty classes reported; h=1 vs h>1 separately; no post-scoring removal",
+     "status": "met",
+     "evidence": "DEVELOPMENT_REPORT_R2 S2 novelty paragraph"
+    },
+    {
+     "c": "revised primary index - majority; historical secondary kept; named secondaries",
+     "status": "met",
+     "evidence": "configs/endpoints/S2-primary-v2.json; s2_v2_summary.json"
+    },
+    {
+     "c": "numerical comparator: exact when tractable; MC 4096/16384/65536 diagnostic; contrast sensitivity < 0.002 or explanation",
+     "status": "met",
+     "evidence": "MC shift 0.004-0.006 at every budget (> 0.002 target) -> exact integer-count policy adopted for all h<=3 (EXACT_MAX_HORIZON=3), so MC is not used for scoring; exact vs SAT 14,880 queries 0 mismatches"
+    },
+    {
+     "c": "mandatory IID uniform-H null; overlap audited not excluded; duplicates-grouped sensitivity",
+     "status": "met",
+     "evidence": "dedup_audit_r2.json: 0 null worlds isomorphic to any dev world, 0 within-split duplicates, so the grouped sensitivity is identical to the ungrouped analysis"
+    },
+    {
+     "c": "exhaustive small-H Bayes inequality",
+     "status": "met",
+     "evidence": "test_s2_v2.py::test_bayes_majority_dominates_on_average_under_uniform_H_exhaustive"
+    },
+    {
+     "c": "sizing for 1000+1000, no promise of power for small effect",
+     "status": "met",
+     "evidence": "reports/DESIGN_SIZING_R2.md"
+    }
+   ]
+  },
+  "P4": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": "250 structured + 250 null + 60 misspecified + 60 shift + 50 noise worlds, new salts",
+     "status": "met",
+     "evidence": "runs/S2-dev-v2: 670/670 ok (D27: missing end event only); S2-dev-v2-repro identical (D31)"
+    },
+    {
+     "c": "MC diagnostic on >=100 structured + >=100 null",
+     "status": "met",
+     "evidence": "runs/S2-dev-v2-mcdiag: 100 + 100 worlds"
+    },
+    {
+     "c": "noise: other codes under identical residual model, or no index-specific claim",
+     "status": "met",
+     "evidence": "all 4 codes with two-part MDL; robustness attributed to the residual code"
+    }
+   ]
+  },
+  "P5": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": ">=2 worlds per family/size cell, all backends, original caps, isolated latency",
+     "status": "met",
+     "evidence": "S1-dev-v2-panel 49 cells x 2 seeds, 7 backends, 686/686 ok; D32 isolation"
+    },
+    {
+     "c": "decoder bundle accounting; archive vs payload sums; 3/M withdrawn; replayability documented",
+     "status": "met",
+     "evidence": "codec.decoder_bundle; s1_v2_summary.json; DEVELOPMENT_REPORT_R2 S1"
+    }
+   ]
+  },
+  "P6": {
+   "status": "met with declared scope reduction",
+   "criteria": [
+    {
+     "c": "balanced + natural panels; complements/renamings nested",
+     "status": "met",
+     "evidence": "s3-tasks-v2; s3_v2_summary.json transforms"
+    },
+    {
+     "c": "arms A,B2,C,D_cert,D_label,D_sample,E with matched turns; probes T_A,T_B2,T_cert,T_label,T_sample",
+     "status": "met",
+     "evidence": "llm/harness.WorldHarnessV2; test_s3_v2.py"
+    },
+    {
+     "c": "train-fit baselines persisted, evaluated on identical held-out items",
+     "status": "met",
+     "evidence": "reports/development_r2/s3_baselines_v2.json (salt dev-v2-s3-train, 300 worlds)"
+    },
+    {
+     "c": "confusion, parse/truncation, complement, renaming, probability/verdict coherence, Brier vs calibration",
+     "status": "met",
+     "evidence": "DEVELOPMENT_REPORT_R2 S3"
+    },
+    {
+     "c": "~20 diagnostic + 100 held-out worlds per model for both local families",
+     "status": "partially met (declared stop rule)",
+     "evidence": "qwen2.5:7b 20+100; gemma-3-12b-it 20 diagnostic only: gate D29 G3 failed (A 0.319 < chance), expansion stopped per P6 stop rule (D33)"
+    },
+    {
+     "c": "re-size future S3 from revised endpoint",
+     "status": "met",
+     "evidence": "DESIGN_SIZING_R2 S3 (MDE table); S3 not proposed for freezing"
+    }
+   ],
+   "focus_result": {
+    "contrast": "T_cert - T_label target accuracy",
+    "run": "s3v2-heldout-qwen25_7b-dev",
+    "estimate": -0.08,
+    "ci95": [
+     -0.16,
+     0.0
+    ],
+    "n_worlds": 100,
+    "reading": "no clear effect detected"
+   }
+  },
+  "P7": {
+   "status": "met at publication",
+   "criteria": [
+    {
+     "c": "design_simulation(alpha) honoured",
+     "status": "met",
+     "evidence": "stats.design_simulation uses NormalDist().inv_cdf(1-alpha/2)"
+    },
+    {
+     "c": "R01-R10 requirement-to-evidence table",
+     "status": "met",
+     "evidence": "reports/R2_EVIDENCE_MATRIX.md"
+    },
+    {
+     "c": "confirmatory_authorized false in handoff",
+     "status": "met",
+     "evidence": "REVIEW_READY_R2.md header; configs/confirmatory.json"
+    },
+    {
+     "c": "new public release preserving old tag; checksummed raw records; clean clone; CI",
+     "status": "see REVIEW_READY_R2.md section 8",
+     "evidence": "artifacts/manifest_r2.json; GitHub prerelease v0.2.0-dev"
+    }
+   ]
+  }
+ },
+ "findings": {
+  "R01": "fixed",
+  "R02": "fixed",
+  "R04": "fixed",
+  "R05": "fixed",
+  "R06": "fixed",
+  "R07": "fixed",
+  "R08": "fixed",
+  "R10": "fixed",
+  "R03": "fixed (fixture lifecycle only; no production freeze)",
+  "R09": "fixed (development)"
+ },
+ "disclosures": [
+  "D27 runner end-accounting defect (S2-dev-v2 lacks end event; reproduction identical)",
+  "D30 concurrent S3 requests",
+  "D32 operator interruption/resume of gemma diagnostic",
+  "D33 gemma floor stop",
+  "D34 post-hoc S3 round-path analysis"
+ ]
+}
