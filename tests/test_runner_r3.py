@@ -277,3 +277,13 @@ def test_worker_started_after_supervisor_death_never_runs_work(tmp_path):
     with pytest.raises(EOFError):                    # the pipe is closed and no result was ever produced
         conn.recv()
     assert FileLock(lock).acquire(exclusive=True, timeout=5.0)
+
+
+def test_same_object_can_execute_twice_and_reacquires_as_resume(tmp_path):
+    p = make_plan("t", "FIXTURE", {}, [("a", {"value": 1}), ("b", {"value": 2})])
+    run = Run("t", p, runs_root=tmp_path)
+    first = run.execute(fx.echo, workers=1, timeout_s=30, stop_after=1)
+    second = run.execute(fx.echo, workers=1, timeout_s=30)
+    assert first["status"] == "incomplete" and second["status"] == "complete" and second["invocation"]["attempted"] == 1
+    assert [e["event"] for e in read_jsonl(tmp_path / "t" / "events.jsonl")].count("resume") == 1
+    assert not [d for d in tmp_path.iterdir() if ".creating-" in d.name]

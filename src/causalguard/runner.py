@@ -557,6 +557,8 @@ class Run:
             try:
                 os.rename(stage, self.dir)       # atomic; refuses an existing non-empty directory
             except OSError:
+                import shutil
+                shutil.rmtree(stage, ignore_errors=True)
                 raise RunRefused(f"run {run_id}: directory appeared concurrently; refused") from None
             _fsync_dir(self.root)
         self.ledger = Ledger(self.dir / "events.jsonl")
@@ -566,6 +568,7 @@ class Run:
         self.ledger.append({"event": "resume" if self.resume else "open", "time": now(), "run_id": run_id,
                             "plan_sha256": plan["plan_sha256"], "git": git_state(), "pid": os.getpid(),
                             "env_hash": environment_info()["env_hash"], "recovered": rec})
+        self.resume = True     # the directory now exists: any later re-acquisition is a resume
 
     def close(self) -> None:
         """Release ownership (idempotent)."""
@@ -768,11 +771,16 @@ _WATCHDOG = (
 )
 
 
+_WORKER_HOLD: FileLock | None = None
+
+
 def _worker_main(conn, fn, lifeline=None, workers_lock: str | None = None) -> None:
     os.setsid()  # own session/process group: the parent (and the watchdog) can kill everything this worker starts
+    global _WORKER_HOLD
     if workers_lock:
-        # SHARED hold for the life of this group: a new owner cannot proceed until every old worker is gone
-        FileLock(Path(workers_lock)).acquire(exclusive=False, blocking=True)
+        # SHARED hold for the life of this process: a new owner cannot proceed until every old worker is gone
+        _WORKER_HOLD = FileLock(Path(workers_lock))
+        _WORKER_HOLD.acquire(exclusive=False, blocking=True)
     if lifeline is not None:
         # The watchdog lives in THIS process group and blocks on the lifeline; the supervisor holds the only write
         # end.  Supervisor exit/death (even SIGKILL of its whole group) => EOF => SIGKILL of this whole group.
