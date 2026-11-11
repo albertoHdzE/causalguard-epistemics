@@ -1,0 +1,49 @@
+{
+ "study": "S2",
+ "mode": "development",
+ "design_version": "s2-design-v2",
+ "run_id": "dev-r3-final-smoke-s2",
+ "description": "Iteration-3 FINAL-source execution smoke (repeat of dev-r3-smoke-s2 at the final content commit, fresh identity) (NOT evidence): one structured world per primary family + one uniform-H null world through the repaired runner, original design/regimes/budgets/limits. Verifies execution paths only; no effect estimate is drawn.",
+ "salt": "dev-r3-smoke",
+ "n": 7,
+ "kmax": 3,
+ "budgets": [
+  2,
+  4,
+  8,
+  16,
+  32,
+  64
+ ],
+ "regimes": [
+  "uniform_states",
+  "observational",
+  "clamp_interventions",
+  "active"
+ ],
+ "endpoint": "configs/endpoints/S2-primary-v2.json",
+ "workers": 4,
+ "item_timeout_s": 900,
+ "populations": [
+  {
+   "population": "realizable",
+   "families": [
+    "conjunctive",
+    "canalizing",
+    "parity",
+    "random_lookup",
+    "modular"
+   ],
+   "start": 0,
+   "worlds_per_family": 1
+  },
+  {
+   "population": "null",
+   "families": [
+    "uniform_H"
+   ],
+   "start": 0,
+   "worlds_per_family": 1
+  }
+ ]
+}
