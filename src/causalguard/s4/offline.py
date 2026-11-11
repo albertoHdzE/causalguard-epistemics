@@ -242,3 +242,44 @@ def active_world(p: dict) -> dict:
                                                   "wall_s": time.perf_counter() - t0}
         out["targets"].append(trow)
     return out
+
+
+# --------------------------------------------------------------------------- misspecification / action diagnostic
+
+def misspec_world(p: dict) -> dict:
+    """Separately scored diagnostic: the hidden mechanism is OUTSIDE the declared class (``n_out`` nodes get a
+    4-input rule while H declares k = 3).  Verified conclusions are executed as simulated actions on the hidden
+    system; postcondition violations show that a proof is relative to its assumptions.  Also reports how often
+    the evidence itself exposes the misspecification (empty V(D) -> inconsistent assumptions)."""
+    import random as _r
+
+    from .checking import check, validate_proposal
+    from .evaluator import Evaluator
+    ev = Evaluator(p["salt"], p["index"], p["family"])
+    rng = _r.Random(f"{p['salt']}|misspec|{p['index']}|{p['family']}")
+    rules = list(ev.world.net.rules)
+    n = ev.world.net.n
+    for j in rng.sample(range(n), p.get("n_out", 1)):
+        ins = tuple(sorted(rng.sample(range(n), 4)))
+        while True:
+            t = rng.getrandbits(16)
+            if Rule(ins, t).canonical().arity == 4:
+                break
+        rules[j] = Rule(ins, t)
+    ev.world.net = Network(n, tuple(rules))                   # hidden mechanism replaced (evaluator side only)
+    ev.evidence = make_evidence(ev.world, ev.design)
+    ev._pub = public_task(ev.world, ev.design, ev.evidence)
+    pub = ev.public()
+    ws = make_workspace("D", pub)
+    cby = {c["cid"]: c for c in pub["claims"]}
+    rows = []
+    for c in pub["claims"]:
+        r = ws.check(c)
+        row = {"cid": c["cid"], "verdict": r["verdict"]}
+        if r["verdict"] in ("entailed", "refuted"):
+            d = check(validate_proposal({"cid": c["cid"], "asserted": r["verdict"]}, cby), ws)
+            held = ev.execute_action(Query.from_json(c["query"]))["postcondition_held"]
+            row.update(status=d.proposal_check_status,
+                       postcondition_violated=(held != (r["verdict"] == "entailed")))
+        rows.append(row)
+    return {"family": p["family"], "index": p["index"], "inconsistent": ws._empty(), "claims": rows}

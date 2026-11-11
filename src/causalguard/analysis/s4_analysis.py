@@ -454,3 +454,15 @@ def sizing(pilot_report: dict, alpha_per_model=0.025, effect=0.05) -> dict:
                                                  "N": normal_approx_n(sd_up, effect, alpha_per_model, 0.8)}
             out[model][f"{a}-{b}"] = entry
     return out
+
+
+def summarize_misspec(run_dir) -> dict:
+    lr = _load(run_dir)
+    res = list(lr["results"].values())
+    ver = [c for r in res for c in r["claims"] if c.get("status") == "verified"]
+    return {"run_id": lr["plan"]["run_id"], "worlds": len(res),
+            "worlds_evidence_inconsistent": sum(r["inconsistent"] for r in res),
+            "claims": sum(len(r["claims"]) for r in res), "verified_definite": len(ver),
+            "verified_but_postcondition_violated": sum(c["postcondition_violated"] for c in ver),
+            "note": "hidden mechanism outside the declared class (one 4-input node, H declares k = 3); a verified "
+                    "conclusion is proof under the declared assumptions only"}

@@ -185,3 +185,21 @@ def test_revision_needs_fresh_check(world):
         commit(p2, d, ws)                                   # old decision does not transfer
     d2 = check(p2, ws)
     assert commit(p2, d2, ws)["released"]
+
+
+def test_simulated_action_postconditions_and_misspecification():
+    """Inside the class, verified conclusions never violate the simulated postcondition; outside it they can."""
+    from causalguard.s4.offline import misspec_world
+    ev = Evaluator("t-s4-act", 3, "repeated_modules")
+    pub, refs = ev.public(), ev.reference()
+    ws = make_workspace("D", pub)
+    cl = _claims(pub)
+    for r in refs:
+        if r.verdict in ("entailed", "refuted"):
+            p = validate_proposal({"cid": r.cid, "asserted": r.verdict}, cl)
+            d = check(p, ws)
+            assert commit(p, d, ws)["verified"]
+            held = ev.execute_action(Query.from_json(cl[r.cid]["query"]))["postcondition_held"]
+            assert held == (r.verdict == "entailed")
+    out = misspec_world({"salt": "t-s4-mis", "index": 0, "family": "parity"})
+    assert "claims" in out and isinstance(out["inconsistent"], bool)

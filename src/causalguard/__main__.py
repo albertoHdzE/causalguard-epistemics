@@ -47,7 +47,7 @@ def _items_from_config(cfg: dict):
                            {"salt": cfg["salt"], "index": i, "family": cell["family"], "n": cell["n"],
                             "backend": backend, "query_timeout_s": cfg["query_timeout_s"],
                             "limits": cfg["limits"]})
-    elif study in ("S4-MAP", "S4-ACTIVE"):
+    elif study in ("S4-MAP", "S4-ACTIVE", "S4-MISSPEC"):
         for fam in cfg["families"]:
             for i in range(cfg.get("start", 0), cfg.get("start", 0) + cfg["worlds_per_family"]):
                 yield f"{fam}|{i}", {"salt": cfg["salt"], "index": i, "family": fam, **cfg.get("payload", {})}
@@ -92,7 +92,7 @@ def _fn_for(study: str):
             from .s4.pilot import pilot_world
             return pilot_world
         return {"S4-MAP": offline.map_world, "S4-ACTIVE": offline.active_world, "S4-STRESS": offline.stress_item,
-                "S4-KNOWN": offline.known_item}[study]
+                "S4-KNOWN": offline.known_item, "S4-MISSPEC": offline.misspec_world}[study]
     raise SystemExit(study)
 
 
@@ -146,6 +146,7 @@ def main(argv=None):
     a4.add_argument("--map", default=None)
     a4.add_argument("--active", default=None)
     a4.add_argument("--known", default=None)
+    a4.add_argument("--misspec", default=None)
     a4.add_argument("--stress", action="append", default=[])
     a4.add_argument("--pilot", action="append", default=[])
     a4.add_argument("--baselines", default="reports/development_r4/s4_surface_baselines.json")
@@ -212,6 +213,8 @@ def main(argv=None):
             res["active"] = A.summarize_active(args.active)
         if args.known:
             res["known"] = A.summarize_known(args.known)
+        if args.misspec:
+            res["misspec"] = A.summarize_misspec(args.misspec)
         for s in args.stress:
             res.setdefault("stress", {})[Path(s).name] = A.summarize_stress(s)
         for k, v in res.items():

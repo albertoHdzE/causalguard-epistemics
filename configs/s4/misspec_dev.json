@@ -1,0 +1,4 @@
+{"study": "S4-MISSPEC", "mode": "development", "run_id": "s4-misspec-dev-v1", "salt": "dev-s4-misspec-v1",
+ "families": ["sparse_conj", "canalizing", "repeated_modules", "ordered_motif", "parity", "bounded_random", "order_disrupted", "uniform_H"],
+ "worlds_per_family": 5, "start": 0, "payload": {"n_out": 1}, "workers": 4, "item_timeout_s": 900,
+ "note": "Separately scored misspecification/action diagnostic: one node outside the declared class; verified conclusions executed in the hidden simulator."}
