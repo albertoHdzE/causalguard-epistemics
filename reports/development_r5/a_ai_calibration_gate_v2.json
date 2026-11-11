@@ -1,0 +1,213 @@
+{
+ "models": {
+  "mistral-small-3.2-24b-instruct-2506-mlx": {
+   "arms": {
+    "B": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.25,
+      "2": 0.625,
+      "4": 0.875
+     },
+     "attempts": 25,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.003987245,
+     "mean_brier_readout": 0.003985969387755102,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": 0.0,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.0,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      14,
+      17
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 123.4481,
+     "status": {
+      "stopped": 8
+     },
+     "tokens": 75753,
+     "valid_action_rate": 1.0,
+     "worlds": 8,
+     "wrong_definite_verdicts": 0
+    },
+    "D": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.25,
+      "2": 0.625,
+      "4": 0.75
+     },
+     "attempts": 24,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.00417252625,
+     "mean_brier_readout": 0.0041708806303586525,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -0.375,
+       0.0
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.125,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.11806951928795378,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      14,
+      16
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 141.3122,
+     "status": {
+      "stopped": 8
+     },
+     "tokens": 79737,
+     "valid_action_rate": 1.0,
+     "worlds": 8,
+     "wrong_definite_verdicts": 0
+    }
+   },
+   "missing_items": [],
+   "planned": 8,
+   "secondary_D_minus_generic_resolved4": {
+    "ci95": [
+     -0.375,
+     0.0
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": -0.125,
+    "n_worlds": 8,
+    "replicates": 10000,
+    "se": 0.11806951928795378,
+    "seed": 20261111
+   }
+  },
+  "qwen2.5:7b": {
+   "arms": {
+    "B": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.25,
+      "2": 0.375,
+      "4": 0.5
+     },
+     "attempts": 21,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.01199458375,
+     "mean_brier_readout": 0.01199294622086589,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -0.75,
+       0.0
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.375,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.1718915473355352,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      6,
+      13
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 67.6153,
+     "status": {
+      "stopped": 8
+     },
+     "tokens": 57422,
+     "valid_action_rate": 1.0,
+     "worlds": 8,
+     "wrong_definite_verdicts": 6
+    },
+    "D": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.25,
+      "2": 0.375,
+      "4": 0.375
+     },
+     "attempts": 22,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.006384328750000001,
+     "mean_brier_readout": 0.006382901977729665,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -0.875,
+       -0.125
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.5,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.17733503140972035,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      6,
+      14
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 61.5837,
+     "status": {
+      "stopped": 8
+     },
+     "tokens": 68219,
+     "valid_action_rate": 1.0,
+     "worlds": 8,
+     "wrong_definite_verdicts": 9
+    }
+   },
+   "missing_items": [],
+   "planned": 8,
+   "secondary_D_minus_generic_resolved4": {
+    "ci95": [
+     -0.375,
+     0.0
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": -0.125,
+    "n_worlds": 8,
+    "replicates": 10000,
+    "se": 0.11656117919187098,
+    "seed": 20261111
+   }
+  }
+ },
+ "selected_policy": "eig"
+}

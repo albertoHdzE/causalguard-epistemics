@@ -1,0 +1,419 @@
+{
+ "A": {
+  "budgets": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "calls_used_before_evaluation": {
+   "by_phase": {
+    "A-calibration": 342
+   },
+   "total": 342
+  },
+  "evidence": 8,
+  "max_calls": 8,
+  "menu_spec": {
+   "excluded": "target-equivalent (query effective start state with the target node, h = 1); duplicates; evidence start states",
+   "interventions": "none for near items; none or one-node clamp for random",
+   "near": "Hamming distance 1-2 from the query's effective start state",
+   "other_near": 4,
+   "random": 8,
+   "target_near": 4
+  },
+  "models": {
+   "mistral-small-3.2-24b-instruct-2506-mlx": {
+    "config_json_sha256": "d5e108fe22782c3a1ecc704368ea76b412252fcca5371bb24ab9f0c352a00846",
+    "index_sha256": "664a049408e8694e5867312145b74b1971ad5472061a1f176e0806dec9b3d21c",
+    "server": "LM Studio, context 16384, lmstudio-community MLX-4bit",
+    "weights_digest": "not computed (3 safetensors shards; disclosed)"
+   },
+   "qwen2.5:7b": {
+    "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+    "quant": "Q4_K_M",
+    "server": "Ollama 0.40.16 native /api/chat num_ctx 16384"
+   }
+  },
+  "policy_selection": {
+   "calibration_worlds": 64,
+   "resolved_at_4_on_calibration": {
+    "disagreement": 0.140625,
+    "eig": 0.78125,
+    "random": 0.15625
+   },
+   "selected": "eig",
+   "tie_order": [
+    "eig",
+    "disagreement",
+    "random"
+   ]
+  },
+  "primary": "resolved@4(AI+D) - resolved@4(eig on D), paired by world, world bootstrap",
+  "prompt_version": "r5-a-prompt-v2",
+  "selected_policy": "eig",
+  "validity_gate": "calibration v2: valid action rate 1.0 for both models and arms (reports/development_r5/a_ai_calibration_gate_v2.json); v1 failed (R5-02 stop-action defect)"
+ },
+ "C": {
+  "backends": [
+   "D",
+   "GEN-VE",
+   "B"
+  ],
+  "checkpoints": [
+   1,
+   10,
+   60,
+   300
+  ],
+  "external_compiler": "ganak v2.9.0 adapter only (not authorized to download/execute); d4v2 not buildable on arm64",
+  "limit_s": 300.0,
+  "release_phase": "D,B: check + common SAT cross-check (RUP proof check on) + witness replay + commit",
+  "repeat_subset": [
+   [
+    8,
+    0
+   ],
+   [
+    8,
+    4
+   ],
+   [
+    32,
+    0
+   ],
+   [
+    32,
+    4
+   ]
+  ],
+  "sizes": [
+   8,
+   16,
+   32,
+   48,
+   64
+  ]
+ },
+ "G": {
+  "candidates_tie_order": [
+   "uniform",
+   "circuit",
+   "gate",
+   "gsr_a50",
+   "gsr_a25",
+   "gsr_a75"
+  ],
+  "champion": "gate",
+  "champion_selection": {
+   "budget": "16",
+   "calibration_brier": {
+    "circuit": 0.08402199386734158,
+    "gate": 0.07273712280969587,
+    "gsr_a25": 0.08716874245847833,
+    "gsr_a50": 0.08716874244594608,
+    "gsr_a75": 0.08716874240849554,
+    "uniform": 0.08928524938160723
+   },
+   "calibration_worlds": 64,
+   "candidates": [
+    "uniform",
+    "circuit",
+    "gate",
+    "gsr_a50",
+    "gsr_a25",
+    "gsr_a75"
+   ],
+   "champion": "gate",
+   "missing_calibration_items": [],
+   "precision_planning": {
+    "approx_se_at_280_groups": 0.003118669922732226,
+    "note": "planning only, from calibration; the evaluation size is fixed",
+    "practical_target": 0.02,
+    "world_sd_of_difference": 0.05218532920608335
+   },
+   "reference_brier_not_used_for_selection": {
+    "cgh_flat": 0.07155180166585903,
+    "cgh_prior": 0.07300256468714575
+   },
+   "tie_order": [
+    "uniform",
+    "circuit",
+    "gate",
+    "gsr_a50",
+    "gsr_a25",
+    "gsr_a75"
+   ]
+  },
+  "evaluation_instances": 320,
+  "evaluation_source_groups": 280,
+  "external_manifest": {
+   "path": "artifacts/r5_source_manifest.json",
+   "sha256": "3eb436d57226a0ec51a4f627ccd835b2064dcb510faa8f645f85c83a05ba50b7"
+  },
+  "full_cgh": "s4.prior cgh_prior: FLAT+TEMPLATE+MODULE, no PATCH, no DICT (R4 language unchanged)",
+  "gsr_gamma": 1e-09,
+  "population_spec": {
+   "S1": {
+    "exception_kind": [
+     "new_local_rule_same_offsets",
+     "rewire_one_input"
+    ],
+    "exceptions": [
+     1,
+     2
+    ],
+    "table": "nondegenerate; analytic catalogue w.p. 0.5",
+    "template_arity": [
+     2,
+     3,
+     3
+    ]
+   },
+   "S2": {
+    "external_input_prob": 0.5,
+    "variants": [
+     "3+3+2 (module size 3, remainder block of 2 random rules)",
+     "4+4 with one position of the second copy replaced"
+    ]
+   },
+   "S3": {
+    "arity": [
+     2,
+     3
+    ],
+    "assignment": "4 nodes per motif, random",
+    "motifs": 2,
+    "role_order": "random permutation per node",
+    "support": "random"
+   },
+   "S4": {
+    "gates": [
+     "AND",
+     "OR",
+     "NAND",
+     "NOR",
+     "XOR",
+     "KOFN",
+     "CANALIZING",
+     "LUT"
+    ],
+    "indegree": [
+     1,
+     2,
+     3
+    ],
+    "roots": "const0/const1/self-memory"
+   },
+   "S5": {
+    "feedback": ">=1 input of rank >= own rank",
+    "indegree": [
+     2,
+     3
+    ],
+    "rule": "nested canalizing (random order/values) w.p. 0.6, canalizing-then-XOR/AND fallback otherwise"
+   },
+   "S6": {
+    "arity": [
+     2,
+     3
+    ],
+    "choices": [
+     "XOR",
+     "XNOR",
+     "KOFN",
+     "MAJORITY",
+     "EXACTK",
+     "LUT"
+    ]
+   },
+   "S7": {
+    "source": "stratum (i mod 3) of S1/S2/S3, same index i, same split",
+    "swaps": "2 x edges attempts"
+   },
+   "S8": {
+    "node_rule": "uniform over candidate_class(8, 3)"
+   },
+   "evidence": {
+    "budgets": [
+     8,
+     16,
+     24
+    ],
+    "clamp_nodes": [
+     1,
+     2
+    ],
+    "clamp_positions": "i % 4 == 3",
+    "nested": true,
+    "states": "distinct uniform"
+   },
+   "k": 3,
+   "n": 8,
+   "queries": {
+    "count": 8,
+    "exclusions": "duplicate (s0, intervention, h, target); clamped target",
+    "h1": 4,
+    "h2": 4,
+    "interventions": [
+     "none",
+     "initial_edit",
+     "persistent_clamp"
+    ],
+    "literal": "target node = 1",
+    "novelty": "start and effective start state not among ANY of the 24 evidence inputs"
+   },
+   "strata": [
+    "template_exceptions",
+    "imperfect_modules",
+    "shared_motifs",
+    "feedforward_hetero",
+    "feedback_canalizing",
+    "mixed_parity_thresh",
+    "rewired_control",
+    "uniform_H"
+   ],
+   "version": "r5-g-population-v1"
+  },
+  "population_spec_sha256": "5339688be28d98546b3546f378da9f922025d7fa98bdd3ddbeaa950155bb3467",
+  "primary": "B=16: stratum-weighted mean world Brier(champion) - Brier(cgh_prior); positive favours full CGH; source-group cluster bootstrap 10000 reps seed 20261111; worst-case [0,1] bounds for missing predictions",
+  "splits": {
+   "calibration": {
+    "per_stratum": 8,
+    "salt": "r5-G-cal-v1"
+   },
+   "evaluation": {
+    "per_stratum": 40,
+    "salt": "r5-G-eval-v1"
+   }
+  }
+ },
+ "M": {
+  "development_probe_salt": "r5-M-v1",
+  "evaluation_salt": "r5-M-eval-v1",
+  "spec": {
+   "budgets": [
+    6,
+    10
+   ],
+   "challenges": 4,
+   "declared_k": 2,
+   "expanded_k": 3,
+   "max_draws_per_panel": 4000,
+   "menu": 16,
+   "n": 6,
+   "outside_nodes": [
+    1,
+    2
+   ],
+   "panels": [
+    "realizable",
+    "evidence_inconsistent",
+    "evidence_consistent"
+   ],
+   "policies": [
+    "current",
+    "expanded",
+    "robust_union",
+    "challenge",
+    "abstain"
+   ],
+   "queries": 8,
+   "robust_union": "H(n,2) u {one node indegree 3}",
+   "version": "r5-m-v1"
+  }
+ },
+ "assignment": {
+  "delegation/iteration_5/01_SCIENTIFIC_PROTOCOL.md": "bc60418d1de23b173aa00fe0166bec0d5800bad6094c86cde173f9ad3d620e48",
+  "delegation/iteration_5/02_EXECUTION_PLAN.md": "5eaa33ecc6a48d0e95cfc2a18bf8bdb2f38900fbf6cd3818b0a83d85566ade06",
+  "delegation/iteration_5/03_ACCEPTANCE_AND_REVIEW.md": "8720f5dd838b1c4d9077c70dfa4186913ab23a3bf65b213cc7c3e4e3d80025fc",
+  "delegation/iteration_5/BATCH_CONTRACT.json": "4a96f81e24519fc061ca7c49d6fa7cec3843ac6658345af4bd788801e4184235",
+  "delegation/iteration_5/MANIFEST.json": "a944bd39f19ceb6f26b0a6e383d9746277de287dafa30a2f3a7bda8be0ee2637",
+  "delegation/iteration_5/VALIDATION.json": "6e7a62701b56c74c8856c2dad22fdb2600f0a1984dadb509231ebc7bed994fb3"
+ },
+ "branch": "iteration-5",
+ "budgets": {
+  "calls_ceiling": 3072,
+  "cpu_hours_ceiling": 64,
+  "server_hours_ceiling": 12,
+  "worker_rss_limit_bytes": 6442450944,
+  "workers_max": 4
+ },
+ "code_commit_at_lock": "941d220 (+ this lock commit)",
+ "configs": {
+  "configs/r5/a_ai_cal_mistral_small_24b.json": "50be43c48b11836c8e142a6255eb81355e381280a8becd9270a6eef47de49c81",
+  "configs/r5/a_ai_cal_qwen25_7b.json": "07870d99dfad64c02e78944586fbef20b0b22b25429dabc3a22a7c24787e2936",
+  "configs/r5/a_ai_eval_mistral_small_24b.json": "751592f0cbed52a6490fd583164fb0808f09f8719299c436c218d50e2637c51b",
+  "configs/r5/a_ai_eval_qwen25_7b.json": "9512aec86c40beeca225e3fe9bb04a12dbe35b879e1bf0f8302d399f4632085e",
+  "configs/r5/a_det_calibration.json": "31fd6fe31fa6c664db317ed11a52c8c13a3d4ed78d5c638c884206246aec5136",
+  "configs/r5/a_det_evaluation.json": "dc63fce389d8e19769277355e1878090d2c0c128cbefde4670a75f98aac06dc1",
+  "configs/r5/c_benchmark.json": "2a73f4db961695a0ba6d149878c0f5c9caf32b40bf49cbb8dc3c54dcd269ca09",
+  "configs/r5/g_calibration.json": "0a857d824f512ae3a4fad48eb606e55cfe7a2694846f91f240a73b5bccffc928",
+  "configs/r5/g_evaluation.json": "d6f75fc9f15a483f88d41724a92f9f94e5b046d8b3136f76303b1feb8110f924",
+  "configs/r5/g_external_intact.json": "5193d8f5ade376a66f2a23b0d898560e4b8dcf8bc96cf2f4fb23b03a24d557b9",
+  "configs/r5/g_external_transformed.json": "f096ad4b27abb96cf353c1596933c4cc94a0f43d7028e185972c19a91c2d09ef",
+  "configs/r5/m_evaluation.json": "c0952a65e535b1a2d65c68e7d4c0479d7bad6a1b4d1b887e5d8cd018812cfa33"
+ },
+ "confirmatory_authorized": false,
+ "date": "2026-11-11",
+ "derivation": {
+  "path": "docs/R5_COUNTING_DERIVATION.md",
+  "sha256": "bb5ca49ea313b5e447cacd297e0eaf9d030ceab9e9d7b9d12d94b33f32939ed8"
+ },
+ "freeze_record": false,
+ "gates": {
+  "ai_valid_action_rate": ">=0.90 passed (1.0)",
+  "certificate_levels": "recorded per query in C release phase and M",
+  "independent_semantic_tests": "tests/test_r5.py 20 passed + full suite",
+  "projection_semantics": "canonical CNF projected count == distinct (tested); GEN-VE == D == explicit",
+  "public_payload_audit": "tested",
+  "replay_resume": "runner snapshot/resume (R3/R4 tests)",
+  "split_audit": "0 shared groups/duplicates/isomorphs"
+ },
+ "kind": "DEVELOPMENT design lock (not a confirmatory freeze; docs/FREEZE_RECORD.json absent)",
+ "offline_usage_before_evaluation": {
+  "by_track_cpu_hours_upper": {
+   "A": 0.2999117747942607,
+   "G": 0.07851880219247606
+  },
+  "max_worker_peak_rss_bytes": 133480448,
+  "runs": {
+   "r5-a-ai-cal-mistral_small_24b-v1": {
+    "cpu_hours_upper": 0.10380258950922225,
+    "track": "A"
+   },
+   "r5-a-ai-cal-mistral_small_24b-v2": {
+    "cpu_hours_upper": 0.07490771638022528,
+    "track": "A"
+   },
+   "r5-a-ai-cal-qwen25_7b-v1": {
+    "cpu_hours_upper": 0.06377644538879394,
+    "track": "A"
+   },
+   "r5-a-ai-cal-qwen25_7b-v2": {
+    "cpu_hours_upper": 0.037089485261175364,
+    "track": "A"
+   },
+   "r5-a-det-cal-v1": {
+    "cpu_hours_upper": 0.020335538254843816,
+    "track": "A"
+   },
+   "r5-g-cal-v1": {
+    "cpu_hours_upper": 0.07851880219247606,
+    "track": "G"
+   }
+  },
+  "total_cpu_hours_upper": 0.37843057698673677
+ },
+ "protocol": {
+  "path": "docs/R5_PROTOCOL.md",
+  "sha256": "0de083b27a68b340b21a2d55ff3a5a70c1b913a26669a604a5a0dd56ed217222"
+ },
+ "revisions_before_lock": [
+  "R5-02 AI stop action (prompt v2)",
+  "A menu/evidence calibrated on deterministic policies only",
+  "M challenge accounting per world"
+ ],
+ "schema": "r5-design-lock-v1",
+ "source_tree_sha256": "8ca2c389bb0abb597d820a3166700aea43f80b68c19e0b2551393e8003ac63cd"
+}
