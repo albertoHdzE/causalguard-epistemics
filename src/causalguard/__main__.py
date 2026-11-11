@@ -140,6 +140,16 @@ def main(argv=None):
     a3.add_argument("--out", default="reports/development_r3")
     sub.add_parser("fit-s3-role-baselines").add_argument("--out", default="reports/development_r3/s3_role_baselines_v3.json")
     sub.add_parser("fixtures")
+    dm = sub.add_parser("s4-demo")
+    dm.add_argument("--live", default=None, help="provider config JSON for a local model (optional)")
+    a4 = sub.add_parser("analyze-s4")
+    a4.add_argument("--map", default=None)
+    a4.add_argument("--active", default=None)
+    a4.add_argument("--known", default=None)
+    a4.add_argument("--stress", action="append", default=[])
+    a4.add_argument("--pilot", action="append", default=[])
+    a4.add_argument("--baselines", default="reports/development_r4/s4_surface_baselines.json")
+    a4.add_argument("--out", default="reports/development_r4")
     args = ap.parse_args(argv)
 
     if args.cmd == "run":
@@ -184,6 +194,34 @@ def main(argv=None):
     if args.cmd == "analyze-s1":
         from .analysis.s1_analysis import analyze
         print(json.dumps(analyze(args.run_id, Path(args.out)), indent=1)[:4000])
+        return 0
+    if args.cmd == "s4-demo":
+        from .s4.demo import run_demo
+        cfg = json.loads(Path(args.live).read_text())["provider"] if args.live else None
+        log = run_demo(cfg)
+        print("\n" + json.dumps({k: v for k, v in log.items() if k != "steps"}))
+        return 0
+    if args.cmd == "analyze-s4":
+        from .analysis import s4_analysis as A
+        out = Path(args.out)
+        out.mkdir(parents=True, exist_ok=True)
+        res = {}
+        if args.map:
+            res["map"] = A.summarize_map(args.map)
+        if args.active:
+            res["active"] = A.summarize_active(args.active)
+        if args.known:
+            res["known"] = A.summarize_known(args.known)
+        for s in args.stress:
+            res.setdefault("stress", {})[Path(s).name] = A.summarize_stress(s)
+        for k, v in res.items():
+            (out / f"s4_{k}_summary.json").write_text(json.dumps(v, indent=1, default=float) + "\n")
+        if args.pilot:
+            rep = A.analyze_pilot(args.pilot, args.baselines, out)
+            (out / "s4_sizing.json").write_text(json.dumps(A.sizing(rep), indent=1, default=float) + "\n")
+            res["pilot"] = {m: {"arm_means": x["arm_means"], "contrasts": x["contrasts_verdict_acc"]}
+                            for m, x in rep["models"].items()}
+        print(json.dumps(res, indent=1, default=float)[:6000])
         return 0
     if args.cmd == "fixtures":
         root = Path(__file__).resolve().parents[2]
