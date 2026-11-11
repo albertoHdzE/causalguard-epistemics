@@ -287,3 +287,18 @@ def test_same_object_can_execute_twice_and_reacquires_as_resume(tmp_path):
     assert first["status"] == "incomplete" and second["status"] == "complete" and second["invocation"]["attempted"] == 1
     assert [e["event"] for e in read_jsonl(tmp_path / "t" / "events.jsonl")].count("resume") == 1
     assert not [d for d in tmp_path.iterdir() if ".creating-" in d.name]
+
+
+def test_published_attempt_without_ledger_end_is_reconciled_on_resume(tmp_path):
+    p = make_plan("g", "FIXTURE", {}, [("a", {"value": 1}), ("b", {"value": 2})])
+    Run("g", p, runs_root=tmp_path).execute(fx.echo, workers=1, timeout_s=30)
+    ev = tmp_path / "g" / "events.jsonl"
+    lines = [x for x in ev.read_text().splitlines(keepends=True)
+             if not ('"attempt_end"' in x and '"item_id": "b"' in x)]          # the kill landed after publication
+    ev.write_text("".join(lines))
+    Run("g", p, runs_root=tmp_path, resume=True).close()
+    ends = [e for e in read_jsonl(ev) if e["event"] == "attempt_end"]
+    assert sorted(e["item_id"] for e in ends) == ["a", "b"]
+    assert [e.get("reconciled") for e in ends if e["item_id"] == "b"] == [True]
+    Run("g", p, runs_root=tmp_path, resume=True).close()                       # idempotent
+    assert len([e for e in read_jsonl(ev) if e["event"] == "attempt_end"]) == 2

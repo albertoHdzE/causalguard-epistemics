@@ -565,6 +565,7 @@ class Run:
         (self.dir / "attempts").mkdir(exist_ok=True)
         rec = self.ledger.recover()
         self._quarantine_stray_tmp()
+        self._reconcile_ledger()
         self.ledger.append({"event": "resume" if self.resume else "open", "time": now(), "run_id": run_id,
                             "plan_sha256": plan["plan_sha256"], "git": git_state(), "pid": os.getpid(),
                             "env_hash": environment_info()["env_hash"], "recovered": rec})
@@ -579,6 +580,17 @@ class Run:
             self._owner.release()
         except Exception:
             pass
+
+    def _reconcile_ledger(self) -> None:
+        """A kill between publishing an attempt and appending its ``attempt_end`` line leaves a stored attempt without
+        a ledger end event.  The attempt file is authoritative; the owner appends an explicit reconciled end event."""
+        logged = {(e.get("item_id"), e.get("attempt")) for e in self.ledger.read() if e.get("event") == "attempt_end"}
+        for iid, atts in read_attempts(self.dir, self.plan).items():
+            for a in atts:
+                if (iid, a["attempt"]) not in logged:
+                    self.ledger.append({"event": "attempt_end", "time": now(), "item_id": iid, "attempt": a["attempt"],
+                                        "status": a["status"], "seconds": round(a["seconds"], 3), "reconciled": True,
+                                        "note": "attempt published before the process was killed; ledger line restored"})
 
     def _quarantine_stray_tmp(self) -> None:
         for p in sorted((self.dir / "attempts").rglob("*.tmp*")):
