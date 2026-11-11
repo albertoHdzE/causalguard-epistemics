@@ -331,7 +331,29 @@ def mock_policy(name: str) -> Callable:
         return lambda m, t, s: txt
     if name.startswith("always_"):
         return fixed(name[len("always_"):])
+    if name == "s4_tool_copier":
+        return _s4_tool_copier
     raise ValueError(f"unknown mock policy {name!r}")
+
+
+def _s4_tool_copier(messages, temperature, seed):
+    """S4 test policy: without tools answer 'underdetermined'/0; with tools check every claim, then commit the
+    tool verdicts (forecast = majority of fraction_true relative to the claim literal)."""
+    import re as _re
+    sys_txt = messages[0]["content"]
+    cids = sorted(set(_re.findall(r"\n (c\d+):", messages[1]["content"])), key=lambda c: int(c[1:]))
+    if "tool_calls" not in sys_txt:
+        return json.dumps({"answers": [{"cid": c, "verdict": "underdetermined", "forecast": 0} for c in cids]})
+    if len(messages) == 2:
+        return json.dumps({"tool_calls": [{"tool": "check", "cid": c} for c in cids]})
+    res = json.loads(messages[-1]["content"].split("\n", 1)[1])
+    ans = []
+    for r in res:
+        if "verdict" in r and "cid" in r:
+            ans.append({"cid": r["cid"], "verdict": r["verdict"] if r["verdict"] in ("entailed", "refuted",
+                                                                                      "underdetermined") else "underdetermined",
+                        "forecast": 0})
+    return json.dumps({"tool_calls": [{"tool": "commit", "answers": ans}]})
 
 
 def make_provider(d: dict) -> BaseProvider:
