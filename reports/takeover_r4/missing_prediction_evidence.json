@@ -1,0 +1,67 @@
+{
+  "repo": "/Users/alberto/Documents/projects/AI-security/AI-x-epistemics",
+  "item_id": "realizable|conjunctive|0",
+  "planned_primary_worlds": 250,
+  "original_contrast": {
+    "a": "index",
+    "b": "vs_majority",
+    "estimate": 0.0008749999999999996,
+    "ci95": [
+      -0.01215625,
+      0.010793749999999986
+    ],
+    "se": 0.006015083103954155,
+    "n_worlds": 250,
+    "n_strata": 5,
+    "replicates": 100,
+    "seed": 20261109,
+    "mean_a": 0.8899999999999999,
+    "mean_b": 0.8891250000000002,
+    "sd_delta": 0.09486874321268844,
+    "per_family": {
+      "canalizing": {
+        "mean_delta": 0.0175,
+        "n": 50
+      },
+      "conjunctive": {
+        "mean_delta": 0.0025,
+        "n": 50
+      },
+      "modular": {
+        "mean_delta": 0.009375,
+        "n": 50
+      },
+      "parity": {
+        "mean_delta": -0.02,
+        "n": 50
+      },
+      "random_lookup": {
+        "mean_delta": -0.005,
+        "n": 50
+      }
+    }
+  },
+  "mutations": {
+    "missing_first": {
+      "accepted": false,
+      "error": "realizable|conjunctive|0[uniform_states|B16]: prediction keys differ from the study contract (missing ['index'], extra [])"
+    },
+    "missing_later": {
+      "accepted": false,
+      "error": "realizable|conjunctive|0[uniform_states|B16]: prediction keys differ from the study contract (missing ['index'], extra [])"
+    },
+    "null_later": {
+      "accepted": false,
+      "error": "realizable|conjunctive|0[uniform_states|B16]: selector index prediction missing (None) in a nonempty version space"
+    },
+    "bool_later": {
+      "accepted": false,
+      "error": "realizable|conjunctive|0[uniform_states|B16]: malformed predictions"
+    }
+  },
+  "saved_record_audit": {
+    "rows": 364320,
+    "bad_rows": [],
+    "raw_records_changed": false
+  }
+}

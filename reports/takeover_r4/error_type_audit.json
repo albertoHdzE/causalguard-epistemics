@@ -1,0 +1,20 @@
+{
+  "s4-pilot-qwen25_7b-v1": {
+    "total": 320,
+    "wrong_total": 112,
+    "wrong_asserted_underdetermined": 111,
+    "wrong_transition_underdetermined_to_refuted": 53,
+    "wrong_transition_underdetermined_to_entailed": 58,
+    "wrong_asserted_refuted": 1,
+    "wrong_transition_refuted_to_entailed": 1
+  },
+  "s4-pilot-mistral_small_24b-v1": {
+    "total": 320,
+    "wrong_total": 116,
+    "wrong_asserted_underdetermined": 115,
+    "wrong_transition_underdetermined_to_refuted": 57,
+    "wrong_transition_underdetermined_to_entailed": 58,
+    "wrong_asserted_entailed": 1,
+    "wrong_transition_entailed_to_underdetermined": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-11",
+  "kind": "delegation_document_validation_not_experiment_result",
+  "contract_json_valid": true,
+  "allocation_arithmetic_valid": true,
+  "required_local_inputs_exist": true,
+  "markdown_fences_balanced": true,
+  "independent_AND_fixture_enumeration": {
+    "declared_networks": 36,
+    "compatible_declared_networks": 1,
+    "expanded_networks": 256,
+    "compatible_expanded_networks": 4,
+    "expanded_models_with_target_zero": 2,
+    "hidden_AND_matches_observations": true,
+    "declared_target_zero_wrong_in_hidden_AND": true
+  },
+  "new_model_calls": 0,
+  "new_research_runs": 0,
+  "production_freeze_exists": false
+}

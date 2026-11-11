@@ -1,0 +1,60 @@
+{
+  "schema": "causalguard-r5-delegation-package-v1",
+  "date": "2026-11-11",
+  "files": [
+    {
+      "path": "delegation/ITERATION_5_OPUS_PROMPT.md",
+      "sha256": "8e641341e61a96b060e4b2c1eb7949af0c6e05d195f0f9354af11af091f943d0"
+    },
+    {
+      "path": "delegation/iteration_5/01_SCIENTIFIC_PROTOCOL.md",
+      "sha256": "bc60418d1de23b173aa00fe0166bec0d5800bad6094c86cde173f9ad3d620e48"
+    },
+    {
+      "path": "delegation/iteration_5/02_EXECUTION_PLAN.md",
+      "sha256": "5eaa33ecc6a48d0e95cfc2a18bf8bdb2f38900fbf6cd3818b0a83d85566ade06"
+    },
+    {
+      "path": "delegation/iteration_5/03_ACCEPTANCE_AND_REVIEW.md",
+      "sha256": "8720f5dd838b1c4d9077c70dfa4186913ab23a3bf65b213cc7c3e4e3d80025fc"
+    },
+    {
+      "path": "delegation/iteration_5/BATCH_CONTRACT.json",
+      "sha256": "4a96f81e24519fc061ca7c49d6fa7cec3843ac6658345af4bd788801e4184235"
+    },
+    {
+      "path": "delegation/iteration_5/VALIDATION.json",
+      "sha256": "6e7a62701b56c74c8856c2dad22fdb2600f0a1984dadb509231ebc7bed994fb3"
+    }
+  ],
+  "context_inputs": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "8e2365636e701ae895bd914040b6a2e998bd443e759f570da676515551ce2ad6"
+    },
+    {
+      "path": "reports/takeover_r4/INSPECTION.md",
+      "sha256": "8ef21ba0b42bd4765408d137d7a6ae26d9567c6e6e15d7c428481bee512df3da"
+    },
+    {
+      "path": "reports/REVIEW_READY_R4.md",
+      "sha256": "346305461ead1e7f347f771167e97033fc4ea8565bb14d21317c32b0ed957d8b"
+    },
+    {
+      "path": "reports/S4_DEVELOPMENT_REPORT.md",
+      "sha256": "7f1c1f43dd7aac2dea8e3433525110a1ccf7717aa32624683c56cee26e966e79"
+    },
+    {
+      "path": "reports/S4_DESIGN_SIZING.md",
+      "sha256": "6eaef71ab5beb504d4255aceac57d5e308e9212fb90fee2a53d0854719504c8d"
+    },
+    {
+      "path": "docs/S4_METHOD_COVERAGE.md",
+      "sha256": "260e652540e62ff8c686cbb27353488b68fa9c780839dd77fdace9893d4c33dd"
+    },
+    {
+      "path": "docs/S4_FOUNDATIONS_AND_PRECOMMIT_CHECKING.md",
+      "sha256": "486af5480c49b65ab3818846319e27b05a13f9e5966dd3454de4f70161e5d543"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "file": "s4_active_summary.json",
+    "byte_identical": true,
+    "sha256": "bd7b8de76fbbcf95f1fed85c5fa8ca4a8bb68df695c0d8b49dca299642a52164"
+  },
+  {
+    "file": "s4_known_summary.json",
+    "byte_identical": true,
+    "sha256": "dee5c65118fe10d4a06c8cca1a6ce7f9db809319fbcde05afab1c70fd5392c70"
+  },
+  {
+    "file": "s4_map_summary.json",
+    "byte_identical": true,
+    "sha256": "e6c497265a2fe23ce9219fb040b9d467e6822918e208f34dd5a2172365636863"
+  },
+  {
+    "file": "s4_misspec_summary.json",
+    "byte_identical": true,
+    "sha256": "00436ad0f1b9d9bc5e851ca372de6493b247a323657d2e49dede5c1de85d7ede"
+  },
+  {
+    "file": "s4_pilot_summary.json",
+    "byte_identical": true,
+    "sha256": "69a9d8538f37feac7cd5858c7042582b56c7effd18116173f085d61d310b91cb"
+  },
+  {
+    "file": "s4_sizing.json",
+    "byte_identical": true,
+    "sha256": "c2e9464acd2eb1b6e5567add43fef6489a33c408d1f41384aad7bfdcb8e936ee"
+  },
+  {
+    "file": "s4_stress_summary.json",
+    "byte_identical": true,
+    "sha256": "5164ceaee5056fe7fad6f8b8795f87d34a0b931874d1239cfd934767b3e602cb"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-11",
+  "scope": "bounded takeover inspection; not full R4 review",
+  "head": "e6483a673303d69f0fbf43d52e30a6725b072542",
+  "content_commit": "957c8d73be5a3a5a6c301929f7f4036d70d70ac3",
+  "tag_commit": "7a6196fdbdc3593ab8a138e4757eb4014fcc826c",
+  "required_manifest_files_matched": 840,
+  "optional_manifest_files_matched": 2,
+  "s4_summaries_byte_identical": 7,
+  "tests": {
+    "passed": 447,
+    "setup_errors": 1,
+    "reason": "sandbox denied localhost HTTP socket bind",
+    "seconds": 179.55
+  },
+  "worker_repro_markers": 0,
+  "worker_repro_trials": 5,
+  "missing_prediction_mutations_refused": 4,
+  "saved_rows_audited": 364320,
+  "saved_bad_rows": 0,
+  "wrong_initial_verdicts": 228,
+  "wrong_initial_underdetermined_verdicts": 226,
+  "wrong_initial_definite_verdicts": 2,
+  "new_model_calls": 0,
+  "confirmatory_authorized": false,
+  "full_r4_review_complete": false,
+  "freeze_record_exists": false,
+  "remote_release_independently_downloaded": false,
+  "new_material_published": false
+}

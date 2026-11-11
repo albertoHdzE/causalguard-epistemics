@@ -1,0 +1,50 @@
+{
+  "schema": "causalguard-takeover-inspection-v1",
+  "date": "2026-11-11",
+  "files": [
+    {
+      "path": "HANDOFF.md",
+      "sha256": "8e2365636e701ae895bd914040b6a2e998bd443e759f570da676515551ce2ad6"
+    },
+    {
+      "path": "delegation/FABLE_RESEARCH_PROMPT.md",
+      "sha256": "b5f31ace9e41f4ae53c25d4da9b1e1ad9f06bcde708a1b40832fdd21be129f79"
+    },
+    {
+      "path": "reports/takeover_r4/INSPECTION.md",
+      "sha256": "8ef21ba0b42bd4765408d137d7a6ae26d9567c6e6e15d7c428481bee512df3da"
+    },
+    {
+      "path": "reports/takeover_r4/audit_takeover.py",
+      "sha256": "1987e9652da4f8d94d8ff50b5856560c4ecced47976076e83129cccc5f1445ce"
+    },
+    {
+      "path": "reports/takeover_r4/error_type_audit.json",
+      "sha256": "17b10448abd175cc76973a149d82bbcfd3f5bbdcd5274abeff4b89bcb43d46f6"
+    },
+    {
+      "path": "reports/takeover_r4/manifest-output.txt",
+      "sha256": "70f2a70f744ef2169e026293bee6021fad02dbb10a79a41d359ca0398f046b27"
+    },
+    {
+      "path": "reports/takeover_r4/missing_prediction_evidence.json",
+      "sha256": "bdb6b602b492ee8bbabd0ac80480992d20a4916b5dc61e858b5aef9137ce8855"
+    },
+    {
+      "path": "reports/takeover_r4/summary_comparison.json",
+      "sha256": "9057645ae43366f4c9961b81786da69201147ba1aa415c53efbdc31180bc0bfe"
+    },
+    {
+      "path": "reports/takeover_r4/test-output.txt",
+      "sha256": "eaf8a6c4a9d1cb1267480d0cc583010170d18689cc6a44770da01b4dbc952902"
+    },
+    {
+      "path": "reports/takeover_r4/verification.json",
+      "sha256": "03369d6f1bb95bac840382695dcaad5342c833d248953ab34ff816f8f2979dfc"
+    },
+    {
+      "path": "reports/takeover_r4/worker_repro.txt",
+      "sha256": "2da69341fc8e83df3cb0afb56ebedb47e7df59f3974a476257203c29788fad22"
+    }
+  ]
+}

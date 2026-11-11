@@ -1,0 +1,2 @@
+/var/folders/54/tt8_6d357691t8wwz7yxv9880000gn/T/r3_start_race_rbpiiwru
+[{'marker': False, 'exit': -9}, {'marker': False, 'exit': -9}, {'marker': False, 'exit': -9}, {'marker': False, 'exit': -9}, {'marker': False, 'exit': -9}]
