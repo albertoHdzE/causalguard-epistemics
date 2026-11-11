@@ -1,0 +1,38 @@
+{
+  "schema": "causalguard-p0-repair-evidence-r4",
+  "date": "2026-11-11",
+  "R3-01": {
+    "fix": "analysis/s2_analysis.py: required_pred_keys(cell kind) from the fixed study contract (experiments.s2.V2_SELECTORS; noise cells + mdl_two_part_*), exact key-set check on every row, state-dependent nulls (nonempty V: selectors 0/1; empty V: selectors None; noise MDL 0/1 in both), observed_majority validated; world_scores scores exactly the declared methods; _contrast refuses rows lacking a method and reports genuinely empty query subsets",
+    "tests": "tests/test_completeness_r4.py (15 tests: first/middle/last-row omissions for index and circuit, nonempty null, extra key, empty-V semantics, noise cell end-to-end and MDL omissions at 3 positions, no first-row inference, denominator refusal)",
+    "reanalysis": {
+      "command": ".venv/bin/python -m causalguard analyze-s2-v2 --run-dir runs/S2-dev-v2 --mc-run-dir runs/S2-dev-v2-mcdiag --out /tmp/cg-r4/s2b",
+      "per_world_csv_identical_to_r3": true,
+      "per_world_csv_sha256": "710b6b492ce58c0fbcc7db23e96f32a72cd127ded475a80150b0a48a48f62361",
+      "summary_json_field_differences_vs_r3": 0,
+      "primary": {
+        "estimate": 0.000875,
+        "ci95": [
+          -0.011125,
+          0.012125
+        ],
+        "n_worlds": 250
+      }
+    }
+  },
+  "R3-02": {
+    "fix": "runner.py: _lifeline_closed (non-blocking select + EOF read) and _refuse_if_supervisor_dead, called synchronously after the shared workers lock is held and again before every payload; the watchdog is retained for death during a payload",
+    "tests": "tests/test_runner_r4.py (9 tests: 5 repeats of the immediate-side-effect case, controlled late start after a drain followed by a completing resume, live-supervisor no-false-positive, watchdog kill mid-payload, primitive)",
+    "reviewer_repro_replay": {
+      "script": "reports/review_r3/repro_worker_start.py",
+      "before_r3_review": "5/5 markers written",
+      "after": "0/5 markers written, all exits -9"
+    },
+    "guarantee": "startup refusal for an already-closed lifeline plus prompt watchdog cleanup for later death; not a guarantee against instructions executed in the instant of a simultaneous supervisor death"
+  },
+  "full_suite": {
+    "command": "CAUSALBOOL_ROOT=~/.cache/causalguard/CausalBool .venv/bin/python -m pytest -o addopts='' -q",
+    "result": "243 passed in 116.66s"
+  },
+  "large_experiment_rerun": false,
+  "model_calls": 0
+}

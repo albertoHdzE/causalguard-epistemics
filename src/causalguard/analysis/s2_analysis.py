@@ -364,7 +364,20 @@ SUPPORTED_ENDPOINT_V2_KEYS = {
     "regime": "uniform_states", "budget": 16, "query_kind": "intervention", "queries_per_world": 16,
     "method_a": "index", "method_b": "vs_majority", "majority_tie_rule": "half_credit", "unit": "world",
     "bootstrap_replicates": 5000, "bootstrap_seed": 20261109}
-V2_CODECS = ("index", "circuit", "bdd", "dnf")
+from ..experiments.s2 import V2_SELECTORS as V2_CODECS  # noqa: E402  (one owner of the planned selector set)
+
+# R3-01: the planned method keys of every saved row come from the FIXED study contract, never from the first row.
+# Ordinary cells carry one prediction per selector; noise cells additionally carry the two-part MDL prediction of
+# every selector under the identical residual model (experiments.s2.run_world_v2).
+NOISE_METHODS = tuple(f"mdl_two_part_{c}" for c in V2_CODECS)
+
+
+def required_pred_keys(cell_kind: str) -> tuple[str, ...]:
+    if cell_kind == "ordinary":
+        return V2_CODECS
+    if cell_kind == "noise":
+        return V2_CODECS + NOISE_METHODS
+    raise ValueError(f"unknown cell kind {cell_kind!r}")
 
 
 class AnalysisRefused(SystemExit):
@@ -412,14 +425,38 @@ def _expected_world_v2(payload: dict):
     return world, design, exp
 
 
-def _check_row_values(q: dict, empty: bool, where: str) -> None:
-    for k in ("pred", "truth", "verdict", "kind"):
+def _is01(v) -> bool:
+    return v in (0, 1) and not isinstance(v, bool)
+
+
+def _check_row_values(q: dict, empty: bool, where: str, cell_kind: str = "ordinary") -> None:
+    """Value semantics of one saved row.  R3-01: the prediction keys must be EXACTLY the planned keys of this cell
+    kind, and their values are state dependent: in a nonempty version space every selector prediction is 0/1 (a
+    selector always returns a compatible model there, so None is a missing output, not a legitimate null); in an
+    empty version space every selector prediction is None; the noise-cell two-part MDL predictions select over
+    the whole class and are therefore 0/1 in both states."""
+    for k in ("pred", "truth", "verdict", "kind", "observed_majority"):
         if k not in q:
             raise OutputDefect(f"{where}: row lacks {k}")
-    if q["truth"] not in (0, 1) or isinstance(q["truth"], bool):
+    if not _is01(q["truth"]):
         raise OutputDefect(f"{where}: truth {q['truth']!r} not in {{0,1}}")
+    if not _is01(q["observed_majority"]):
+        raise OutputDefect(f"{where}: observed_majority {q['observed_majority']!r} not in {{0,1}}")
     if not isinstance(q["pred"], dict) or any(v not in (0, 1, None) or isinstance(v, bool) for v in q["pred"].values()):
         raise OutputDefect(f"{where}: malformed predictions")
+    req = required_pred_keys(cell_kind)
+    if set(q["pred"]) != set(req):
+        miss, extra = sorted(set(req) - set(q["pred"])), sorted(set(q["pred"]) - set(req))
+        raise OutputDefect(f"{where}: prediction keys differ from the study contract (missing {miss}, extra {extra})")
+    for m in V2_CODECS:
+        v = q["pred"][m]
+        if empty and v is not None:
+            raise OutputDefect(f"{where}: selector {m} predicts {v!r} in an empty version space")
+        if not empty and v is None:
+            raise OutputDefect(f"{where}: selector {m} prediction missing (None) in a nonempty version space")
+    for m in req[len(V2_CODECS):]:
+        if not _is01(q["pred"][m]):
+            raise OutputDefect(f"{where}: noise-cell method {m} prediction {q['pred'][m]!r} not in {{0,1}}")
     if empty:
         if any(q.get(k) is not None for k in ("p", "num", "den", "vs_majority", "tie")) or \
                 q["verdict"] != "inconsistent_evidence_or_class":
@@ -513,8 +550,9 @@ def validate_world_v2(item_id: str, payload: dict, out: dict) -> dict:
         rows = c.get("queries", [])
         if not isinstance(c.get("empty"), bool):
             raise OutputDefect(f"{where}: malformed empty flag")
+        kind = "noise" if key[0].startswith("noise") else "ordinary"
         for q in rows:
-            _check_row_values(q, c["empty"], where)
+            _check_row_values(q, c["empty"], where, kind)
         complete, legacy = _match_rows(rows, exp, where)
         legacy_any |= legacy
         cells[key] = "complete" if complete else "short"
@@ -653,12 +691,16 @@ V2_METHODS = V2_CODECS + ("vs_majority", "uniform", "observed_majority")
 
 
 def world_scores(qs: list[dict], methods=V2_METHODS) -> dict:
+    """Scores for EXACTLY the declared methods (R3-01: never inferred from the first row).  A row lacking a declared
+    method's output refuses; validated records cannot reach that branch."""
     out = {"n_queries": len(qs)}
     if not qs:
         return out
+    derived = ("vs_majority", "uniform", "observed_majority")
     for m in methods:
-        if m in qs[0]["pred"] or m in ("vs_majority", "uniform", "observed_majority"):
-            out[m] = float(np.mean([_acc(q, m) for q in qs]))
+        if m not in derived and any(m not in q["pred"] for q in qs):
+            raise AnalysisRefused(f"method {m} is declared for this cell but absent from a row")
+        out[m] = float(np.mean([_acc(q, m) for q in qs]))
     out["ties"] = sum(1 for q in qs if q.get("tie"))
     out["truth_prevalence"] = float(np.mean([q["truth"] for q in qs]))
     ans = [q for q in qs if q["verdict"] in ("entailed", "refuted")]
@@ -695,20 +737,28 @@ def per_world_table_v2(recs: list[dict]) -> list[dict]:
         for rate, nz in r.get("noise", {}).items():
             for B, res in nz["budgets"].items():
                 qs = [q for q in res["queries"] if q["kind"] == "intervention"]
-                sc = world_scores(qs, V2_METHODS + tuple(f"mdl_two_part_{c}" for c in V2_CODECS))
+                sc = world_scores(qs, V2_METHODS + NOISE_METHODS)
                 rows.append({**base, "regime": f"uniform_states+noise{rate}", "budget": int(B), "kind": "intervention",
                              "subset": "all", "empty_vs": res["empty"], **sc})
     return rows
 
 
 def _contrast(rows, a, b, reps, seed=20261109):
-    sel = [r for r in rows if a in r and b in r]
+    """R3-01: the denominator is every supplied world row.  Only rows of a genuinely EMPTY query subset
+    (n_queries == 0, e.g. no h>1 query in that world) carry no score and are excluded, and that exclusion is
+    reported; a nonempty row lacking either method refuses rather than silently shrinking N."""
+    empty_subset = [r for r in rows if r.get("n_queries", 1) == 0]
+    sel = [r for r in rows if r.get("n_queries", 1) != 0]
+    if lacking := [r.get("world_id", "?") for r in sel if a not in r or b not in r]:
+        raise AnalysisRefused(f"contrast {a}-{b}: {len(lacking)} planned world rows lack a method score "
+                              f"(first {lacking[:3]}); refusing to change the denominator")
     if not sel:
         return None
     d = np.array([r[a] - r[b] for r in sel])
     s = np.array([r["family"] for r in sel])
     br = paired_cluster_bootstrap(d, s, replicates=reps, seed=seed)
     return {"a": a, "b": b, "estimate": br.estimate, "ci95": [br.lo, br.hi], "se": br.se, "n_worlds": br.n_worlds,
+            **({"excluded_empty_query_subset_rows": len(empty_subset)} if empty_subset else {}),
             "n_strata": br.n_strata, "replicates": reps, "seed": seed,
             "mean_a": stratified_mean(np.array([r[a] for r in sel]), s),
             "mean_b": stratified_mean(np.array([r[b] for r in sel]), s),
@@ -934,7 +984,7 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, endpoint_path: Path, mc_run:
             s = np.array([r["family"] for r in rr])
             e = {"rate": float(rate), "budget": B, "n_worlds": len(rr),
                  "exact_vs_empty_rate": float(np.mean([r["empty_vs"] for r in rr]))}
-            for m in tuple(f"mdl_two_part_{c}" for c in V2_CODECS) + ("index", "vs_majority"):
+            for m in NOISE_METHODS + ("index", "vs_majority"):
                 e[m] = stratified_mean(np.array([r[m] for r in rr]), s)
             noise.append(e)
     stress["noise_two_part_mdl_all_codes"] = noise

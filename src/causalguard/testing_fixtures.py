@@ -40,3 +40,11 @@ def hung_with_child(p: dict) -> dict:
 
 def crash(p: dict) -> dict:
     os._exit(7)
+
+
+def touch_marker(p: dict) -> dict:
+    """Immediate side effect (R3-02 tests): writes a marker before doing anything else, then optionally sleeps."""
+    from pathlib import Path
+    Path(p["marker"]).write_text("scientific work started")
+    time.sleep(p.get("sleep", 0))
+    return {"marker": p["marker"]}

@@ -786,6 +786,26 @@ _WATCHDOG = (
 _WORKER_HOLD: FileLock | None = None
 
 
+def _lifeline_closed(fd: int) -> bool:
+    """Synchronous, non-blocking check (R3-02).  The supervisor never writes to the lifeline, so the read end is
+    readable only at EOF, i.e. when every write end is closed: the supervisor exited or died."""
+    import select
+    r, _, _ = select.select([fd], [], [], 0)
+    if not r:
+        return False
+    try:
+        return os.read(fd, 1) == b""
+    except OSError:
+        return True
+
+
+def _refuse_if_supervisor_dead(fd: int | None) -> None:
+    if fd is not None and _lifeline_closed(fd):
+        # No payload may start for a dead supervisor.  Kill this whole group (worker, watchdog, descendants), the
+        # same action the watchdog takes for a later death.
+        os.killpg(os.getpgid(0), signal.SIGKILL)
+
+
 def _worker_main(conn, fn, lifeline=None, workers_lock: str | None = None) -> None:
     os.setsid()  # own session/process group: the parent (and the watchdog) can kill everything this worker starts
     global _WORKER_HOLD
@@ -793,6 +813,12 @@ def _worker_main(conn, fn, lifeline=None, workers_lock: str | None = None) -> No
         # SHARED hold for the life of this process: a new owner cannot proceed until every old worker is gone
         _WORKER_HOLD = FileLock(Path(workers_lock))
         _WORKER_HOLD.acquire(exclusive=False, blocking=True)
+    life_fd = lifeline.fileno() if lifeline is not None else None
+    # R3-02: the watchdog below observes the lifeline asynchronously, so a payload queued before it runs could
+    # start after the supervisor is already dead (and a late-starting old worker could pass the workers lock after
+    # a new owner drained it).  Refuse synchronously after the lock is held and again before every payload; the
+    # watchdog remains responsible for a supervisor death during a payload.
+    _refuse_if_supervisor_dead(life_fd)
     if lifeline is not None:
         # The watchdog lives in THIS process group and blocks on the lifeline; the supervisor holds the only write
         # end.  Supervisor exit/death (even SIGKILL of its whole group) => EOF => SIGKILL of this whole group.
@@ -809,6 +835,7 @@ def _worker_main(conn, fn, lifeline=None, workers_lock: str | None = None) -> No
         if msg is None:
             return
         payload = msg
+        _refuse_if_supervisor_dead(life_fd)
         t0 = time.time()
         try:
             out = fn(payload)
