@@ -76,7 +76,7 @@ class _NodeDomain:
 
     def __init__(self, n: int, k: int, cons: list[tuple[int, int]]):
         self.n, self.k = n, k
-        xs = np.array([x for x, _ in cons], dtype=np.int64)
+        xs = np.array([x for x, _ in cons], dtype=np.uint64)        # n <= 64 state bits (R5-04: was int64)
         vs = np.array([v for _, v in cons], dtype=np.int64)
         self.groups = []                          # (supports array (m, d), tables array T_d, consistent mask (m, |T_d|))
         self.count = 0
@@ -86,7 +86,7 @@ class _NodeDomain:
             if len(xs):
                 Y = np.zeros((len(F), len(xs)), dtype=np.int64)
                 for t in range(d):
-                    Y |= ((xs[None, :] >> F[:, t:t + 1]) & 1) << t
+                    Y |= (((xs[None, :] >> F[:, t:t + 1].astype(np.uint64)) & np.uint64(1)).astype(np.int64)) << t
                 mask = np.zeros(len(F), dtype=np.int64)
                 val = np.zeros(len(F), dtype=np.int64)
                 conflict = np.zeros(len(F), dtype=bool)
@@ -109,8 +109,9 @@ class _NodeDomain:
         for F, T, ok in self.groups:
             d = F.shape[1]
             y = np.zeros(len(F), dtype=np.int64)
+            su = np.uint64(s)
             for t in range(d):
-                y |= ((s >> F[:, t]) & 1) << t
+                y |= (((su >> F[:, t].astype(np.uint64)) & np.uint64(1)).astype(np.int64)) << t
             bit = (T[None, :] >> y[:, None]) & 1
             c1 = int((ok & (bit == 1)).sum())
             c[1] += c1

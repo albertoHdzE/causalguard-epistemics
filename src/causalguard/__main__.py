@@ -95,6 +95,9 @@ def _items_from_config(cfg: dict):
                  for n in SIZES for b in range(8) for be in BACKENDS]
         items += [(f"n{n}|b{b}|{be}|r{r}", {"n": n, "base": b, "backend": be, "rep": r})
                   for (n, b) in REPEAT_SUBSET for be in BACKENDS for r in (1, 2)]
+        if cfg.get("only"):                                    # supplementary rerun of named cells (R5-04)
+            items = [it for it in items if it[1]["n"] in cfg["only"]["sizes"] and
+                     it[1]["backend"] in cfg["only"]["backends"]]
         _r.Random(cfg["order_seed"]).shuffle(items)           # randomized backend/instance order (serial run)
         yield from items
     elif study in ("R5-A-DET", "R5-A-AI"):

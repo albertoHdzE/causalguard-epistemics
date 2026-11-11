@@ -26,7 +26,7 @@ def sha(p):
 
 
 def entries(man: dict) -> list[dict]:
-    if man.get("manifest_version") in ("r2", "r3", "r4"):
+    if man.get("manifest_version") in ("r2", "r3", "r4", "r5"):
         return man["files"]
     out = [{**e, "required": True, "group": "report"} for e in man["reports"]]
     out += [{**e, "required": True, "group": "raw_run_v1"} for e in man["raw_runs"]]

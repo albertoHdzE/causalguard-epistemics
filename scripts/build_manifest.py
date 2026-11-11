@@ -32,7 +32,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 MANIFEST_EXCLUDED = {"r2": {"reports/REVIEW_READY_R2.md"}, "r3": {"reports/REVIEW_READY_R3.md"},
-                     "r4": {"reports/REVIEW_READY_R4.md"}}
+                     "r4": {"reports/REVIEW_READY_R4.md"},
+                     "r5": {"reports/REVIEW_READY_R5.md", "reports/RELEASE_CHECK_R5.md", "reports/acceptance_r5.json"}}
 
 
 def sha(p: Path) -> str:
@@ -57,7 +58,7 @@ def run_files(rid: str) -> list[Path]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("version", choices=["r2", "r3", "r4"])
+    ap.add_argument("version", choices=["r2", "r3", "r4", "r5"])
     ap.add_argument("--runs", nargs="+", required=True)
     ap.add_argument("--prior-runs", nargs="*", default=[], help="r3: iteration-2 runs (v0.2.0-dev asset)")
     ap.add_argument("--historical-runs", nargs="*", default=[])
@@ -72,7 +73,10 @@ def main() -> None:
     ledger = ROOT / "runs" / "s4-calls" / "ledger.jsonl"
     if a.version == "r4" and ledger.exists():
         new_raw.append(ledger)                     # S4 model-call ledger (every physical attempt, incl. smokes)
-    new_group = {"r2": "raw_run_v2", "r3": "raw_run_v3", "r4": "raw_run_v4"}[a.version]
+    ledger5 = ROOT / "runs" / "r5-calls" / "ledger.jsonl"
+    if a.version == "r5" and ledger5.exists():
+        new_raw.append(ledger5)                    # R5 model-call ledger (every physical attempt, all phases)
+    new_group = {"r2": "raw_run_v2", "r3": "raw_run_v3", "r4": "raw_run_v4", "r5": "raw_run_v5"}[a.version]
     excluded = MANIFEST_EXCLUDED[a.version]
     files += [entry(f, new_group) for f in new_raw]
     files += [entry(f, "raw_run_v2") for rid in a.prior_runs for f in run_files(rid)]
@@ -82,14 +86,14 @@ def main() -> None:
     files += [entry(f, "report") for f in sorted((ROOT / "reports").rglob("*"))
               if f.is_file() and f.relative_to(ROOT).as_posix() not in excluded]
     files += [entry(f, "config") for f in sorted((ROOT / "configs").rglob("*.json"))]
-    if a.version in ("r3", "r4"):
+    if a.version in ("r3", "r4", "r5"):
         files += [entry(f, "doc") for f in sorted((ROOT / "docs").rglob("*")) if f.is_file()]
     asset = ROOT / a.asset
     asset.parent.mkdir(exist_ok=True)
     with tarfile.open(asset, "w:gz") as tf:
         for f in new_raw:
             tf.add(f, arcname=str(f.relative_to(ROOT)))
-    label = {"r2": "iteration-2", "r3": "iteration-3", "r4": "iteration-4"}[a.version] + " development runs"
+    label = {"r2": "iteration-2", "r3": "iteration-3", "r4": "iteration-4", "r5": "iteration-5"}[a.version] + " development runs"
     assets = [{"path": str(asset.relative_to(ROOT)), "bytes": asset.stat().st_size, "sha256": sha(asset),
                "required": False, "group": "release_asset",
                "contents": f"{label}: {', '.join(a.runs)} + runs/registry.jsonl"}]
@@ -111,6 +115,15 @@ def main() -> None:
         man["registry_note"] = ("iteration-1..3 raw runs are verified by manifest_r3.json from releases v0.1.0-dev.."
                                 "v0.3.0-dev; this manifest adds the iteration-4 runs (asset v0.4.0-dev) and the S4 "
                                 "call ledger. runs/registry.jsonl is append-only.")
+    if a.version == "r5":
+        files_extra = [entry(ROOT / "artifacts" / "r5_source_manifest.json", "source_manifest")]
+        man["files"] = files_extra + man["files"]
+        man["previous_manifest"] = {"path": "artifacts/manifest_r4.json",
+                                    "sha256": sha(ROOT / "artifacts" / "manifest_r4.json")}
+        man["registry_note"] = ("iteration-1..4 raw runs are verified by manifest_r4.json (and earlier) from releases "
+                                "v0.1.0-dev..v0.4.0-dev; this manifest adds the iteration-5 runs (asset v0.5.0-dev) "
+                                "and the R5 call ledger. Third-party Boolean models are NOT included (retrieval "
+                                "manifest only).")
     if a.version == "r3":
         man["previous_manifest"] = {"path": "artifacts/manifest_r2.json",
                                     "sha256": sha(ROOT / "artifacts" / "manifest_r2.json")}

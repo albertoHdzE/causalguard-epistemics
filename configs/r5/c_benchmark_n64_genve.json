@@ -1,0 +1,1 @@
+{"mode": "development", "r5_track": "C", "study": "R5-C", "run_id": "r5-c-bench-n64-genve-v3", "order_seed": 20261111, "workers": 1, "item_timeout_s": 900, "only": {"sizes": [64], "backends": ["GEN-VE"]}, "note": "Supplementary rerun of the GEN-VE n=64 cells after R5-04 (int64 overflow); all other cells from r5-c-bench-v2."}

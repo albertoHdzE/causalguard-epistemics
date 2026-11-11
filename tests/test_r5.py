@@ -299,3 +299,20 @@ def test_stop_action_is_valid_and_carries_verdict():
     e = I.ai_episode(w, "D", MockProvider(script=lambda m, t, s: '{"verdict": "underdetermined", "measure": null}'),
                      CallBudget(8, None))
     assert e["status"] == "stopped" and e["n_attempts"] == 1 and set(e["per_turn"]) == {"0", "1", "2", "3", "4"}
+
+
+def test_gen_ve_handles_64_bit_states():
+    from causalguard.r5.counting import VECounter
+    from causalguard.s4.mechspace import MechanismSpace
+    rng = random.Random(64)
+    n = 64
+    net = Network(n, tuple(Rule(tuple(sorted(rng.sample(range(n), 2))), rng.getrandbits(4)).canonical() for _ in range(n)))
+    obs = []
+    for x in [rng.getrandbits(64) | (1 << 63) for _ in range(3)]:
+        y = reference.run(net, x, Intervention("none"), 1)[-1]
+        obs.append(Observation(x, Intervention("none"), 1, tuple((j, (y >> j) & 1) for j in range(n))))
+    ev = Evidence(n, tuple(obs))
+    q = Query.point((1 << 63) | 5, n, Intervention("none"), 1, Pred.lit(63, 1))
+    ve, ms = VECounter(ev, 2), MechanismSpace(ev, 2)
+    c = ms.claim_counts(q)
+    assert ve.counts == ms.counts() and ve.count(q) == (c.num, c.den)
