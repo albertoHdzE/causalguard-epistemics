@@ -431,12 +431,13 @@ def _check_row_values(q: dict, empty: bool, where: str) -> None:
         raise OutputDefect(f"{where}: malformed exact counts {q.get('num')!r}/{q.get('den')!r}") from None
     if str(num) != q["num"] or str(den) != q["den"] or not (0 <= num <= den) or den <= 0:
         raise OutputDefect(f"{where}: invalid exact counts {q['num']}/{q['den']}")
-    tie = 2 * num == den
-    if q.get("tie") is not tie or q.get("vs_majority") != (None if tie else int(2 * num > den)):
+    from ..versionspace import posterior_from_counts
+    post = posterior_from_counts(num, den)
+    if q.get("tie") is not post["tie"] or q.get("vs_majority") != post["majority"]:
         raise OutputDefect(f"{where}: tie/majority inconsistent with counts {num}/{den}")
-    if q.get("p") != num / den:
+    if q.get("p") != post["p"]:
         raise OutputDefect(f"{where}: p inconsistent with counts")
-    if q["verdict"] != ("refuted" if num == 0 else "entailed" if num == den else "underdetermined"):
+    if q["verdict"] != post["verdict"]:
         raise OutputDefect(f"{where}: verdict inconsistent with counts")
 
 

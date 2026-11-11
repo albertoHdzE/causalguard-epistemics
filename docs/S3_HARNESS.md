@@ -164,8 +164,11 @@ Offline scoring:
 
 ## Iteration 2 harness (task version `s3-tasks-v2`; `WorldHarnessV2`; development only)
 
-**World.** n=4, k≤2; budget 3/5/8 by world index; observation states, queries and the renaming permutation come
-from an exogenous design stream, and the mechanism is evaluated afterwards.
+**World.** n=4, k≤2; budget 3/5/8 by world index; observation states and the renaming permutation come from an
+exogenous design stream, and the mechanism is evaluated afterwards. *Correction (iteration 3, ERRATA_R3 E8):* query
+**selection is oracle-balanced**. Candidates are drawn from the design stream but accepted by their evidence-relative
+verdict, so the final queries are outcome-stratified, not exogenous. The exogeneity test covers observation inputs
+only. The budget index also fixes the requested target verdict (B3→entailed, B5→refuted, B8→underdetermined; E6).
 
 **Items.** 3 balanced items (target verdicts a random permutation of entailed/refuted/underdetermined, each
 searched in one budget × horizon × intervention cell; ≤400 candidates, else the first candidate is kept and

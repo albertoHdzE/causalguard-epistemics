@@ -99,6 +99,7 @@ def main(argv=None):
     a2.add_argument("--run-dir", required=True, action="append")
     a2.add_argument("--endpoint", default="configs/endpoints/S2-primary-v2.json")
     a2.add_argument("--mc-run-dir", default=None)
+    a2.add_argument("--no-development-sizing", action="store_true", help="skip prospective sizing (development only)")
     a2.add_argument("--out", default="reports/development_r3")
     a1 = sub.add_parser("analyze-s1-v2")
     a1.add_argument("--run-dir", required=True, action="append")
@@ -133,7 +134,8 @@ def main(argv=None):
     if args.cmd == "analyze-s2-v2":
         from .analysis.s2_analysis import analyze_v2
         res = analyze_v2([Path(d) for d in args.run_dir], Path(args.out), Path(args.endpoint),
-                         Path(args.mc_run_dir) if args.mc_run_dir else None)
+                         Path(args.mc_run_dir) if args.mc_run_dir else None,
+                         development_sizing=False if args.no_development_sizing else None)
         print(json.dumps(res, indent=1, default=float)[:4000])
         return 0
     if args.cmd == "analyze-s1-v2":

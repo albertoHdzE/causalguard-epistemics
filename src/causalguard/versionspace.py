@@ -688,13 +688,19 @@ def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
 MAJORITY_TIE_RULE = "half_credit"   # an exact tie scores 0.5 (expected accuracy of any tie-break; polarity-free)
 
 
-def exact_posterior(vs: VersionSpace, q: Query) -> dict:
-    """Exact uniform-compatible posterior summary of q: probability, exact majority decision and tie flag."""
-    num, den = exact_query_counts(vs, q)
+def posterior_from_counts(num: int, den: int) -> dict:
+    """The ONE derivation of probability, exact majority, tie and verdict from exact integer counts (also used by
+    the analysis-side validator to check saved records)."""
     tie = 2 * num == den
     return {"num": num, "den": den, "p": num / den if den else None, "method": "exact_counts",
             "majority": None if tie else int(2 * num > den), "tie": tie,
             "verdict": (Verdict.REFUTED if num == 0 else Verdict.ENTAILED if num == den else Verdict.UNDERDETERMINED).value}
+
+
+def exact_posterior(vs: VersionSpace, q: Query) -> dict:
+    """Exact uniform-compatible posterior summary of q: probability, exact majority decision and tie flag."""
+    num, den = exact_query_counts(vs, q)
+    return posterior_from_counts(num, den)
 
 
 def boolean_support(vs: VersionSpace, q: Query) -> set[bool]:

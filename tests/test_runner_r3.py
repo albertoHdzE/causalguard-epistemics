@@ -254,3 +254,26 @@ def test_ledger_shared_lock_file_is_outside_ledger(tmp_path):
     led = Ledger(tmp_path / "access_ledger.jsonl", shared=True)
     led.append({"a": 1})
     assert read_jsonl(tmp_path / "access_ledger.jsonl") == [{"a": 1}]
+
+
+def test_worker_started_after_supervisor_death_never_runs_work(tmp_path):
+    """Startup race: the lifeline's write end is already closed when a worker starts (its supervisor died between
+    spawning and setup).  The worker's group must die promptly, release the workers lock and run no payload."""
+    import multiprocessing as mp
+
+    from causalguard.runner import FileLock, _worker_main
+    ctx = mp.get_context("spawn")
+    conn, child = ctx.Pipe()
+    life_r, life_w = ctx.Pipe(duplex=False)
+    lock = tmp_path / "w.lock"
+    proc = ctx.Process(target=_worker_main, args=(child, fx.echo, life_r, str(lock)), daemon=True)
+    proc.start()
+    child.close()
+    life_r.close()
+    life_w.close()                                   # "supervisor death" before the worker finished its setup
+    conn.send({"value": 1, "sleep": 30})             # work that must never complete
+    proc.join(10)
+    assert not proc.is_alive()
+    with pytest.raises(EOFError):                    # the pipe is closed and no result was ever produced
+        conn.recv()
+    assert FileLock(lock).acquire(exclusive=True, timeout=5.0)

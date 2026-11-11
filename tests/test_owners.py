@@ -17,6 +17,12 @@ GUARDS = {
     "freeze record schema": (r'^RECORD_SCHEMA = "causalguard-freeze-record-v2"', "freeze.py"),
     "decoder bundle measurement": (r"^def decoder_bundle\(", "codec.py"),
     "nested per-query SIGALRM (inside items only)": (r"signal\.SIGALRM", "experiments/s1.py"),
+    # iteration 3
+    "verdict/vector coherence rule": (r">= max\(probs\.values\(\)\)|< max\(probs\.values\(\)\)", "llm/parse.py"),
+    "no-clobber attempt publication": (r"os\.link\(", "runner.py"),
+    "strict attempt validator": (r"^def validate_attempt\(", "runner.py"),
+    "run phase from provenance": (r"^def run_phase\(", "runner.py"),
+    "S2 endpoint reconciliation": (r"^def validate_world_v2\(", "analysis/s2_analysis.py"),
 }
 
 

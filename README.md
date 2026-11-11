@@ -1,6 +1,6 @@
 # CausalGuard — compressed symbolic models for auditable epistemic improvement
 
-**Status: development release `v0.2.0-dev` (iteration 2, 2026-11-10, pre-sprint; the AI × Epistemics sprint runs 2026-11-13 to 11-15). Not a final study release. No confirmatory result exists; confirmatory runs are prepared but NOT authorized (no freeze record).** The review package is `reports/REVIEW_READY_R2.md`; the iteration-1 release `v0.1.0-dev` and its records are preserved unchanged.
+**Status: development release `v0.3.0-dev` (iteration 3, bounded repair, 2026-11-10/11, pre-sprint; the AI × Epistemics sprint runs 2026-11-13 to 11-15). Not a final study release. No confirmatory result exists; confirmatory runs are prepared but NOT authorized (no freeze record).** The review package is `reports/REVIEW_READY_R3.md`. The releases `v0.1.0-dev` and `v0.2.0-dev` and their records are preserved unchanged; corrections to them are listed in `reports/ERRATA_R3.md`.
 
 ## What this is
 
@@ -26,10 +26,12 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements-lock.txt && .venv
 ```
 Core dependency: numpy. Solver extras: python-sat, dd. No Wolfram, no GPU, no paid API.
 
-## Reproduce (iteration 2)
+## Reproduce (iterations 2-3)
 
 Long runs are resumable (`--resume`, identical plan required) and are normally launched from an immutable snapshot:
-`scripts/run_from_snapshot.sh <commit> <log-name> python -m causalguard run --config ...`.
+`scripts/run_from_snapshot.sh <commit> <log-name> python -m causalguard run --config ...`. One live process owns a
+run at a time (a second opener is refused); a killed supervisor's workers are reaped by their watchdog before a
+resume may proceed (`docs/EXECUTION.md`).
 
 | Step | Command | Measured (M3 Ultra) |
 |---|---|---|
@@ -37,21 +39,22 @@ Long runs are resumable (`--resume`, identical plan required) and are normally l
 | Fast smoke (3 S2 worlds) | `python -m causalguard run --config configs/s2_ci_smoke.json --runs-root /tmp/runs --quiet` | ~2 s |
 | S2 development v2 (670 worlds) | `python -m causalguard run --config configs/s2_dev_v2.json --quiet` | ~25 s wall on 24 workers |
 | S2 MC diagnostic (200 worlds) | `python -m causalguard run --config configs/s2_dev_v2_mcdiag.json --quiet` | ~16 s |
-| S2 analysis v2 | `python -m causalguard analyze-s2-v2 --run-dir runs/S2-dev-v2 --mc-run-dir runs/S2-dev-v2-mcdiag --out reports/development_r2` | ~3 min |
-| S1 repair panel | `python -m causalguard run --config configs/s1_dev_v2_panel.json --quiet`; `python -m causalguard analyze-s1-v2 --run-dir runs/S1-dev-v2-panel --out reports/development_r2` | see report |
+| S2 analysis v2 | `python -m causalguard analyze-s2-v2 --run-dir runs/S2-dev-v2 --mc-run-dir runs/S2-dev-v2-mcdiag --out reports/development_r3` (R3 analysis; R2 output kept in `reports/development_r2`) | ~3 min |
+| S1 repair panel | `python -m causalguard run --config configs/s1_dev_v2_panel.json --quiet`; `python -m causalguard analyze-s1-v2 --run-dir runs/S1-dev-v2-panel --out reports/development_r3` | see report |
 | S3 v2 panels (local model servers) | `python -m causalguard.experiments.s3 --config configs/s3v2_<panel>_<model>.json --run-id <id> --quiet` | see report |
-| S3 analysis v2 | `python -m causalguard analyze-s3-v2 --run-dir runs/<id> ... --out reports/development_r2` | < 1 min |
+| S3 analysis (v3 audits) | `python -m causalguard analyze-s3-v2 --run-dir runs/<id> ... --out reports/development_r3` (role baselines: `fit-s3-role-baselines`) | < 1 min |
+| R2 → R3 field-level audit | `python scripts/audit_r3_before_after.py --quiet` | < 1 s |
 | Iteration-1 byte-level reproduction | `scripts/reproduce_v1.sh` (historical code from tag `v0.1.0-dev`) | ~3 min |
-| Verify artifacts | `python scripts/verify_artifacts.py artifacts/manifest_r2.json` (extract both release assets into the checkout for COMPLETE) | < 1 min |
+| Verify artifacts | `python scripts/verify_artifacts.py artifacts/manifest_r3.json` (extract the release assets into the checkout for COMPLETE) | < 1 min |
 
-Raw run records (`runs/`) are not in git; `artifacts/manifest_r2.json` lists every required file with its SHA-256 and the release assets that contain them.
+Raw run records (`runs/`) are not in git; `artifacts/manifest_r3.json` (historical: `manifest_r2.json`, `manifest.json`) lists every required file with its SHA-256 and the release assets that contain them.
 
 ## Results so far (development only)
-`reports/DEVELOPMENT_REPORT_R2.md` (iteration 2) and `reports/DEVELOPMENT_REPORT.md` (iteration 1, historical); sizing proposal `reports/DESIGN_SIZING_R2.md`; claims `reports/CLAIM_LEDGER_R2.csv`.
+`reports/DEVELOPMENT_REPORT_R3.md` (iteration 3 corrections), `reports/DEVELOPMENT_REPORT_R2.md` (iteration 2) and `reports/DEVELOPMENT_REPORT.md` (iteration 1, historical); sizing proposal `reports/DESIGN_SIZING_R2.md` (two-sided correction in ERRATA_R3); claims `reports/CLAIM_LEDGER_R3.csv`.
 
 ## Repository map
 `src/causalguard/` — `schema` (types), `semantics`, `reference` (independent oracle), `index_repr` (index families), `codec`, `query` (index backends), `bdd_ref` (independent BDD), `proofcheck` (RUP), `versionspace` (incl. exact posterior counts), `generators` (incl. exogenous S2 design v2), `freeze` (confirmatory lifecycle, not authorized), `dedup`, `s3_tasks`, `llm/`, `runner`, `stats`, `experiments/`, `analysis/`, `upstream_adapter`.
-`docs/` — SEMANTICS, CODEC, S3_HARNESS, PROTOCOL. `delegation/` — dated design history (pre-sprint). `reports/` — development evidence and the review package.
+`docs/` — SEMANTICS, CODEC, S3_HARNESS, PROTOCOL, EXECUTION, S3_FUTURE_DESIGN_R3 (proposal only). `delegation/` — dated design history (pre-sprint). `reports/` — development evidence and the review package.
 
 ## Provenance and license
 Original code: MIT (LICENSE). The license covers only the original CausalGuard code and documentation in this repository, not the upstream CausalBool repository. The upstream CausalBool method (pinned `376a11dd`) is cited and used read-only for parity tests; no upstream code is redistributed (UPSTREAM.md). Dating: PREEXISTING_WORK.md.

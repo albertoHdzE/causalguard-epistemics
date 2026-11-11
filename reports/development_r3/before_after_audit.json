@@ -1,0 +1,389 @@
+{
+ "protected_blocks_changed": [],
+ "r2_dir": "reports/development_r2",
+ "r3_dir": "reports/development_r3",
+ "studies": {
+  "S1": {
+   "protected_identical": {
+    "amortized_totals": true,
+    "certificate_levels": true,
+    "codec_roundtrip_failures": true,
+    "completion": true,
+    "construction_seconds_median": true,
+    "correctness": true,
+    "decoder_bundle": true,
+    "independent_worlds": true,
+    "large_n_unsat_type_validation": true,
+    "latency_completed_queries": true,
+    "median_archive_bits": true,
+    "outcome_balance_by_construction": true,
+    "worlds_by_cell": true
+   },
+   "query_grid_reconciliation": {
+    "codec_items_missing_codecs": {},
+    "ok_items_missing_query_rows": {},
+    "queries_per_world": 24,
+    "status": "complete"
+   },
+   "rss_cells": 49,
+   "rss_r2_zero_cells": 49,
+   "rss_r3_measured_items": 546,
+   "rss_r3_mib_median_range": [
+    24.9453125,
+    5003.9375
+   ],
+   "rss_r3_null_cells": 0,
+   "rss_r3_ok_items": 546,
+   "top_level_changes": {
+    "analysis_version": {
+     "added": 0,
+     "changed": 1,
+     "removed": 0
+    },
+    "changes_in_v3": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "peak_rss_coverage": {
+     "added": 98,
+     "changed": 0,
+     "removed": 0
+    },
+    "peak_rss_mib_median": {
+     "added": 0,
+     "changed": 49,
+     "removed": 0
+    },
+    "peak_rss_note": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "phase": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "query_grid_reconciliation": {
+     "added": 4,
+     "changed": 0,
+     "removed": 0
+    }
+   }
+  },
+  "S2": {
+   "completeness": {
+    "overall_study": "complete",
+    "required_null": "complete",
+    "structured_primary": "complete"
+   },
+   "legacy_row_outputs": {
+    "S2-dev-v2": 670
+   },
+   "per_world_csv_byte_identical": true,
+   "per_world_csv_sha256": "710b6b492ce58c0fbcc7db23e96f32a72cd127ded475a80150b0a48a48f62361",
+   "primary_ci95": [
+    -0.011125,
+    0.012125
+   ],
+   "primary_estimate": 0.0008749999999999996,
+   "primary_n_worlds": 250,
+   "primary_numbers_identical": true,
+   "primary_status_text": {
+    "r2": "complete (development; not confirmatory)",
+    "r3": "complete (development); not confirmatory"
+   },
+   "protected_identical": {
+    "EXPLORATORY_structured_minus_null|index-vs_majority": true,
+    "curves": true,
+    "design_simulation_null_index_minus_majority": true,
+    "design_simulation_revised_primary": true,
+    "exact_verdict_vs_sat_B16": true,
+    "mc_diagnostic": true,
+    "null_overlap_audit": true,
+    "null_uniform_H": true,
+    "primary_complete_case": true,
+    "primary_terminal_accounting": true,
+    "secondary_exploratory": true,
+    "stress_descriptive": true,
+    "ties": true
+   },
+   "top_level_changes": {
+    "analysis_version": {
+     "added": 0,
+     "changed": 1,
+     "removed": 0
+    },
+    "changes_in_v3": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "completeness": {
+     "added": 31,
+     "changed": 0,
+     "removed": 0
+    },
+    "overall_study_status": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "phase": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "primary": {
+     "added": 0,
+     "changed": 1,
+     "removed": 0
+    },
+    "required_null_status": {
+     "added": 1,
+     "changed": 0,
+     "removed": 0
+    },
+    "runs": {
+     "added": 5,
+     "changed": 0,
+     "removed": 0
+    }
+   }
+  },
+  "S3": {
+   "s3v2-diag-gemma3_12b-dev": {
+    "C_balanced_aggregate_coherence": {
+     "kind": "aggregate_disagreement(majority verdict vs mean vector)",
+     "mismatch": 2,
+     "saved_flag_mismatch": 0,
+     "tied_argmax": 0,
+     "valid_verdict_and_vector": 60
+    },
+    "exploratory_focus_excluding_identical": {
+     "T_cert-T_label|target_accuracy": null,
+     "excluded_worlds": [],
+     "n_worlds": 20,
+     "note": "exploratory sensitivity only; the original focus over all planned worlds is unchanged"
+    },
+    "focus": {
+     "ci95": [
+      -0.3,
+      0.0
+     ],
+     "dropped_nan_replicates": 0,
+     "estimate": -0.15,
+     "mean_a": 0.2,
+     "mean_b": 0.35,
+     "n_worlds": 20,
+     "replicates": 5000,
+     "se": 0.0807042690060889,
+     "seed": 20261109
+    },
+    "historical_baselines_identical": true,
+    "identical_claim_worlds": [],
+    "new_baseline_keys": [
+     "design_known_budget_rule|balanced",
+     "design_known_budget_rule|natural",
+     "design_known_budget_rule|target",
+     "role_surface_rule|balanced",
+     "role_surface_rule|natural",
+     "role_surface_rule|target"
+    ],
+    "protected_identical": {
+     "arms": true,
+     "confusion_balanced": true,
+     "contrasts": true,
+     "revisions": true,
+     "round_paths_balanced": true,
+     "target": true,
+     "transforms": true
+    },
+    "target_baselines": {
+     "design_known_budget_rule": {
+      "correct": 18,
+      "items": 20
+     },
+     "majority": {
+      "correct": 4,
+      "items": 20
+     },
+     "role_surface_rule": {
+      "correct": 18,
+      "items": 20
+     },
+     "surface_rule": {
+      "correct": 11,
+      "items": 20
+     }
+    },
+    "top_level_run_changes": [
+     "phase",
+     "r3_audits",
+     "summary"
+    ]
+   },
+   "s3v2-diag-qwen25_7b-dev": {
+    "C_balanced_aggregate_coherence": {
+     "kind": "aggregate_disagreement(majority verdict vs mean vector)",
+     "mismatch": 28,
+     "saved_flag_mismatch": 0,
+     "tied_argmax": 24,
+     "valid_verdict_and_vector": 60
+    },
+    "exploratory_focus_excluding_identical": {
+     "T_cert-T_label|target_accuracy": null,
+     "excluded_worlds": [],
+     "n_worlds": 20,
+     "note": "exploratory sensitivity only; the original focus over all planned worlds is unchanged"
+    },
+    "focus": {
+     "ci95": [
+      -0.35,
+      0.05
+     ],
+     "dropped_nan_replicates": 0,
+     "estimate": -0.15,
+     "mean_a": 0.35,
+     "mean_b": 0.5,
+     "n_worlds": 20,
+     "replicates": 5000,
+     "se": 0.10572704498664627,
+     "seed": 20261109
+    },
+    "historical_baselines_identical": true,
+    "identical_claim_worlds": [],
+    "new_baseline_keys": [
+     "design_known_budget_rule|balanced",
+     "design_known_budget_rule|natural",
+     "design_known_budget_rule|target",
+     "role_surface_rule|balanced",
+     "role_surface_rule|natural",
+     "role_surface_rule|target"
+    ],
+    "protected_identical": {
+     "arms": true,
+     "confusion_balanced": true,
+     "contrasts": true,
+     "revisions": true,
+     "round_paths_balanced": true,
+     "target": true,
+     "transforms": true
+    },
+    "target_baselines": {
+     "design_known_budget_rule": {
+      "correct": 18,
+      "items": 20
+     },
+     "majority": {
+      "correct": 4,
+      "items": 20
+     },
+     "role_surface_rule": {
+      "correct": 18,
+      "items": 20
+     },
+     "surface_rule": {
+      "correct": 11,
+      "items": 20
+     }
+    },
+    "top_level_run_changes": [
+     "phase",
+     "r3_audits",
+     "summary"
+    ]
+   },
+   "s3v2-heldout-qwen25_7b-dev": {
+    "C_balanced_aggregate_coherence": {
+     "kind": "aggregate_disagreement(majority verdict vs mean vector)",
+     "mismatch": 134,
+     "saved_flag_mismatch": 0,
+     "tied_argmax": 117,
+     "valid_verdict_and_vector": 297
+    },
+    "exploratory_focus_excluding_identical": {
+     "T_cert-T_label|target_accuracy": {
+      "ci95": [
+       -0.16161616161616163,
+       -0.010101010101010102
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.08080808080808081,
+      "mean_a": 0.3333333333333333,
+      "mean_b": 0.41414141414141414,
+      "n_worlds": 99,
+      "replicates": 5000,
+      "se": 0.0396978356946368,
+      "seed": 20261109
+     },
+     "excluded_worlds": [
+      2
+     ],
+     "n_worlds": 99,
+     "note": "exploratory sensitivity only; the original focus over all planned worlds is unchanged"
+    },
+    "focus": {
+     "ci95": [
+      -0.16,
+      0.0
+     ],
+     "dropped_nan_replicates": 0,
+     "estimate": -0.08,
+     "mean_a": 0.33,
+     "mean_b": 0.41,
+     "n_worlds": 100,
+     "replicates": 5000,
+     "se": 0.039354004212144744,
+     "seed": 20261109
+    },
+    "historical_baselines_identical": true,
+    "identical_claim_worlds": [
+     2
+    ],
+    "new_baseline_keys": [
+     "design_known_budget_rule|balanced",
+     "design_known_budget_rule|natural",
+     "design_known_budget_rule|target",
+     "role_surface_rule|balanced",
+     "role_surface_rule|natural",
+     "role_surface_rule|target"
+    ],
+    "protected_identical": {
+     "arms": true,
+     "confusion_balanced": true,
+     "contrasts": true,
+     "revisions": true,
+     "round_paths_balanced": true,
+     "target": true,
+     "transforms": true
+    },
+    "target_baselines": {
+     "design_known_budget_rule": {
+      "correct": 80,
+      "items": 100
+     },
+     "majority": {
+      "correct": 29,
+      "items": 100
+     },
+     "role_surface_rule": {
+      "correct": 79,
+      "items": 100
+     },
+     "surface_rule": {
+      "correct": 47,
+      "items": 100
+     }
+    },
+    "top_level_run_changes": [
+     "phase",
+     "r3_audits",
+     "summary"
+    ]
+   }
+  }
+ },
+ "verdict": "PASS: scientific blocks unchanged"
+}

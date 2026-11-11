@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "causalguard"
-version = "0.2.0.dev0"
+version = "0.3.0.dev0"
 description = "Compressed symbolic models for auditable epistemic improvement: index-family Boolean network representations, incomplete-evidence inference and controlled LLM evaluation."
 readme = "README.md"
 requires-python = ">=3.11"
