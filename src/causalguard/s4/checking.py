@@ -109,7 +109,7 @@ def _sat_crosscheck(ws: Workspace, q: Query, side_holds: bool) -> str:
     vs = _sat_only_space(ws.evidence, ws.hclass)
     vr = verdict(vs, q if side_holds else Query(q.quantifier, q.domain, q.intervention, q.horizon,
                                                 Pred.lit(q.target.node, 1 - q.target.value)),
-                 check_proof=ws.limits.proof_check)
+                 check_proof=ws.limits.proof_check, amo="ladder")
     v = vr.verdict.value
     if v in ("entailed", "underdetermined"):
         return "sat"

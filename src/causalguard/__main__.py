@@ -51,6 +51,12 @@ def _items_from_config(cfg: dict):
         for fam in cfg["families"]:
             for i in range(cfg.get("start", 0), cfg.get("start", 0) + cfg["worlds_per_family"]):
                 yield f"{fam}|{i}", {"salt": cfg["salt"], "index": i, "family": fam, **cfg.get("payload", {})}
+    elif study == "S4-PILOT":
+        for fam in cfg["families"]:
+            for i in range(cfg.get("start", 0), cfg.get("start", 0) + cfg["worlds_per_family"]):
+                yield f"{fam}|{i}", {"salt": cfg["salt"], "index": i, "family": fam, "provider": cfg["provider"],
+                                     "global_cap": cfg["global_cap"], "call_ledger": cfg["call_ledger"],
+                                     "world_cap": cfg["world_cap"]}
     elif study == "S4-STRESS":
         for cell in cfg["cells"]:
             for s in range(cell["seeds"]):
@@ -82,6 +88,9 @@ def _fn_for(study: str):
         return run_item
     if study.startswith("S4-"):
         from .s4 import offline
+        if study == "S4-PILOT":
+            from .s4.pilot import pilot_world
+            return pilot_world
         return {"S4-MAP": offline.map_world, "S4-ACTIVE": offline.active_world, "S4-STRESS": offline.stress_item,
                 "S4-KNOWN": offline.known_item}[study]
     raise SystemExit(study)

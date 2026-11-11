@@ -171,6 +171,8 @@ class OpenAICompatibleProvider(BaseProvider):
             raise FatalProviderError(f"non-JSON envelope: {raw[:200]!r}") from None
 
     def _send(self, messages: list[dict], temperature: float, seed: int | None) -> dict:
+        if self.cfg.backend == "ollama" and self.cfg.extra.get("ollama_native_options"):
+            return self._send_ollama_native(messages, temperature, seed)
         body = {"model": self.cfg.model, "messages": messages, "temperature": temperature,
                 "max_tokens": self.cfg.max_tokens, "stream": False}
         if seed is not None:
@@ -184,6 +186,25 @@ class OpenAICompatibleProvider(BaseProvider):
         usage = r.get("usage") or {}
         return {"content": content if content is not None else "", "finish_reason": choice.get("finish_reason"),
                 "prompt_tokens": usage.get("prompt_tokens"), "completion_tokens": usage.get("completion_tokens"),
+                "response_model": r.get("model")}
+
+    def _send_ollama_native(self, messages: list[dict], temperature: float, seed: int | None) -> dict:
+        """Ollama native /api/chat (iteration 4): the OpenAI-compatible endpoint cannot set the context window, and
+        a silently truncated prompt would invalidate multi-turn episodes.  ``extra.ollama_native_options`` (e.g.
+        {"num_ctx": 16384}) is sent verbatim with temperature, seed and num_predict = max_tokens."""
+        opts = {**self.cfg.extra["ollama_native_options"], "temperature": temperature,
+                "num_predict": self.cfg.max_tokens}
+        if seed is not None:
+            opts["seed"] = seed
+        r = self._http(self.root + "/api/chat", {"model": self.cfg.model, "messages": messages, "stream": False,
+                                                  "options": opts})
+        try:
+            content = r["message"].get("content")
+        except (KeyError, TypeError, AttributeError):
+            raise FatalProviderError(f"malformed envelope: {str(r)[:200]}") from None
+        fr = r.get("done_reason")
+        return {"content": content if content is not None else "", "finish_reason": "length" if fr == "length" else fr,
+                "prompt_tokens": r.get("prompt_eval_count"), "completion_tokens": r.get("eval_count"),
                 "response_model": r.get("model")}
 
     def _try(self, fn):

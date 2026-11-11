@@ -353,8 +353,13 @@ def uniform_prob_true(vs: VersionSpace, q: Query, rng: np.random.Generator, exac
 class _Enc:
     """Complete CNF encoding of H restricted by evidence, plus a point-query trajectory."""
 
-    def __init__(self, vs: VersionSpace):
+    def __init__(self, vs: VersionSpace, amo: str = "pairwise"):
+        """``amo``: at-most-one encoding of the per-node support selector.  'pairwise' (historical default,
+        O(C(n,k)^2) clauses per node) or 'ladder' (iteration 4: Sinz sequential counter, O(C(n,k)) clauses and
+        auxiliary variables; equisatisfiable, same selector semantics)."""
         from .query import _CNF
+        if amo not in ("pairwise", "ladder"):
+            raise ValueError(f"unknown at-most-one encoding {amo!r}")
         self.vs = vs
         self.cnf = _CNF()
         n, k = vs.n, vs.cls.k
@@ -391,9 +396,23 @@ class _Enc:
             if sels:
                 self.cnf.add(list(sels.values()))       # at least one subset
                 svals = list(sels.values())
-                for a in range(len(svals)):            # at most one (pairwise; <= C(n,k) options)
-                    for b in range(a + 1, len(svals)):
-                        self.cnf.add([-svals[a], -svals[b]])
+                if amo == "pairwise":
+                    for a in range(len(svals)):        # at most one (pairwise; <= C(n,k) options)
+                        for b in range(a + 1, len(svals)):
+                            self.cnf.add([-svals[a], -svals[b]])
+                else:                                   # sequential counter: r_i <=> some x_1..x_i is true
+                    r_prev = None
+                    for i, x in enumerate(svals):
+                        if i == len(svals) - 1:
+                            if r_prev is not None:
+                                self.cnf.add([-x, -r_prev])
+                            break
+                        r = self.cnf.var()
+                        self.cnf.add([-x, r])
+                        if r_prev is not None:
+                            self.cnf.add([-r_prev, r])
+                            self.cnf.add([-x, -r_prev])
+                        r_prev = r
 
     def out_lit(self, j: int, state_lits: list[int]) -> int:
         """Literal for node j's output given symbolic state bits."""
@@ -439,8 +458,8 @@ class _Enc:
         return Network(self.vs.n, tuple(rules))
 
 
-def verdict(vs: VersionSpace, q: Query, check_proof: bool = False, solver: str = "cadical153"
-            ) -> VerdictResult:
+def verdict(vs: VersionSpace, q: Query, check_proof: bool = False, solver: str = "cadical153",
+            amo: str = "pairwise") -> VerdictResult:
     """Evidence-relative verdict for a point query over ALL of V(D)."""
     from pysat.solvers import Solver
 
@@ -456,7 +475,7 @@ def verdict(vs: VersionSpace, q: Query, check_proof: bool = False, solver: str =
     except Unsupported:
         return VerdictResult(Verdict.UNSUPPORTED, Certificate(scope, VerificationLevel.NONE, None, ev_h,
                                                               q.digest()), True, count)
-    enc = _Enc(vs)
+    enc = _Enc(vs, amo)
     if not enc.feasible:  # pragma: no cover - enumerated V(D) nonempty implies feasible
         raise AssertionError("SAT encoding infeasible while enumerated version space is nonempty")
     ql = enc.query_lit(q)
@@ -564,6 +583,35 @@ def _bits_matrix(n: int) -> np.ndarray:
     return ((xs[:, None] >> np.arange(n)[None, :]) & 1).astype(np.int64)  # (N, n)
 
 
+_LIMB = 26
+
+
+def _limbs(w) -> list[np.ndarray]:
+    """Exact decomposition of nonnegative Python-int weights into 26-bit int64 limbs (w = sum_l limb_l 2^(26 l))."""
+    w = [int(x) for x in w]
+    top = max((x.bit_length() for x in w), default=0)
+    return [np.array([(x >> (_LIMB * l)) & ((1 << _LIMB) - 1) for x in w], dtype=np.int64)
+            for l in range(max(1, -(-top // _LIMB)))]
+
+
+def _wcolsum(A01: np.ndarray, w) -> np.ndarray:
+    """Exact weighted column sums sum_m w_m A[m, s] as an object array (int64 products per limb are exact)."""
+    out = np.zeros(A01.shape[1], dtype=object)
+    for l, lw in enumerate(_limbs(w)):
+        out = out + ((A01.astype(np.int64) * lw[:, None]).sum(axis=0).astype(object) << (_LIMB * l))
+    return out
+
+
+def _wgram(A01: np.ndarray, w, N: int) -> np.ndarray:
+    """Exact A^T diag(w) A as an object array."""
+    G = np.zeros((N, N), dtype=object)
+    if len(A01) == 0:
+        return G
+    for l, lw in enumerate(_limbs(w)):
+        G = G + ((A01.T @ (A01 * lw[:, None])).astype(object) << (_LIMB * l))
+    return G
+
+
 def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | None = None) -> tuple[int, int]:
     """Exact (number of models in V(D) for which q holds, |V(D)|) for a point query with h <= 3.
 
@@ -575,8 +623,8 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
     if weights is not None:
         if len(weights) != vs.n or any(len(w) != len(c) for w, c in zip(weights, vs.compatible)):
             raise SemanticsError("weights must align with the compatible sets")
-        if any(int(w.sum()) >= 1 << 52 for w in weights):
-            raise Unsupported("weights too large for the exact float64 Gram path (sum >= 2^52)")
+        if any(int(np.asarray(w).min(initial=0)) < 0 for w in weights):
+            raise SemanticsError("weights must be nonnegative")
     n = vs.n
     N = 1 << n
     x0 = point_query_parts(q, n)
@@ -586,8 +634,8 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
     clamped = [bool(clamp and (m >> j) & 1) for j in range(n)]
     cval = [(v >> j) & 1 for j in range(n)]
     W = [np.ones(len(c), dtype=np.int64) for c in vs.compatible] if weights is None else \
-        [np.asarray(w, dtype=np.int64) for w in weights]
-    sizes = [int(len(c)) for c in vs.compatible] if weights is None else [int(w.sum()) for w in W]
+        [np.array([int(x) for x in w], dtype=object) for w in weights]
+    sizes = [int(len(c)) for c in vs.compatible] if weights is None else [int(sum(w)) for w in W]
     den = math.prod(sizes)
     h = q.horizon
     tnodes = sorted(q.target.nodes())
@@ -611,7 +659,7 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
                 if j in tnodes:
                     c = combo[tnodes.index(j)]
                     w *= (sizes[j] if c == cval[j] else 0) if clamped[j] else (
-                        int((A[j][:, s0] == c).sum()) if weights is None else int(W[j][A[j][:, s0] == c].sum()))
+                        int((A[j][:, s0] == c).sum()) if weights is None else int(sum(W[j][A[j][:, s0] == c])))
                 else:
                     w *= sizes[j]
             num += w
@@ -626,12 +674,18 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
             if weights is None:
                 parts[a] = (Aa, int(Aa.shape[0]), Aa.sum(axis=0).astype(np.int64))
             else:
-                wa = W[j][a0 == a].astype(np.float64)
-                parts[a] = (Aa, int(W[j][a0 == a].sum()), (Aa * wa[:, None]).sum(axis=0).astype(np.int64), wa)
+                wa = W[j][a0 == a]
+                parts[a] = (Aa, int(sum(wa)), _wcolsum(A[j][a0 == a], wa), wa)
         split.append(parts)
 
     def obj(x):
+        if isinstance(x, np.ndarray) and x.dtype == object:
+            return x
         return np.asarray(x, dtype=np.int64).astype(object)
+
+    def sc(x):      # a (possibly > int64) weighted scalar; plain int on the unweighted path
+        return x if weights is None else np.array(x, dtype=object)
+    fdt = np.int64 if weights is None else object
 
     if h == 2:
         # grid over s1 (N,)
@@ -641,10 +695,10 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
         for j in range(n):
             if clamped[j]:
                 valid &= bits[:, j] == cval[j]
-                cnt[j] = {c: np.full(N, sizes[j] if c == cval[j] else 0) for c in (0, 1)}
+                cnt[j] = {c: np.full(N, sizes[j] if c == cval[j] else 0, dtype=fdt) for c in (0, 1)}
                 continue
             a = bits[:, j]
-            n_a = np.where(a == 1, split[j][1][1], split[j][0][1])
+            n_a = np.where(a == 1, sc(split[j][1][1]), sc(split[j][0][1]))
             col = np.where(a == 1, split[j][1][2][s1], split[j][0][2][s1])
             cnt[j] = {1: col, 0: n_a - col}
         base = np.ones(N, dtype=object)
@@ -666,13 +720,13 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
     for j in range(n):
         if clamped[j]:
             valid &= (bits[:, j] == cval[j])[:, None] & (bits[:, j] == cval[j])[None, :]
-            tcnt[j] = {c: np.full((N, N), sizes[j] if c == cval[j] else 0, dtype=np.int64) for c in (0, 1)}
+            tcnt[j] = {c: np.full((N, N), sizes[j] if c == cval[j] else 0, dtype=fdt) for c in (0, 1)}
             if j not in tnodes:
                 base = base * sizes[j]
             continue
         a = bits[:, j][:, None]           # bit j of s1 (selects the subset at s0)
         e = bits[:, j][None, :]           # bit j of s2 (= required output at s1)
-        n_a = np.where(a == 1, split[j][1][1], split[j][0][1])
+        n_a = np.where(a == 1, sc(split[j][1][1]), sc(split[j][0][1]))
         col1 = np.where(a == 1, split[j][1][2][:, None], split[j][0][2][:, None])   # #{A[m,s1]=1} as (N,1)
         Ne = np.where(e == 1, col1, n_a - col1)                                     # (N, N)
         if j not in tnodes:
@@ -682,8 +736,10 @@ def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | N
         K = {}
         for aa in (0, 1):
             Aa, na, col = split[j][aa][:3]
-            Aw = Aa if weights is None else Aa * split[j][aa][3][:, None]
-            G = (Aa.T @ Aw).round().astype(np.int64) if na else np.zeros((N, N), dtype=np.int64)
+            if weights is None:
+                G = (Aa.T @ Aa).round().astype(np.int64) if na else np.zeros((N, N), dtype=np.int64)
+            else:
+                G = _wgram(Aa.astype(np.int64), split[j][aa][3], N)
             ci, cj = col[:, None], col[None, :]
             K[aa] = {(1, 1): G, (1, 0): ci - G, (0, 1): cj - G, (0, 0): na - ci - cj + G}
         tc = {}

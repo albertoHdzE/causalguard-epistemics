@@ -66,7 +66,7 @@ def _weights(vs, bits):
     for comp in vs.compatible:
         b = bits[comp]
         mb = int(b.max())
-        W.append((np.int64(1) << (mb - b)).astype(np.int64))
+        W.append(np.array([1 << (mb - int(x)) for x in b], dtype=object))     # exact Python ints
         off.append(mb)
     return W, off
 

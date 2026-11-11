@@ -1,0 +1,7 @@
+{"study": "S4-PILOT", "mode": "development", "run_id": "s4-pilot-mistral_small_24b-v1", "salt": "dev-s4-pilot-v1",
+ "families": ["sparse_conj", "canalizing", "repeated_modules", "ordered_motif", "parity", "bounded_random", "order_disrupted", "uniform_H"], "worlds_per_family": 5, "start": 0,
+ "provider": {"kind": "openai_compatible", "backend": "lmstudio", "base_url": "http://127.0.0.1:1234/v1", "model": "mistral-small-3.2-24b-instruct-2506-mlx",
+              "max_tokens": 1200, "seed": 0, "timeout_s": 300, "max_transport_retries": 1},
+ "global_cap": 2560, "world_cap": 25, "call_ledger": "RUNS/s4-calls/ledger.jsonl",
+ "workers": 1, "item_timeout_s": 3600,
+ "note": "S4 bounded development pilot (docs/S4_PROTOCOL_DRAFT.md). Local inference only. LM Studio model loaded with --context-length 16384 before the run."}

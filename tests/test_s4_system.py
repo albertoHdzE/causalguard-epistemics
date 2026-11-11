@@ -128,3 +128,57 @@ def test_offline_items_smoke():
     assert all(q["exact_match"] for q in k["queries"]) and all(q["mu"] == q["d"] - q["c"] for q in k["queries"])
     s = offline.stress_item({"n": 12, "seed": 3, "backend": "C", "budget": 8})
     assert set(s["verdicts"]) == {"unsupported_or_resource"}           # materialization refused, recorded
+
+
+def test_weighted_counts_exact_with_huge_weights():
+    """Codec weights can span > 64 bits within one node; the limb path must stay exact (bruteforce)."""
+    import itertools
+
+    import numpy as np
+
+    from causalguard.schema import Pred, Query
+    from causalguard.versionspace import exact_query_counts
+    from test_s4_mechspace import rand_evidence, rand_iv, rand_net
+    tested = 0
+    for seed in range(40):
+        rng = random.Random(seed)
+        n = rng.choice([3, 4])
+        net = rand_net(rng, n, 2)
+        ev = rand_evidence(rng, net, rng.choice([3, 5, 8]))
+        vs = build_version_space(ev, HypothesisClass(n, 2))
+        if vs.product_size() > 5000:
+            continue
+        W = [np.array([rng.choice([1, 2 ** 40 + 7, 2 ** 70 + 3]) for _ in c], dtype=object) for c in vs.compatible]
+        for _ in range(3):
+            q = Query.point(rng.randrange(1 << n), n, rand_iv(rng, n), rng.choice([1, 2, 3]),
+                            Pred.lit(rng.randrange(n), rng.randint(0, 1)))
+            num = den = 0
+            for combo in itertools.product(*[range(len(c)) for c in vs.compatible]):
+                w = 1
+                for j, i in enumerate(combo):
+                    w *= int(W[j][i])
+                den += w
+                num += w * int(predict(network_from_choice(vs.cls, [int(vs.compatible[j][i])
+                                                                    for j, i in enumerate(combo)]), q))
+            assert exact_query_counts(vs, q, W) == (num, den)
+            tested += 1
+    assert tested >= 30
+
+
+def test_ladder_amo_is_equivalent_to_pairwise():
+    """B's competent sequential-counter at-most-one encoding gives the same verdicts (with RUP proof checks)."""
+    from causalguard.schema import Pred, Query
+    from causalguard.versionspace import verdict
+    from test_s4_mechspace import rand_evidence, rand_iv, rand_net
+    n_checked = 0
+    for seed in range(15):
+        rng = random.Random(seed)
+        n, k = rng.choice([3, 4, 5]), rng.choice([1, 2, 3])
+        vs = build_version_space(rand_evidence(rng, rand_net(rng, n, k), rng.choice([2, 4, 8])), HypothesisClass(n, k))
+        if vs.empty:
+            continue
+        for _ in range(3):
+            q = Query.point(rng.randrange(1 << n), n, rand_iv(rng, n), rng.choice([1, 2, 3]), Pred.lit(rng.randrange(n), 1))
+            assert verdict(vs, q).verdict == verdict(vs, q, check_proof=True, amo="ladder").verdict
+            n_checked += 1
+    assert n_checked >= 30

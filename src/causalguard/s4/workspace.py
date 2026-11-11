@@ -223,7 +223,7 @@ class GenericWorkspace(ExplicitBase):
         from ..versionspace import verdict
         self._last_witness_nets = {}
         vs = self.vs if self.vs is not None else _sat_only_space(self.evidence, self.hclass)
-        vr = verdict(vs, q, check_proof=self.limits.proof_check)
+        vr = verdict(vs, q, check_proof=self.limits.proof_check, amo="ladder")
         wm = vr.certificate.witness_models
         nets = [Network.from_json(m) for m in wm]
         v = vr.verdict.value
@@ -256,7 +256,7 @@ def _sat_feasible(evidence, hclass) -> bool:
     from ..versionspace import CandidateClass, VersionSpace, _Enc
     shell = VersionSpace(CandidateClass(hclass.n, hclass.max_indegree, [], np.zeros((0, 0), dtype=np.uint8), {},
                                         np.zeros(0, dtype=np.int64)), evidence, [np.zeros(1, dtype=np.int64)] * hclass.n)
-    enc = _Enc(shell)
+    enc = _Enc(shell, "ladder")
     if not enc.feasible:
         return False
     with Solver(name="cadical153", bootstrap_with=enc.cnf.clauses) as sv:
