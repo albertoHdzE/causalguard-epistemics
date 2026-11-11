@@ -1,0 +1,95 @@
+{
+  "s3v2-diag-gemma3_12b-dev": {
+    "C_balanced_aggregates": {
+      "actual_argmax_mismatch": 2,
+      "flagged_mismatch": 0,
+      "valid_verdict_and_vector": 60
+    },
+    "D_label_paths_truth_round1_round2": {
+      "entailed|entailed|entailed": 17,
+      "refuted|refuted|refuted": 16,
+      "refuted|refuted|underdetermined": 4,
+      "underdetermined|underdetermined|underdetermined": 23
+    },
+    "budget_target_truth": {
+      "3": {
+        "entailed": 7
+      },
+      "5": {
+        "refuted": 7
+      },
+      "8": {
+        "refuted": 2,
+        "underdetermined": 4
+      }
+    },
+    "design_known_budget_only_target_correct": 18,
+    "n_worlds": 20,
+    "source_target_identical_claim_after_initial_edit_normalization": []
+  },
+  "s3v2-diag-qwen25_7b-dev": {
+    "C_balanced_aggregates": {
+      "actual_argmax_mismatch": 28,
+      "flagged_mismatch": 0,
+      "valid_verdict_and_vector": 60
+    },
+    "D_label_paths_truth_round1_round2": {
+      "entailed|entailed|underdetermined": 17,
+      "refuted|refuted|entailed": 1,
+      "refuted|refuted|refuted": 14,
+      "refuted|refuted|underdetermined": 5,
+      "underdetermined|underdetermined|underdetermined": 23
+    },
+    "budget_target_truth": {
+      "3": {
+        "entailed": 7
+      },
+      "5": {
+        "refuted": 7
+      },
+      "8": {
+        "refuted": 2,
+        "underdetermined": 4
+      }
+    },
+    "design_known_budget_only_target_correct": 18,
+    "n_worlds": 20,
+    "source_target_identical_claim_after_initial_edit_normalization": []
+  },
+  "s3v2-heldout-qwen25_7b-dev": {
+    "C_balanced_aggregates": {
+      "actual_argmax_mismatch": 134,
+      "flagged_mismatch": 0,
+      "valid_verdict_and_vector": 297
+    },
+    "D_label_paths_truth_round1_round2": {
+      "entailed|entailed|underdetermined": 98,
+      "refuted|refuted|entailed": 1,
+      "refuted|refuted|refuted": 80,
+      "refuted|refuted|underdetermined": 27,
+      "underdetermined|underdetermined|entailed": 1,
+      "underdetermined|underdetermined|refuted": 2,
+      "underdetermined|underdetermined|underdetermined": 91
+    },
+    "budget_target_truth": {
+      "3": {
+        "entailed": 27,
+        "underdetermined": 7
+      },
+      "5": {
+        "refuted": 32,
+        "underdetermined": 1
+      },
+      "8": {
+        "entailed": 6,
+        "refuted": 6,
+        "underdetermined": 21
+      }
+    },
+    "design_known_budget_only_target_correct": 80,
+    "n_worlds": 100,
+    "source_target_identical_claim_after_initial_edit_normalization": [
+      2
+    ]
+  }
+}

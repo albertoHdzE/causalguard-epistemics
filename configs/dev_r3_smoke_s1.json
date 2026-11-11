@@ -1,0 +1,52 @@
+{
+ "study": "S1",
+ "mode": "development",
+ "run_id": "dev-r3-smoke-s1",
+ "description": "Iteration-3 execution smoke (NOT evidence; latency not an isolated benchmark): all backends on one sparse_conj n=8 world (exhaustive reference applies) and one parity n=128 world (high n), original caps (20 s/query, 1200 s/item), maxtasks=1. Includes one deliberate supervisor-group SIGKILL and immediate resume (recorded).",
+ "salt": "dev-r3-smoke-s1",
+ "backends": [
+  "reference",
+  "literal",
+  "index_enum",
+  "index_cube",
+  "index_sat",
+  "bdd_ref",
+  "codecs"
+ ],
+ "query_timeout_s": 20,
+ "limits": {
+  "reference_max_n": 10,
+  "literal_max_n": 16,
+  "index_enum_max_n": 12,
+  "full_codec_max_n": 16,
+  "cube_budget": 20000,
+  "bdd_node_budget": 2000000,
+  "proof_check_max_n": 256
+ },
+ "workers": 4,
+ "maxtasks": 1,
+ "item_timeout_s": 1200,
+ "excluded_by_design": {
+  "dense_random": "n>10 (cannot instantiate a dense 2**n-entry function per node)",
+  "reference": "n>10",
+  "literal": "n>16",
+  "index_enum": "n>12",
+  "full codec": "n>16"
+ },
+ "cells": [
+  {
+   "family": "sparse_conj",
+   "grid": "small",
+   "n": 8,
+   "seeds": 1,
+   "start": 0
+  },
+  {
+   "family": "parity",
+   "grid": "large",
+   "n": 128,
+   "seeds": 1,
+   "start": 0
+  }
+ ]
+}

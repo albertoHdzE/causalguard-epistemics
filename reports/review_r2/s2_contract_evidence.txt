@@ -1,0 +1,3 @@
+MISSING_B16_CELL {"accounting": {"planned_worlds": 5, "ok_worlds": 5, "unresolved_worlds": [], "complete": true}, "primary_n": 4, "status": "complete (development; not confirmatory)", "null_B16": null}
+SHORT_PRIMARY_GRID {"accounting": {"planned_worlds": 5, "ok_worlds": 5, "unresolved_worlds": [], "complete": true}, "primary_n": 5, "primary_query_total": 65, "expected_queries": 80, "status": "complete (development; not confirmatory)"}
+fixture /var/folders/54/tt8_6d357691t8wwz7yxv9880000gn/T/cg_s2_r2_contract__57q8s2s

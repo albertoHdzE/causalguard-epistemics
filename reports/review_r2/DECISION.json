@@ -1,0 +1,41 @@
+{
+  "schema": "causalguard-review-decision-r2",
+  "review_id": "codex-r2-2026-11-10",
+  "date": "2026-11-10",
+  "reviewed_content_commit": "161123c98f88f78637c81b13b93d0749ae03243f",
+  "reviewed_release_commit": "9de376bf5fee11688d82463d1a4d7808867203e1",
+  "reviewed_source_tree_sha256": "adde979318c7a09e782767e8c75ac0243cf249e18f86e8b42b15189cb2137934",
+  "decision": "revise_before_confirmation",
+  "confirmatory_authorized": false,
+  "approved_studies": [],
+  "production_freeze_record_created": false,
+  "confirmatory_runs_executed": [],
+  "study_decisions": {
+    "S1": "scientific development accepted; repair shared execution, completeness and RSS reporting before freeze",
+    "S2": "revised scientific design accepted; repair shared execution and endpoint completeness before freeze",
+    "S3": "development only; offline corrections; no new LLM calls in iteration 3"
+  },
+  "s2_design_decisions": {
+    "primary": "retain S2-primary-v2 index minus exact compatible-set majority",
+    "structured_worlds": 1000,
+    "iid_uniform_H_null_worlds": 1000,
+    "misspecified_population": "retain as descriptive model-class adequacy and prediction-coverage diagnostic",
+    "structured_minus_null": "retain exploratory only",
+    "new_large_development_panel_required": false
+  },
+  "blocking_findings": [
+    "R2-01",
+    "R2-02",
+    "R2-03",
+    "R2-04",
+    "R2-05",
+    "R2-06"
+  ],
+  "s3_findings": [
+    "R2-07",
+    "R2-08",
+    "R2-09"
+  ],
+  "authorized_next_work": "reports/review_r2/REPAIR_SPEC.md sections A-D; development repairs, fixture tests, small smoke runs, offline reanalysis, public development release",
+  "wp10_wp11_authorized": false
+}

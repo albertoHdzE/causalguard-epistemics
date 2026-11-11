@@ -1,0 +1,22 @@
+Matplotlib is building the font cache; this may take a moment.
+{
+ "digest": "e509111326f9435c32ec204700e38474677c0310d1b1c3ce33c0ecc3734d5aa0",
+ "independent_worlds": 98,
+ "correctness": {
+  "compared_with_exhaustive_reference": {
+   "literal": 1152,
+   "index_enum": 1152,
+   "index_cube": 1147,
+   "index_sat": 1152,
+   "bdd_ref": 1152
+  },
+  "mismatches_vs_reference": {},
+  "cross_backend_disagreements_total": 0,
+  "disagreement_examples": [],
+  "witness_replay_failures": 0,
+  "bdd_answers_excluded_post_interrupt_legacy": 0,
+  "unsat_proofs_checked_ok": 696,
+  "unsat_proofs_not_certified": 1
+ },
+ "summary": "/tmp/causalguard-review-r2/s1-reproduction/s1_v2_summary.json"
+}

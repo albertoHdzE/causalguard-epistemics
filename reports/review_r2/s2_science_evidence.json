@@ -1,0 +1,75 @@
+{
+  "record_audit": {
+    "run_id": "S2-dev-v2",
+    "worlds": 670,
+    "cells": 15180,
+    "counted_queries": 347904,
+    "empty_queries": 16416,
+    "shape_errors": 0,
+    "internal_consistency_errors": 0
+  },
+  "exhaustive_check": {
+    "n": 2,
+    "kmax": 2,
+    "networks": 256,
+    "queries": 64,
+    "horizons": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "rng_seed": 604,
+    "mismatches": 0
+  },
+  "sizing_null_false_positive_rates": [
+    {
+      "N": 200,
+      "lower_tail": 0.0205,
+      "upper_tail": 0.027,
+      "two_sided": 0.0475
+    },
+    {
+      "N": 400,
+      "lower_tail": 0.0265,
+      "upper_tail": 0.0225,
+      "two_sided": 0.049
+    },
+    {
+      "N": 600,
+      "lower_tail": 0.0225,
+      "upper_tail": 0.0285,
+      "two_sided": 0.051000000000000004
+    },
+    {
+      "N": 800,
+      "lower_tail": 0.0245,
+      "upper_tail": 0.0245,
+      "two_sided": 0.049
+    },
+    {
+      "N": 1000,
+      "lower_tail": 0.025,
+      "upper_tail": 0.0225,
+      "two_sided": 0.0475
+    },
+    {
+      "N": 1200,
+      "lower_tail": 0.0235,
+      "upper_tail": 0.0225,
+      "two_sided": 0.046
+    },
+    {
+      "N": 1500,
+      "lower_tail": 0.027,
+      "upper_tail": 0.0275,
+      "two_sided": 0.0545
+    },
+    {
+      "N": 2000,
+      "lower_tail": 0.0215,
+      "upper_tail": 0.0315,
+      "two_sided": 0.053
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+Matplotlib is building the font cache; this may take a moment.
+{
+ "primary": {
+  "a": "index",
+  "b": "vs_majority",
+  "estimate": 0.0008749999999999996,
+  "ci95": [
+   -0.011125,
+   0.012125
+  ],
+  "se": 0.005992019439952506,
+  "n_worlds": 250,
+  "n_strata": 5,
+  "replicates": 5000,
+  "seed": 20261109,
+  "mean_a": 0.8899999999999999,
+  "mean_b": 0.8891250000000002,
+  "sd_delta": 0.09486874321268844,
+  "per_family": {
+   "canalizing": {
+    "mean_delta": 0.0175,
+    "n": 50
+   },
+   "conjunctive": {
+    "mean_delta": 0.0025,
+    "n": 50
+   },
+   "modular": {
+    "mean_delta": 0.009375,
+    "n": 50
+   },
+   "parity": {
+    "mean_delta": -0.02,
+    "n": 50
+   },
+   "random_lookup": {
+    "mean_delta": -0.005,
+    "n": 50
+   }
+  },
+  "status": "complete (development; not confirmatory)"
+ },
+ "accounting": {
+  "planned_worlds": 250,
+  "ok_worlds": 250,
+  "unresolved_worlds": [],
+  "complete": true
+ },
+ "summary": "/tmp/causalguard-review-r2/s2-reproduction/s2_v2_summary.json",
+ "digest": "f68b683a5453188b6f6df73577a3709c5c0161acd7d438e82973c3631bcdf2f8"
+}

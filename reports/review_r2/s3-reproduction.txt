@@ -1,0 +1,49 @@
+Matplotlib is building the font cache; this may take a moment.
+{
+ "digest": "3fac1d6deb1d3e64e518962073cadc4a3eae5822fb3995873d9b8708775044c8",
+ "summary": "/tmp/causalguard-review-r2/s3-reproduction/s3_v2_summary.json",
+ "focus": {
+  "s3v2-diag-qwen25_7b-dev": {
+   "estimate": -0.15,
+   "ci95": [
+    -0.35,
+    0.05
+   ],
+   "se": 0.10572704498664627,
+   "n_worlds": 20,
+   "replicates": 5000,
+   "dropped_nan_replicates": 0,
+   "seed": 20261109,
+   "mean_a": 0.35,
+   "mean_b": 0.5
+  },
+  "s3v2-diag-gemma3_12b-dev": {
+   "estimate": -0.15,
+   "ci95": [
+    -0.3,
+    0.0
+   ],
+   "se": 0.0807042690060889,
+   "n_worlds": 20,
+   "replicates": 5000,
+   "dropped_nan_replicates": 0,
+   "seed": 20261109,
+   "mean_a": 0.2,
+   "mean_b": 0.35
+  },
+  "s3v2-heldout-qwen25_7b-dev": {
+   "estimate": -0.08,
+   "ci95": [
+    -0.16,
+    0.0
+   ],
+   "se": 0.039354004212144744,
+   "n_worlds": 100,
+   "replicates": 5000,
+   "dropped_nan_replicates": 0,
+   "seed": 20261109,
+   "mean_a": 0.33,
+   "mean_b": 0.41
+  }
+ }
+}

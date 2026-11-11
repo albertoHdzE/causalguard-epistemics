@@ -1,0 +1,100 @@
+[
+  {
+    "case": "failure_resume",
+    "first_status": "complete_with_failures",
+    "resume_status": "complete",
+    "remaining_failures": 1
+  },
+  {
+    "case": "wrong_attempt_identity",
+    "accepted_results": {
+      "item": {
+        "pid": 34783,
+        "value": 1
+      }
+    }
+  },
+  {
+    "case": "corrupt_stored_plan",
+    "resume_accepted": true,
+    "stored_payload": {
+      "value": 999
+    },
+    "requested_payload": {
+      "value": 1
+    }
+  },
+  {
+    "fixture_root": "/var/folders/54/tt8_6d357691t8wwz7yxv9880000gn/T/causalguard_r2_runtime_review_pabcc6f8"
+  },
+  {
+    "exit_codes": [
+      0,
+      0
+    ],
+    "attempt_files": 1,
+    "attempt_end_events": [
+      {
+        "attempt": 1,
+        "event": "attempt_end",
+        "item_id": "item",
+        "seconds": 1.005,
+        "status": "ok",
+        "time": "2026-11-10T18:40:21Z"
+      },
+      {
+        "attempt": 1,
+        "event": "attempt_end",
+        "item_id": "item",
+        "seconds": 1.005,
+        "status": "ok",
+        "time": "2026-11-10T18:40:21Z"
+      }
+    ],
+    "results": {
+      "item": {
+        "pid": 34808,
+        "value": 1
+      }
+    },
+    "fixture_root": "/var/folders/54/tt8_6d357691t8wwz7yxv9880000gn/T/causalguard_r2_concurrent_review_4ml66ard"
+  },
+  {
+    "case": "parent_group_sigkill",
+    "parent_returncode": -9,
+    "worker_alive": true,
+    "grandchild_alive": true,
+    "worker_pid": 34822,
+    "child_pid": 34823,
+    "fixture_root": "/var/folders/54/tt8_6d357691t8wwz7yxv9880000gn/T/causalguard_r2_parentkill_review_ubci2far"
+  },
+  {
+    "cleanup_worker_alive": false,
+    "cleanup_child_alive": false
+  },
+  {
+    "case": "s1_rss_analysis",
+    "all_reported_rss_zero": true,
+    "reported_cells": 49,
+    "examples": [
+      {
+        "path": "runs/S1-dev-v2-panel/attempts/6b8485fa6d63cd5587cd/001.json",
+        "backend": "codecs",
+        "actual_worker_peak_rss_bytes": 98844672,
+        "output_has_worker_peak_rss_bytes": false
+      },
+      {
+        "path": "runs/S1-dev-v2-panel/attempts/9bd18b742e3deb36f923/001.json",
+        "backend": "index_sat",
+        "actual_worker_peak_rss_bytes": 33783808,
+        "output_has_worker_peak_rss_bytes": false
+      },
+      {
+        "path": "runs/S1-dev-v2-panel/attempts/3c7fb5aee5126a701ac4/001.json",
+        "backend": "literal",
+        "actual_worker_peak_rss_bytes": 35667968,
+        "output_has_worker_peak_rss_bytes": false
+      }
+    ]
+  }
+]

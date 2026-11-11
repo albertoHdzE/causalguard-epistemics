@@ -1,0 +1,6 @@
+config           required: listed 16, ok 16, mismatch 0, absent 0
+raw_run_v1       required: listed 21, ok 21, mismatch 0, absent 0
+raw_run_v2       required: listed 2384, ok 2384, mismatch 0, absent 0
+release_asset    optional: listed 2, ok 2, mismatch 0, absent 0
+report           required: listed 53, ok 53, mismatch 0, absent 0
+COMPLETE: all 2474 required files verified

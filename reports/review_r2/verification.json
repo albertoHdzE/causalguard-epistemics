@@ -1,0 +1,37 @@
+{
+  "reviewed_content_commit": "161123c98f88f78637c81b13b93d0749ae03243f",
+  "local_release_commit": "9de376bf5fee11688d82463d1a4d7808867203e1",
+  "source_tree_sha256": "adde979318c7a09e782767e8c75ac0243cf249e18f86e8b42b15189cb2137934",
+  "required_manifest_files_verified": 2474,
+  "test_result": {
+    "passed": 163,
+    "errors": 1,
+    "environment_blocked_test": "test_http_adapter_retries_5xx_not_4xx",
+    "reason": "sandbox prohibits local socket bind; PermissionError"
+  },
+  "github_remote_independently_verified": false,
+  "remote_limitation": "gh API connection failed; web GitHub page cache miss",
+  "checksums": {
+    "configs/confirmatory.json": "aefb5935062dafe2186caaecca89eeba7bd9236df6df119c4ef696c89810f9fa",
+    "configs/endpoints/S2-primary-v2.json": "1b797c8b293f51eadf06a9264652aa60bd6bd29a87ddf0df3e2d3ae5d98c72ac",
+    "artifacts/manifest_r2.json": "0cad85a0a172dc1ba1b5dbc27d2528a3ad9a52656c0517193f1ea659b769b62e"
+  },
+  "reproductions": {
+    "s1_v2_summary.json": {
+      "byte_identical": true,
+      "sha256": "e509111326f9435c32ec204700e38474677c0310d1b1c3ce33c0ecc3734d5aa0"
+    },
+    "s2_v2_summary.json": {
+      "byte_identical": true,
+      "sha256": "f68b683a5453188b6f6df73577a3709c5c0161acd7d438e82973c3631bcdf2f8"
+    },
+    "s2_v2_per_world.csv": {
+      "byte_identical": true,
+      "sha256": "710b6b492ce58c0fbcc7db23e96f32a72cd127ded475a80150b0a48a48f62361"
+    },
+    "s3_v2_summary.json": {
+      "byte_identical": true,
+      "sha256": "3fac1d6deb1d3e64e518962073cadc4a3eae5822fb3995873d9b8708775044c8"
+    }
+  }
+}
