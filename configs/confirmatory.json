@@ -1,15 +1,16 @@
 {
- "status": "PROPOSAL FOR REVIEW R2 \u2014 not frozen, not authorized. Becomes executable only together with a reviewer-issued docs/FREEZE_RECORD.json (schema causalguard-freeze-record-v2) at a clean freeze commit.",
+ "status": "PROPOSAL FOR REVIEW R3 \u2014 not frozen, not authorized. Becomes executable only together with a reviewer-issued docs/FREEZE_RECORD.json (schema causalguard-freeze-record-v2) at a clean freeze commit.",
  "confirmatory_authorized": false,
  "mode": "confirmatory",
  "salt_namespace": "confirm",
  "salt_rule": "salt = 'confirm-' + sha256(freeze_commit|causalguard-confirmatory-v2)[:16]; a public reproducibility identifier, not a secret seal (no-peeking is a process rule).",
- "development_manifest": "artifacts/manifest_r2.json",
+ "development_manifest": "artifacts/manifest_r3.json",
  "development_corpora": {
   "S2": [
    "runs/S2-dev-v1",
    "runs/S2-dev-null-v1",
-   "runs/S2-dev-v2"
+   "runs/S2-dev-v2",
+   "runs/dev-r3-smoke-s2"
   ]
  },
  "readiness_proposal": {
@@ -437,5 +438,6 @@
  "S3": {
   "status": "not_ready",
   "reason": "development only in iteration 2; see reports/REVIEW_READY_R2.md S3 section and the revised S3 sizing"
- }
+ },
+ "development_corpora_note": "dev-r3-final-smoke-s2 repeats dev-r3-smoke-s2 with the same salt (identical worlds), so listing one covers both; S2-dev-v2-mcdiag and S2-dev-v2-repro reuse S2-dev-v2 salts/indices"
 }

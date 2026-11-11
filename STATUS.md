@@ -1,37 +1,43 @@
 # STATUS
 
-_Last updated: 2026-11-10 (iteration 2, after Codex review R1). Pre-sprint development (the sprint starts 2026-11-13)._
+_Last updated: 2026-11-11 (iteration 3, bounded repair after Codex review R2). Pre-sprint development (the sprint
+starts 2026-11-13)._
 
-**Resume protocol.** Read this file, `DECISIONS.md` (D23+ for iteration 2), `git log` on branch `iteration-2`, and
-`runs/registry.jsonl` (runtime registry; the tracked `RUNS.jsonl` is the frozen iteration-1 registry). Every run is
-reconciled with `causalguard.runner.load_run(<run dir>)`. A run is continued only with `--resume` under an identical
-plan (same config and source-tree digest); long runs execute from an immutable snapshot worktree via
-`scripts/run_from_snapshot.sh <commit> <log> python -m ...`, so the main tree can be edited while they run.
+**Resume protocol.** Read, in this order:
+- this file;
+- `DECISIONS.md` (D36+ for iteration 3);
+- `git log` on branch `iteration-3`;
+- `runs/registry.jsonl` (runtime registry; the tracked `RUNS.jsonl` is the frozen iteration-1 registry).
 
-**Not authorized:** no `docs/FREEZE_RECORD.json`, no confirmatory run, no WP10/WP11 (reports/review_r1/DECISION.json).
+Every run is reconciled with `causalguard.runner.load_run(<run dir>)`. A run is continued only with `--resume`
+under an identical plan. Only one live process may own a run (`docs/EXECUTION.md`). Runs execute from an immutable
+snapshot worktree via `scripts/run_from_snapshot.sh <commit> <log> python -m ...`.
 
-## Iteration-2 work items (REPAIR_SPEC P1–P7)
+**Not authorized:** `docs/FREEZE_RECORD.json`, any confirmatory run, new LLM panels, and WP10/WP11. None of these
+exists or was started (`reports/review_r2/DECISION.json`: `confirmatory_authorized: false`).
+
+## Iteration-3 work items (reports/review_r2/REPAIR_SPEC.md A–D)
 
 | Item | State | Evidence |
 |---|---|---|
-| P1 exactness (R01), strict logs (R04), plan/endpoint binding (R05) | implemented + tested | versionspace.exact_query_counts / boolean_support; runner v2; analysis.s2_analysis.analyze_v2; tests/test_s2_v2.py, test_runner_v2.py |
-| P2 freeze lifecycle (R03), caps (R06), manifests (R08) | implemented + E2E fixture tests | src/causalguard/freeze.py, scripts/run_confirmatory.py, tests/test_freeze_lifecycle.py, scripts/verify_artifacts.py |
-| P3 S2 design v2 + revised primary + MC policy | implemented | generators.make_s2_design, configs/endpoints/S2-primary-v2.json |
-| P4 S2 development (670 worlds + MC diagnostic) | runs complete | runs/S2-dev-v2 (670 ok; D27), runs/S2-dev-v2-mcdiag (200 ok) |
-| P5 S1 repair panel | complete: 686/686 ok, 0 mismatches | runs/S1-dev-v2-panel; reports/development_r2/s1_v2_summary.json |
-| P6 S3 v2 development | complete: qwen diag + held-out (100/100 ok); gemma diag = floor diagnostic (D33); analysis D34 | runs/s3v2-*; reports/development_r2/s3_v2_summary.json |
-| P7 package + release | complete: content 161123c, tag v0.2.0-dev (prerelease) | reports/REVIEW_READY_R2.md §8 |
+| A ownership, no-clobber, parent death, status, strict validation (R2-01..04) | implemented + tested | runner.py; tests/test_runner_r3.py; docs/EXECUTION.md; D37 |
+| B completeness, RSS, phase (R2-05, R2-06) | implemented + tested; preserved data reanalysed (estimates unchanged) | analysis/s2_analysis.py, s1_analysis.py; tests/test_completeness_r3.py; reports/development_r3/; D38, D39 |
+| C S3 offline corrections (R2-07..09) | implemented + tested; no model calls | analysis/s3_analysis.py, llm/parse.py, llm/harness.py; tests/test_s3_r3.py; docs/S3_FUTURE_DESIGN_R3.md; D42 |
+| D reporting, smoke, audit, release | see REVIEW_READY_R3.md | DEVELOPMENT_REPORT_R3.md, ERRATA_R3.md, CLAIM_LEDGER_R3.csv, acceptance_r3.json, before_after_audit.json |
 
-## Runs (iteration 2)
+## Runs (iteration 3: execution smokes only, not evidence)
 
 | run id | snapshot | state |
 |---|---|---|
-| s3v2-diag-qwen25_7b-dev | 915f089c1db7 | complete: 20 ok; gate D29 passed |
-| s3v2-diag-gemma3_12b-dev | 915f089c1db7 | complete: 20 ok (interrupted 13:45Z and resumed 14:02Z, D32); gate D29 G3 failed (D33) |
-| s3v2-heldout-qwen25_7b-dev | dd63670a78b1 | complete: 100 ok, 0 failed (16:53Z) |
-| S2-dev-v2 | 01ca7072fb09 | complete: 670 ok, 0 failed (no `end` event, D27) |
-| S2-dev-v2-mcdiag | 01ca7072fb09 | complete: 200 ok |
-| S1-dev-v2-panel | dd63670a78b1 | complete: 686 ok |
+| dev-r3-smoke-s2 | c40c35f2e64d | complete 6/6 |
+| dev-r3-smoke-s1 | c40c35f2e64d | complete 14/14; one deliberate supervisor-group SIGKILL and an immediate resume (D40) |
+| dev-r3-final-smoke-s2 | 2209593a0f02 | complete 6/6 (final-source repeat; identical science) |
+| dev-r3-final-smoke-s1 | 2209593a0f02 | complete 14/14 (final-source repeat; identical science) |
+
+The iteration-2 runs (S2-dev-v2, S2-dev-v2-mcdiag, S2-dev-v2-repro, S1-dev-v2-panel, s3v2-*) are unchanged and were
+reanalysed read-only.
 
 ## Next exact actions
-1. None in iteration 2. Await Codex review R2. Do not create FREEZE_RECORD or run confirmation.
+
+1. None in iteration 3. Await Codex review R3 (`delegation/REVIEW_R3_REQUEST_PROMPT.md`).
+2. Do not create a freeze record or run confirmation.

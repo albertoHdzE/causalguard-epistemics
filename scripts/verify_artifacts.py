@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Verify an artifact manifest.  Prints the denominator for every class of file.
 
-  scripts/verify_artifacts.py [artifacts/manifest_r2.json]
+  scripts/verify_artifacts.py [artifacts/manifest_r3.json]
 
-r2 manifests: REQUIRED files must all exist and match; OPTIONAL release assets may be absent (reported).
+r2/r3 manifests: REQUIRED files must all exist and match; OPTIONAL release assets may be absent (reported).
 Exit 0 only if every required file was checked and matched; 1 on any mismatch; 2 if any required file is
 absent (verification incomplete -- extract the release assets into the checkout first); 3 if nothing loaded.
 The historical v0.1.0-dev manifest (artifacts/manifest.json) is verified with the same rules: its reports are
@@ -26,7 +26,7 @@ def sha(p):
 
 
 def entries(man: dict) -> list[dict]:
-    if man.get("manifest_version") == "r2":
+    if man.get("manifest_version") in ("r2", "r3"):
         return man["files"]
     out = [{**e, "required": True, "group": "report"} for e in man["reports"]]
     out += [{**e, "required": True, "group": "raw_run_v1"} for e in man["raw_runs"]]
@@ -36,7 +36,7 @@ def entries(man: dict) -> list[dict]:
 
 
 def main(argv) -> int:
-    path = Path(argv[1]) if len(argv) > 1 else ROOT / "artifacts" / "manifest_r2.json"
+    path = Path(argv[1]) if len(argv) > 1 else ROOT / "artifacts" / "manifest_r3.json"
     man = json.loads(path.read_text())
     es = entries(man)
     if not es:
