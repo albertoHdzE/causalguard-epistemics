@@ -218,7 +218,7 @@ def execute(root: Path, study: str, freeze_commit: str, runtime_root: Path, resu
     if runtime_root.is_relative_to(root.resolve()):
         raise Refused("REFUSED: runtime root must be outside the frozen repository")
     record_path = record_path or root / "docs" / "FREEZE_RECORD.json"
-    ledger = Ledger(runtime_root / "access_ledger.jsonl") if runtime_root.exists() else None
+    ledger = Ledger(runtime_root / "access_ledger.jsonl", shared=True) if runtime_root.exists() else None
     entry = {"time": now(), "study": study, "freeze_commit": freeze_commit, "resume": resume, "model": model}
     try:
         pf = preflight(root, study, freeze_commit, record_path, model)
@@ -233,7 +233,8 @@ def execute(root: Path, study: str, freeze_commit: str, runtime_root: Path, resu
         raise Refused("REFUSED: fixture freeze records may only run in temporary fixture storage")
     salt = confirmatory_salt(freeze_commit, rec["salt_namespace"])
     run_id = f"{rec['salt_namespace']}-{study}-{freeze_commit[:12]}" + (f"-{model}" if model else "")
-    extra = {"freeze": {"freeze_commit": freeze_commit, "record_sha256": sha256_file(record_path),
+    extra = {"phase": "fixture" if rec["fixture"] else "confirmatory",
+             "freeze": {"freeze_commit": freeze_commit, "record_sha256": sha256_file(record_path),
                         "salt": salt, "salt_note": "public reproducibility identifier, not a secret seal",
                         "manifest_check": pf["manifest_check"]}}
     if study == "S2":
@@ -251,7 +252,7 @@ def execute(root: Path, study: str, freeze_commit: str, runtime_root: Path, resu
     plan = make_plan(run_id, study, {"confirmatory_config_sha256": rec["config_sha256"], "study_config": scfg},
                      items, strata_fn=_strata, source_digest=rec["reviewed_source_tree_sha256"], extra=extra)
     runtime_root.mkdir(parents=True, exist_ok=True)
-    ledger = Ledger(runtime_root / "access_ledger.jsonl")
+    ledger = Ledger(runtime_root / "access_ledger.jsonl", shared=True)
     ledger.recover()
     try:
         run = Run(run_id, plan, runs_root=runtime_root, resume=resume, registry=runtime_root / "registry.jsonl")
@@ -263,5 +264,7 @@ def execute(root: Path, study: str, freeze_commit: str, runtime_root: Path, resu
     end = run.execute(fn, workers=workers or scfg.get("workers", 8), timeout_s=scfg.get("item_timeout_s", 900),
                       quiet=quiet, mode="confirmatory" if not rec["fixture"] else "fixture",
                       maxtasks=scfg.get("maxtasks", 50))
-    ledger.append({**entry, "event": "end", "run_id": run_id, "status": end["status"]})
+    ledger.append({**entry, "event": "end", "run_id": run_id, "status": end["status"],
+                   "run_counts": {k: end[k] for k in ("planned", "ok", "failed", "missing")},
+                   "invocation": end["invocation"]})
     return {"run_id": run_id, "end": end, "run_dir": str(run.dir)}

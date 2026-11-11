@@ -352,7 +352,7 @@ def test_resume_does_not_duplicate(tmp_path):
     run.execute(s3.run_world, timeout_s=60, stop_after=1)
     run = Run("t", plan, runs_root=tmp_path / "runs", resume=True)
     end = run.execute(s3.run_world, timeout_s=60)
-    assert end["ok"] == 1 and end["status"] == "complete"
+    assert end["ok"] == 2 and end["invocation"]["ok"] == 1 and end["status"] == "complete"   # run-level vs invocation
     lr = load_run(run.dir)
     assert sorted(lr["results"]) == ["w0", "w1"] and lr["attempts_total"] == 2
     assert all(r["provider_kind"] == "mock" for r in lr["results"].values())
