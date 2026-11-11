@@ -1,0 +1,75 @@
+{
+ "cell_counts": {
+  "h1|initial_edit": {
+   "entailed": 55,
+   "refuted": 55,
+   "underdetermined": 88
+  },
+  "h1|persistent_clamp": {
+   "entailed": 47,
+   "refuted": 51,
+   "underdetermined": 106
+  },
+  "h2|initial_edit": {
+   "entailed": 30,
+   "refuted": 36,
+   "underdetermined": 160
+  },
+  "h2|persistent_clamp": {
+   "entailed": 33,
+   "refuted": 29,
+   "underdetermined": 158
+  },
+  "h3|initial_edit": {
+   "entailed": 16,
+   "refuted": 17,
+   "underdetermined": 181
+  },
+  "h3|persistent_clamp": {
+   "entailed": 24,
+   "refuted": 35,
+   "underdetermined": 159
+  }
+ },
+ "rules": {
+  "always_underdetermined": "underdetermined",
+  "cell_budget_majority": {
+   "h1|initial_edit|B12": "underdetermined",
+   "h1|initial_edit|B16": "refuted",
+   "h1|initial_edit|B24": "refuted",
+   "h1|persistent_clamp|B12": "underdetermined",
+   "h1|persistent_clamp|B16": "underdetermined",
+   "h1|persistent_clamp|B24": "refuted",
+   "h2|initial_edit|B12": "underdetermined",
+   "h2|initial_edit|B16": "underdetermined",
+   "h2|initial_edit|B24": "underdetermined",
+   "h2|persistent_clamp|B12": "underdetermined",
+   "h2|persistent_clamp|B16": "underdetermined",
+   "h2|persistent_clamp|B24": "entailed",
+   "h3|initial_edit|B12": "underdetermined",
+   "h3|initial_edit|B16": "underdetermined",
+   "h3|initial_edit|B24": "underdetermined",
+   "h3|persistent_clamp|B12": "underdetermined",
+   "h3|persistent_clamp|B16": "underdetermined",
+   "h3|persistent_clamp|B24": "underdetermined"
+  },
+  "cell_majority": {
+   "h1|initial_edit": "underdetermined",
+   "h1|persistent_clamp": "underdetermined",
+   "h2|initial_edit": "underdetermined",
+   "h2|persistent_clamp": "underdetermined",
+   "h3|initial_edit": "underdetermined",
+   "h3|persistent_clamp": "underdetermined"
+  },
+  "forecast_observed_majority": "majority of the target node's observed next values (ties -> 0)"
+ },
+ "schema": "s4-surface-baselines-v1",
+ "sha256": "1fb5dc40249257257e2ae3f039a0fbd90ecc95f3c3bba037ad5aca99c72e5155",
+ "training_salt": "dev-s4-train-v1",
+ "training_verdict_mix": {
+  "entailed": 205,
+  "refuted": 223,
+  "underdetermined": 852
+ },
+ "worlds": 160
+}
