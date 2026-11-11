@@ -377,39 +377,262 @@ def check_endpoint(spec: dict) -> None:
         raise AnalysisRefused(f"endpoint spec differs from the supported executable definition: {bad}")
 
 
+# --------------------------------------------------------------------------- endpoint completeness (iteration 3, R2-05)
+#
+# A nominal ``ok`` attempt is NOT a scientific outcome until its output reconciles with the planned world and the
+# versioned design.  Each output is checked against the world and design REGENERATED from its plan payload:
+#   * identity: world_id, family, population, design (byte-equal JSON), design_version, n_queries;
+#   * grid: every planned regime x budget cell (and noise rate x noise budget cell) and no unplanned cell;
+#   * rows: exactly 8 state + 16 intervention rows per cell, in design order.  Rows carrying ``qid`` (runs from
+#     iteration 3 on) must equal the design query digest at their position (distinct by construction).  LEGACY rows
+#     (no qid) are matched by fingerprint (kind, horizon, intervention kind, target node, truth recomputed on the
+#     regenerated world).  Byte-identical rows for distinct queries are common in saved data, so a duplicated legacy
+#     row with the same fingerprint as the row it replaced cannot be detected; this limitation is reported;
+#   * values: exact counts (0 <= num <= den, den > 0), p = num/den, tie, majority and verdict derived from the counts,
+#     predictions in {0, 1, None}, truth in {0, 1}; an empty version space has the declared empty-row semantics.
+# Fatal defects (wrong identity, unplanned/extra rows, malformed values) refuse the analysis.  ABSENT outcomes (a
+# missing cell or a short cell) make that cell missing: the world contributes nothing there and the endpoint is
+# explicitly incomplete -- never silently averaged over fewer queries, worlds or families.
+
+S2_CELL_SHAPE = {"s2-design-v2": {"state": 8, "intervention": 16}}
+PRIMARY_CELL = ("uniform_states", "16")
+
+
+class OutputDefect(AnalysisRefused):
+    pass
+
+
+def _expected_world_v2(payload: dict):
+    from ..experiments.s2 import build_world_v2
+    from ..versionspace import predict
+    world, design, _inst = build_world_v2(payload)
+    queries = [("state", q) for q in design.state_queries] + [("intervention", q) for q in design.intervention_queries]
+    exp = [{"kind": k, "qid": q.digest(), "h": q.horizon, "iv": q.intervention.kind, "target_node": q.target.node,
+            "truth": int(predict(world.net, q))} for k, q in queries]
+    return world, design, exp
+
+
+def _check_row_values(q: dict, empty: bool, where: str) -> None:
+    for k in ("pred", "truth", "verdict", "kind"):
+        if k not in q:
+            raise OutputDefect(f"{where}: row lacks {k}")
+    if q["truth"] not in (0, 1) or isinstance(q["truth"], bool):
+        raise OutputDefect(f"{where}: truth {q['truth']!r} not in {{0,1}}")
+    if not isinstance(q["pred"], dict) or any(v not in (0, 1, None) or isinstance(v, bool) for v in q["pred"].values()):
+        raise OutputDefect(f"{where}: malformed predictions")
+    if empty:
+        if any(q.get(k) is not None for k in ("p", "num", "den", "vs_majority", "tie")) or \
+                q["verdict"] != "inconsistent_evidence_or_class":
+            raise OutputDefect(f"{where}: empty version space row carries posterior values")
+        return
+    try:
+        num, den = int(q["num"]), int(q["den"])
+    except (TypeError, ValueError, KeyError):
+        raise OutputDefect(f"{where}: malformed exact counts {q.get('num')!r}/{q.get('den')!r}") from None
+    if str(num) != q["num"] or str(den) != q["den"] or not (0 <= num <= den) or den <= 0:
+        raise OutputDefect(f"{where}: invalid exact counts {q['num']}/{q['den']}")
+    tie = 2 * num == den
+    if q.get("tie") is not tie or q.get("vs_majority") != (None if tie else int(2 * num > den)):
+        raise OutputDefect(f"{where}: tie/majority inconsistent with counts {num}/{den}")
+    if q.get("p") != num / den:
+        raise OutputDefect(f"{where}: p inconsistent with counts")
+    if q["verdict"] != ("refuted" if num == 0 else "entailed" if num == den else "underdetermined"):
+        raise OutputDefect(f"{where}: verdict inconsistent with counts")
+
+
+def _match_rows(rows: list[dict], exp: list[dict], where: str) -> tuple[bool, bool]:
+    """Returns (complete, legacy).  Raises on identity defects."""
+    if len(rows) > len(exp):
+        raise OutputDefect(f"{where}: {len(rows)} rows for {len(exp)} planned queries (extra or duplicated rows)")
+    has_qid = [("qid" in r) for r in rows]
+    if any(has_qid) and not all(has_qid):
+        raise OutputDefect(f"{where}: mixed rows with and without query identities")
+    legacy = not any(has_qid)
+    if not legacy:
+        pos = {e["qid"]: i for i, e in enumerate(exp)}
+        seen = []
+        for r in rows:
+            if r["qid"] not in pos:
+                raise OutputDefect(f"{where}: query identity {r['qid'][:12]} is not in this world's design")
+            seen.append(pos[r["qid"]])
+        if len(set(seen)) != len(seen):
+            raise OutputDefect(f"{where}: duplicated query identity")
+        if seen != sorted(seen):
+            raise OutputDefect(f"{where}: rows out of design order")
+        for r in rows:
+            e = exp[pos[r["qid"]]]
+            if any(r.get(k) != e[k] for k in ("kind", "h", "iv", "target_node", "truth")):
+                raise OutputDefect(f"{where}: row fields disagree with its query identity")
+        return len(rows) == len(exp), False
+    # legacy: order-preserving fingerprint match (exact positional match when the cell is full)
+    fp = ("kind", "h", "iv", "target_node", "truth")
+    j = 0
+    for r in rows:
+        while j < len(exp) and any(r.get(k) != exp[j][k] for k in fp):
+            if len(rows) == len(exp):
+                raise OutputDefect(f"{where}: row {j} does not match the planned query at that position")
+            j += 1
+        if j == len(exp):
+            raise OutputDefect(f"{where}: a row matches no remaining planned query (wrong identity or duplicate)")
+        j += 1
+    return len(rows) == len(exp), True
+
+
+def validate_world_v2(item_id: str, payload: dict, out: dict) -> dict:
+    """Reconcile one ok S2 output with its planned world and design.  Returns
+    {cells: {(regime_or_noise, budget): "complete" | "missing" | "short"}, legacy_rows, primary_complete}."""
+    w = f"{item_id}"
+    dv = payload.get("design_version")
+    if dv not in S2_CELL_SHAPE or out.get("design_version") != dv:
+        raise OutputDefect(f"{w}: design version {out.get('design_version')!r} (planned {dv!r})")
+    world, design, exp = _expected_world_v2(payload)
+    ow = out.get("world", {})
+    if ow.get("world_id") != world.world_id or ow.get("family") != payload["family"] or \
+            ow.get("population") != payload["population"]:
+        raise OutputDefect(f"{w}: world identity differs from the planned world")
+    if out.get("design") != json.loads(json.dumps(design.to_json())):
+        raise OutputDefect(f"{w}: design differs from the regenerated design")
+    shape = S2_CELL_SHAPE[dv]
+    if [e["kind"] for e in exp].count("state") != shape["state"] or out.get("n_queries") != len(exp):
+        raise OutputDefect(f"{w}: query count differs from the design shape")
+    planned = {(rg, str(B)) for rg in payload["regimes"] for B in payload["budgets"]}
+    planned |= {(f"noise{rate}", str(B)) for rate in payload.get("noise_rates", []) for B in payload.get("noise_budgets", [])}
+    present = {(rg, B): c for rg, byb in out.get("regimes", {}).items() for B, c in byb.items()}
+    for rate, nz in out.get("noise", {}).items():
+        present.update({(f"noise{rate}", B): c for B, c in nz.get("budgets", {}).items()})
+    if extra := sorted(set(present) - planned):
+        raise OutputDefect(f"{w}: unplanned cells {extra[:4]}")
+    cells, legacy_any = {}, False
+    for key in sorted(planned):
+        c = present.get(key)
+        if c is None:
+            cells[key] = "missing"
+            continue
+        where = f"{w}[{key[0]}|B{key[1]}]"
+        rows = c.get("queries", [])
+        if not isinstance(c.get("empty"), bool):
+            raise OutputDefect(f"{where}: malformed empty flag")
+        for q in rows:
+            _check_row_values(q, c["empty"], where)
+        complete, legacy = _match_rows(rows, exp, where)
+        legacy_any |= legacy
+        cells[key] = "complete" if complete else "short"
+    return {"cells": cells, "legacy_rows": legacy_any, "primary_complete": cells.get(PRIMARY_CELL) == "complete"}
+
+
+def _drop_incomplete_cells(out: dict, cells: dict) -> dict:
+    """Copy of an output without its missing/short cells (they contribute no scores anywhere)."""
+    bad = {k for k, v in cells.items() if v != "complete"}
+    if not bad:
+        return out
+    o = dict(out)
+    o["regimes"] = {rg: {B: c for B, c in byb.items() if (rg, B) not in bad} for rg, byb in out["regimes"].items()}
+    if "noise" in out:
+        o["noise"] = {rate: {**nz, "budgets": {B: c for B, c in nz["budgets"].items() if (f"noise{rate}", B) not in bad}}
+                      for rate, nz in out["noise"].items()}
+    return o
+
+
 def load_v2(run_dirs: list[Path]) -> tuple[list[dict], dict]:
-    """Strictly load v2 S2 runs; return (records with item ids, accounting)."""
+    """Strictly load v2 S2 runs; validate every ok output against its planned world/design; return
+    (records with item ids, accounting).  Records keep only complete cells."""
     from ..runner import load_run
     if len({str(Path(d).resolve()) for d in run_dirs}) != len(run_dirs):
         raise AnalysisRefused("duplicate run arguments")
-    recs, acct, seen_items, seen_worlds = [], {"runs": {}}, set(), {}
+    recs, acct, seen_items, seen_worlds = [], {"runs": {}, "items": {}, "phases": set()}, set(), {}
     for d in run_dirs:
         lr = load_run(Path(d))
         if lr["layout"] != "v2":
             raise AnalysisRefused(f"{d}: v1 layout; use the historical analysis")
         plan = lr["plan"]
+        acct["phases"].add(lr["phase"])
         planned = {e["item_id"]: e for e in plan["items"]}
         fails = {k: {"status": v["status"], "error": str(v["output"].get("error"))[:200], **planned[k]["strata"]}
                  for k, v in lr["failures"].items()}
         missing = [{"item_id": k, **planned[k]["strata"]} for k in lr["missing"]]
-        acct["runs"][plan["run_id"]] = {"plan_sha256": plan["plan_sha256"], "planned": len(planned),
-                                        "ok": len(lr["results"]), "failed": len(fails), "missing": len(missing),
-                                        "attempts_total": lr["attempts_total"],
-                                        "superseded_failed_attempts": lr["superseded_failures"],
-                                        "failures": fails, "missing_items": missing,
-                                        "source_tree_sha256": plan["source_tree_sha256"],
-                                        "endpoint": plan.get("endpoint", {}).get("sha256")}
-        for iid, out in lr["results"].items():
+        incomplete_out = {}
+        legacy = 0
+        for iid, e in planned.items():
             if iid in seen_items:
                 raise AnalysisRefused(f"item {iid} appears in more than one run (ambiguous rerun combination)")
             seen_items.add(iid)
-            wid = out["world"]["world_id"]
-            if wid in seen_worlds:
-                raise AnalysisRefused(f"world {wid} appears twice ({seen_worlds[wid]}, {iid})")
-            seen_worlds[wid] = iid
-            recs.append({"item_id": iid, "run_id": plan["run_id"], "strata": planned[iid]["strata"], **out})
+            st = "failed" if iid in lr["failures"] else "missing" if iid not in lr["results"] else None
+            info = {"status": st, "strata": e["strata"], "run_id": plan["run_id"]}
+            if st is None:
+                out = lr["results"][iid]
+                v = validate_world_v2(iid, e["payload"], out)
+                legacy += v["legacy_rows"]
+                bad = {f"{a}|B{b}": c for (a, b), c in v["cells"].items() if c != "complete"}
+                info.update(status="ok_complete_grid" if not bad else "ok_incomplete_grid",
+                            primary_cell_complete=v["primary_complete"], incomplete_cells=bad)
+                if bad:
+                    incomplete_out[iid] = bad
+                wid = out["world"]["world_id"]
+                if wid in seen_worlds:
+                    raise AnalysisRefused(f"world {wid} appears twice ({seen_worlds[wid]}, {iid})")
+                seen_worlds[wid] = iid
+                recs.append({"item_id": iid, "run_id": plan["run_id"], "strata": e["strata"],
+                             **_drop_incomplete_cells(out, v["cells"])})
+            acct["items"][iid] = info
+        acct["runs"][plan["run_id"]] = {"plan_sha256": plan["plan_sha256"], "planned": len(planned),
+                                        "ok": len(lr["results"]), "failed": len(fails), "missing": len(missing),
+                                        "ok_with_incomplete_grid": len(incomplete_out),
+                                        "ok_outputs_with_legacy_rows(no qid)": legacy,
+                                        "execution_status": lr["execution_status"]["status"], "phase": lr["phase"],
+                                        "attempts_total": lr["attempts_total"],
+                                        "superseded_failed_attempts": lr["superseded_failures"],
+                                        "failures": fails, "missing_items": missing,
+                                        "incomplete_outputs": incomplete_out,
+                                        "source_tree_sha256": plan["source_tree_sha256"],
+                                        "endpoint": plan.get("endpoint", {}).get("sha256")}
         acct.setdefault("plans", {})[plan["run_id"]] = plan
     return recs, acct
+
+
+def completeness_v2(items: dict, spec: dict) -> dict:
+    """Planned / complete / failed / missing accounting, separately for the structured primary, the required
+    uniform-H null (B16 intervention cell) and the whole planned study grid."""
+    def block(sel, cell_key):
+        ids = [i for i, x in items.items() if sel(x)]
+        st = {"planned": len(ids), "complete": 0, "failed": 0, "missing_attempt": 0, "ok_but_endpoint_cell_absent": 0}
+        by_fam: dict = {}
+        for i in ids:
+            x = items[i]
+            f = x["strata"].get("family")
+            bf = by_fam.setdefault(f, {"planned": 0, "complete": 0})
+            bf["planned"] += 1
+            if x["status"] == "failed":
+                st["failed"] += 1
+            elif x["status"] == "missing":
+                st["missing_attempt"] += 1
+            elif x.get(cell_key):
+                st["complete"] += 1
+                bf["complete"] += 1
+            else:
+                st["ok_but_endpoint_cell_absent"] += 1
+        st["by_family"] = by_fam
+        st["status"] = ("not_planned" if not ids else "complete" if st["complete"] == len(ids) else "incomplete")
+        return st
+    prim = block(lambda x: x["strata"].get("label") == "realizable" and x["strata"].get("family") in spec["families"],
+                 "primary_cell_complete")
+    missing_fams = [f for f in spec["families"] if f not in prim["by_family"]]
+    if missing_fams:
+        prim["status"] = "incomplete"
+        prim["families_not_planned"] = missing_fams
+    null = block(lambda x: x["strata"].get("label") == spec["required_null"]["population"]
+                 and x["strata"].get("family") == spec["required_null"]["family"], "primary_cell_complete")
+    allst = {"planned_items": len(items),
+             "ok_complete_grid": sum(x["status"] == "ok_complete_grid" for x in items.values()),
+             "ok_incomplete_grid": sum(x["status"] == "ok_incomplete_grid" for x in items.values()),
+             "failed": sum(x["status"] == "failed" for x in items.values()),
+             "missing_attempt": sum(x["status"] == "missing" for x in items.values())}
+    allst["status"] = ("complete" if allst["ok_complete_grid"] == len(items) and prim["status"] == "complete"
+                       and null["status"] == "complete" else "incomplete")
+    return {"structured_primary": prim, "required_null": null, "overall_study": allst,
+            "rule": ("an ok attempt counts toward an endpoint only if its planned cell reconciles exactly with the "
+                     "regenerated world and design; absent cells/queries are missing outcomes, never averaged away. "
+                     "A structured estimate can be reported while the null is unfinished, but the study is then "
+                     "incomplete.")}
 
 
 def _acc(q: dict, method: str) -> float:
@@ -558,7 +781,10 @@ def mc_diagnostic_summary(run_dir: Path) -> dict:
 
 
 def analyze_v2(run_dirs: list[Path], out_dir: Path, endpoint_path: Path, mc_run: Path | None = None,
-               reps_primary: int = 5000, reps_secondary: int = 2000) -> dict:
+               reps_primary: int = 5000, reps_secondary: int = 2000, development_sizing: bool | None = None,
+               analysis_version: str = "s2-analysis-v3") -> dict:
+    """``development_sizing``: prospective sizing from development deltas.  Default: only for development-phase
+    runs; explicitly requesting it for fixture/confirmatory runs is refused (no re-sizing from final outcomes)."""
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     ep_bytes = Path(endpoint_path).read_bytes()
@@ -569,42 +795,72 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, endpoint_path: Path, mc_run:
     for rid, a in acct["runs"].items():
         if a["endpoint"] not in (None, ep_sha):
             raise AnalysisRefused(f"run {rid} was planned under a different endpoint spec ({a['endpoint']})")
-    plans = acct.pop("plans")
+    phases = acct.pop("phases")
+    if len(phases) != 1:
+        raise AnalysisRefused(f"runs of different phases cannot be analysed together: {sorted(phases)}")
+    phase = phases.pop()
+    if development_sizing is None:
+        development_sizing = phase == "development"
+    elif development_sizing and phase != "development":
+        raise AnalysisRefused("prospective sizing is a development-only action; refused for a "
+                              f"{phase} analysis (no re-sizing from final outcomes)")
+    acct.pop("plans")
+    items = acct.pop("items")
     rows = per_world_table_v2(recs)
-    result = {"analysis_version": "s2-analysis-v2", "endpoint": {"path": str(endpoint_path), "sha256": ep_sha,
-                                                                  "spec": spec},
+    result = {"analysis_version": analysis_version, "phase": phase,
+              "endpoint": {"path": str(endpoint_path), "sha256": ep_sha, "spec": spec},
               "runs": acct["runs"], "semantics_changed_from_v1": [
                   "primary contrast index - vs_majority (v1: index - uniform)",
                   "exact integer-count posterior (v1: Monte Carlo for large multistep version spaces)",
                   "majority ties score 0.5 (v1: tie -> predict 0)",
                   "exogenous design s2-design-v2 (v1: holdouts and query redraws depended on hidden trajectories)",
-                  "strict plan reconciliation and failure accounting (v1: concatenated records, failures ignored)"]}
+                  "strict plan reconciliation and failure accounting (v1: concatenated records, failures ignored)"],
+              "changes_in_v3": [
+                  "every ok output reconciled with its regenerated world and design before scoring (R2-05)",
+                  "absent cells/queries are missing outcomes; structured primary, required null and overall study "
+                  "completeness reported separately",
+                  "phase (development/fixture/confirmatory) derived from validated run provenance",
+                  "prospective sizing only for development-phase analyses"]}
+    comp = completeness_v2(items, spec)
+    result["completeness"] = comp
     # ---------------- terminal accounting for the primary population
-    prim_planned = [(rid, e) for rid, p in plans.items() for e in p["items"]
-                    if e["strata"].get("label") == "realizable" and e["strata"]["family"] in spec["families"]]
-    prim_ok_ids = {r["item_id"] for r in recs if r["strata"].get("label") == "realizable"
-                   and r["world"]["family"] in spec["families"]}
-    unresolved = [e["item_id"] for _, e in prim_planned if e["item_id"] not in prim_ok_ids]
-    result["primary_terminal_accounting"] = {"planned_worlds": len(prim_planned), "ok_worlds": len(prim_ok_ids),
+    pc = comp["structured_primary"]
+    prim_ids = [i for i, x in items.items() if x["strata"].get("label") == "realizable"
+                and x["strata"].get("family") in spec["families"]]
+    unresolved = [i for i in prim_ids if not items[i].get("primary_cell_complete")]
+    result["primary_terminal_accounting"] = {"planned_worlds": pc["planned"], "ok_worlds": pc["complete"],
                                              "unresolved_worlds": unresolved,
-                                             "complete": not unresolved}
+                                             "complete": pc["status"] == "complete"}
     base = dict(regime="uniform_states", budget=16, kind="intervention", subset="all")
     prim = [r for r in _sel(rows, label="realizable", **base) if r["family"] in spec["families"]]
-    result["primary"] = _contrast(prim, "index", "vs_majority", reps_primary)
-    if unresolved:
-        result["primary"]["status"] = "INCOMPLETE: planned-N claim not issued"
-        n_f = {f: sum(1 for _, e in prim_planned if e["strata"]["family"] == f) for f in spec["families"]}
-        bounds = {}
-        for name, fill in (("worst", -1.0), ("best", 1.0)):
-            vals = []
-            for f in spec["families"]:
-                d = [r["index"] - r["vs_majority"] for r in prim if r["family"] == f]
-                miss = n_f[f] - len(d)
-                vals.append((sum(d) + fill * miss) / n_f[f])
-            bounds[name] = float(np.mean(vals))
-        result["primary"]["missing_outcome_bounds"] = bounds
+    fam_done = {f: sum(1 for r in prim if r["family"] == f) for f in spec["families"]}
+    absent_fams = [f for f in spec["families"] if fam_done[f] == 0]
+    if prim and not absent_fams:
+        result["primary"] = _contrast(prim, "index", "vs_majority", reps_primary)
     else:
-        result["primary"]["status"] = "complete (development; not confirmatory)"
+        result["primary"] = {"a": "index", "b": "vs_majority", "estimate": None, "ci95": None,
+                             "n_worlds": len(prim), "families_without_completed_worlds": absent_fams,
+                             "note": "not estimable under equal family weighting; no family is dropped or reweighted"}
+    if pc["status"] != "complete":
+        result["primary"]["status"] = f"INCOMPLETE ({phase}): planned-N claim not issued"
+        n_f = {f: pc["by_family"].get(f, {}).get("planned", 0) for f in spec["families"]}
+        if all(n_f.values()):
+            bounds = {}
+            for name, fill in (("worst", -1.0), ("best", 1.0)):
+                vals = []
+                for f in spec["families"]:
+                    d = [r["index"] - r["vs_majority"] for r in prim if r["family"] == f]
+                    vals.append((sum(d) + fill * (n_f[f] - len(d))) / n_f[f])
+                bounds[name] = float(np.mean(vals))
+            result["primary"]["missing_outcome_bounds"] = bounds
+            result["primary"]["missing_outcome_bounds_rule"] = ("each missing world scored -1 (worst) or +1 (best) "
+                                                                "within its family; equal family weights")
+        else:
+            result["primary"]["missing_outcome_bounds"] = None
+    else:
+        result["primary"]["status"] = f"complete ({phase})" + ("; not confirmatory" if phase != "confirmatory" else "")
+    result["required_null_status"] = comp["required_null"]["status"]
+    result["overall_study_status"] = comp["overall_study"]["status"]
     result["primary_complete_case"] = _contrast([r for r in prim if not r["empty_vs"]], "index", "vs_majority",
                                                 reps_primary)
     # ---------------- historical and named secondaries (structured realizable)
@@ -720,11 +976,13 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, endpoint_path: Path, mc_run:
     if mc_run:
         result["mc_diagnostic"] = mc_diagnostic_summary(Path(mc_run))
     # ---------------- sizing for the revised endpoint (development deltas only)
-    if prim:
+    if not development_sizing:
+        result["design_simulation_note"] = f"prospective sizing not run ({phase} analysis; development-only action)"
+    if development_sizing and prim:
         d = np.array([r["index"] - r["vs_majority"] for r in prim])
         s = np.array([r["family"] for r in prim])
         result["design_simulation_revised_primary"] = design_simulation(d, s, sims=2000, effect=0.05)
-    if nrows:
+    if development_sizing and nrows:
         d = np.array([r["index"] - r["vs_majority"] for r in nrows])
         result["design_simulation_null_index_minus_majority"] = design_simulation(
             d, np.array(["null"] * len(d)), sims=2000, effect=0.05,
@@ -743,6 +1001,7 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, endpoint_path: Path, mc_run:
     except Exception as e:  # figures optional; numbers are in the JSON
         result["figure_error"] = repr(e)
     return {"primary": result["primary"], "accounting": result["primary_terminal_accounting"],
+            "completeness": comp, "phase": phase,
             "summary": str(out_dir / "s2_v2_summary.json"), "digest": digest}
 
 
@@ -767,8 +1026,8 @@ def _figures_v2(rows, result, out_dir: Path, spec: dict) -> None:
         ax.set_xticklabels([g[0].replace("_", "\n") for g in groups], fontsize=8)
         ax.set_title(f"per-world {a} - {b} (B16, 16 intervention queries)", fontsize=9)
     axes[0].set_ylabel("per-world accuracy difference")
-    fig.suptitle("S2 DEVELOPMENT v2 (exogenous design, exact majority). Blue: structured; red: uniform-H null. "
-                 "Bars = means. Every world shown.", fontsize=9)
+    fig.suptitle(f"S2 {result['phase'].upper()} (exogenous design, exact majority). Blue: structured; red: "
+                 "uniform-H null. Bars = means. Every world shown.", fontsize=9)
     fig.tight_layout()
     fig.savefig(out_dir / "s2_v2_per_world_deltas.png", dpi=130)
     plt.close(fig)
@@ -786,7 +1045,8 @@ def _figures_v2(rows, result, out_dir: Path, spec: dict) -> None:
         ax.set_title(f"{lab}: uniform designed measurements (n={sel[0]['n_worlds']})", fontsize=9)
         ax.set_xlabel("evidence budget")
     axes[0].set_ylabel("hidden intervention accuracy")
-    axes[0].legend(fontsize=7)
+    if axes[0].get_legend_handles_labels()[0]:
+        axes[0].legend(fontsize=7)
     fig.tight_layout()
     fig.savefig(out_dir / "s2_v2_accuracy_vs_budget.png", dpi=130)
     plt.close(fig)

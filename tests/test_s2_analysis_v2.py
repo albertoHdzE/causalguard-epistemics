@@ -38,7 +38,7 @@ def _run(root, run_id, start=0, per=1, fail_one=False, null=0):
 
 def test_complete_run_and_refusals(tmp_path):
     d = _run(tmp_path, "a", per=2, null=3)
-    res = analyze_v2([d], tmp_path / "out", EP, reps_primary=200, reps_secondary=100)
+    res = analyze_v2([d], tmp_path / "out", EP, reps_primary=200, reps_secondary=100, development_sizing=False)
     assert res["accounting"]["complete"] and res["primary"]["n_worlds"] == 10
     with pytest.raises(AnalysisRefused):
         analyze_v2([d, d], tmp_path / "o2", EP)                      # duplicate run arguments
@@ -57,7 +57,7 @@ def test_complete_run_and_refusals(tmp_path):
 
 def test_failed_world_makes_primary_incomplete_with_bounds(tmp_path):
     d = _run(tmp_path, "f", per=2, fail_one=True)
-    res = analyze_v2([d], tmp_path / "out", EP, reps_primary=200, reps_secondary=100)
+    res = analyze_v2([d], tmp_path / "out", EP, reps_primary=200, reps_secondary=100, development_sizing=False)
     acc = res["accounting"]
     assert not acc["complete"] and len(acc["unresolved_worlds"]) == 1
     p = res["primary"]

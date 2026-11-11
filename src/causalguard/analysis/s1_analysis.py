@@ -17,6 +17,44 @@ import numpy as np
 from ..runner import ROOT, read_jsonl
 
 TRUTH = ("true", "false")
+S1_QUERIES_PER_WORLD = 24
+
+
+class S1OutputDefect(SystemExit):
+    pass
+
+
+def validate_s1_output(item_id: str, payload: dict, out: dict, world_ids: dict) -> dict:
+    """Reconcile one ok S1 item output with its plan (iteration 3, R2-05 analogue).  Identity defects and
+    duplicated/unplanned query rows refuse; ABSENT query rows are counted as missing outcomes (never dropped
+    from denominators).  Returns {"missing_queries": int, "missing_codecs": [..]}."""
+    from ..codec import ALL_NODE_CODECS
+    w = item_id
+    for k in ("family", "n", "backend"):
+        if out.get(k) != payload[k]:
+            raise S1OutputDefect(f"{w}: output {k}={out.get(k)!r} differs from the plan ({payload[k]!r})")
+    key = (payload["family"], payload["n"], payload["index"])
+    if world_ids.setdefault(key, out.get("world_id")) != out.get("world_id"):
+        raise S1OutputDefect(f"{w}: world_id differs from the same planned world under another backend")
+    tags = out.get("query_tags")
+    if not isinstance(tags, list) or len(tags) != S1_QUERIES_PER_WORLD:
+        raise S1OutputDefect(f"{w}: query grid has {len(tags) if isinstance(tags, list) else tags!r} tags, "
+                             f"expected {S1_QUERIES_PER_WORLD}")
+    res = {"missing_queries": 0, "missing_codecs": []}
+    if out.get("status") == "ok" and payload["backend"] != "codecs":
+        qs = out.get("queries")
+        if not isinstance(qs, list):
+            raise S1OutputDefect(f"{w}: ok item without a query list")
+        ids = [q.get("q") for q in qs]
+        if len(set(ids)) != len(ids) or any(not isinstance(i, int) or not 0 <= i < len(tags) for i in ids):
+            raise S1OutputDefect(f"{w}: duplicated or unplanned query ids")
+        if any(q.get("tag") != tags[q["q"]] for q in qs):
+            raise S1OutputDefect(f"{w}: query tag differs from the planned grid")
+        res["missing_queries"] = len(tags) - len(ids)
+    if out.get("status") == "ok" and payload["backend"] == "codecs":
+        bits = out.get("bits", {})
+        res["missing_codecs"] = [c for c in ALL_NODE_CODECS if c not in bits]
+    return res
 
 
 def analyze(run_ids: list[str], out_dir: Path) -> dict:
@@ -53,11 +91,16 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path) -> dict:
         raise SystemExit("duplicate run arguments")
     recs, planned, acct = [], [], {}
     seen = set()
+    world_ids: dict = {}
+    phases = set()
+    missing_q = Counter()
+    missing_codecs = Counter()
     for d in run_dirs:
         lr = load_run(Path(d))
         if lr["layout"] != "v2":
             raise SystemExit(f"{d}: legacy layout; use analyze")
         plan = lr["plan"]
+        phases.add(lr["phase"])
         rid = plan["run_id"]
         acct[rid] = {"planned": len(plan["items"]), "ok": len(lr["results"]), "failed": len(lr["failures"]),
                      "missing": len(lr["missing"]), "attempts_total": lr["attempts_total"],
@@ -71,16 +114,37 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path) -> dict:
             seen.add(key)
             st = e["strata"]
             if e["item_id"] in lr["results"]:
-                recs.append({"item_id": e["item_id"], "run_id": rid, **lr["results"][e["item_id"]]})
+                out = lr["results"][e["item_id"]]
+                v = validate_s1_output(e["item_id"], e["payload"], out, world_ids)
+                if v["missing_queries"]:
+                    missing_q[f"{st['backend']}|n{st['n']}"] += v["missing_queries"]
+                for c in v["missing_codecs"]:
+                    missing_codecs[f"{c}|{st['family']}|n{st['n']}"] += 1
+                rss = lr["attempt_meta"][e["item_id"]].get("worker_peak_rss_bytes")
+                recs.append({"item_id": e["item_id"], "run_id": rid, **out, "_worker_peak_rss_bytes": rss,
+                             "_missing_queries": v["missing_queries"]})
             else:
                 f = lr["failures"].get(e["item_id"])
                 planned.append({"backend": st["backend"], "n": st["n"], "family": st["family"],
                                 "status": f"item_failure:{f['status']}" if f else "item_missing"})
-    res = {"analysis_version": "s1-analysis-v2", "run_dirs": [str(d) for d in run_dirs], "runs": acct,
-           "n_records": len(recs), "semantics_changed_from_v1": [
+    if len(phases) != 1:
+        raise SystemExit(f"runs of different phases cannot be analysed together: {sorted(phases)}")
+    phase = phases.pop()
+    res = {"analysis_version": "s1-analysis-v3", "phase": phase, "run_dirs": [str(d) for d in run_dirs],
+           "runs": acct, "n_records": len(recs), "semantics_changed_from_v1": [
                "failed/missing planned items counted in completion denominators",
                "amortized totals: archive_sum (sum of archive bits) and payload_sum reported separately",
-               "decoder charge = gzip-9 of the complete local dependency bundle (codec+index_repr+schema)"]}
+               "decoder charge = gzip-9 of the complete local dependency bundle (codec+index_repr+schema)"],
+           "changes_in_v3": [
+               "peak RSS read from the validated attempt envelope (R2-06); missing measurements are null, never 0",
+               "every ok item reconciled with its planned family/n/backend, shared world id and 24-query grid; "
+               "absent query rows counted as 'query_missing' in completion denominators",
+               "phase derived from validated run provenance"],
+           "query_grid_reconciliation": {"queries_per_world": S1_QUERIES_PER_WORLD,
+                                         "ok_items_missing_query_rows": dict(missing_q),
+                                         "codec_items_missing_codecs": dict(missing_codecs),
+                                         "status": "complete" if not missing_q and not missing_codecs and not planned
+                                         else "incomplete"}}
     return _core(recs, res, out_dir, "s1_v2_summary.json", planned=planned)
 
 
@@ -193,6 +257,8 @@ def _core(recs: list[dict], res: dict, out_dir: Path, summary_name: str, planned
             c[st] += 1
             if st == "completed":
                 lat.setdefault(key, []).append(q["seconds"])
+        if r.get("_missing_queries"):
+            c["query_missing"] += r["_missing_queries"]
     for e in planned or []:
         if e["backend"] != "codecs":
             comp.setdefault(f"{e['backend']}|n{e['n']}", Counter())[e["status"]] += 24
@@ -205,9 +271,21 @@ def _core(recs: list[dict], res: dict, out_dir: Path, summary_name: str, planned
         if r.get("status") == "ok" and "t_construct" in r:
             cons[f"{r['backend']}|n{r['n']}"].append(r["t_construct"])
         if r.get("status") == "ok":
-            rss[f"{r['backend']}|n{r['n']}"].append(r.get("worker_peak_rss_bytes", 0))
+            if planned is None:   # legacy v1 records carry the field themselves (field kept for byte reproduction)
+                rss[f"{r['backend']}|n{r['n']}"].append(r.get("worker_peak_rss_bytes", 0))
+            else:                 # v2+: validated attempt envelope; None = not measured (never a zero)
+                rss[f"{r['backend']}|n{r['n']}"].append(r.get("_worker_peak_rss_bytes"))
     res["construction_seconds_median"] = {k: float(np.median(v)) for k, v in sorted(cons.items())}
-    res["peak_rss_mib_median"] = {k: float(np.median(v)) / 2**20 for k, v in sorted(rss.items())}
+    if planned is None:
+        res["peak_rss_mib_median"] = {k: float(np.median(v)) / 2**20 for k, v in sorted(rss.items())}
+    else:
+        res["peak_rss_mib_median"] = {k: (float(np.median([x for x in v if x is not None])) / 2**20
+                                          if any(x is not None for x in v) else None) for k, v in sorted(rss.items())}
+        res["peak_rss_coverage"] = {k: {"measured": sum(x is not None for x in v), "ok_items": len(v)}
+                                    for k, v in sorted(rss.items())}
+        res["peak_rss_note"] = ("median over ok items of the worker's ru_maxrss (bytes on macOS; KiB x 1024 on Linux), "
+                                "reported in MiB = 2^20 bytes; one fresh worker per item (maxtasks=1), so the value "
+                                "includes the interpreter and imported-module baseline; null = no measurement")
 
     # ------------- bits (identical target object per world)
     bits = defaultdict(lambda: defaultdict(list))
@@ -300,7 +378,8 @@ def _figures(res: dict, out_dir: Path) -> None:
         ax.set_xlabel("n (nodes)")
         ax.set_ylabel("median archive bits")
     axes.flat[0].legend(fontsize=7)
-    fig.suptitle("S1 DEVELOPMENT: archive bits of the same network object under each codec", fontsize=10)
+    phase = res.get("phase", "development").upper()
+    fig.suptitle(f"S1 {phase}: archive bits of the same network object under each codec", fontsize=10)
     fig.tight_layout()
     fig.savefig(out_dir / "s1_bits_vs_n.png", dpi=130)
     plt.close(fig)
@@ -322,7 +401,7 @@ def _figures(res: dict, out_dir: Path) -> None:
     ax.set_xlabel("n (nodes)")
     ax.set_ylabel("fraction of queries completed within the 20 s cap (excl. design exclusions)")
     ax.legend(fontsize=8)
-    ax.set_title("S1 DEVELOPMENT: capped completion by backend (timeouts/unknown kept in denominator)", fontsize=9)
+    ax.set_title(f"S1 {phase}: capped completion by backend (timeouts/unknown kept in denominator)", fontsize=9)
     fig.tight_layout()
     fig.savefig(out_dir / "s1_completion.png", dpi=130)
     plt.close(fig)

@@ -1,0 +1,3978 @@
+{
+ "amortized_totals": {
+  "bounded_random|n10": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148352,
+    "archive_sum_bits": 1640,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1422
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148696,
+    "archive_sum_bits": 1984,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1770
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148440,
+    "archive_sum_bits": 1728,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1521
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167416,
+    "archive_sum_bits": 20704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20480
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147560,
+    "archive_sum_bits": 848,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 640
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148056,
+    "archive_sum_bits": 1344,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1130
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147480,
+    "archive_sum_bits": 768,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 560
+   }
+  },
+  "bounded_random|n128": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 170368,
+    "archive_sum_bits": 23656,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 23421
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 175728,
+    "archive_sum_bits": 29016,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 28774
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 176152,
+    "archive_sum_bits": 29440,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 29201
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 160184,
+    "archive_sum_bits": 13472,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 13239
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 177424,
+    "archive_sum_bits": 30712,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 30476
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 159168,
+    "archive_sum_bits": 12456,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 12223
+   }
+  },
+  "bounded_random|n16": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149272,
+    "archive_sum_bits": 2560,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2337
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149896,
+    "archive_sum_bits": 3184,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2962
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149392,
+    "archive_sum_bits": 2680,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2460
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 2244104,
+    "archive_sum_bits": 2097392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2097152
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148072,
+    "archive_sum_bits": 1360,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1143
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149184,
+    "archive_sum_bits": 2472,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2248
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147944,
+    "archive_sum_bits": 1232,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1015
+   }
+  },
+  "bounded_random|n256": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 196136,
+    "archive_sum_bits": 49424,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 49182
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 207040,
+    "archive_sum_bits": 60328,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 60083
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 210872,
+    "archive_sum_bits": 64160,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 63924
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 176032,
+    "archive_sum_bits": 29320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 29072
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 215304,
+    "archive_sum_bits": 68592,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 68344
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 173984,
+    "archive_sum_bits": 27272,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 27024
+   }
+  },
+  "bounded_random|n32": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152080,
+    "archive_sum_bits": 5368,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5146
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153504,
+    "archive_sum_bits": 6792,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6571
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152696,
+    "archive_sum_bits": 5984,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5757
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149624,
+    "archive_sum_bits": 2912,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2688
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152520,
+    "archive_sum_bits": 5808,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5587
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149368,
+    "archive_sum_bits": 2656,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2432
+   }
+  },
+  "bounded_random|n4": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147456,
+    "archive_sum_bits": 744,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 534
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147704,
+    "archive_sum_bits": 992,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 783
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147432,
+    "archive_sum_bits": 720,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 517
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 128
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147096,
+    "archive_sum_bits": 384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 184
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147224,
+    "archive_sum_bits": 512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 314
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147064,
+    "archive_sum_bits": 352,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 152
+   }
+  },
+  "bounded_random|n6": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147744,
+    "archive_sum_bits": 1032,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 826
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147936,
+    "archive_sum_bits": 1224,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1020
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147712,
+    "archive_sum_bits": 1000,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 790
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 768
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147240,
+    "archive_sum_bits": 528,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 324
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147456,
+    "archive_sum_bits": 744,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 534
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147192,
+    "archive_sum_bits": 480,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 276
+   }
+  },
+  "bounded_random|n64": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 158104,
+    "archive_sum_bits": 11392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 11164
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 160616,
+    "archive_sum_bits": 13904,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 13673
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 159856,
+    "archive_sum_bits": 13144,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 12912
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152944,
+    "archive_sum_bits": 6232,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6004
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 160000,
+    "archive_sum_bits": 13288,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 13054
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152432,
+    "archive_sum_bits": 5720,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5492
+   }
+  },
+  "bounded_random|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148112,
+    "archive_sum_bits": 1400,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1186
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148456,
+    "archive_sum_bits": 1744,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1532
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148056,
+    "archive_sum_bits": 1344,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1135
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151032,
+    "archive_sum_bits": 4320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4096
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147416,
+    "archive_sum_bits": 704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 496
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147840,
+    "archive_sum_bits": 1128,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 913
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147352,
+    "archive_sum_bits": 640,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 432
+   }
+  },
+  "canalizing|n10": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147968,
+    "archive_sum_bits": 1256,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1043
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147880,
+    "archive_sum_bits": 1168,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 953
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147712,
+    "archive_sum_bits": 1000,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 790
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167416,
+    "archive_sum_bits": 20704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20480
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147848,
+    "archive_sum_bits": 1136,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 922
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147520,
+    "archive_sum_bits": 808,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 595
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147776,
+    "archive_sum_bits": 1064,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 857
+   }
+  },
+  "canalizing|n128": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 164424,
+    "archive_sum_bits": 17712,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 17482
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 163352,
+    "archive_sum_bits": 16640,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 16408
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 159872,
+    "archive_sum_bits": 13160,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 12928
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 162096,
+    "archive_sum_bits": 15384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 15150
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 160744,
+    "archive_sum_bits": 14032,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 13795
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 161320,
+    "archive_sum_bits": 14608,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 14372
+   }
+  },
+  "canalizing|n16": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148568,
+    "archive_sum_bits": 1856,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1638
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148448,
+    "archive_sum_bits": 1736,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1522
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148104,
+    "archive_sum_bits": 1392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1181
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 2244104,
+    "archive_sum_bits": 2097392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2097152
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148320,
+    "archive_sum_bits": 1608,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1387
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148032,
+    "archive_sum_bits": 1320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1103
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148224,
+    "archive_sum_bits": 1512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1296
+   }
+  },
+  "canalizing|n256": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 185144,
+    "archive_sum_bits": 38432,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 38195
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 182400,
+    "archive_sum_bits": 35688,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 35442
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 175728,
+    "archive_sum_bits": 29016,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 28773
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 180040,
+    "archive_sum_bits": 33328,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 33084
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 178392,
+    "archive_sum_bits": 31680,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 31434
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 178488,
+    "archive_sum_bits": 31776,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 31536
+   }
+  },
+  "canalizing|n32": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150360,
+    "archive_sum_bits": 3648,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3427
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150064,
+    "archive_sum_bits": 3352,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3129
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149344,
+    "archive_sum_bits": 2632,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2412
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149704,
+    "archive_sum_bits": 2992,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2773
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149384,
+    "archive_sum_bits": 2672,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2451
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149504,
+    "archive_sum_bits": 2792,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2571
+   }
+  },
+  "canalizing|n4": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147096,
+    "archive_sum_bits": 384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 186
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147064,
+    "archive_sum_bits": 352,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 160
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147040,
+    "archive_sum_bits": 328,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 134
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 128
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147016,
+    "archive_sum_bits": 304,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 108
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147016,
+    "archive_sum_bits": 304,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 110
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147008,
+    "archive_sum_bits": 296,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 98
+   }
+  },
+  "canalizing|n6": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147384,
+    "archive_sum_bits": 672,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 461
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147312,
+    "archive_sum_bits": 600,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 399
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147256,
+    "archive_sum_bits": 544,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 337
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 768
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147256,
+    "archive_sum_bits": 544,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 344
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147160,
+    "archive_sum_bits": 448,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 247
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147224,
+    "archive_sum_bits": 512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 311
+   }
+  },
+  "canalizing|n64": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 155384,
+    "archive_sum_bits": 8672,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 8448
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 154616,
+    "archive_sum_bits": 7904,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 7674
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153032,
+    "archive_sum_bits": 6320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6095
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 154024,
+    "archive_sum_bits": 7312,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 7081
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153288,
+    "archive_sum_bits": 6576,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6351
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153616,
+    "archive_sum_bits": 6904,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6675
+   }
+  },
+  "canalizing|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147648,
+    "archive_sum_bits": 936,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 727
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147560,
+    "archive_sum_bits": 848,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 630
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147392,
+    "archive_sum_bits": 680,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 469
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151032,
+    "archive_sum_bits": 4320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4096
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147472,
+    "archive_sum_bits": 760,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 552
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147320,
+    "archive_sum_bits": 608,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 397
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147424,
+    "archive_sum_bits": 712,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 506
+   }
+  },
+  "dense_random|n10": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 231144,
+    "archive_sum_bits": 84432,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 84200
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 410352,
+    "archive_sum_bits": 263640,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 263405
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 310912,
+    "archive_sum_bits": 164200,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 163969
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167416,
+    "archive_sum_bits": 20704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20480
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167576,
+    "archive_sum_bits": 20864,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20640
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 209240,
+    "archive_sum_bits": 62528,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 62301
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167496,
+    "archive_sum_bits": 20784,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20560
+   }
+  },
+  "dense_random|n4": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147376,
+    "archive_sum_bits": 664,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 456
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147504,
+    "archive_sum_bits": 792,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 582
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147328,
+    "archive_sum_bits": 616,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 409
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 128
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147096,
+    "archive_sum_bits": 384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 184
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147184,
+    "archive_sum_bits": 472,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 269
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147064,
+    "archive_sum_bits": 352,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 152
+   }
+  },
+  "dense_random|n6": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150240,
+    "archive_sum_bits": 3528,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3316
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152656,
+    "archive_sum_bits": 5944,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5729
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150480,
+    "archive_sum_bits": 3768,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3561
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 768
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147768,
+    "archive_sum_bits": 1056,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 852
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148688,
+    "archive_sum_bits": 1976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1771
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147720,
+    "archive_sum_bits": 1008,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 804
+   }
+  },
+  "dense_random|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 163104,
+    "archive_sum_bits": 16392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 16169
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 186744,
+    "archive_sum_bits": 40032,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 39813
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 170272,
+    "archive_sum_bits": 23560,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 23344
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151032,
+    "archive_sum_bits": 4320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4096
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151160,
+    "archive_sum_bits": 4448,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4224
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 158280,
+    "archive_sum_bits": 11568,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 11350
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151096,
+    "archive_sum_bits": 4384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4160
+   }
+  },
+  "modular|n10": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147736,
+    "archive_sum_bits": 1024,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 816
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147472,
+    "archive_sum_bits": 760,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 544
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147824,
+    "archive_sum_bits": 1112,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 898
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167416,
+    "archive_sum_bits": 20704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20480
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147336,
+    "archive_sum_bits": 624,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 412
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147640,
+    "archive_sum_bits": 928,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 718
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147304,
+    "archive_sum_bits": 592,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 380
+   }
+  },
+  "modular|n128": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 161312,
+    "archive_sum_bits": 14600,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 14360
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 158160,
+    "archive_sum_bits": 11448,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 11214
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 162416,
+    "archive_sum_bits": 15704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 15465
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 156464,
+    "archive_sum_bits": 9752,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 9512
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 163688,
+    "archive_sum_bits": 16976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 16739
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 155912,
+    "archive_sum_bits": 9200,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 8960
+   }
+  },
+  "modular|n16": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148288,
+    "archive_sum_bits": 1576,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1352
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147936,
+    "archive_sum_bits": 1224,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1008
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148144,
+    "archive_sum_bits": 1432,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1216
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 2244104,
+    "archive_sum_bits": 2097392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2097152
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147712,
+    "archive_sum_bits": 1000,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 792
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148104,
+    "archive_sum_bits": 1392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1172
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147656,
+    "archive_sum_bits": 944,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 736
+   }
+  },
+  "modular|n256": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 177512,
+    "archive_sum_bits": 30800,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 30560
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 171440,
+    "archive_sum_bits": 24728,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 24485
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 179520,
+    "archive_sum_bits": 32808,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 32569
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 168160,
+    "archive_sum_bits": 21448,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 21208
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 183288,
+    "archive_sum_bits": 36576,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 36332
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 166920,
+    "archive_sum_bits": 20208,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 19968
+   }
+  },
+  "modular|n32": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149984,
+    "archive_sum_bits": 3272,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3048
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149240,
+    "archive_sum_bits": 2528,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2302
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149984,
+    "archive_sum_bits": 3272,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3054
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148800,
+    "archive_sum_bits": 2088,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1864
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150024,
+    "archive_sum_bits": 3312,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3091
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148664,
+    "archive_sum_bits": 1952,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1728
+   }
+  },
+  "modular|n4": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147176,
+    "archive_sum_bits": 464,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 264
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147096,
+    "archive_sum_bits": 384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 181
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147184,
+    "archive_sum_bits": 472,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 267
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 128
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 120
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147096,
+    "archive_sum_bits": 384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 180
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147016,
+    "archive_sum_bits": 304,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 104
+   }
+  },
+  "modular|n6": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147344,
+    "archive_sum_bits": 632,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 420
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147224,
+    "archive_sum_bits": 512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 300
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147328,
+    "archive_sum_bits": 616,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 413
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 768
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147136,
+    "archive_sum_bits": 424,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 232
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147224,
+    "archive_sum_bits": 512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 307
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147096,
+    "archive_sum_bits": 384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 192
+   }
+  },
+  "modular|n64": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153504,
+    "archive_sum_bits": 6792,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6568
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152048,
+    "archive_sum_bits": 5336,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5110
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153496,
+    "archive_sum_bits": 6784,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6552
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151232,
+    "archive_sum_bits": 4520,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4296
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153896,
+    "archive_sum_bits": 7184,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6954
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150904,
+    "archive_sum_bits": 4192,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3968
+   }
+  },
+  "modular|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147528,
+    "archive_sum_bits": 816,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 608
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147344,
+    "archive_sum_bits": 632,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 424
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147472,
+    "archive_sum_bits": 760,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 551
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151032,
+    "archive_sum_bits": 4320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4096
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147232,
+    "archive_sum_bits": 520,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 312
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147392,
+    "archive_sum_bits": 680,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 470
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147208,
+    "archive_sum_bits": 496,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 288
+   }
+  },
+  "parity|n10": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148488,
+    "archive_sum_bits": 1776,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1562
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147680,
+    "archive_sum_bits": 968,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 753
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 157096,
+    "archive_sum_bits": 10384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 10170
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167416,
+    "archive_sum_bits": 20704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20480
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147224,
+    "archive_sum_bits": 512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 310
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152488,
+    "archive_sum_bits": 5776,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5556
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147776,
+    "archive_sum_bits": 1064,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 850
+   }
+  },
+  "parity|n128": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 170080,
+    "archive_sum_bits": 23368,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 23133
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 161112,
+    "archive_sum_bits": 14400,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 14163
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 289568,
+    "archive_sum_bits": 142856,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 142610
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 155976,
+    "archive_sum_bits": 9264,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 9023
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 277464,
+    "archive_sum_bits": 130752,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 130506
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 161080,
+    "archive_sum_bits": 14368,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 14135
+   }
+  },
+  "parity|n16": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149344,
+    "archive_sum_bits": 2632,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2413
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148208,
+    "archive_sum_bits": 1496,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1283
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 160424,
+    "archive_sum_bits": 13712,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 13492
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 2244104,
+    "archive_sum_bits": 2097392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2097152
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147560,
+    "archive_sum_bits": 848,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 630
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 156704,
+    "archive_sum_bits": 9992,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 9768
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148272,
+    "archive_sum_bits": 1560,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1342
+   }
+  },
+  "parity|n256": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 196344,
+    "archive_sum_bits": 49632,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 49390
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 178104,
+    "archive_sum_bits": 31392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 31146
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 483896,
+    "archive_sum_bits": 337184,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 336930
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167728,
+    "archive_sum_bits": 21016,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20775
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 465024,
+    "archive_sum_bits": 318312,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 318062
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 178544,
+    "archive_sum_bits": 31832,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 31591
+   }
+  },
+  "parity|n32": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151848,
+    "archive_sum_bits": 5136,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4910
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149712,
+    "archive_sum_bits": 3000,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2781
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 173512,
+    "archive_sum_bits": 26800,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 26572
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148512,
+    "archive_sum_bits": 1800,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1577
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 168768,
+    "archive_sum_bits": 22056,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 21824
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149720,
+    "archive_sum_bits": 3008,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2785
+   }
+  },
+  "parity|n4": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147232,
+    "archive_sum_bits": 520,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 314
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147072,
+    "archive_sum_bits": 360,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 159
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147456,
+    "archive_sum_bits": 744,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 540
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 128
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 146984,
+    "archive_sum_bits": 272,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 71
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147224,
+    "archive_sum_bits": 512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 302
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147016,
+    "archive_sum_bits": 304,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 107
+   }
+  },
+  "parity|n6": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147640,
+    "archive_sum_bits": 928,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 717
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147256,
+    "archive_sum_bits": 544,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 339
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150600,
+    "archive_sum_bits": 3888,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3678
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 768
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 124
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148320,
+    "archive_sum_bits": 1608,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1402
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147264,
+    "archive_sum_bits": 552,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 352
+   }
+  },
+  "parity|n64": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 157664,
+    "archive_sum_bits": 10952,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 10718
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153232,
+    "archive_sum_bits": 6520,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6294
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 214400,
+    "archive_sum_bits": 67688,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 67442
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150776,
+    "archive_sum_bits": 4064,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3842
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 206040,
+    "archive_sum_bits": 59328,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 59094
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153456,
+    "archive_sum_bits": 6744,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6514
+   }
+  },
+  "parity|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148104,
+    "archive_sum_bits": 1392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1184
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147488,
+    "archive_sum_bits": 776,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 566
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153224,
+    "archive_sum_bits": 6512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6294
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151032,
+    "archive_sum_bits": 4320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4096
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147136,
+    "archive_sum_bits": 424,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 219
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150480,
+    "archive_sum_bits": 3768,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3558
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147536,
+    "archive_sum_bits": 824,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 619
+   }
+  },
+  "sparse_conj|n10": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148032,
+    "archive_sum_bits": 1320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1110
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147832,
+    "archive_sum_bits": 1120,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 912
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147640,
+    "archive_sum_bits": 928,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 722
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 167416,
+    "archive_sum_bits": 20704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 20480
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147232,
+    "archive_sum_bits": 520,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 309
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147336,
+    "archive_sum_bits": 624,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 415
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148568,
+    "archive_sum_bits": 1856,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1645
+   }
+  },
+  "sparse_conj|n128": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 166456,
+    "archive_sum_bits": 19744,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 19512
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 164112,
+    "archive_sum_bits": 17400,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 17161
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 159432,
+    "archive_sum_bits": 12720,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 12484
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 157080,
+    "archive_sum_bits": 10368,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 10131
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 158344,
+    "archive_sum_bits": 11632,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 11395
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 174600,
+    "archive_sum_bits": 27888,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 27651
+   }
+  },
+  "sparse_conj|n16": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148600,
+    "archive_sum_bits": 1888,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1677
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148368,
+    "archive_sum_bits": 1656,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1442
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147936,
+    "archive_sum_bits": 1224,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1006
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 2244104,
+    "archive_sum_bits": 2097392,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2097152
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147584,
+    "archive_sum_bits": 872,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 655
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147728,
+    "archive_sum_bits": 1016,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 799
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148816,
+    "archive_sum_bits": 2104,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1887
+   }
+  },
+  "sparse_conj|n256": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 189328,
+    "archive_sum_bits": 42616,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 42374
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 184528,
+    "archive_sum_bits": 37816,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 37571
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 174576,
+    "archive_sum_bits": 27864,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 27621
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 170400,
+    "archive_sum_bits": 23688,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 23450
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 172944,
+    "archive_sum_bits": 26232,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 25993
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 204536,
+    "archive_sum_bits": 57824,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 57578
+   }
+  },
+  "sparse_conj|n32": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151016,
+    "archive_sum_bits": 4304,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4083
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 150416,
+    "archive_sum_bits": 3704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 3482
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 149424,
+    "archive_sum_bits": 2712,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2490
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148680,
+    "archive_sum_bits": 1968,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1742
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148992,
+    "archive_sum_bits": 2280,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 2058
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153016,
+    "archive_sum_bits": 6304,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 6082
+   }
+  },
+  "sparse_conj|n4": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147088,
+    "archive_sum_bits": 376,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 178
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147064,
+    "archive_sum_bits": 352,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 154
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147040,
+    "archive_sum_bits": 328,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 127
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147032,
+    "archive_sum_bits": 320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 128
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 146984,
+    "archive_sum_bits": 272,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 74
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147000,
+    "archive_sum_bits": 288,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 95
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147008,
+    "archive_sum_bits": 296,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 98
+   }
+  },
+  "sparse_conj|n6": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147416,
+    "archive_sum_bits": 704,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 495
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147336,
+    "archive_sum_bits": 624,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 419
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147232,
+    "archive_sum_bits": 520,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 318
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 768
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147024,
+    "archive_sum_bits": 312,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 119
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147080,
+    "archive_sum_bits": 368,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 172
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147352,
+    "archive_sum_bits": 640,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 435
+   }
+  },
+  "sparse_conj|n64": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 155320,
+    "archive_sum_bits": 8608,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 8383
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 154264,
+    "archive_sum_bits": 7552,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 7322
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 152224,
+    "archive_sum_bits": 5512,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 5288
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151088,
+    "archive_sum_bits": 4376,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4151
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151680,
+    "archive_sum_bits": 4968,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4739
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 158096,
+    "archive_sum_bits": 11384,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 11159
+   }
+  },
+  "sparse_conj|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147688,
+    "archive_sum_bits": 976,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 769
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147544,
+    "archive_sum_bits": 832,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 627
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147376,
+    "archive_sum_bits": 664,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 454
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151032,
+    "archive_sum_bits": 4320,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 4096
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147120,
+    "archive_sum_bits": 408,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 206
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147200,
+    "archive_sum_bits": 488,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 283
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148144,
+    "archive_sum_bits": 1432,
+    "decoder_bundle_bits": 146712,
+    "objects": 2,
+    "payload_sum_bits": 1222
+   }
+  }
+ },
+ "amortized_totals_note": "archive_sum = sum of complete archives (header+framing+payload); payload_sum is NOT added to it. The decoder charge is the gzip-9 size of the complete local dependency bundle under CPython 3.12 stdlib, identical for every codec. These are encoder-specific code lengths, not Kolmogorov complexity.",
+ "analysis_version": "s1-analysis-v3",
+ "certificate_levels": {
+  "bdd_ref|independent_exact": 638,
+  "bdd_ref|none": 308,
+  "bdd_ref|solver_only": 1406,
+  "index_cube|none": 503,
+  "index_cube|solver_only": 642,
+  "index_cube|witness_replayed": 1207,
+  "index_enum|exhaustive": 368,
+  "index_enum|witness_replayed": 784,
+  "index_sat|checked_proof": 696,
+  "index_sat|solver_only": 1,
+  "index_sat|witness_replayed": 1655,
+  "literal|exhaustive": 435,
+  "literal|witness_replayed": 957,
+  "reference|exhaustive": 368,
+  "reference|witness_replayed": 784
+ },
+ "changes_in_v3": [
+  "peak RSS read from the validated attempt envelope (R2-06); missing measurements are null, never 0",
+  "every ok item reconciled with its planned family/n/backend, shared world id and 24-query grid; absent query rows counted as 'query_missing' in completion denominators",
+  "phase derived from validated run provenance"
+ ],
+ "codec_roundtrip_failures": 0,
+ "completion": {
+  "bdd_ref|n10": {
+   "completed": 288
+  },
+  "bdd_ref|n128": {
+   "completed": 162,
+   "timeout": 23,
+   "unknown_resource": 55
+  },
+  "bdd_ref|n16": {
+   "completed": 228,
+   "unknown_resource": 12
+  },
+  "bdd_ref|n256": {
+   "completed": 144,
+   "timeout": 23,
+   "unknown_resource": 73
+  },
+  "bdd_ref|n32": {
+   "completed": 184,
+   "timeout": 10,
+   "unknown_resource": 46
+  },
+  "bdd_ref|n4": {
+   "completed": 288
+  },
+  "bdd_ref|n6": {
+   "completed": 288
+  },
+  "bdd_ref|n64": {
+   "completed": 174,
+   "timeout": 25,
+   "unknown_resource": 41
+  },
+  "bdd_ref|n8": {
+   "completed": 288
+  },
+  "index_cube|n10": {
+   "completed": 283,
+   "timeout": 5
+  },
+  "index_cube|n128": {
+   "completed": 108,
+   "timeout": 7,
+   "unknown_resource": 125
+  },
+  "index_cube|n16": {
+   "completed": 216,
+   "timeout": 24
+  },
+  "index_cube|n256": {
+   "completed": 114,
+   "timeout": 5,
+   "unknown_resource": 121
+  },
+  "index_cube|n32": {
+   "completed": 143,
+   "timeout": 20,
+   "unknown_resource": 77
+  },
+  "index_cube|n4": {
+   "completed": 288
+  },
+  "index_cube|n6": {
+   "completed": 288
+  },
+  "index_cube|n64": {
+   "completed": 121,
+   "timeout": 6,
+   "unknown_resource": 113
+  },
+  "index_cube|n8": {
+   "completed": 288
+  },
+  "index_enum|n10": {
+   "completed": 288
+  },
+  "index_enum|n128": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n16": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n256": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n32": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n4": {
+   "completed": 288
+  },
+  "index_enum|n6": {
+   "completed": 288
+  },
+  "index_enum|n64": {
+   "excluded_by_design": 240
+  },
+  "index_enum|n8": {
+   "completed": 288
+  },
+  "index_sat|n10": {
+   "completed": 288
+  },
+  "index_sat|n128": {
+   "completed": 240
+  },
+  "index_sat|n16": {
+   "completed": 240
+  },
+  "index_sat|n256": {
+   "completed": 240
+  },
+  "index_sat|n32": {
+   "completed": 240
+  },
+  "index_sat|n4": {
+   "completed": 288
+  },
+  "index_sat|n6": {
+   "completed": 288
+  },
+  "index_sat|n64": {
+   "completed": 240
+  },
+  "index_sat|n8": {
+   "completed": 288
+  },
+  "literal|n10": {
+   "completed": 288
+  },
+  "literal|n128": {
+   "excluded_by_design": 240
+  },
+  "literal|n16": {
+   "completed": 240
+  },
+  "literal|n256": {
+   "excluded_by_design": 240
+  },
+  "literal|n32": {
+   "excluded_by_design": 240
+  },
+  "literal|n4": {
+   "completed": 288
+  },
+  "literal|n6": {
+   "completed": 288
+  },
+  "literal|n64": {
+   "excluded_by_design": 240
+  },
+  "literal|n8": {
+   "completed": 288
+  },
+  "reference|n10": {
+   "completed": 288
+  },
+  "reference|n128": {
+   "excluded_by_design": 240
+  },
+  "reference|n16": {
+   "excluded_by_design": 240
+  },
+  "reference|n256": {
+   "excluded_by_design": 240
+  },
+  "reference|n32": {
+   "excluded_by_design": 240
+  },
+  "reference|n4": {
+   "completed": 288
+  },
+  "reference|n6": {
+   "completed": 288
+  },
+  "reference|n64": {
+   "excluded_by_design": 240
+  },
+  "reference|n8": {
+   "completed": 288
+  }
+ },
+ "construction_seconds_median": {
+  "bdd_ref|n10": 0.049276520999910645,
+  "bdd_ref|n128": 0.0571161039999879,
+  "bdd_ref|n16": 0.04864531249995707,
+  "bdd_ref|n256": 0.0591101040004105,
+  "bdd_ref|n32": 0.04933902050015604,
+  "bdd_ref|n4": 0.05759372899979098,
+  "bdd_ref|n6": 0.0572882919998392,
+  "bdd_ref|n64": 0.05090677099997265,
+  "bdd_ref|n8": 0.05648122950015022,
+  "index_cube|n10": 0.00347145849991648,
+  "index_cube|n128": 0.016672938000056092,
+  "index_cube|n16": 0.0022967709999193175,
+  "index_cube|n256": 0.03388589649966889,
+  "index_cube|n32": 0.003581874500014237,
+  "index_cube|n4": 0.00021943749993624806,
+  "index_cube|n6": 0.0007385415001408546,
+  "index_cube|n64": 0.009144583500074077,
+  "index_cube|n8": 0.001244145999862667,
+  "index_enum|n10": 0.0033993125000506552,
+  "index_enum|n4": 0.00022381250005309994,
+  "index_enum|n6": 0.0007150834999265498,
+  "index_enum|n8": 0.0012322500001573644,
+  "index_sat|n10": 0.0034476044997973077,
+  "index_sat|n128": 0.016593603999808693,
+  "index_sat|n16": 0.0022520625002471206,
+  "index_sat|n256": 0.03390012499994555,
+  "index_sat|n32": 0.0035199165001813526,
+  "index_sat|n4": 0.000218541999856825,
+  "index_sat|n6": 0.0007197915001597721,
+  "index_sat|n64": 0.00913668799989864,
+  "index_sat|n8": 0.001242062500296015,
+  "literal|n10": 0.021187750500303082,
+  "literal|n16": 0.024947666999878493,
+  "literal|n4": 0.02419708349998473,
+  "literal|n6": 0.02465364599993336,
+  "literal|n8": 0.023791291499946965,
+  "reference|n10": 4.170001375314314e-07,
+  "reference|n4": 4.5899969336460344e-07,
+  "reference|n6": 4.5799993131367955e-07,
+  "reference|n8": 4.58000158687355e-07
+ },
+ "correctness": {
+  "bdd_answers_excluded_post_interrupt_legacy": 0,
+  "compared_with_exhaustive_reference": {
+   "bdd_ref": 1152,
+   "index_cube": 1147,
+   "index_enum": 1152,
+   "index_sat": 1152,
+   "literal": 1152
+  },
+  "cross_backend_disagreements_total": 0,
+  "disagreement_examples": [],
+  "mismatches_vs_reference": {},
+  "unsat_proofs_checked_ok": 696,
+  "unsat_proofs_not_certified": 1,
+  "witness_replay_failures": 0
+ },
+ "decoder": {
+  "codec_version": 1,
+  "decoder": "causalguard.codec",
+  "gzip_bytes": 8340,
+  "sha256": "734cc3bc6e092384f09f3c2808135f1e0abf45c4df5f0c76b3aacbf8f00eb8a1",
+  "source_bytes": 27403
+ },
+ "decoder_bundle": {
+  "bundle_sha256": "0128a1249f17508b6656f9aa7f6bb94d636adc9dd44a4c9899ba333ebb8bd126",
+  "codec_version": 1,
+  "gzip_bytes": 18339,
+  "modules": [
+   "codec.py",
+   "index_repr.py",
+   "schema.py"
+  ],
+  "runtime": "CPython 3.12 standard library (+ package __init__ stub)",
+  "source_bytes": 64841
+ },
+ "independent_worlds": 98,
+ "index_cover_exact_worlds": {
+  "False": 4,
+  "True": 94
+ },
+ "large_n_unsat_type_validation": {
+  "independently_confirmed_by_bdd_ref": 22,
+  "independently_confirmed_by_bdd_ref+index_cube": 182,
+  "independently_confirmed_by_bdd_ref+index_cube+literal": 66,
+  "independently_confirmed_by_index_cube": 25,
+  "independently_confirmed_by_index_cube+literal": 1,
+  "no_independent_exact_method_completed": 33,
+  "total": 329
+ },
+ "latency_completed_queries": {
+  "bdd_ref|n10": {
+   "max_s": 0.14312924999967436,
+   "median_s": 0.00040877099991121213,
+   "n": 288,
+   "p90_s": 0.025493320500163494
+  },
+  "bdd_ref|n128": {
+   "max_s": 4.889383624999937,
+   "median_s": 0.011212937499749387,
+   "n": 162,
+   "p90_s": 0.2190398497003571
+  },
+  "bdd_ref|n16": {
+   "max_s": 2.772410624999793,
+   "median_s": 0.00041920850003407395,
+   "n": 228,
+   "p90_s": 0.0071018749003087635
+  },
+  "bdd_ref|n256": {
+   "max_s": 5.371212209000078,
+   "median_s": 0.034796479500073474,
+   "n": 144,
+   "p90_s": 0.3040794079002831
+  },
+  "bdd_ref|n32": {
+   "max_s": 1.0725390000002335,
+   "median_s": 0.0010138960001313535,
+   "n": 184,
+   "p90_s": 0.06063151240000484
+  },
+  "bdd_ref|n4": {
+   "max_s": 0.00020041700008732732,
+   "median_s": 8.785399973021413e-05,
+   "n": 288,
+   "p90_s": 0.0001258832001894916
+  },
+  "bdd_ref|n6": {
+   "max_s": 0.0017157920001409366,
+   "median_s": 0.0001476460001867963,
+   "n": 288,
+   "p90_s": 0.00045627489998878445
+  },
+  "bdd_ref|n64": {
+   "max_s": 1.935083792000114,
+   "median_s": 0.0031075625001903973,
+   "n": 174,
+   "p90_s": 0.10798661680028103
+  },
+  "bdd_ref|n8": {
+   "max_s": 0.011560041999928217,
+   "median_s": 0.00023712550000709598,
+   "n": 288,
+   "p90_s": 0.002944978699997593
+  },
+  "index_cube|n10": {
+   "max_s": 19.14612758300018,
+   "median_s": 0.0014389170000868035,
+   "n": 283,
+   "p90_s": 1.093054599799963
+  },
+  "index_cube|n128": {
+   "max_s": 5.214144667000255,
+   "median_s": 0.0014723330000379065,
+   "n": 108,
+   "p90_s": 0.07953747049991754
+  },
+  "index_cube|n16": {
+   "max_s": 19.64672895800004,
+   "median_s": 0.0009970209998755308,
+   "n": 216,
+   "p90_s": 1.5293928954999956
+  },
+  "index_cube|n256": {
+   "max_s": 5.189600415999848,
+   "median_s": 0.0021550624996962142,
+   "n": 114,
+   "p90_s": 0.2544658918999634
+  },
+  "index_cube|n32": {
+   "max_s": 11.997006707999844,
+   "median_s": 0.0004971660000592237,
+   "n": 143,
+   "p90_s": 0.36595699939989557
+  },
+  "index_cube|n4": {
+   "max_s": 0.0006583339995813731,
+   "median_s": 8.262500023192842e-05,
+   "n": 288,
+   "p90_s": 0.0002428372999020212
+  },
+  "index_cube|n6": {
+   "max_s": 0.015902458999789815,
+   "median_s": 0.0001937920001182647,
+   "n": 288,
+   "p90_s": 0.0030503085999953336
+  },
+  "index_cube|n64": {
+   "max_s": 2.540071709000131,
+   "median_s": 0.0008694580001247232,
+   "n": 121,
+   "p90_s": 0.232884582999759
+  },
+  "index_cube|n8": {
+   "max_s": 0.4932075420001638,
+   "median_s": 0.00047404199995071394,
+   "n": 288,
+   "p90_s": 0.0781610418000583
+  },
+  "index_enum|n10": {
+   "max_s": 0.0031469999998989806,
+   "median_s": 0.00041864600007102126,
+   "n": 288,
+   "p90_s": 0.0007413831000576467
+  },
+  "index_enum|n4": {
+   "max_s": 8.729199998924742e-05,
+   "median_s": 3.945850016862096e-05,
+   "n": 288,
+   "p90_s": 4.992930007574614e-05
+  },
+  "index_enum|n6": {
+   "max_s": 0.00018729100020209444,
+   "median_s": 7.316699975490337e-05,
+   "n": 288,
+   "p90_s": 0.00010770820008474403
+  },
+  "index_enum|n8": {
+   "max_s": 0.0008565000002818124,
+   "median_s": 0.00015881250010352232,
+   "n": 288,
+   "p90_s": 0.00043598309998742527
+  },
+  "index_sat|n10": {
+   "max_s": 0.16086399999994683,
+   "median_s": 0.0015123335001590021,
+   "n": 288,
+   "p90_s": 0.05810660010001812
+  },
+  "index_sat|n128": {
+   "max_s": 1.0993406659999891,
+   "median_s": 0.010642853999797808,
+   "n": 240,
+   "p90_s": 0.05043561280026552
+  },
+  "index_sat|n16": {
+   "max_s": 0.06353916599982767,
+   "median_s": 0.0015436874998613348,
+   "n": 240,
+   "p90_s": 0.007768249700257001
+  },
+  "index_sat|n256": {
+   "max_s": 2.3026874580000367,
+   "median_s": 0.020295374999932392,
+   "n": 240,
+   "p90_s": 0.11570030439988839
+  },
+  "index_sat|n32": {
+   "max_s": 0.6574941250000848,
+   "median_s": 0.002883583500079112,
+   "n": 240,
+   "p90_s": 0.014878379099809533
+  },
+  "index_sat|n4": {
+   "max_s": 0.008074082999883103,
+   "median_s": 0.0006597500000680157,
+   "n": 288,
+   "p90_s": 0.0017065912000362006
+  },
+  "index_sat|n6": {
+   "max_s": 0.07852070800026922,
+   "median_s": 0.0010524790000090434,
+   "n": 288,
+   "p90_s": 0.005800987400243686
+  },
+  "index_sat|n64": {
+   "max_s": 0.09368758300024638,
+   "median_s": 0.005608249999795589,
+   "n": 240,
+   "p90_s": 0.027838412199889712
+  },
+  "index_sat|n8": {
+   "max_s": 0.38780662499993923,
+   "median_s": 0.001381958500132896,
+   "n": 288,
+   "p90_s": 0.013445891999890592
+  },
+  "literal|n10": {
+   "max_s": 0.0004260420000719023,
+   "median_s": 0.00010385450013927766,
+   "n": 288,
+   "p90_s": 0.00025031689970091977
+  },
+  "literal|n16": {
+   "max_s": 0.000889833000201179,
+   "median_s": 0.00041181249980581924,
+   "n": 240,
+   "p90_s": 0.0006355541000175435
+  },
+  "literal|n4": {
+   "max_s": 0.00014325000029202783,
+   "median_s": 4.45835000846273e-05,
+   "n": 288,
+   "p90_s": 5.4595699839410376e-05
+  },
+  "literal|n6": {
+   "max_s": 0.00019070799999099108,
+   "median_s": 6.379150022439717e-05,
+   "n": 288,
+   "p90_s": 9.433760010324477e-05
+  },
+  "literal|n8": {
+   "max_s": 0.0005960419998700672,
+   "median_s": 8.029149989852158e-05,
+   "n": 288,
+   "p90_s": 0.0001642624998567044
+  },
+  "reference|n10": {
+   "max_s": 0.001930166999954963,
+   "median_s": 0.000421124999775202,
+   "n": 288,
+   "p90_s": 0.0009022082000228696
+  },
+  "reference|n4": {
+   "max_s": 8.058299999902374e-05,
+   "median_s": 3.9229499861903605e-05,
+   "n": 288,
+   "p90_s": 6.0291299951131806e-05
+  },
+  "reference|n6": {
+   "max_s": 0.0002443749999656575,
+   "median_s": 7.543700007772713e-05,
+   "n": 288,
+   "p90_s": 0.0001344002000223554
+  },
+  "reference|n8": {
+   "max_s": 0.0010350420002396277,
+   "median_s": 0.00016212500008805364,
+   "n": 288,
+   "p90_s": 0.0004777126997396409
+  }
+ },
+ "median_archive_bits": {
+  "bounded_random|n10": {
+   "bdd": 820.0,
+   "best_codec": "lut",
+   "circuit": 992.0,
+   "dnf": 864.0,
+   "full": 10352.0,
+   "gate": 424.0,
+   "generic_gzip": 1056.0,
+   "generic_lzma": 988.0,
+   "generic_raw": 1576.0,
+   "index": 672.0,
+   "index_rank_among_codecs": 3,
+   "lut": 384.0,
+   "worlds": 2
+  },
+  "bounded_random|n128": {
+   "bdd": 11828.0,
+   "best_codec": "lut",
+   "circuit": 14508.0,
+   "dnf": 14720.0,
+   "gate": 6736.0,
+   "generic_gzip": 10056.0,
+   "generic_lzma": 9828.0,
+   "generic_raw": 22900.0,
+   "index": 15356.0,
+   "index_rank_among_codecs": 8,
+   "lut": 6228.0,
+   "worlds": 2
+  },
+  "bounded_random|n16": {
+   "bdd": 1280.0,
+   "best_codec": "lut",
+   "circuit": 1592.0,
+   "dnf": 1340.0,
+   "full": 1048696.0,
+   "gate": 680.0,
+   "generic_gzip": 1500.0,
+   "generic_lzma": 1552.0,
+   "generic_raw": 2612.0,
+   "index": 1236.0,
+   "index_rank_among_codecs": 3,
+   "lut": 616.0,
+   "worlds": 2
+  },
+  "bounded_random|n256": {
+   "bdd": 24712.0,
+   "best_codec": "lut",
+   "circuit": 30164.0,
+   "dnf": 32080.0,
+   "gate": 14660.0,
+   "generic_gzip": 21056.0,
+   "generic_lzma": 19620.0,
+   "generic_raw": 49300.0,
+   "index": 34296.0,
+   "index_rank_among_codecs": 8,
+   "lut": 13636.0,
+   "worlds": 2
+  },
+  "bounded_random|n32": {
+   "bdd": 2684.0,
+   "best_codec": "lut",
+   "circuit": 3396.0,
+   "dnf": 2992.0,
+   "gate": 1456.0,
+   "generic_gzip": 2576.0,
+   "generic_lzma": 2688.0,
+   "generic_raw": 5372.0,
+   "index": 2904.0,
+   "index_rank_among_codecs": 6,
+   "lut": 1328.0,
+   "worlds": 2
+  },
+  "bounded_random|n4": {
+   "bdd": 372.0,
+   "best_codec": "full",
+   "circuit": 496.0,
+   "dnf": 360.0,
+   "full": 160.0,
+   "gate": 192.0,
+   "generic_gzip": 612.0,
+   "generic_lzma": 520.0,
+   "generic_raw": 704.0,
+   "index": 256.0,
+   "index_rank_among_codecs": 4,
+   "lut": 176.0,
+   "worlds": 2
+  },
+  "bounded_random|n6": {
+   "bdd": 516.0,
+   "best_codec": "lut",
+   "circuit": 612.0,
+   "dnf": 500.0,
+   "full": 488.0,
+   "gate": 264.0,
+   "generic_gzip": 800.0,
+   "generic_lzma": 696.0,
+   "generic_raw": 996.0,
+   "index": 372.0,
+   "index_rank_among_codecs": 3,
+   "lut": 240.0,
+   "worlds": 2
+  },
+  "bounded_random|n64": {
+   "bdd": 5696.0,
+   "best_codec": "lut",
+   "circuit": 6952.0,
+   "dnf": 6572.0,
+   "gate": 3116.0,
+   "generic_gzip": 4988.0,
+   "generic_lzma": 5028.0,
+   "generic_raw": 10944.0,
+   "index": 6644.0,
+   "index_rank_among_codecs": 7,
+   "lut": 2860.0,
+   "worlds": 2
+  },
+  "bounded_random|n8": {
+   "bdd": 700.0,
+   "best_codec": "lut",
+   "circuit": 872.0,
+   "dnf": 672.0,
+   "full": 2160.0,
+   "gate": 352.0,
+   "generic_gzip": 944.0,
+   "generic_lzma": 836.0,
+   "generic_raw": 1272.0,
+   "index": 564.0,
+   "index_rank_among_codecs": 3,
+   "lut": 320.0,
+   "worlds": 2
+  },
+  "canalizing|n10": {
+   "bdd": 628.0,
+   "best_codec": "index",
+   "circuit": 584.0,
+   "dnf": 500.0,
+   "full": 10352.0,
+   "gate": 568.0,
+   "generic_gzip": 1228.0,
+   "generic_lzma": 1228.0,
+   "generic_raw": 1928.0,
+   "index": 404.0,
+   "index_rank_among_codecs": 1,
+   "lut": 532.0,
+   "worlds": 2
+  },
+  "canalizing|n128": {
+   "bdd": 8856.0,
+   "best_codec": "dnf",
+   "circuit": 8320.0,
+   "dnf": 6580.0,
+   "gate": 7692.0,
+   "generic_gzip": 11320.0,
+   "generic_lzma": 11116.0,
+   "generic_raw": 25400.0,
+   "index": 7016.0,
+   "index_rank_among_codecs": 2,
+   "lut": 7304.0,
+   "worlds": 2
+  },
+  "canalizing|n16": {
+   "bdd": 928.0,
+   "best_codec": "index",
+   "circuit": 868.0,
+   "dnf": 696.0,
+   "full": 1048696.0,
+   "gate": 804.0,
+   "generic_gzip": 1680.0,
+   "generic_lzma": 1748.0,
+   "generic_raw": 2920.0,
+   "index": 660.0,
+   "index_rank_among_codecs": 1,
+   "lut": 756.0,
+   "worlds": 2
+  },
+  "canalizing|n256": {
+   "bdd": 19216.0,
+   "best_codec": "dnf",
+   "circuit": 17844.0,
+   "dnf": 14508.0,
+   "gate": 16664.0,
+   "generic_gzip": 23652.0,
+   "generic_lzma": 21980.0,
+   "generic_raw": 54120.0,
+   "index": 15840.0,
+   "index_rank_among_codecs": 2,
+   "lut": 15888.0,
+   "worlds": 2
+  },
+  "canalizing|n32": {
+   "bdd": 1824.0,
+   "best_codec": "dnf",
+   "circuit": 1676.0,
+   "dnf": 1316.0,
+   "gate": 1496.0,
+   "generic_gzip": 2644.0,
+   "generic_lzma": 2812.0,
+   "generic_raw": 5404.0,
+   "index": 1336.0,
+   "index_rank_among_codecs": 2,
+   "lut": 1396.0,
+   "worlds": 2
+  },
+  "canalizing|n4": {
+   "bdd": 192.0,
+   "best_codec": "lut",
+   "circuit": 176.0,
+   "dnf": 164.0,
+   "full": 160.0,
+   "gate": 152.0,
+   "generic_gzip": 576.0,
+   "generic_lzma": 500.0,
+   "generic_raw": 540.0,
+   "index": 152.0,
+   "index_rank_among_codecs": 2,
+   "lut": 148.0,
+   "worlds": 2
+  },
+  "canalizing|n6": {
+   "bdd": 336.0,
+   "best_codec": "index",
+   "circuit": 300.0,
+   "dnf": 272.0,
+   "full": 488.0,
+   "gate": 272.0,
+   "generic_gzip": 804.0,
+   "generic_lzma": 732.0,
+   "generic_raw": 972.0,
+   "index": 224.0,
+   "index_rank_among_codecs": 1,
+   "lut": 256.0,
+   "worlds": 2
+  },
+  "canalizing|n64": {
+   "bdd": 4336.0,
+   "best_codec": "dnf",
+   "circuit": 3952.0,
+   "dnf": 3160.0,
+   "gate": 3656.0,
+   "generic_gzip": 5648.0,
+   "generic_lzma": 5768.0,
+   "generic_raw": 12192.0,
+   "index": 3288.0,
+   "index_rank_among_codecs": 2,
+   "lut": 3452.0,
+   "worlds": 2
+  },
+  "canalizing|n8": {
+   "bdd": 468.0,
+   "best_codec": "index",
+   "circuit": 424.0,
+   "dnf": 340.0,
+   "full": 2160.0,
+   "gate": 380.0,
+   "generic_gzip": 976.0,
+   "generic_lzma": 952.0,
+   "generic_raw": 1368.0,
+   "index": 304.0,
+   "index_rank_among_codecs": 1,
+   "lut": 356.0,
+   "worlds": 2
+  },
+  "dense_random|n10": {
+   "bdd": 42216.0,
+   "best_codec": "full",
+   "circuit": 131820.0,
+   "dnf": 82100.0,
+   "full": 10352.0,
+   "gate": 10432.0,
+   "generic_gzip": 13432.0,
+   "generic_lzma": 11704.0,
+   "generic_raw": 26792.0,
+   "index": 31264.0,
+   "index_rank_among_codecs": 6,
+   "lut": 10392.0,
+   "worlds": 2
+  },
+  "dense_random|n4": {
+   "bdd": 332.0,
+   "best_codec": "full",
+   "circuit": 396.0,
+   "dnf": 308.0,
+   "full": 160.0,
+   "gate": 192.0,
+   "generic_gzip": 612.0,
+   "generic_lzma": 524.0,
+   "generic_raw": 708.0,
+   "index": 236.0,
+   "index_rank_among_codecs": 4,
+   "lut": 176.0,
+   "worlds": 2
+  },
+  "dense_random|n6": {
+   "bdd": 1764.0,
+   "best_codec": "full",
+   "circuit": 2972.0,
+   "dnf": 1884.0,
+   "full": 488.0,
+   "gate": 528.0,
+   "generic_gzip": 1088.0,
+   "generic_lzma": 1100.0,
+   "generic_raw": 1880.0,
+   "index": 988.0,
+   "index_rank_among_codecs": 4,
+   "lut": 504.0,
+   "worlds": 2
+  },
+  "dense_random|n8": {
+   "bdd": 8196.0,
+   "best_codec": "full",
+   "circuit": 20016.0,
+   "dnf": 11780.0,
+   "full": 2160.0,
+   "gate": 2224.0,
+   "generic_gzip": 3172.0,
+   "generic_lzma": 3048.0,
+   "generic_raw": 6408.0,
+   "index": 5784.0,
+   "index_rank_among_codecs": 6,
+   "lut": 2192.0,
+   "worlds": 2
+  },
+  "modular|n10": {
+   "bdd": 512.0,
+   "best_codec": "lut",
+   "circuit": 380.0,
+   "dnf": 556.0,
+   "full": 10352.0,
+   "gate": 312.0,
+   "generic_gzip": 876.0,
+   "generic_lzma": 780.0,
+   "generic_raw": 1256.0,
+   "index": 464.0,
+   "index_rank_among_codecs": 4,
+   "lut": 296.0,
+   "worlds": 2
+  },
+  "modular|n128": {
+   "bdd": 7300.0,
+   "best_codec": "lut",
+   "circuit": 5724.0,
+   "dnf": 7852.0,
+   "gate": 4876.0,
+   "generic_gzip": 6716.0,
+   "generic_lzma": 6592.0,
+   "generic_raw": 17668.0,
+   "index": 8488.0,
+   "index_rank_among_codecs": 8,
+   "lut": 4600.0,
+   "worlds": 2
+  },
+  "modular|n16": {
+   "bdd": 788.0,
+   "best_codec": "lut",
+   "circuit": 612.0,
+   "dnf": 716.0,
+   "full": 1048696.0,
+   "gate": 500.0,
+   "generic_gzip": 1176.0,
+   "generic_lzma": 1156.0,
+   "generic_raw": 2028.0,
+   "index": 696.0,
+   "index_rank_among_codecs": 4,
+   "lut": 472.0,
+   "worlds": 2
+  },
+  "modular|n256": {
+   "bdd": 15400.0,
+   "best_codec": "lut",
+   "circuit": 12364.0,
+   "dnf": 16404.0,
+   "gate": 10724.0,
+   "generic_gzip": 13504.0,
+   "generic_lzma": 12476.0,
+   "generic_raw": 37804.0,
+   "index": 18288.0,
+   "index_rank_among_codecs": 8,
+   "lut": 10104.0,
+   "worlds": 2
+  },
+  "modular|n32": {
+   "bdd": 1636.0,
+   "best_codec": "lut",
+   "circuit": 1264.0,
+   "dnf": 1636.0,
+   "gate": 1044.0,
+   "generic_gzip": 2000.0,
+   "generic_lzma": 2032.0,
+   "generic_raw": 4208.0,
+   "index": 1656.0,
+   "index_rank_among_codecs": 6,
+   "lut": 976.0,
+   "worlds": 2
+  },
+  "modular|n4": {
+   "bdd": 232.0,
+   "best_codec": "lut",
+   "circuit": 192.0,
+   "dnf": 236.0,
+   "full": 160.0,
+   "gate": 160.0,
+   "generic_gzip": 572.0,
+   "generic_lzma": 484.0,
+   "generic_raw": 568.0,
+   "index": 192.0,
+   "index_rank_among_codecs": 4,
+   "lut": 152.0,
+   "worlds": 2
+  },
+  "modular|n6": {
+   "bdd": 316.0,
+   "best_codec": "lut",
+   "circuit": 256.0,
+   "dnf": 308.0,
+   "full": 488.0,
+   "gate": 212.0,
+   "generic_gzip": 688.0,
+   "generic_lzma": 580.0,
+   "generic_raw": 788.0,
+   "index": 256.0,
+   "index_rank_among_codecs": 3,
+   "lut": 192.0,
+   "worlds": 2
+  },
+  "modular|n64": {
+   "bdd": 3396.0,
+   "best_codec": "lut",
+   "circuit": 2668.0,
+   "dnf": 3392.0,
+   "gate": 2260.0,
+   "generic_gzip": 3476.0,
+   "generic_lzma": 3456.0,
+   "generic_raw": 8396.0,
+   "index": 3592.0,
+   "index_rank_among_codecs": 8,
+   "lut": 2096.0,
+   "worlds": 2
+  },
+  "modular|n8": {
+   "bdd": 408.0,
+   "best_codec": "lut",
+   "circuit": 316.0,
+   "dnf": 380.0,
+   "full": 2160.0,
+   "gate": 260.0,
+   "generic_gzip": 804.0,
+   "generic_lzma": 700.0,
+   "generic_raw": 1012.0,
+   "index": 340.0,
+   "index_rank_among_codecs": 4,
+   "lut": 248.0,
+   "worlds": 2
+  },
+  "parity|n10": {
+   "bdd": 888.0,
+   "best_codec": "gate",
+   "circuit": 484.0,
+   "dnf": 5192.0,
+   "full": 10352.0,
+   "gate": 256.0,
+   "generic_gzip": 1152.0,
+   "generic_lzma": 1136.0,
+   "generic_raw": 1988.0,
+   "index": 2888.0,
+   "index_rank_among_codecs": 7,
+   "lut": 532.0,
+   "worlds": 2
+  },
+  "parity|n128": {
+   "bdd": 11684.0,
+   "best_codec": "gate",
+   "circuit": 7200.0,
+   "dnf": 71428.0,
+   "gate": 4632.0,
+   "generic_gzip": 8408.0,
+   "generic_lzma": 8344.0,
+   "generic_raw": 25640.0,
+   "index": 65376.0,
+   "index_rank_among_codecs": 7,
+   "lut": 7184.0,
+   "worlds": 2
+  },
+  "parity|n16": {
+   "bdd": 1316.0,
+   "best_codec": "gate",
+   "circuit": 748.0,
+   "dnf": 6856.0,
+   "full": 1048696.0,
+   "gate": 424.0,
+   "generic_gzip": 1488.0,
+   "generic_lzma": 1496.0,
+   "generic_raw": 3048.0,
+   "index": 4996.0,
+   "index_rank_among_codecs": 7,
+   "lut": 780.0,
+   "worlds": 2
+  },
+  "parity|n256": {
+   "bdd": 24816.0,
+   "best_codec": "gate",
+   "circuit": 15696.0,
+   "dnf": 168592.0,
+   "gate": 10508.0,
+   "generic_gzip": 17336.0,
+   "generic_lzma": 16736.0,
+   "generic_raw": 55596.0,
+   "index": 159156.0,
+   "index_rank_among_codecs": 7,
+   "lut": 15916.0,
+   "worlds": 2
+  },
+  "parity|n32": {
+   "bdd": 2568.0,
+   "best_codec": "gate",
+   "circuit": 1500.0,
+   "dnf": 13400.0,
+   "gate": 900.0,
+   "generic_gzip": 2328.0,
+   "generic_lzma": 2412.0,
+   "generic_raw": 5892.0,
+   "index": 11028.0,
+   "index_rank_among_codecs": 7,
+   "lut": 1504.0,
+   "worlds": 2
+  },
+  "parity|n4": {
+   "bdd": 260.0,
+   "best_codec": "gate",
+   "circuit": 180.0,
+   "dnf": 372.0,
+   "full": 160.0,
+   "gate": 136.0,
+   "generic_gzip": 584.0,
+   "generic_lzma": 496.0,
+   "generic_raw": 568.0,
+   "index": 256.0,
+   "index_rank_among_codecs": 5,
+   "lut": 152.0,
+   "worlds": 2
+  },
+  "parity|n6": {
+   "bdd": 464.0,
+   "best_codec": "gate",
+   "circuit": 272.0,
+   "dnf": 1944.0,
+   "full": 488.0,
+   "gate": 160.0,
+   "generic_gzip": 748.0,
+   "generic_lzma": 656.0,
+   "generic_raw": 1080.0,
+   "index": 804.0,
+   "index_rank_among_codecs": 8,
+   "lut": 276.0,
+   "worlds": 2
+  },
+  "parity|n64": {
+   "bdd": 5476.0,
+   "best_codec": "gate",
+   "circuit": 3260.0,
+   "dnf": 33844.0,
+   "gate": 2032.0,
+   "generic_gzip": 4188.0,
+   "generic_lzma": 4344.0,
+   "generic_raw": 12328.0,
+   "index": 29664.0,
+   "index_rank_among_codecs": 7,
+   "lut": 3372.0,
+   "worlds": 2
+  },
+  "parity|n8": {
+   "bdd": 696.0,
+   "best_codec": "gate",
+   "circuit": 388.0,
+   "dnf": 3256.0,
+   "full": 2160.0,
+   "gate": 212.0,
+   "generic_gzip": 1016.0,
+   "generic_lzma": 960.0,
+   "generic_raw": 1576.0,
+   "index": 1884.0,
+   "index_rank_among_codecs": 7,
+   "lut": 412.0,
+   "worlds": 2
+  },
+  "sparse_conj|n10": {
+   "bdd": 660.0,
+   "best_codec": "gate",
+   "circuit": 560.0,
+   "dnf": 464.0,
+   "full": 10352.0,
+   "gate": 260.0,
+   "generic_gzip": 1544.0,
+   "generic_lzma": 1568.0,
+   "generic_raw": 2960.0,
+   "index": 312.0,
+   "index_rank_among_codecs": 2,
+   "lut": 928.0,
+   "worlds": 2
+  },
+  "sparse_conj|n128": {
+   "bdd": 9872.0,
+   "best_codec": "gate",
+   "circuit": 8700.0,
+   "dnf": 6360.0,
+   "gate": 5184.0,
+   "generic_gzip": 11072.0,
+   "generic_lzma": 10792.0,
+   "generic_raw": 37756.0,
+   "index": 5816.0,
+   "index_rank_among_codecs": 2,
+   "lut": 13944.0,
+   "worlds": 2
+  },
+  "sparse_conj|n16": {
+   "bdd": 944.0,
+   "best_codec": "gate",
+   "circuit": 828.0,
+   "dnf": 612.0,
+   "full": 1048696.0,
+   "gate": 436.0,
+   "generic_gzip": 1800.0,
+   "generic_lzma": 1828.0,
+   "generic_raw": 3536.0,
+   "index": 508.0,
+   "index_rank_among_codecs": 2,
+   "lut": 1052.0,
+   "worlds": 2
+  },
+  "sparse_conj|n256": {
+   "bdd": 21308.0,
+   "best_codec": "gate",
+   "circuit": 18908.0,
+   "dnf": 13932.0,
+   "gate": 11844.0,
+   "generic_gzip": 22280.0,
+   "generic_lzma": 21016.0,
+   "generic_raw": 81960.0,
+   "index": 13116.0,
+   "index_rank_among_codecs": 2,
+   "lut": 28912.0,
+   "worlds": 2
+  },
+  "sparse_conj|n32": {
+   "bdd": 2152.0,
+   "best_codec": "gate",
+   "circuit": 1852.0,
+   "dnf": 1356.0,
+   "gate": 984.0,
+   "generic_gzip": 3668.0,
+   "generic_lzma": 3728.0,
+   "generic_raw": 9132.0,
+   "index": 1140.0,
+   "index_rank_among_codecs": 2,
+   "lut": 3152.0,
+   "worlds": 2
+  },
+  "sparse_conj|n4": {
+   "bdd": 188.0,
+   "best_codec": "gate",
+   "circuit": 176.0,
+   "dnf": 164.0,
+   "full": 160.0,
+   "gate": 136.0,
+   "generic_gzip": 556.0,
+   "generic_lzma": 480.0,
+   "generic_raw": 528.0,
+   "index": 144.0,
+   "index_rank_among_codecs": 2,
+   "lut": 148.0,
+   "worlds": 2
+  },
+  "sparse_conj|n6": {
+   "bdd": 352.0,
+   "best_codec": "gate",
+   "circuit": 312.0,
+   "dnf": 260.0,
+   "full": 488.0,
+   "gate": 156.0,
+   "generic_gzip": 788.0,
+   "generic_lzma": 688.0,
+   "generic_raw": 1028.0,
+   "index": 184.0,
+   "index_rank_among_codecs": 2,
+   "lut": 320.0,
+   "worlds": 2
+  },
+  "sparse_conj|n64": {
+   "bdd": 4304.0,
+   "best_codec": "gate",
+   "circuit": 3776.0,
+   "dnf": 2756.0,
+   "gate": 2188.0,
+   "generic_gzip": 5844.0,
+   "generic_lzma": 5828.0,
+   "generic_raw": 16604.0,
+   "index": 2484.0,
+   "index_rank_among_codecs": 2,
+   "lut": 5692.0,
+   "worlds": 2
+  },
+  "sparse_conj|n8": {
+   "bdd": 488.0,
+   "best_codec": "gate",
+   "circuit": 416.0,
+   "dnf": 332.0,
+   "full": 2160.0,
+   "gate": 204.0,
+   "generic_gzip": 1048.0,
+   "generic_lzma": 996.0,
+   "generic_raw": 2236.0,
+   "index": 244.0,
+   "index_rank_among_codecs": 2,
+   "lut": 716.0,
+   "worlds": 2
+  }
+ },
+ "n_records": 686,
+ "outcome_balance_by_construction": {
+  "clamp_exists": {
+   "false": 72,
+   "true": 106
+  },
+  "clamp_forall": {
+   "false": 131,
+   "true": 83
+  },
+  "exists_free": {
+   "false": 203,
+   "true": 189
+  },
+  "exists_planted": {
+   "true": 392
+  },
+  "forall_free": {
+   "false": 230,
+   "true": 162
+  },
+  "forall_planted_counterexample": {
+   "false": 392
+  },
+  "membership": {
+   "false": 177,
+   "true": 215
+  }
+ },
+ "peak_rss_coverage": {
+  "bdd_ref|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "bdd_ref|n128": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "bdd_ref|n16": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "bdd_ref|n256": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "bdd_ref|n32": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "bdd_ref|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "bdd_ref|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "bdd_ref|n64": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "bdd_ref|n8": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "codecs|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "codecs|n128": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "codecs|n16": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "codecs|n256": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "codecs|n32": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "codecs|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "codecs|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "codecs|n64": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "codecs|n8": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_cube|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_cube|n128": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_cube|n16": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_cube|n256": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_cube|n32": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_cube|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_cube|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_cube|n64": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_cube|n8": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_enum|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_enum|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_enum|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_enum|n8": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_sat|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_sat|n128": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_sat|n16": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_sat|n256": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_sat|n32": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_sat|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_sat|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "index_sat|n64": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "index_sat|n8": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "literal|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "literal|n16": {
+   "measured": 10,
+   "ok_items": 10
+  },
+  "literal|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "literal|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "literal|n8": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "reference|n10": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "reference|n4": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "reference|n6": {
+   "measured": 12,
+   "ok_items": 12
+  },
+  "reference|n8": {
+   "measured": 12,
+   "ok_items": 12
+  }
+ },
+ "peak_rss_mib_median": {
+  "bdd_ref|n10": 45.21875,
+  "bdd_ref|n128": 3552.28125,
+  "bdd_ref|n16": 45.3203125,
+  "bdd_ref|n256": 4889.8046875,
+  "bdd_ref|n32": 1458.1328125,
+  "bdd_ref|n4": 40.390625,
+  "bdd_ref|n6": 40.7265625,
+  "bdd_ref|n64": 5003.9375,
+  "bdd_ref|n8": 41.5703125,
+  "codecs|n10": 94.6171875,
+  "codecs|n128": 95.203125,
+  "codecs|n16": 123.75,
+  "codecs|n256": 95.703125,
+  "codecs|n32": 94.625,
+  "codecs|n4": 94.421875,
+  "codecs|n6": 94.671875,
+  "codecs|n64": 95.046875,
+  "codecs|n8": 94.71875,
+  "index_cube|n10": 25.2890625,
+  "index_cube|n128": 36.6796875,
+  "index_cube|n16": 29.9921875,
+  "index_cube|n256": 39.296875,
+  "index_cube|n32": 34.828125,
+  "index_cube|n4": 25.1171875,
+  "index_cube|n6": 25.15625,
+  "index_cube|n64": 35.984375,
+  "index_cube|n8": 25.203125,
+  "index_enum|n10": 25.078125,
+  "index_enum|n4": 25.0859375,
+  "index_enum|n6": 25.1484375,
+  "index_enum|n8": 25.125,
+  "index_sat|n10": 29.7265625,
+  "index_sat|n128": 37.3515625,
+  "index_sat|n16": 29.9765625,
+  "index_sat|n256": 45.078125,
+  "index_sat|n32": 31.078125,
+  "index_sat|n4": 29.40625,
+  "index_sat|n6": 29.4296875,
+  "index_sat|n64": 32.7734375,
+  "index_sat|n8": 29.7890625,
+  "literal|n10": 33.6171875,
+  "literal|n16": 35.859375,
+  "literal|n4": 33.6171875,
+  "literal|n6": 33.734375,
+  "literal|n8": 33.6484375,
+  "reference|n10": 24.9453125,
+  "reference|n4": 25.0546875,
+  "reference|n6": 25.0625,
+  "reference|n8": 24.96875
+ },
+ "peak_rss_note": "median over ok items of the worker's ru_maxrss (bytes on macOS; KiB x 1024 on Linux), reported in MiB = 2^20 bytes; one fresh worker per item (maxtasks=1), so the value includes the interpreter and imported-module baseline; null = no measurement",
+ "phase": "development",
+ "query_grid_reconciliation": {
+  "codec_items_missing_codecs": {},
+  "ok_items_missing_query_rows": {},
+  "queries_per_world": 24,
+  "status": "complete"
+ },
+ "run_dirs": [
+  "runs/S1-dev-v2-panel"
+ ],
+ "runs": {
+  "S1-dev-v2-panel": {
+   "attempts_total": 686,
+   "failed": 0,
+   "failures": {},
+   "missing": 0,
+   "ok": 686,
+   "plan_sha256": "830899744feb882ee344df71327ab1fa36b3c28737e11bd44b161b73fa32765e",
+   "planned": 686,
+   "source_tree_sha256": "2a8215ad25a1b8a33537144f51819842bfb2af7044959810749ab22aec4fe531"
+  }
+ },
+ "semantics_changed_from_v1": [
+  "failed/missing planned items counted in completion denominators",
+  "amortized totals: archive_sum (sum of archive bits) and payload_sum reported separately",
+  "decoder charge = gzip-9 of the complete local dependency bundle (codec+index_repr+schema)"
+ ],
+ "worlds_by_cell": {
+  "bounded_random|n10": 2,
+  "bounded_random|n128": 2,
+  "bounded_random|n16": 2,
+  "bounded_random|n256": 2,
+  "bounded_random|n32": 2,
+  "bounded_random|n4": 2,
+  "bounded_random|n6": 2,
+  "bounded_random|n64": 2,
+  "bounded_random|n8": 2,
+  "canalizing|n10": 2,
+  "canalizing|n128": 2,
+  "canalizing|n16": 2,
+  "canalizing|n256": 2,
+  "canalizing|n32": 2,
+  "canalizing|n4": 2,
+  "canalizing|n6": 2,
+  "canalizing|n64": 2,
+  "canalizing|n8": 2,
+  "dense_random|n10": 2,
+  "dense_random|n4": 2,
+  "dense_random|n6": 2,
+  "dense_random|n8": 2,
+  "modular|n10": 2,
+  "modular|n128": 2,
+  "modular|n16": 2,
+  "modular|n256": 2,
+  "modular|n32": 2,
+  "modular|n4": 2,
+  "modular|n6": 2,
+  "modular|n64": 2,
+  "modular|n8": 2,
+  "parity|n10": 2,
+  "parity|n128": 2,
+  "parity|n16": 2,
+  "parity|n256": 2,
+  "parity|n32": 2,
+  "parity|n4": 2,
+  "parity|n6": 2,
+  "parity|n64": 2,
+  "parity|n8": 2,
+  "sparse_conj|n10": 2,
+  "sparse_conj|n128": 2,
+  "sparse_conj|n16": 2,
+  "sparse_conj|n256": 2,
+  "sparse_conj|n32": 2,
+  "sparse_conj|n4": 2,
+  "sparse_conj|n6": 2,
+  "sparse_conj|n64": 2,
+  "sparse_conj|n8": 2
+ }
+}

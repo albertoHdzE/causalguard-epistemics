@@ -55,7 +55,7 @@ def evaluate_budget(world: World, evidence: Evidence, queries: list[tuple[str, Q
     t_ver = 0.0
     for kind, q in queries:
         b = q.target.args[0].node if q.target.op != "lit" else q.target.node
-        row = {"kind": kind, "h": q.horizon, "iv": q.intervention.kind, "target_node": b,
+        row = {"kind": kind, "qid": q.digest(), "h": q.horizon, "iv": q.intervention.kind, "target_node": b,
                "pred": {cd: (int(predict(nets[cd], q)) if nets[cd] is not None else None) for cd in SELECTORS},
                "majority": _majority_baseline(evidence, b)}
         if not vs.empty:
@@ -193,7 +193,7 @@ def evaluate_budget_v2(world: World, evidence: Evidence, queries: list[tuple[str
     sat_mismatch = 0
     for kind, q in queries:
         b = q.target.node
-        row = {"kind": kind, "h": q.horizon, "iv": q.intervention.kind, "target_node": b,
+        row = {"kind": kind, "qid": q.digest(), "h": q.horizon, "iv": q.intervention.kind, "target_node": b,
                "pred": {cd: (int(predict(nets[cd], q)) if nets[cd] is not None else None) for cd in V2_SELECTORS},
                "observed_majority": _majority_baseline(evidence, b)}
         if not vs.empty:
