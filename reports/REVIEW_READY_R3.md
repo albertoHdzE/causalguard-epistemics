@@ -1,0 +1,109 @@
+# REVIEW READY — iteration 3 (bounded repair after Codex review R2)
+
+Development release `v0.3.0-dev`, pre-sprint (2026-11-10/11; the sprint runs 2026-11-13 to 11-15). The
+release identity is in the last section of this file. **No confirmatory result exists:** `confirmatory_authorized`
+is false, `docs/FREEZE_RECORD.json` is absent, no confirmatory run happened, no LLM was called, and WP10/WP11 were
+not started. This file names the release identity, so it is excluded from `artifacts/manifest_r3.json`.
+
+Start here, then read:
+- `reports/acceptance_r3.json`;
+- `reports/R3_EVIDENCE_MATRIX.md` (R2-01..R2-09 plus reporting corrections → tests → evidence);
+- `reports/DEVELOPMENT_REPORT_R3.md`;
+- `reports/ERRATA_R3.md`;
+- `docs/EXECUTION.md`;
+- `reports/development_r3/before_after_audit.json`;
+- `DECISIONS.md` D36–D43.
+
+## 1. What changed
+
+| section | result |
+|---|---|
+| A execution (R2-01..04) | **Ownership:** exclusive kernel-`flock` run ownership; a second opener is refused before it touches storage. **Attempts:** published no-clobber by `link()`. **Supervisor death:** a lifeline watchdog in each worker's process group, and the new owner must drain the workers lock before recovery, so a group SIGKILL of the supervisor kills the worker and its descendants and an immediate resume never overlaps them. **Status:** derived from every latest stored attempt; invocation counts are separate. **Validation:** one strict validator for plans and every attempt, run before any mutation. **Phase:** from provenance. **Retries:** development only. |
+| B completeness (R2-05, R2-06) | S2 outputs are reconciled with the regenerated world and design. Absent cells and queries are explicit missing outcomes. Completeness is reported for the structured primary, the required null and the overall study; family weights never change silently. New rows carry `qid`. S1 has a 24-query grid reconciliation, and RSS now comes from the attempt envelope. Phase-aware titles and status; sizing is development-only. |
+| C S3 offline (R2-07..09) | Design-known budget rule; training-fitted role rules (persisted); single coherence rule with post-aggregation C audit; semantic novelty audit; future-design note only. |
+| D reporting | Errata E1–E14; R3 report; claim ledger R3; smoke runs; before/after audit; manifest r3; release. |
+
+## 2. Unchanged scientific results (verified, `before_after_audit.json` → PASS)
+
+- **S2 primary (development):** index − exact compatible-set majority = **+0.000875, 95% CI [−0.0111, +0.0121]**,
+  250 structured worlds, B16, 16 intervention queries. This is identical to R2, and the per-world CSV is
+  byte-identical. No clear advantage was detected; this is not equivalence. The null, secondaries, stress, MC, sizing
+  and curves are identical.
+- **S1:** correctness, completion, latency, archive bits and amortized totals are identical.
+- **S3:** arms, targets, contrasts (focus T_cert − T_label = −0.08 [−0.16, 0.00]), transforms, revisions, confusion
+  and the historical baselines are identical.
+- At the final code, the R3 summaries reproduce byte-for-byte from the raw runs. The R2 S1 and S3 summaries still
+  reproduce from tag `v0.2.0-dev`, apart from path strings. All 2,404 preserved R1/R2 raw files are hash-identical
+  to manifest r2.
+
+## 3. Corrected values
+
+- S1 RSS: R2 had 49/49 false zeros. R3 has 546/546 items measured, with medians of 24.9–5,003.9 MiB (worker peak,
+  interpreter included).
+- S3 coherence: C aggregates disagree with their own mean vector in **134/297** valid cases on the qwen held-out panel
+  (28/60 and 2/60 on the diagnostics). R2 reported 0.
+- S3 shortcut: the design-known budget rule scores **80/100** on held-out targets, and the training-fitted role rule
+  scores 79/100. The pooled rule scored 47/100.
+- S3 novelty: held-out world 2 repeats its source claim. An exploratory exclusion gives −0.081 over 99 worlds.
+- Sizing: the two-sided false-positive rate is **0.046–0.0545**.
+- Wording: Bayes non-exceedance; balanced accuracy (qwen A 0.433 balanced vs 0.417 ordinary); oracle-balanced
+  queries; D29 timing and gemma scope; certificate assurance; Brier.
+
+## 4. Smoke runs (execution verification only, `DEVELOPMENT_REPORT_R3.md` §5)
+
+`dev-r3-smoke-s2` (6/6) and `dev-r3-smoke-s1` (14/14) ran at `c40c35f`. The S1 run includes one deliberate
+supervisor-group SIGKILL with 4 items in flight, followed by an immediate resume, which completed (D40).
+
+Code changed after those runs (D41), so both were repeated at the final source as `dev-r3-final-smoke-s2/s1`, with
+plan source digest `40af8866…` equal to the release source. Results:
+- S2: structured, null and overall completeness complete; `qid` path.
+- S1: 0 mismatches against the exhaustive reference (24 comparisons per backend); 0 cross-backend disagreements;
+  RSS measured.
+- The scientific outputs are identical to the first smokes; only timing fields differ.
+
+## 5. S1/S2 identities proposed for the scoped freeze review
+
+| item | value |
+|---|---|
+| source tree digest (`runner.source_tree_digest`, `src/causalguard/**.py`) | `40af8866350e3f1a74bdf2f008a7d7166ca0aaabb137ba9d975a6f612748d6fa` |
+| `configs/confirmatory.json` (proposal; allocation unchanged: S2 1,000 structured + 1,000 null; S1 grid) | `6736122ba0cdd8f9e000ec199eb449280280d8be76f39d1c09dc16113e8a6df9` |
+| `configs/endpoints/S2-primary-v2.json` (unchanged) | `1b797c8b293f51eadf06a9264652aa60bd6bd29a87ddf0df3e2d3ae5d98c72ac` |
+| `artifacts/manifest_r3.json` (development manifest named by the config) | `1d655765ea364adaf29df5e608cec441c168ac19a03d7db33151fd6411cf9c90` |
+
+Config changes since R2:
+- `development_manifest` now points to manifest r3.
+- `runs/dev-r3-smoke-s2` is added to the S2 dedup corpora. This is conservative: confirmatory structured worlds
+  isomorphic to those 6 observed worlds are excluded.
+- Status text.
+
+No N, endpoint, tie rule or generator changed.
+
+## 6. Tests and checks
+
+- Local (macOS, Python 3.12, `CAUSALBOOL_ROOT` = upstream `376a11dd`): **218 passed, 0 skipped**
+  (`reports/test-output-r3.txt`). Ruff is clean.
+- Mutation and plant checks:
+  - disabling the watchdog kill fails the parent-death test;
+  - a planted copy of the coherence rule fails the owner guard.
+- CI (Ubuntu + macOS, upstream parity on Ubuntu): see the last section.
+
+## 7. Remaining limitations (candid)
+
+- **Legacy S2 rows.** The 670 saved worlds have no `qid`, and 8,359/15,630 saved cells contain byte-identical rows
+  for distinct queries. A duplicate with the same fingerprint as the row it replaced is therefore undetectable in
+  those records. Cardinality, order, identity fingerprint, recomputed truth and count consistency are all checked.
+  New runs are exact.
+- **Watchdog scope.** It does not cover descendants that leave the worker's process group. The drain bound is 30 s,
+  after which a resume refuses rather than overlapping. Platform support is POSIX only (macOS and Linux); Windows is
+  unsupported.
+- **Smoke latencies** are not isolated benchmarks. The D40 driver's process-listing check matched nothing even
+  before the kill, so it is not evidence; the drain lock and the PID-tracking unit test are.
+- **S3** is exploratory. The target task has weak construct validity (80/100 shortcut). Gemma is a 20-world floor
+  diagnostic, and D29 is not preregistration.
+- **Development estimates** do not show a general truth, an ordering of Kolmogorov complexities or durable learning.
+- **Public verification** of GitHub availability, CI, download-back and the fresh clone is reported by the author
+  below. The R2 reviewer could not reach GitHub from its sandbox.
+
+## Release identity (filled at publication)
+
+PENDING

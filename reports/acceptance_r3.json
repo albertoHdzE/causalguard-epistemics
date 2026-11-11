@@ -1,0 +1,203 @@
+{
+ "schema": "causalguard-acceptance-r3",
+ "date": "2026-11-11",
+ "dating": "pre-sprint development (sprint 2026-11-13..15)",
+ "authority": "reports/review_r2/REPAIR_SPEC.md (A-D), reports/review_r2/REVIEW.md (R2-01..R2-09)",
+ "confirmatory_authorized": false,
+ "production_freeze_record_present": false,
+ "confirmatory_runs_executed": [],
+ "new_llm_calls": 0,
+ "wp10_wp11_started": false,
+ "release": {
+  "tag": "v0.3.0-dev",
+  "commit": "see REVIEW_READY_R3.md section 'Release identity' (filled at publication)",
+  "previous_tags_preserved": [
+   "v0.1.0-dev",
+   "v0.2.0-dev"
+  ]
+ },
+ "tests": {
+  "file": "reports/test-output-r3.txt",
+  "result": "218 passed, 0 skipped (macOS, CAUSALBOOL_ROOT=376a11dd)",
+  "ci": "see REVIEW_READY_R3.md"
+ },
+ "sections": {
+  "A": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": "deterministic concurrent resumes: one owner, one successful attempt, original bytes intact",
+     "status": "met",
+     "evidence": "test_runner_r3.py::test_concurrent_resume_is_refused_and_attempt_bytes_survive"
+    },
+    {
+     "c": "second executor refused before recovery; live temporaries untouched",
+     "status": "met",
+     "evidence": "::test_second_opener_refused_and_live_temporary_not_quarantined"
+    },
+    {
+     "c": "hard parent-group kill with hanging worker and descendant; prompt cleanup; immediate safe resume",
+     "status": "met",
+     "evidence": "::test_hard_supervisor_group_kill_cleans_worker_group_and_resume_does_not_overlap (mutation-checked); ::test_worker_started_after_supervisor_death_never_runs_work; smoke D40"
+    },
+    {
+     "c": "normal interruption mid-write",
+     "status": "met",
+     "evidence": "test_runner_v2.py::test_real_interruption_and_resume, ::test_interrupted_attempt_write_fails_closed_then_resume_quarantines"
+    },
+    {
+     "c": "failure followed by no-op resume stays a failure; CLI/ledger/analysis share status",
+     "status": "met",
+     "evidence": "::test_failure_then_noop_resume_stays_complete_with_failures; freeze.execute access ledger; load_run execution_status"
+    },
+    {
+     "c": "permitted explicit failed retry (development only); refused in confirmatory/fixture modes",
+     "status": "met",
+     "evidence": "same test; supersedes [1]"
+    },
+    {
+     "c": "altered stored plan refused",
+     "status": "met",
+     "evidence": "::test_altered_stored_plan_with_old_digest_is_refused"
+    },
+    {
+     "c": "wrong run/plan/source/payload on any attempt incl. superseded failures; validation before mutation",
+     "status": "met",
+     "evidence": "::test_wrong_identity_on_any_attempt_is_corruption_before_mutation (14 cases)"
+    },
+    {
+     "c": "shared registry writes synchronized",
+     "status": "met",
+     "evidence": "::test_shared_registry_concurrent_writers_do_not_corrupt"
+    },
+    {
+     "c": "scoped preflight, external runtime, cross-study fixture lifecycle tests on macOS and Ubuntu",
+     "status": "met locally (macOS); Ubuntu via CI",
+     "evidence": "tests/test_freeze_lifecycle.py, test_confirmatory_guard.py; CI run in REVIEW_READY_R3"
+    }
+   ]
+  },
+  "B": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": "absent B16, 1-of-16 grid, duplicate replacing missing query, wrong world/query identity, missing family, missing/failed null, malformed exact counts",
+     "status": "met",
+     "evidence": "tests/test_completeness_r3.py"
+    },
+    {
+     "c": "S1 missing queries; measured and non-measured RSS",
+     "status": "met",
+     "evidence": "::test_s1_missing_query_rows_counted_and_duplicates_refused, ::test_s1_rss_from_envelope_and_missing_is_null"
+    },
+    {
+     "c": "fixture phase rendering",
+     "status": "met",
+     "evidence": "::test_fixture_phase_is_rendered_and_sizing_refused, ::test_mixed_phases_refused"
+    },
+    {
+     "c": "on preserved raw data S2 estimates and per-world scores unchanged",
+     "status": "met",
+     "evidence": "before_after_audit.json: per-world CSV byte-identical; primary +0.000875 [-0.0111, +0.0121] identical"
+    },
+    {
+     "c": "S1 correctness/completion unchanged while RSS truthful",
+     "status": "met",
+     "evidence": "before_after_audit.json; 49/49 cells measured"
+    }
+   ],
+   "limitation": "legacy S2 rows (no qid) cannot reveal a duplicate with an identical fingerprint; 8,359/15,630 saved cells contain identical rows"
+  },
+  "C": {
+   "status": "met",
+   "criteria": [
+    {
+     "c": "budget rule 80/100 reproduced",
+     "status": "met",
+     "evidence": "s3_v2_summary.json baselines design_known_budget_rule|target"
+    },
+    {
+     "c": "134/297 C aggregate disagreements",
+     "status": "met",
+     "evidence": "r3_audits.coherence_final_answers C|balanced"
+    },
+    {
+     "c": "duplicate at held-out index 2",
+     "status": "met",
+     "evidence": "r3_audits.target_novelty"
+    },
+    {
+     "c": "original -0.08 target contrast",
+     "status": "met",
+     "evidence": "contrasts FOCUS|T_cert-T_label|target_accuracy unchanged"
+    },
+    {
+     "c": "aggregate tests: mean-vector vs majority disagreement; probability ties",
+     "status": "met",
+     "evidence": "tests/test_s3_r3.py"
+    },
+    {
+     "c": "no raw S3 call changed; no new calls",
+     "status": "met",
+     "evidence": "read-only analysis; manifest r3 raw_run_v2 hashes equal r2"
+    },
+    {
+     "c": "bounded future-design note",
+     "status": "met",
+     "evidence": "docs/S3_FUTURE_DESIGN_R3.md"
+    }
+   ]
+  },
+  "D": {
+   "status": "met (release identity in REVIEW_READY_R3)",
+   "criteria": [
+    {
+     "c": "two-sided sizing and non-exceedance wording",
+     "status": "met",
+     "evidence": "ERRATA_R3 E2, E3"
+    },
+    {
+     "c": "allocation retained; misspecification diagnostic; structured-null exploratory; isomorphism conditioning stated",
+     "status": "met",
+     "evidence": "configs/confirmatory.json unchanged allocation; ERRATA E14; DEVELOPMENT_REPORT_R3 s4"
+    },
+    {
+     "c": "historical runs/reports/tags preserved; versioned corrected reports; errata",
+     "status": "met",
+     "evidence": "reports/development_r3/, ERRATA_R3.md; R2 S1/S3 summaries reproduce from tag v0.2.0-dev"
+    },
+    {
+     "c": "smoke runs through the repaired runner (each S2 family + null; S1 reference/exact backends + high n)",
+     "status": "met",
+     "evidence": "dev-r3-smoke-*, dev-r3-final-smoke-* (D40)"
+    },
+    {
+     "c": "field-level before/after audit",
+     "status": "met",
+     "evidence": "scripts/audit_r3_before_after.py -> PASS"
+    },
+    {
+     "c": "manifest, release, downloaded assets and fresh public clone verified",
+     "status": "see REVIEW_READY_R3",
+     "evidence": "artifacts/manifest_r3.json"
+    }
+   ]
+  }
+ },
+ "findings": {
+  "R2-01": "repaired",
+  "R2-02": "repaired",
+  "R2-03": "repaired",
+  "R2-04": "repaired",
+  "R2-05": "repaired",
+  "R2-06": "repaired",
+  "R2-07": "repaired",
+  "R2-08": "repaired",
+  "R2-09": "repaired"
+ },
+ "disclosures": [
+  "D40 deliberate interruption; its process-listing check was uninformative (not evidence)",
+  "D41 code changed after the first smokes; smokes repeated at final source",
+  "S3 remains exploratory; target task construct validity weak (80/100 shortcut)"
+ ]
+}
