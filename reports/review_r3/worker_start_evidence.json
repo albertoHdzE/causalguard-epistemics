@@ -1,0 +1,13 @@
+{
+  "reproduction": "repro_worker_start.py",
+  "root_replay_trials": 5,
+  "marker_written_before_watchdog_kill": 5,
+  "worker_exitcodes": [
+    -9,
+    -9,
+    -9,
+    -9,
+    -9
+  ],
+  "published_result_corruption_demonstrated": false
+}

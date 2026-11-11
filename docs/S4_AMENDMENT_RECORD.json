@@ -1,0 +1,30 @@
+{
+  "schema": "causalguard-s4-amendment-v1",
+  "date": "2026-11-11",
+  "reason": "User clarification: complexity science and algorithmic modeling; Boolean systems as experimental tool; check AI claims before release",
+  "source_manuscript": {
+    "path": "/Users/alberto/Documents/projects/CausalBool/papers/method/manuscript_formal/method_paper.tex",
+    "sha256": "04ea352c0aff664180d68a395b09bd7311e634d1e975ab7edf3531b08b029366",
+    "repository_head": "50b3d48cef9743ddbe7535752c61566360c15e98"
+  },
+  "new_documents": [
+    "docs/S4_FOUNDATIONS_AND_PRECOMMIT_CHECKING.md"
+  ],
+  "updated_documents": [
+    "docs/RESEARCH_DIRECTION_S4.md",
+    "delegation/ITERATION_4_CLAUDE_PROMPT.md",
+    "reports/FAMILY_MAP_AND_METHOD_SCOPE.md"
+  ],
+  "historical_scientific_endpoints_changed": false,
+  "S4_main_endpoint_changed": false,
+  "pilot_call_budget_increased": false,
+  "production_freeze_authorized": false,
+  "new_experiments_executed": false,
+  "new_scope": [
+    "formal-paper method mapping including analytic parity/thresholds",
+    "complexity upper bounds versus finite codec priors versus proof",
+    "pre-release proposal checking with separately scoped verdicts",
+    "secondary error-prevention and valid-release metrics within existing pilot",
+    "offline known-mechanism checking panel and attribution ablations"
+  ]
+}

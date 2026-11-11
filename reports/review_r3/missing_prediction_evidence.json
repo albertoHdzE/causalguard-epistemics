@@ -1,0 +1,228 @@
+{
+  "repo": "/Users/alberto/Documents/projects/AI-security/AI-x-epistemics",
+  "item_id": "realizable|conjunctive|0",
+  "planned_primary_worlds": 250,
+  "original_contrast": {
+    "a": "index",
+    "b": "vs_majority",
+    "estimate": 0.0008749999999999996,
+    "ci95": [
+      -0.01215625,
+      0.010793749999999986
+    ],
+    "se": 0.006015083103954155,
+    "n_worlds": 250,
+    "n_strata": 5,
+    "replicates": 100,
+    "seed": 20261109,
+    "mean_a": 0.8899999999999999,
+    "mean_b": 0.8891250000000002,
+    "sd_delta": 0.09486874321268844,
+    "per_family": {
+      "canalizing": {
+        "mean_delta": 0.0175,
+        "n": 50
+      },
+      "conjunctive": {
+        "mean_delta": 0.0025,
+        "n": 50
+      },
+      "modular": {
+        "mean_delta": 0.009375,
+        "n": 50
+      },
+      "parity": {
+        "mean_delta": -0.02,
+        "n": 50
+      },
+      "random_lookup": {
+        "mean_delta": -0.005,
+        "n": 50
+      }
+    }
+  },
+  "mutations": {
+    "missing_first": {
+      "accepted": true,
+      "primary_complete": true,
+      "world_scores": {
+        "n_queries": 16,
+        "circuit": 0.8125,
+        "bdd": 0.8125,
+        "dnf": 0.8125,
+        "vs_majority": 0.875,
+        "uniform": 0.8359718741297688,
+        "observed_majority": 0.875,
+        "ties": 0,
+        "truth_prevalence": 0.625,
+        "consensus_coverage": 0.3125,
+        "consensus_wrong_hidden": 0.0,
+        "n_underdetermined": 11
+      },
+      "contrast": {
+        "a": "index",
+        "b": "vs_majority",
+        "estimate": 0.0011403061224489796,
+        "ci95": [
+          -0.011795408163265306,
+          0.012829145408163265
+        ],
+        "se": 0.006670679823976048,
+        "n_worlds": 249,
+        "n_strata": 5,
+        "replicates": 100,
+        "seed": 20261109,
+        "mean_a": 0.890408163265306,
+        "mean_b": 0.8892678571428572,
+        "sd_delta": 0.09497425395061805,
+        "per_family": {
+          "canalizing": {
+            "mean_delta": 0.0175,
+            "n": 50
+          },
+          "conjunctive": {
+            "mean_delta": 0.003826530612244898,
+            "n": 49
+          },
+          "modular": {
+            "mean_delta": 0.009375,
+            "n": 50
+          },
+          "parity": {
+            "mean_delta": -0.02,
+            "n": 50
+          },
+          "random_lookup": {
+            "mean_delta": -0.005,
+            "n": 50
+          }
+        }
+      }
+    },
+    "missing_later": {
+      "accepted": true,
+      "primary_complete": true,
+      "world_scores": {
+        "n_queries": 16,
+        "index": 0.75,
+        "circuit": 0.8125,
+        "bdd": 0.8125,
+        "dnf": 0.8125,
+        "vs_majority": 0.875,
+        "uniform": 0.8359718741297688,
+        "observed_majority": 0.875,
+        "ties": 0,
+        "truth_prevalence": 0.625,
+        "consensus_coverage": 0.3125,
+        "consensus_wrong_hidden": 0.0,
+        "n_underdetermined": 11
+      },
+      "contrast": {
+        "a": "index",
+        "b": "vs_majority",
+        "estimate": 0.0006250000000000008,
+        "ci95": [
+          -0.01239375,
+          0.010662499999999988
+        ],
+        "se": 0.006050332865039558,
+        "n_worlds": 250,
+        "n_strata": 5,
+        "replicates": 100,
+        "seed": 20261109,
+        "mean_a": 0.88975,
+        "mean_b": 0.8891250000000002,
+        "sd_delta": 0.09511844299499,
+        "per_family": {
+          "canalizing": {
+            "mean_delta": 0.0175,
+            "n": 50
+          },
+          "conjunctive": {
+            "mean_delta": 0.00125,
+            "n": 50
+          },
+          "modular": {
+            "mean_delta": 0.009375,
+            "n": 50
+          },
+          "parity": {
+            "mean_delta": -0.02,
+            "n": 50
+          },
+          "random_lookup": {
+            "mean_delta": -0.005,
+            "n": 50
+          }
+        }
+      }
+    },
+    "null_later": {
+      "accepted": true,
+      "primary_complete": true,
+      "world_scores": {
+        "n_queries": 16,
+        "index": 0.75,
+        "circuit": 0.8125,
+        "bdd": 0.8125,
+        "dnf": 0.8125,
+        "vs_majority": 0.875,
+        "uniform": 0.8359718741297688,
+        "observed_majority": 0.875,
+        "ties": 0,
+        "truth_prevalence": 0.625,
+        "consensus_coverage": 0.3125,
+        "consensus_wrong_hidden": 0.0,
+        "n_underdetermined": 11
+      },
+      "contrast": {
+        "a": "index",
+        "b": "vs_majority",
+        "estimate": 0.0006250000000000008,
+        "ci95": [
+          -0.01239375,
+          0.010662499999999988
+        ],
+        "se": 0.006050332865039558,
+        "n_worlds": 250,
+        "n_strata": 5,
+        "replicates": 100,
+        "seed": 20261109,
+        "mean_a": 0.88975,
+        "mean_b": 0.8891250000000002,
+        "sd_delta": 0.09511844299499,
+        "per_family": {
+          "canalizing": {
+            "mean_delta": 0.0175,
+            "n": 50
+          },
+          "conjunctive": {
+            "mean_delta": 0.00125,
+            "n": 50
+          },
+          "modular": {
+            "mean_delta": 0.009375,
+            "n": 50
+          },
+          "parity": {
+            "mean_delta": -0.02,
+            "n": 50
+          },
+          "random_lookup": {
+            "mean_delta": -0.005,
+            "n": 50
+          }
+        }
+      }
+    },
+    "bool_later": {
+      "accepted": false,
+      "error": "realizable|conjunctive|0[uniform_states|B16]: malformed predictions"
+    }
+  },
+  "saved_record_audit": {
+    "rows": 364320,
+    "bad_rows": [],
+    "raw_records_changed": false
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "causalguard-review-r3-manifest",
+  "files": [
+    {
+      "path": "delegation/ITERATION_4_CLAUDE_PROMPT.md",
+      "sha256": "e2e53e6196e26037cdcf50318b4cbe8b5c52fb493c04726bb924f1195bb15fe6"
+    },
+    {
+      "path": "docs/RESEARCH_DIRECTION_S4.md",
+      "sha256": "1d9cbe98b8127478723647f5d466ad3fa7c742ccb92de76c4f64f18755110815"
+    },
+    {
+      "path": "docs/S4_AMENDMENT_RECORD.json",
+      "sha256": "123cc0b87b30cbd19e8d57e12f618adb4750f571a34b48f9f5146a19d7bc7b2f"
+    },
+    {
+      "path": "docs/S4_FOUNDATIONS_AND_PRECOMMIT_CHECKING.md",
+      "sha256": "486af5480c49b65ab3818846319e27b05a13f9e5966dd3454de4f70161e5d543"
+    },
+    {
+      "path": "reports/FAMILY_MAP_AND_METHOD_SCOPE.md",
+      "sha256": "4aa249ab9ec7a1259742ad4a54f5fdfed2b4a08a127b385c563d414f6a530efb"
+    },
+    {
+      "path": "reports/review_r3/DECISION.json",
+      "sha256": "2ad21b379fd7208374ddc4a06152680dc5d031685abc69fe1fd8e8b272ebdc9b"
+    },
+    {
+      "path": "reports/review_r3/REVIEW.md",
+      "sha256": "93562aeb387ab488dac6fc354225bcda0e9637236abfa840096d76392e3e974d"
+    },
+    {
+      "path": "reports/review_r3/family_evidence.json",
+      "sha256": "ba62d6e0177ebab9797afbed2347a70d7fab8665f64fede622e39dec725858d3"
+    },
+    {
+      "path": "reports/review_r3/missing_prediction_evidence.json",
+      "sha256": "d9bd0128440bf873cd6a059ae08daf7f992db7365f5fc6b796953200ed8b928a"
+    },
+    {
+      "path": "reports/review_r3/repro_missing_prediction.py",
+      "sha256": "8ba7f0859337a11631fbf574bad82b94b5b3714ec070b05e055186116feef359"
+    },
+    {
+      "path": "reports/review_r3/repro_worker_start.py",
+      "sha256": "738dd9cc73ed88ed697ad16faadd8ffba8c96a3595af3cc0deee2367c3bb148b"
+    },
+    {
+      "path": "reports/review_r3/runner-tests.txt",
+      "sha256": "74fb138dbc28a09759e1d2bdb4273f6245fd22a34b0f42246ef04b3c31915df3"
+    },
+    {
+      "path": "reports/review_r3/test-output.txt",
+      "sha256": "2c62c4bd82d83dbf944a07825a40933495451acea23b07d89784e28764385c14"
+    },
+    {
+      "path": "reports/review_r3/verification.json",
+      "sha256": "b28f7f2005768573490f05a06b3a38c92e54e55892b89f6fa9424e4b11a9594f"
+    },
+    {
+      "path": "reports/review_r3/worker_start_evidence.json",
+      "sha256": "fa0ac7d857a6e18741b0d3957e26a12253aad6e131bee7f1ed24ca361b10e03e"
+    }
+  ],
+  "last_document_amendment": "2026-11-11; see docs/S4_AMENDMENT_RECORD.json; original R3 review findings and raw evidence unchanged"
+}

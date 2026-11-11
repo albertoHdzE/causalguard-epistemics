@@ -1,0 +1,19 @@
+{
+  "schema": "causalguard-review-decision-r3",
+  "date": "2026-11-10",
+  "reviewed_content_commit": "ed719eac96580d19b4ded1b563d1e402b01ec05e",
+  "decision": "bounded_repairs_before_freeze_and_new_S4_development",
+  "confirmatory_authorized": false,
+  "approved_studies": [],
+  "production_freeze_record_created": false,
+  "blocking_findings": [
+    "R3-01",
+    "R3-02"
+  ],
+  "existing_scientific_estimates": "reproduced; no observed corruption from new findings",
+  "authorized_next_work": "delegation/ITERATION_4_CLAUDE_PROMPT.md P0-P5: bounded repairs, faithful S4 implementation, offline family map, bounded local development pilot, prospective sizing, public development release",
+  "S2_endpoint_or_allocation_changed": false,
+  "large_S4_evaluation_authorized": false,
+  "paid_inference_authorized": false,
+  "wp10_wp11_authorized": false
+}

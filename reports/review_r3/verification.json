@@ -1,0 +1,38 @@
+{
+  "reviewed_content_commit": "ed719eac96580d19b4ded1b563d1e402b01ec05e",
+  "local_head": "f506d0adc996de1afde780317663a77c312e3cd6",
+  "tag_commit": "a02e29e91789371b2c7c58f5e87f0c4a32623ee3",
+  "manifest_required_files": 2620,
+  "manifest_all_required_match": true,
+  "full_tests": {
+    "passed": 218,
+    "setup_errors": 1,
+    "error": "localhost HTTP socket bind denied by sandbox",
+    "seconds": 125.05
+  },
+  "reproductions": {
+    "s1": {
+      "sha256": "f70d5deb8c8363f94aa56f7022f2e4764b73e296a35d003afb0f359ada178067",
+      "committed_sha256": "f70d5deb8c8363f94aa56f7022f2e4764b73e296a35d003afb0f359ada178067",
+      "byte_identical": true
+    },
+    "s2": {
+      "sha256": "cc359699873f5d6af898875642e5b4abe86a2da43742203fc3d53ab339ad7ecf",
+      "committed_sha256": "cc359699873f5d6af898875642e5b4abe86a2da43742203fc3d53ab339ad7ecf",
+      "byte_identical": true
+    },
+    "s3": {
+      "sha256": "a3e57777378937d1df291ecbdaa2301de36de6362b3f9ef8444f1995b594885e",
+      "committed_sha256": "a3e57777378937d1df291ecbdaa2301de36de6362b3f9ef8444f1995b594885e",
+      "byte_identical": true
+    }
+  },
+  "s2_csv": {
+    "byte_identical": true,
+    "sha256": "710b6b492ce58c0fbcc7db23e96f32a72cd127ded475a80150b0a48a48f62361"
+  },
+  "production_freeze_present": false,
+  "confirmatory_runs_executed": [],
+  "reviewer_llm_calls": 0,
+  "remote_ci_and_download_independently_verified": false
+}

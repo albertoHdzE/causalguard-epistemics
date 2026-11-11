@@ -1,0 +1,491 @@
+{
+  "caution": "Development only. R1 has 2 worlds/cell at n256; R3 repair panel has 2 worlds/cell at all sizes. Same family names do not prove equivalence between S1/S2 generators. Archive bits include headers/framing; not complete decoder amortization.",
+  "s1": {
+    "r1": {
+      "source": "reports/development/s1_summary.json",
+      "n256": {
+        "bounded_random|n256": {
+          "bdd": 24620.0,
+          "best_codec": "lut",
+          "circuit": 30196.0,
+          "dnf": 32068.0,
+          "gate": 14668.0,
+          "generic_gzip": 21156.0,
+          "generic_lzma": 19576.0,
+          "generic_raw": 49648.0,
+          "index": 34252.0,
+          "index_rank_among_codecs": 8,
+          "lut": 13648.0,
+          "worlds": 2
+        },
+        "canalizing|n256": {
+          "bdd": 18808.0,
+          "best_codec": "dnf",
+          "circuit": 17400.0,
+          "dnf": 14268.0,
+          "gate": 16340.0,
+          "generic_gzip": 23080.0,
+          "generic_lzma": 21692.0,
+          "generic_raw": 53224.0,
+          "index": 15584.0,
+          "index_rank_among_codecs": 2,
+          "lut": 15588.0,
+          "worlds": 2
+        },
+        "modular|n256": {
+          "bdd": 15328.0,
+          "best_codec": "lut",
+          "circuit": 12388.0,
+          "dnf": 16036.0,
+          "gate": 10756.0,
+          "generic_gzip": 13500.0,
+          "generic_lzma": 12504.0,
+          "generic_raw": 37776.0,
+          "index": 17892.0,
+          "index_rank_among_codecs": 8,
+          "lut": 10104.0,
+          "worlds": 2
+        },
+        "parity|n256": {
+          "bdd": 24960.0,
+          "best_codec": "gate",
+          "circuit": 15772.0,
+          "dnf": 161672.0,
+          "gate": 10544.0,
+          "generic_gzip": 17396.0,
+          "generic_lzma": 16744.0,
+          "generic_raw": 55472.0,
+          "index": 153348.0,
+          "index_rank_among_codecs": 7,
+          "lut": 15780.0,
+          "worlds": 2
+        },
+        "sparse_conj|n256": {
+          "bdd": 21216.0,
+          "best_codec": "gate",
+          "circuit": 18868.0,
+          "dnf": 13896.0,
+          "gate": 11812.0,
+          "generic_gzip": 22064.0,
+          "generic_lzma": 20840.0,
+          "generic_raw": 79296.0,
+          "index": 13076.0,
+          "index_rank_among_codecs": 2,
+          "lut": 29064.0,
+          "worlds": 2
+        }
+      },
+      "n16": {
+        "bounded_random|n16": {
+          "bdd": 1296.0,
+          "best_codec": "lut",
+          "circuit": 1608.0,
+          "dnf": 1352.0,
+          "full": 1048696.0,
+          "gate": 688.0,
+          "generic_gzip": 1472.0,
+          "generic_lzma": 1512.0,
+          "generic_raw": 2616.0,
+          "index": 1232.0,
+          "index_rank_among_codecs": 3,
+          "lut": 624.0,
+          "worlds": 5
+        },
+        "canalizing|n16": {
+          "bdd": 960.0,
+          "best_codec": "index",
+          "circuit": 920.0,
+          "dnf": 712.0,
+          "full": 1048696.0,
+          "gate": 832.0,
+          "generic_gzip": 1696.0,
+          "generic_lzma": 1784.0,
+          "generic_raw": 2952.0,
+          "index": 672.0,
+          "index_rank_among_codecs": 1,
+          "lut": 776.0,
+          "worlds": 5
+        },
+        "modular|n16": {
+          "bdd": 824.0,
+          "best_codec": "lut",
+          "circuit": 616.0,
+          "dnf": 824.0,
+          "full": 1048696.0,
+          "gate": 512.0,
+          "generic_gzip": 1192.0,
+          "generic_lzma": 1120.0,
+          "generic_raw": 2024.0,
+          "index": 776.0,
+          "index_rank_among_codecs": 4,
+          "lut": 472.0,
+          "worlds": 5
+        },
+        "parity|n16": {
+          "bdd": 1328.0,
+          "best_codec": "gate",
+          "circuit": 760.0,
+          "dnf": 6056.0,
+          "full": 1048696.0,
+          "gate": 424.0,
+          "generic_gzip": 1472.0,
+          "generic_lzma": 1520.0,
+          "generic_raw": 3032.0,
+          "index": 4512.0,
+          "index_rank_among_codecs": 7,
+          "lut": 744.0,
+          "worlds": 5
+        },
+        "sparse_conj|n16": {
+          "bdd": 992.0,
+          "best_codec": "gate",
+          "circuit": 856.0,
+          "dnf": 632.0,
+          "full": 1048696.0,
+          "gate": 432.0,
+          "generic_gzip": 2272.0,
+          "generic_lzma": 2312.0,
+          "generic_raw": 4488.0,
+          "index": 512.0,
+          "index_rank_among_codecs": 2,
+          "lut": 1496.0,
+          "worlds": 5
+        }
+      }
+    },
+    "r3": {
+      "source": "reports/development_r3/s1_v2_summary.json",
+      "n256": {
+        "bounded_random|n256": {
+          "bdd": 24712.0,
+          "best_codec": "lut",
+          "circuit": 30164.0,
+          "dnf": 32080.0,
+          "gate": 14660.0,
+          "generic_gzip": 21056.0,
+          "generic_lzma": 19620.0,
+          "generic_raw": 49300.0,
+          "index": 34296.0,
+          "index_rank_among_codecs": 8,
+          "lut": 13636.0,
+          "worlds": 2
+        },
+        "canalizing|n256": {
+          "bdd": 19216.0,
+          "best_codec": "dnf",
+          "circuit": 17844.0,
+          "dnf": 14508.0,
+          "gate": 16664.0,
+          "generic_gzip": 23652.0,
+          "generic_lzma": 21980.0,
+          "generic_raw": 54120.0,
+          "index": 15840.0,
+          "index_rank_among_codecs": 2,
+          "lut": 15888.0,
+          "worlds": 2
+        },
+        "modular|n256": {
+          "bdd": 15400.0,
+          "best_codec": "lut",
+          "circuit": 12364.0,
+          "dnf": 16404.0,
+          "gate": 10724.0,
+          "generic_gzip": 13504.0,
+          "generic_lzma": 12476.0,
+          "generic_raw": 37804.0,
+          "index": 18288.0,
+          "index_rank_among_codecs": 8,
+          "lut": 10104.0,
+          "worlds": 2
+        },
+        "parity|n256": {
+          "bdd": 24816.0,
+          "best_codec": "gate",
+          "circuit": 15696.0,
+          "dnf": 168592.0,
+          "gate": 10508.0,
+          "generic_gzip": 17336.0,
+          "generic_lzma": 16736.0,
+          "generic_raw": 55596.0,
+          "index": 159156.0,
+          "index_rank_among_codecs": 7,
+          "lut": 15916.0,
+          "worlds": 2
+        },
+        "sparse_conj|n256": {
+          "bdd": 21308.0,
+          "best_codec": "gate",
+          "circuit": 18908.0,
+          "dnf": 13932.0,
+          "gate": 11844.0,
+          "generic_gzip": 22280.0,
+          "generic_lzma": 21016.0,
+          "generic_raw": 81960.0,
+          "index": 13116.0,
+          "index_rank_among_codecs": 2,
+          "lut": 28912.0,
+          "worlds": 2
+        }
+      },
+      "n16": {
+        "bounded_random|n16": {
+          "bdd": 1280.0,
+          "best_codec": "lut",
+          "circuit": 1592.0,
+          "dnf": 1340.0,
+          "full": 1048696.0,
+          "gate": 680.0,
+          "generic_gzip": 1500.0,
+          "generic_lzma": 1552.0,
+          "generic_raw": 2612.0,
+          "index": 1236.0,
+          "index_rank_among_codecs": 3,
+          "lut": 616.0,
+          "worlds": 2
+        },
+        "canalizing|n16": {
+          "bdd": 928.0,
+          "best_codec": "index",
+          "circuit": 868.0,
+          "dnf": 696.0,
+          "full": 1048696.0,
+          "gate": 804.0,
+          "generic_gzip": 1680.0,
+          "generic_lzma": 1748.0,
+          "generic_raw": 2920.0,
+          "index": 660.0,
+          "index_rank_among_codecs": 1,
+          "lut": 756.0,
+          "worlds": 2
+        },
+        "modular|n16": {
+          "bdd": 788.0,
+          "best_codec": "lut",
+          "circuit": 612.0,
+          "dnf": 716.0,
+          "full": 1048696.0,
+          "gate": 500.0,
+          "generic_gzip": 1176.0,
+          "generic_lzma": 1156.0,
+          "generic_raw": 2028.0,
+          "index": 696.0,
+          "index_rank_among_codecs": 4,
+          "lut": 472.0,
+          "worlds": 2
+        },
+        "parity|n16": {
+          "bdd": 1316.0,
+          "best_codec": "gate",
+          "circuit": 748.0,
+          "dnf": 6856.0,
+          "full": 1048696.0,
+          "gate": 424.0,
+          "generic_gzip": 1488.0,
+          "generic_lzma": 1496.0,
+          "generic_raw": 3048.0,
+          "index": 4996.0,
+          "index_rank_among_codecs": 7,
+          "lut": 780.0,
+          "worlds": 2
+        },
+        "sparse_conj|n16": {
+          "bdd": 944.0,
+          "best_codec": "gate",
+          "circuit": 828.0,
+          "dnf": 612.0,
+          "full": 1048696.0,
+          "gate": 436.0,
+          "generic_gzip": 1800.0,
+          "generic_lzma": 1828.0,
+          "generic_raw": 3536.0,
+          "index": 508.0,
+          "index_rank_among_codecs": 2,
+          "lut": 1052.0,
+          "worlds": 2
+        }
+      },
+      "query_outcomes_n256": {
+        "bounded_random|bdd_ref": {
+          "true": 11,
+          "false": 7,
+          "unknown_resource": 30
+        },
+        "bounded_random|index_cube": {
+          "true": 10,
+          "false": 6,
+          "unknown_resource": 32
+        },
+        "bounded_random|index_sat": {
+          "true": 25,
+          "false": 23
+        },
+        "canalizing|bdd_ref": {
+          "true": 14,
+          "false": 17,
+          "timeout": 17
+        },
+        "canalizing|index_cube": {
+          "true": 10,
+          "false": 15,
+          "unknown_resource": 22,
+          "timeout": 1
+        },
+        "canalizing|index_sat": {
+          "true": 23,
+          "false": 25
+        },
+        "modular|bdd_ref": {
+          "true": 12,
+          "false": 15,
+          "timeout": 4,
+          "unknown_resource": 17
+        },
+        "modular|index_cube": {
+          "true": 14,
+          "false": 15,
+          "unknown_resource": 19
+        },
+        "modular|index_sat": {
+          "true": 23,
+          "false": 25
+        },
+        "parity|bdd_ref": {
+          "true": 21,
+          "false": 13,
+          "unknown_resource": 14
+        },
+        "parity|index_cube": {
+          "true": 11,
+          "false": 5,
+          "unknown_resource": 30,
+          "timeout": 2
+        },
+        "parity|index_sat": {
+          "true": 28,
+          "false": 20
+        },
+        "sparse_conj|bdd_ref": {
+          "true": 19,
+          "false": 15,
+          "unknown_resource": 12,
+          "timeout": 2
+        },
+        "sparse_conj|index_cube": {
+          "true": 17,
+          "false": 11,
+          "unknown_resource": 18,
+          "timeout": 2
+        },
+        "sparse_conj|index_sat": {
+          "true": 26,
+          "false": 22
+        }
+      }
+    }
+  },
+  "s2": {
+    "source": "reports/development_r3/s2_v2_summary.json",
+    "index_minus_majority": {
+      "a": "index",
+      "b": "vs_majority",
+      "ci95": [
+        -0.011125,
+        0.012125
+      ],
+      "estimate": 0.0008749999999999996,
+      "mean_a": 0.8899999999999999,
+      "mean_b": 0.8891250000000002,
+      "n_strata": 5,
+      "n_worlds": 250,
+      "per_family": {
+        "canalizing": {
+          "mean_delta": 0.0175,
+          "n": 50
+        },
+        "conjunctive": {
+          "mean_delta": 0.0025,
+          "n": 50
+        },
+        "modular": {
+          "mean_delta": 0.009375,
+          "n": 50
+        },
+        "parity": {
+          "mean_delta": -0.02,
+          "n": 50
+        },
+        "random_lookup": {
+          "mean_delta": -0.005,
+          "n": 50
+        }
+      },
+      "replicates": 5000,
+      "sd_delta": 0.09486874321268844,
+      "se": 0.005992019439952506,
+      "seed": 20261109,
+      "status": "complete (development); not confirmatory"
+    },
+    "circuit_minus_majority": {
+      "a": "circuit",
+      "b": "vs_majority",
+      "ci95": [
+        0.013250000000000001,
+        0.036375000000000005
+      ],
+      "estimate": 0.025124999999999998,
+      "mean_a": 0.91425,
+      "mean_b": 0.8891250000000002,
+      "n_strata": 5,
+      "n_worlds": 250,
+      "per_family": {
+        "canalizing": {
+          "mean_delta": 0.005,
+          "n": 50
+        },
+        "conjunctive": {
+          "mean_delta": -0.00625,
+          "n": 50
+        },
+        "modular": {
+          "mean_delta": 0.051875,
+          "n": 50
+        },
+        "parity": {
+          "mean_delta": 0.10375,
+          "n": 50
+        },
+        "random_lookup": {
+          "mean_delta": -0.02875,
+          "n": 50
+        }
+      },
+      "replicates": 2000,
+      "sd_delta": 0.1037654673475498,
+      "se": 0.0059165544908245755,
+      "seed": 20261109
+    },
+    "null_index_minus_majority": {
+      "a": "index",
+      "b": "vs_majority",
+      "ci95": [
+        -0.0325,
+        -0.011121875000000017
+      ],
+      "estimate": -0.02175,
+      "mean_a": 0.83575,
+      "mean_b": 0.8575,
+      "n_strata": 1,
+      "n_worlds": 250,
+      "per_family": {
+        "uniform_H": {
+          "mean_delta": -0.02175,
+          "n": 250
+        }
+      },
+      "replicates": 2000,
+      "sd_delta": 0.08408832192126406,
+      "se": 0.005329395877001506,
+      "seed": 20261109
+    }
+  }
+}
