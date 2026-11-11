@@ -30,7 +30,7 @@ from collections import Counter
 from pathlib import Path
 
 from ..s3_tasks import VERDICT_LABELS, label_feedback, render_item_prompt, solver_answer, witness_feedback
-from .parse import parse_answer
+from .parse import parse_answer, verdict_vector_coherent
 from .providers import BaseProvider, CapExceeded
 
 ARMS = ("A", "B", "C", "D", "D_label", "E", "T_A", "T_D")
@@ -123,6 +123,9 @@ def aggregate_c(members: list[dict]) -> dict:
         flags.append("no_valid_votes")
     vecs = [m["probabilities"] for m in members if m["probs_valid"]]
     probs = ({k: sum(v[k] for v in vecs) / len(vecs) for k in VERDICT_LABELS} if vecs else None)
+    if verdict is not None and probs is not None and not verdict_vector_coherent(verdict, probs):
+        # the majority verdict and the MEAN vector disagree: an aggregate disagreement, not a model contradiction
+        flags.append("aggregate_verdict_prob_mismatch")
     if verdict is None:
         status = "abstain"
     elif probs is None:

@@ -130,6 +130,21 @@ def last_balanced_object(text: str) -> str | None:
     return last
 
 
+COHERENCE_POLICY = ("a verdict is coherent with a probability vector iff its probability equals the vector's maximum; "
+                    "a verdict among TIED maxima is coherent (the tie is counted separately); only valid verdicts "
+                    "and valid vectors enter the denominator")
+
+
+def verdict_vector_coherent(verdict: str, probs: dict) -> bool:
+    """The one coherence rule (direct model responses and post-aggregation C answers alike)."""
+    return probs[verdict] >= max(probs.values())
+
+
+def argmax_tied(probs: dict) -> bool:
+    mx = max(probs.values())
+    return sum(1 for v in probs.values() if v == mx) > 1
+
+
 def parse_answer(raw: str | None, provider_ok: bool = True) -> dict:
     out = {"status": None, "verdict": None, "verdict_valid": False, "probabilities": None, "probs_valid": False,
            "prob_error": None, "reason": None, "flags": []}
@@ -173,10 +188,8 @@ def parse_answer(raw: str | None, provider_ok: bool = True) -> dict:
                 out["flags"].append("verdict_normalized")
         elif norm in ABSTAIN_WORDS:
             abstain = True
-    if out["verdict_valid"] and out["probs_valid"]:
-        mx = max(probs.values())
-        if probs[out["verdict"]] < mx:
-            out["flags"].append("verdict_prob_mismatch")
+    if out["verdict_valid"] and out["probs_valid"] and not verdict_vector_coherent(out["verdict"], probs):
+        out["flags"].append("verdict_prob_mismatch")
     if abstain:
         out["status"] = "abstain"
     elif not out["verdict_valid"]:

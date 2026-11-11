@@ -194,6 +194,138 @@ def fit_baselines(out_path: Path, n_worlds: int = S3_BASELINE_TRAIN_WORLDS) -> d
     return art
 
 
+# --------------------------------------------------------------------------- iteration 3 (offline S3 corrections)
+
+def design_known_target_rule() -> dict:
+    """The generator's own coupling (R2-07): world ``index`` sets BOTH the budget S3_BUDGETS[index % 3] and the
+    requested target verdict VERDICT_LABELS[index % 3], so budget alone names the requested target verdict.  Derived
+    from the generator constants, never fitted."""
+    from ..s3_tasks import S3_BUDGETS
+    if len(S3_BUDGETS) != len(VERDICT_LABELS):  # pragma: no cover - the coupling is budget-identifiable only then
+        raise ValueError("budget/target coupling is not a function of budget")
+    return {str(b): VERDICT_LABELS[i] for i, b in enumerate(S3_BUDGETS)}
+
+
+def _role(item: dict) -> str:
+    return item["role"].split(":")[0]
+
+
+def baseline_names(baselines: dict) -> list[str]:
+    names = ["majority", "surface_rule"]
+    if "role_surface_rule" in baselines:
+        names.append("role_surface_rule")
+    if "design_known_budget_rule" in baselines:
+        names.append("design_known_budget_rule")
+    return names
+
+
+def baseline_predict(name: str, baselines: dict, item: dict, budget: int) -> str:
+    maj = baselines["majority_verdict"]
+    if name == "majority":
+        return maj
+    if name == "design_known_budget_rule":
+        return baselines["design_known_budget_rule"][str(budget)]
+    key = "|".join(map(str, _features(item, budget)))
+    if name == "surface_rule":
+        return baselines["surface_rule"].get(key, maj)
+    if name == "role_surface_rule":
+        rb = baselines["role_surface_rule"][_role(item)]
+        return rb["rule"].get(key, rb["majority_verdict"])
+    raise KeyError(name)
+
+
+def fit_role_baselines(out_path: Path, n_worlds: int = S3_BASELINE_TRAIN_WORLDS) -> dict:
+    """Role-specific surface baselines fitted on the SAME development training worlds as the v2 baselines (no
+    model calls, no held-out labels): one (budget, horizon, kind, target value) -> most-common-verdict table per
+    role.  Persisted next to (not over) the historical v2 baselines."""
+    from collections import Counter, defaultdict
+
+    from ..s3_tasks import make_s3_items_v2
+    tab, per_role = defaultdict(lambda: defaultdict(Counter)), defaultdict(Counter)
+    for i in range(n_worlds):
+        d = make_s3_items_v2(S3_BASELINE_TRAIN_SALT, i)
+        B = d["private"]["budget"]
+        for it in d["private"]["items"]:
+            r = _role(it)
+            if r in ("balanced", "natural", "transfer_target"):
+                tab[r][_features(it, B)][it["verdict"]] += 1
+                per_role[r][it["verdict"]] += 1
+
+    def top(c):
+        return sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))[0][0]
+    art = {"artifact": "s3-role-baselines-v3", "train_salt": S3_BASELINE_TRAIN_SALT, "train_worlds": n_worlds,
+           "features": ["budget", "horizon", "intervention_kind", "target_value"],
+           "tie_break": "most frequent, then alphabetical; unseen feature cells fall back to the role majority",
+           "roles": {r: {"majority_verdict": top(per_role[r]), "train_verdict_counts": dict(per_role[r]),
+                         "rule": {"|".join(map(str, f)): top(c) for f, c in sorted(tab[r].items())}}
+                     for r in sorted(tab)},
+           "design_known_budget_rule": design_known_target_rule(),
+           "design_known_note": "not fitted: the generator's budget -> requested target verdict coupling (R2-07)"}
+    Path(out_path).write_text(json.dumps(art, indent=1, sort_keys=True))
+    art["sha256"] = hashlib.sha256(Path(out_path).read_bytes()).hexdigest()
+    return art
+
+
+def semantic_claim(item: dict) -> tuple:
+    """Effective claim of a point query: (state after initial edits, horizon, target node, persistent clamps)."""
+    from ..s3_tasks import point_state
+    from ..schema import Query
+    q = Query.from_json(item["query"]) if isinstance(item["query"], dict) else item["query"]
+    x = point_state(q)
+    persistent = ()
+    if q.intervention.kind == "initial_edit":
+        for j, v in q.intervention.assign:
+            x = (x & ~(1 << j)) | (v << j)
+    elif q.intervention.kind == "persistent_clamp":
+        persistent = tuple(sorted(q.intervention.assign))
+        for j, v in q.intervention.assign:      # a clamp also fixes the initial value of the clamped node
+            x = (x & ~(1 << j)) | (v << j)
+    return (x, q.horizon, q.target.node, persistent), q.target.value
+
+
+def target_novelty_audit(records: list[dict], source_item: int = 0) -> dict:
+    """Semantic source/target relation per world (R2-09): identical claim, complement claim (same effective
+    claim, opposite target value) or fresh."""
+    rel = {}
+    for r in records:
+        items = r["task_private"]["items"]
+        tgt = next(i for i, it in enumerate(items) if _role(it) == "transfer_target")
+        (ks, vs_), (kt, vt) = semantic_claim(items[source_item]), semantic_claim(items[tgt])
+        rel[r["world_index"]] = ("identical_claim" if ks == kt and vs_ == vt else
+                                 "complement_claim" if ks == kt else "fresh")
+    return {"source_item": source_item, "identical_claim_worlds": sorted(k for k, v in rel.items() if v == "identical_claim"),
+            "complement_claim_worlds": sorted(k for k, v in rel.items() if v == "complement_claim"),
+            "fresh_worlds": sum(v == "fresh" for v in rel.values()),
+            "rule": ("effective initial state after initial edits / clamp initial values, horizon, target node, "
+                     "persistent clamps; target value compared separately")}
+
+
+def coherence_audit(records: list[dict]) -> dict:
+    """Verdict/vector coherence of FINAL answers by arm and item role, with valid-vector denominators (R2-08).
+    Direct-response arms use the parser flag (a model contradiction); arm C is recomputed AFTER aggregation (an
+    aggregate majority-verdict vs mean-vector disagreement), beside the historical saved flag."""
+    from ..llm.parse import COHERENCE_POLICY, argmax_tied, verdict_vector_coherent
+    out = {"policy": COHERENCE_POLICY, "by_arm": {}}
+    for arm in ("A", "B2", "C", "D_cert", "D_label", "D_sample", "E"):
+        for role in ("balanced", "natural"):
+            c = {"valid_verdict_and_vector": 0, "mismatch": 0, "tied_argmax": 0, "saved_flag_mismatch": 0}
+            for r in records:
+                items = r["task_private"]["items"]
+                for i, it in enumerate(items):
+                    f = _final_v2(r, arm, i)
+                    if _role(it) != role or f is None or not (f.get("verdict_valid") and f.get("probs_valid")):
+                        continue
+                    c["valid_verdict_and_vector"] += 1
+                    c["mismatch"] += not verdict_vector_coherent(f["verdict"], f["probabilities"])
+                    c["tied_argmax"] += argmax_tied(f["probabilities"])
+                    c["saved_flag_mismatch"] += "verdict_prob_mismatch" in f.get("flags", [])
+            if c["valid_verdict_and_vector"]:
+                c["kind"] = ("aggregate_disagreement(majority verdict vs mean vector)" if arm == "C"
+                             else "direct_model_response")
+                out["by_arm"][f"{arm}|{role}"] = c
+    return out
+
+
 def _final_v2(r: dict, arm: str, i: int) -> dict | None:
     v = r["arms"].get(arm, {}).get(str(i))
     return v["final"] if v else None
@@ -286,12 +418,10 @@ def per_world_v2(records: list[dict], baselines: dict) -> list[dict]:
                                 "correct_transformed": int(fb["verdict_valid"] and fb["verdict"] == y[i])})
         row["transforms"] = {"complement": comp, "renaming": ren}
         # baselines on the identical saved items
-        for name in ("majority", "surface_rule"):
+        for name in baseline_names(baselines):
             st = {}
             for lab, idx in (("balanced", bal), ("natural", nat), ("target", tgt)):
-                preds = [baselines["majority_verdict"] if name == "majority" else
-                         baselines["surface_rule"].get("|".join(map(str, _features(items[i], B))),
-                                                       baselines["majority_verdict"]) for i in idx]
+                preds = [baseline_predict(name, baselines, items[i], B) for i in idx]
                 st[lab] = {"n": len(idx), "correct": sum(int(p == y[i]) for p, i in zip(preds, idx)),
                            "by_class": {c: [sum(1 for i in idx if y[i] == c),
                                             sum(1 for p, i in zip(preds, idx) if y[i] == c and p == c)]
@@ -359,7 +489,7 @@ def summarize_v2(records: list[dict], baselines: dict, reps: int = 5000, seed: i
     for a, b in (("D_cert", "D_label"), ("D_sample", "B2"), ("B2", "A"), ("C", "A"), ("D_label", "B2"),
                  ("D_cert", "B2"), ("C", "B2")):
         out["contrasts"][f"secondary|{a}-{b}|balanced_items_accuracy"] = paired_items(a, b)
-    for name in ("majority", "surface_rule"):
+    for name in baseline_names(baselines):
         for lab in ("balanced", "natural", "target"):
             st = [r["baselines"][name][lab] for r in rows]
             nit = sum(s["n"] for s in st)
@@ -458,7 +588,10 @@ def costs_v2(records: list[dict]) -> dict:
             "probe_source_context_chars_median": {k: float(np.median(v)) for k, v in ctx.items()}}
 
 
-def analyze_v2(run_dirs: list[Path], out_dir: Path, baselines_path: Path, reps: int = 5000) -> dict:
+def analyze_v2(run_dirs: list[Path], out_dir: Path, baselines_path: Path, reps: int = 5000,
+               role_baselines_path: Path | None = None) -> dict:
+    """``role_baselines_path`` (iteration 3): persisted role-specific training-world baselines plus the design-known
+    budget rule; when given, the analysis is s3-analysis-v3 and adds the R2-07..R2-09 audits."""
     from ..experiments.s3 import check_kinds
     from ..runner import load_run
     out_dir = Path(out_dir)
@@ -469,6 +602,22 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, baselines_path: Path, reps: 
                                                                    "sha256": hashlib.sha256(base_bytes).hexdigest(),
                                                                    "train_salt": baselines["train_salt"]},
               "runs": {}}
+    if role_baselines_path is not None:
+        rb_bytes = Path(role_baselines_path).read_bytes()
+        rb = json.loads(rb_bytes)
+        if rb["train_salt"] != baselines["train_salt"] or rb["design_known_budget_rule"] != design_known_target_rule():
+            raise SystemExit("role baselines were not fitted on the baseline training worlds / design rule differs")
+        baselines = {**baselines, "role_surface_rule": rb["roles"], "design_known_budget_rule": rb["design_known_budget_rule"]}
+        result["analysis_version"] = "s3-analysis-v3"
+        result["role_baselines"] = {"path": str(role_baselines_path), "sha256": hashlib.sha256(rb_bytes).hexdigest(),
+                                    "train_salt": rb["train_salt"], "design_known_budget_rule": rb["design_known_budget_rule"]}
+        result["changes_in_v3"] = [
+            "R2-07: design-known budget rule (not fitted) and role-specific surface rules fitted on training worlds, "
+            "scored on the identical saved items; historical pooled surface rule retained",
+            "R2-08: arm-C coherence recomputed AFTER aggregation with the parser's single tie rule and valid-vector "
+            "denominators; aggregate disagreement reported separately from direct model contradictions",
+            "R2-09: semantic source/target novelty audit; original focus retained; exploratory exclusion sensitivity",
+            "phase derived from validated run provenance"]
     panels = {}
     for d in run_dirs:
         lr = load_run(Path(d))
@@ -487,12 +636,24 @@ def analyze_v2(run_dirs: list[Path], out_dir: Path, baselines_path: Path, reps: 
             for s in r["task_private"]["balance_shortfalls"]:
                 k = f"B{s['budget']}|h{s['horizon']}|{s['kind']}|want={s['target_verdict']}|{s['role']}"
                 bal_short[k] = bal_short.get(k, 0) + 1
-        res = {"model": model, "panel": panel, "provider_kind": kind, "plan_sha256": plan["plan_sha256"],
+        res = {"model": model, "panel": panel, "provider_kind": kind, "phase": lr["phase"], "plan_sha256": plan["plan_sha256"],
                "source_tree_sha256": plan["source_tree_sha256"], "planned_worlds": len(plan["items"]),
                "ok_worlds": len(recs), "failed_worlds": len(lr["failures"]), "missing_worlds": len(lr["missing"]),
                "provider_metadata": recs[0].get("provider_metadata") if recs else None,
                "balance_shortfalls": dict(sorted(bal_short.items())),
                "summary": summarize_v2(recs, baselines, reps) if recs else None, "cost": costs_v2(recs) if recs else None}
+        if recs and role_baselines_path is not None:
+            src = int(plan["config"].get("harness", {}).get("transfer_source_item", 0))
+            nov = target_novelty_audit(recs, src)
+            keep = [r for r in recs if r["world_index"] not in set(nov["identical_claim_worlds"])]
+            res["r3_audits"] = {
+                "coherence_final_answers": coherence_audit(recs),
+                "target_novelty": nov,
+                "EXPLORATORY_focus_excluding_identical_claim_worlds": {
+                    "excluded_worlds": nov["identical_claim_worlds"], "n_worlds": len(keep),
+                    "T_cert-T_label|target_accuracy": (summarize_v2(keep, baselines, reps) or {}).get("contrasts", {})
+                    .get("FOCUS|T_cert-T_label|target_accuracy") if nov["identical_claim_worlds"] else None,
+                    "note": "exploratory sensitivity only; the original focus over all planned worlds is unchanged"}}
         result["runs"][rid] = res
         if recs:
             figures_v2(recs, baselines, out_dir / f"s3_v2_per_world_{rid}.png", f"{rid} ({model})")

@@ -106,7 +106,10 @@ def main(argv=None):
     a3 = sub.add_parser("analyze-s3-v2")
     a3.add_argument("--run-dir", required=True, action="append")
     a3.add_argument("--baselines", default="reports/development_r2/s3_baselines_v2.json")
-    a3.add_argument("--out", default="reports/development_r2")
+    a3.add_argument("--role-baselines", default="reports/development_r3/s3_role_baselines_v3.json",
+                    help="iteration-3 role-specific baselines + design-known rule ('none' = historical v2 analysis)")
+    a3.add_argument("--out", default="reports/development_r3")
+    sub.add_parser("fit-s3-role-baselines").add_argument("--out", default="reports/development_r3/s3_role_baselines_v3.json")
     sub.add_parser("fixtures")
     args = ap.parse_args(argv)
 
@@ -139,8 +142,14 @@ def main(argv=None):
         return 0
     if args.cmd == "analyze-s3-v2":
         from .analysis.s3_analysis import analyze_v2 as s3v2
-        print(json.dumps(s3v2([Path(d) for d in args.run_dir], Path(args.out), Path(args.baselines)), indent=1,
-                         default=float)[:4000])
+        rb = None if args.role_baselines == "none" else Path(args.role_baselines)
+        print(json.dumps(s3v2([Path(d) for d in args.run_dir], Path(args.out), Path(args.baselines),
+                              role_baselines_path=rb), indent=1, default=float)[:4000])
+        return 0
+    if args.cmd == "fit-s3-role-baselines":
+        from .analysis.s3_analysis import fit_role_baselines
+        art = fit_role_baselines(Path(args.out))
+        print(json.dumps({"out": args.out, "sha256": art["sha256"]}))
         return 0
     if args.cmd == "analyze-s1":
         from .analysis.s1_analysis import analyze
