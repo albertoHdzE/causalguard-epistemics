@@ -159,8 +159,8 @@ No revision was used.
 
   | | A | B | C | D | no-LLM controller | observed-majority surface rule |
   |---|---:|---:|---:|---:|---:|---:|
-  | qwen | 0.478 | 0.586 | 0.540 | 0.543 | **0.772** | 0.571 |
-  | mistral | 0.514 | 0.553 | 0.554 | 0.557 | **0.772** | 0.571 |
+  | qwen | 0.478 | 0.586 | 0.540 | 0.543 | **0.782** | 0.571 |
+  | mistral | 0.514 | 0.553 | 0.554 | 0.557 | **0.782** | 0.571 |
 
   The models do not use the exact `fraction_true` the tools return: the deterministic controller gets all of
   the available forecasting benefit, and more than any AI arm.

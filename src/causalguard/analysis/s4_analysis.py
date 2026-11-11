@@ -357,8 +357,13 @@ def analyze_pilot(run_dirs, baselines_path, out_dir, reps=10000) -> dict:
                     row[f"{arm}_merged"] = _world_scores(ep, ref, mf if mf is not None else ep.get("final", {}))
                     row[f"{arm}_merged"]["changed_by_merge"] = int(mf is not None and mf != ep.get("final", {}))
             # deterministic no-LLM controller: copy the exact tool verdict, forecast = exact majority (ties -> 0)
-            ctl_final = {c: {"verdict": x["verdict"], "forecast": (x["target_value"] if 2 * int(x["num"]) > int(x["den"])
-                                                                   else 1 - x["target_value"])} for c, x in ref.items()}
+            from ..versionspace import posterior_from_counts
+            ctl_final = {}
+            for c, x in ref.items():
+                post = posterior_from_counts(int(x["num"]), int(x["den"]))      # owner's majority/tie rule
+                holds = post["majority"]                                         # None at an exact tie
+                ctl_final[c] = {"verdict": x["verdict"],
+                                "forecast": 0 if holds is None else (x["target_value"] if holds else 1 - x["target_value"])}
             row["controller"] = _world_scores({"final": ctl_final}, ref)
             bans = _baseline_answers(pub["claims"], ref, r["budget"], bl, pub["evidence"])
             for b in ("always_underdetermined", "cell_majority", "cell_budget_majority"):

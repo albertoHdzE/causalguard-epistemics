@@ -23,6 +23,14 @@ GUARDS = {
     "strict attempt validator": (r"^def validate_attempt\(", "runner.py"),
     "run phase from provenance": (r"^def run_phase\(", "runner.py"),
     "S2 endpoint reconciliation": (r"^def validate_world_v2\(", "analysis/s2_analysis.py"),
+    # iteration 4
+    "S2 study-contract method keys": (r"^def required_pred_keys\(", "analysis/s2_analysis.py"),
+    "dead-supervisor startup refusal": (r"^def _refuse_if_supervisor_dead\(", "runner.py"),
+    "support-schema Moebius counting": (r"\(-1\) \*\* \(len\(E\) - r\)", "s4/mechspace.py"),
+    "CGH-1 decoder": (r"^def decode\(bits: list\[int\]\)", "s4/hcode.py"),
+    "release gate commit": (r"^def commit\(p: dict, decision", "s4/checking.py"),
+    "decision seal": (r"hmac\.new\(", "s4/checking.py"),
+    "exact limb weights": (r"^def _limbs\(", "versionspace.py"),
 }
 
 

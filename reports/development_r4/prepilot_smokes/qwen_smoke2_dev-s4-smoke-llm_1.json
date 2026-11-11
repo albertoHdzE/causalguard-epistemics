@@ -1,0 +1,1362 @@
+{
+ "task_id": "72109904dbe48c556b4a89f4d742c47bfc3887832373e23dacdcd17fc3d5f0ab",
+ "world_id": "s4w-67e2d961da3c7c30",
+ "family": "repeated_modules",
+ "index": 1,
+ "model": "qwen2.5:7b",
+ "provider_metadata": {
+  "provider_kind": "real",
+  "backend": "ollama",
+  "base_url": "http://127.0.0.1:11434/v1",
+  "model": "qwen2.5:7b",
+  "seed_sent": true,
+  "seed_honoured": "not_verified",
+  "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "server_version": "0.40.16",
+  "quantization": "Q4_K_M",
+  "parameter_size": "7.6B",
+  "format": "gguf",
+  "chat_template_sha256": "eb4402837c7829a690fa845de4d7f3fd842c2adee476d5341da8a46ea9255175",
+  "model_parameters": null,
+  "models_entry": {
+   "name": "qwen2.5:7b",
+   "modified_at": "2026-03-30T14:06:17.320877292-06:00",
+   "size": 4683087332,
+   "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e"
+  },
+  "limitations": [
+   "seed is sent but whether the backend honours it is not verified"
+  ]
+ },
+ "budget": 24,
+ "public_sha256": "6d68df9b7c62a0cc744e92c8e9e6245f5dc5db3aa9fd1299b656d17ba8e6c8a8",
+ "episodes": {
+  "A": {
+   "arm": "A",
+   "status": "answered",
+   "turns": 1,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "```json\n{\n  \"answers\": [\n    {\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0},\n    {\"cid\": \"c1\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c2\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0},\n    {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c6\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}\n  ]\n}\n```\n\nExplanation:\n- **Claim c0**: The claim is refuted. In the evidence, holding T3=1 and A5=1 fixed, the state 10000011 does not lead to H6=0 after one step. The evidence does not support this claim.\n- **Claim c1**: The claim is underdetermined. The evidence does not provide enough information to determine the behavior of the system when B4 and H6 are held fixed. The forecast is based on the evidence provided.\n- **Claim c2**: The claim is underdetermined. Similar to c1, the evidence does not provide enough information to determine the behavior of the system when C2 and B4 are held fixed.\n- **Claim c3**: The claim is underdetermined. The evidence does not provide enough information to determine the behavior of the system when H6 is set to 1 and then updated freely.\n- **Claim c4**: The claim is underdetermined. The evidence does not provide enough information to determine the behavior of the system when A1 is set to 1 and then updated freely.\n- **Claim c5**: The claim is underdetermined. The evidence does not provide enough information to determine the behavior of the system when A5 is set to 0 and then updated freely.\n- **Claim c6**: The claim is underdetermined. The evidence does not provide enough information to determine the behavior of the system when C2 is held fixed.\n- **Claim c7**: The claim is underdetermined. The evidence does not provide enough information to determine the behavior of the system when T3 is held fixed.\nEach of these claims is based on the evidence provided, which is insufficient to definitively determine the behavior of the system in all consistent mechanisms.",
+     "failure": null,
+     "request_hash": "217da16926f2379c4dd381badf0f6df02649dd96ebe9becbfed53ba7f529476b",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1214,
+       "completion_tokens": 563,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 6.2729
+      }
+     ]
+    }
+   ],
+   "final": {
+    "c0": {
+     "verdict": "refuted",
+     "forecast": 0
+    },
+    "c1": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c2": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c3": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c4": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c5": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c6": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c7": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    }
+   },
+   "released_verified": {},
+   "tool_log": [],
+   "decisions": {},
+   "workspace_cost": null,
+   "messages_chars": 4824
+  },
+  "B": {
+   "arm": "B",
+   "status": "committed",
+   "turns": 3,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"check\", \"cid\": \"c0\"}, {\"tool\": \"check\", \"cid\": \"c1\"}, {\"tool\": \"check\", \"cid\": \"c2\"}, {\"tool\": \"check\", \"cid\": \"c3\"}, {\"tool\": \"check\", \"cid\": \"c4\"}, {\"tool\": \"check\", \"cid\": \"c5\"}, {\"tool\": \"check\", \"cid\": \"c6\"}, {\"tool\": \"check\", \"cid\": \"c7\"}]}",
+     "failure": null,
+     "request_hash": "95c55eda318c0b2fadfa43739eb527ec473102fa90c636286e33b6ed2875fd97",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1448,
+       "completion_tokens": 110,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 2.2404
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"commit\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]",
+     "failure": null,
+     "request_hash": "1db54bc7a714577d9da16acc844733c2ada64d016d1ad598fe0fd471e180deb6",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 3642,
+       "completion_tokens": 188,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 3.6477
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"commit\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]}",
+     "failure": null,
+     "request_hash": "336843280c3e60f8eb984c20a6deb89f5a89c49175aee9031267c72ab943a308",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 3853,
+       "completion_tokens": 188,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 1.8636
+      }
+     ]
+    }
+   ],
+   "final": {
+    "c0": {
+     "verdict": "refuted",
+     "forecast": 0
+    },
+    "c1": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c2": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c3": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c4": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c5": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c6": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c7": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    }
+   },
+   "released_verified": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": true,
+    "c5": true,
+    "c6": true,
+    "c7": true
+   },
+   "tool_log": [
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c0",
+     "wall_s": 0.009269916999983252
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c1",
+     "wall_s": 0.010901333000219893
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c2",
+     "wall_s": 0.00784562500030006
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c3",
+     "wall_s": 0.012027250000301137
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c4",
+     "wall_s": 0.004984375000276486
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c5",
+     "wall_s": 0.0034975410003426077
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c6",
+     "wall_s": 0.004396584000005532
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c7",
+     "wall_s": 0.010413916000288737
+    },
+    {
+     "turn": 1,
+     "invalid": true
+    },
+    {
+     "turn": 2,
+     "tool": "commit",
+     "cid": null,
+     "wall_s": 0.07562783299999865
+    }
+   ],
+   "decisions": {
+    "c0": {
+     "cid": "c0",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "refuted",
+     "binding": "dc56bfe8f7e884faf2d27b6aea6a283bfb3cf332e435e93559acc802626f6367",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "0",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "solver_only",
+       "solver": "cadical153",
+       "cnf_vars": 574,
+       "cnf_clauses": 1920
+      },
+      "side1_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'H6=0 after 1 step(s)' is refuted."
+    },
+    "c1": {
+     "cid": "c1",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "d1e5ee9ad5865b837fea24cfc473f57dcc503d26861697bd2e053cc226c2a804",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "solver_only",
+       "solver": "cadical153",
+       "cnf_vars": 1114,
+       "cnf_clauses": 5628
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A5=1 after 3 step(s)' is entailed."
+    },
+    "c2": {
+     "cid": "c2",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "589ca6d3d968f0844bb444bed1ecf68b751e7fc7e06ee3c456cec600ad4212ce",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "solver_only",
+       "solver": "cadical153",
+       "cnf_vars": 860,
+       "cnf_clauses": 3886
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A1=1 after 2 step(s)' is entailed."
+    },
+    "c3": {
+     "cid": "c3",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "b01c191319e45ccc8ae2b8114515141b4be2315e8906d967bb512c024b0941ac",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "180",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "witness_replayed",
+       "solver": "cadical153",
+       "cnf_vars": 1312,
+       "cnf_clauses": 6978
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'N7=0 after 3 step(s)' (two replayed witnesses)."
+    },
+    "c4": {
+     "cid": "c4",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "1ba72c5a086370c15768693263a840d7c929e3fd023c33a26bd86891abfc5c7f",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "270",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "witness_replayed",
+       "solver": "cadical153",
+       "cnf_vars": 992,
+       "cnf_clauses": 4786
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'Z0=1 after 2 step(s)' (two replayed witnesses)."
+    },
+    "c5": {
+     "cid": "c5",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "cb456d5b11c5c0c0edb71cd3a7ae3b98e132c8ffa7c5d6ece4c83874623d82bf",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "216",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "witness_replayed",
+       "solver": "cadical153",
+       "cnf_vars": 672,
+       "cnf_clauses": 2594
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'H6=1 after 1 step(s)' (two replayed witnesses)."
+    },
+    "c6": {
+     "cid": "c6",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "b6b289e960919d0cd1bfad4ffa7ddc60d591edc9b2f2b9f61d9f2e7b7faa9241",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "solver_only",
+       "solver": "cadical153",
+       "cnf_vars": 894,
+       "cnf_clauses": 4112
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A1=1 after 2 step(s)' is entailed."
+    },
+    "c7": {
+     "cid": "c7",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "140baf6284583a4c197d0566b38ab651560565c9f3f54f28e1ed36cc2c98db0c",
+     "certificate": {
+      "backend": "B",
+      "counts": {
+       "num": "162",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "witness_replayed",
+       "solver": "cadical153",
+       "cnf_vars": 1165,
+       "cnf_clauses": 5967
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'B4=1 after 3 step(s)' (two replayed witnesses)."
+    }
+   },
+   "workspace_cost": {
+    "wall_s": 0.11518904100057625,
+    "ops": 16,
+    "build_s": 1.737066958000014
+   },
+   "messages_chars": 9009
+  },
+  "C": {
+   "arm": "C",
+   "status": "committed",
+   "turns": 3,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"check\", \"cid\": \"c0\"}, {\"tool\": \"check\", \"cid\": \"c1\"}, {\"tool\": \"check\", \"cid\": \"c2\"}, {\"tool\": \"check\", \"cid\": \"c3\"}, {\"tool\": \"check\", \"cid\": \"c4\"}, {\"tool\": \"check\", \"cid\": \"c5\"}, {\"tool\": \"check\", \"cid\": \"c6\"}, {\"tool\": \"check\", \"cid\": \"c7\"}]}",
+     "failure": null,
+     "request_hash": "dcebb15d81c64596fe632183f33d872f2d735ee6140fa52a1909193610e51e5a",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1448,
+       "completion_tokens": 110,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 1.0392
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"propose\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]}\n\nBased on the evidence and the analysis of the claims, I propose the following answers:\n\n- Claim c0 is refuted, and my forecast for H6 after 1 step is 0.\n- Claim c1 is entailed, and my forecast for A5 after 3 steps is 1.\n- Claim c2 is entailed, and my forecast for A1 after 2 steps is 1.\n- Claim c3 is underdetermined, and my forecast for N7 after 3 steps is 0.\n- Claim c4 is underdetermined, and my forecast for Z0 after 2 steps is 1.\n- Claim c5 is underdetermined, and my forecast for H6 after 1 step is 1.\n- Claim c6 is entailed, and my forecast for A1 after 2 steps is 1.\n- Claim c7 is underdetermined, and my forecast for B4 after 3 steps is 0.\n\nI will now commit these answers.",
+     "failure": null,
+     "request_hash": "2bc005e37d17f441c76133b43d3cee306a73fbc46ad59dbdbd35a1353ce51b69",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 3696,
+       "completion_tokens": 394,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 5.6632
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"commit\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]}\n\nI have committed the following answers based on the verification:\n\n- Claim c0: refuted, H6 after 1 step is 0.\n- Claim c1: entailed, A5 after 3 steps is 1.\n- Claim c2: entailed, A1 after 2 steps is 1.\n- Claim c3: underdetermined, N7 after 3 steps is 0.\n- Claim c4: underdetermined, Z0 after 2 steps is 1.\n- Claim c5: underdetermined, H6 after 1 step is 1.\n- Claim c6: entailed, A1 after 2 steps is 1.\n- Claim c7: underdetermined, B4 after 3 steps is 0.\n\nThis concludes the task.",
+     "failure": null,
+     "request_hash": "1d8bd9d6538fdd0b1da6fcf4717e3dff23e64abdc60695209f47baa917d4ae13",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 4437,
+       "completion_tokens": 353,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 3.9016
+      }
+     ]
+    }
+   ],
+   "final": {
+    "c0": {
+     "verdict": "refuted",
+     "forecast": 0
+    },
+    "c1": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c2": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c3": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c4": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c5": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c6": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c7": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    }
+   },
+   "released_verified": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": true,
+    "c5": true,
+    "c6": true,
+    "c7": true
+   },
+   "tool_log": [
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c0",
+     "wall_s": 0.0008726669998395664
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c1",
+     "wall_s": 0.04943520799997714
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c2",
+     "wall_s": 0.001858832999914739
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c3",
+     "wall_s": 0.10577587499983565
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c4",
+     "wall_s": 0.0037379590003183694
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c5",
+     "wall_s": 0.001291292000132671
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c6",
+     "wall_s": 0.0018713330000537098
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c7",
+     "wall_s": 0.1038495839998177
+    },
+    {
+     "turn": 1,
+     "tool": "propose",
+     "cid": null,
+     "wall_s": 0.29301500000019587
+    },
+    {
+     "turn": 2,
+     "tool": "commit",
+     "cid": null,
+     "wall_s": 0.32880183399993257
+    }
+   ],
+   "decisions": {
+    "c0": {
+     "cid": "c0",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "refuted",
+     "binding": "646b203b8d074ef75076516d629489c06e7ea3a1a800d966b621d8e9190a71e2",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "0",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "side1_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'H6=0 after 1 step(s)' is refuted."
+    },
+    "c1": {
+     "cid": "c1",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "acc9412ce689b93f424ed01858e7f3732de6b05efcc57af1573752868307fa78",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A5=1 after 3 step(s)' is entailed."
+    },
+    "c2": {
+     "cid": "c2",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "e220b9b3387cff5cd5ac63c75a27547e1bdc7163d39ccfa62fbb661bf183241b",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A1=1 after 2 step(s)' is entailed."
+    },
+    "c3": {
+     "cid": "c3",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "4c772a39ef3068036a5aa2e42ec570f11c57944db2ad0b270845d316937a3001",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "180",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'N7=0 after 3 step(s)' (two replayed witnesses)."
+    },
+    "c4": {
+     "cid": "c4",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "6002e1ceb04cb1e8a07856384dbfc20c2bba74cf8aa1ba9e74590c217129591e",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "270",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'Z0=1 after 2 step(s)' (two replayed witnesses)."
+    },
+    "c5": {
+     "cid": "c5",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "91ccfc858f0e2a07594072186014902eb12cb529533de7f05fb94c1fc41fc5ba",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "216",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'H6=1 after 1 step(s)' (two replayed witnesses)."
+    },
+    "c6": {
+     "cid": "c6",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "57bd9532f0f753b46f8742f97619a2dc5846c44539b642598f5603313b61eae2",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A1=1 after 2 step(s)' is entailed."
+    },
+    "c7": {
+     "cid": "c7",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "39b9323b29d82e32b10bdcef2c8f8ced7f5610e6f729e9ea28ad308267998af7",
+     "certificate": {
+      "backend": "C",
+      "counts": {
+       "num": "162",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_explicit_count"
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'B4=1 after 3 step(s)' (two replayed witnesses)."
+    }
+   },
+   "workspace_cost": {
+    "wall_s": 0.8263186669996685,
+    "ops": 24,
+    "build_s": 0.0016167090002454643
+   },
+   "messages_chars": 11787
+  },
+  "D": {
+   "arm": "D",
+   "status": "committed",
+   "turns": 4,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"check\", \"cid\": \"c0\"}, {\"tool\": \"check\", \"cid\": \"c1\"}, {\"tool\": \"check\", \"cid\": \"c2\"}, {\"tool\": \"check\", \"cid\": \"c3\"}, {\"tool\": \"check\", \"cid\": \"c4\"}, {\"tool\": \"check\", \"cid\": \"c5\"}, {\"tool\": \"check\", \"cid\": \"c6\"}, {\"tool\": \"check\", \"cid\": \"c7\"}]}",
+     "failure": null,
+     "request_hash": "116be04330cbd123472abc76d77014bc509bdafab5897b7f0447abb8b665ed46",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1448,
+       "completion_tokens": 110,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 1.0843
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"propose\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]",
+     "failure": null,
+     "request_hash": "c7de3eda97c4009a76979a369ae959acbe31cc00c89b0d33d47837d7e06b6251",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 3433,
+       "completion_tokens": 189,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 3.4913
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"commit\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]",
+     "failure": null,
+     "request_hash": "aeb8adb6f5b656bf15a8af044bd3cc5b5177d98f6ceed9891159545bbe9709f2",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 3645,
+       "completion_tokens": 188,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 1.8853
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [{\"tool\": \"commit\", \"answers\": [{\"cid\": \"c0\", \"verdict\": \"refuted\", \"forecast\": 0}, {\"cid\": \"c1\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c2\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1}, {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 0}, {\"cid\": \"c6\", \"verdict\": \"entailed\", \"forecast\": 1}, {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 0}]}]}",
+     "failure": null,
+     "request_hash": "fe8b961e85eff7f6e907915f3899af43074f8d7c6c76e6f55dc6f4802faa44cc",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 3856,
+       "completion_tokens": 188,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 1.8825
+      }
+     ]
+    }
+   ],
+   "final": {
+    "c0": {
+     "verdict": "refuted",
+     "forecast": 0
+    },
+    "c1": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c2": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c3": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c4": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c5": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c6": {
+     "verdict": "entailed",
+     "forecast": 1
+    },
+    "c7": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    }
+   },
+   "released_verified": {
+    "c0": true,
+    "c1": true,
+    "c2": true,
+    "c3": true,
+    "c4": true,
+    "c5": true,
+    "c6": true,
+    "c7": true
+   },
+   "tool_log": [
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c0",
+     "wall_s": 0.015596374999859108
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c1",
+     "wall_s": 0.01550145800001701
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c2",
+     "wall_s": 0.0059415000000626605
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c3",
+     "wall_s": 0.06227500000022701
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c4",
+     "wall_s": 0.005027042000165238
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c5",
+     "wall_s": 0.0011834999995699036
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c6",
+     "wall_s": 0.002386749999914173
+    },
+    {
+     "turn": 0,
+     "tool": "check",
+     "cid": "c7",
+     "wall_s": 0.013731999999890832
+    },
+    {
+     "turn": 1,
+     "invalid": true
+    },
+    {
+     "turn": 2,
+     "invalid": true
+    },
+    {
+     "turn": 3,
+     "tool": "commit",
+     "cid": null,
+     "wall_s": 0.14442133300008209
+    }
+   ],
+   "decisions": {
+    "c0": {
+     "cid": "c0",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "refuted",
+     "binding": "71f5ab704ff0f2a1f63810976e6ffa372880147dd50af623996b7412f83d665b",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "0",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h1_closed_form",
+       "meter": {
+        "g_evals": 93,
+        "support_terms": 0,
+        "enumerated_states": 0,
+        "witnesses_built": 0
+       }
+      },
+      "side1_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'H6=0 after 1 step(s)' is refuted."
+    },
+    "c1": {
+     "cid": "c1",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "0a5b0e23d12bcda1fa8bbb4b419c94334f65b70489ff67b526952104b60d84f4",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h3_enumerated_s1",
+       "meter": {
+        "g_evals": 5494,
+        "support_terms": 186,
+        "enumerated_states": 2,
+        "witnesses_built": 0
+       }
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A5=1 after 3 step(s)' is entailed."
+    },
+    "c2": {
+     "cid": "c2",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "d2436c421d788cf63684fd1a8800f6764da1fc52d15794da4390d38894da78ff",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h2_support_local",
+       "meter": {
+        "g_evals": 2980,
+        "support_terms": 93,
+        "enumerated_states": 0,
+        "witnesses_built": 0
+       }
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A1=1 after 2 step(s)' is entailed."
+    },
+    "c3": {
+     "cid": "c3",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "9ad53bbeacab8f937bb625b563815a37037c76081d045b0a6f686d09f4a4854a",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "180",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h3_enumerated_s1",
+       "meter": {
+        "g_evals": 45766,
+        "support_terms": 1488,
+        "enumerated_states": 16,
+        "witnesses_built": 0
+       }
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'N7=0 after 3 step(s)' (two replayed witnesses)."
+    },
+    "c4": {
+     "cid": "c4",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "7fb9979148e247e184c85bf53c4e86fc3772b462d4e9e3ab3bc9c9588c95d2e0",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "270",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h2_support_local",
+       "meter": {
+        "g_evals": 3352,
+        "support_terms": 93,
+        "enumerated_states": 0,
+        "witnesses_built": 0
+       }
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'Z0=1 after 2 step(s)' (two replayed witnesses)."
+    },
+    "c5": {
+     "cid": "c5",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "19bc848a27921ac6a04666a44995a23d79b869659c6234f60ee0d1c4d1a36ab7",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "216",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h1_closed_form",
+       "meter": {
+        "g_evals": 93,
+        "support_terms": 0,
+        "enumerated_states": 0,
+        "witnesses_built": 0
+       }
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'H6=1 after 1 step(s)' (two replayed witnesses)."
+    },
+    "c6": {
+     "cid": "c6",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "entailed",
+     "binding": "eab33874864345af9d6e340b2e688b48ca30865dc7f2b4e56f42056cae3afd75",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "324",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h2_support_local",
+       "meter": {
+        "g_evals": 2666,
+        "support_terms": 93,
+        "enumerated_states": 0,
+        "witnesses_built": 0
+       }
+      },
+      "side0_impossible": "unsat",
+      "witness_replayed": true
+     },
+     "counterexample": null,
+     "feedback": "Verified under the declared class and evidence: 'A1=1 after 2 step(s)' is entailed."
+    },
+    "c7": {
+     "cid": "c7",
+     "proposal_check_status": "verified",
+     "epistemic_verdict": "underdetermined",
+     "binding": "6cb54d89ba85414d989ed695264595ce46df0642c33409cefc4baaf866ee8238",
+     "certificate": {
+      "backend": "D",
+      "counts": {
+       "num": "162",
+       "den": "324"
+      },
+      "backend_certificate": {
+       "level": "exhaustive_symbolic_count",
+       "path": "h3_enumerated_s1",
+       "meter": {
+        "g_evals": 10988,
+        "support_terms": 372,
+        "enumerated_states": 4,
+        "witnesses_built": 0
+       }
+      },
+      "witnesses_replayed": 2
+     },
+     "counterexample": null,
+     "feedback": "Verified: compatible mechanisms disagree on 'B4=1 after 3 step(s)' (two replayed witnesses)."
+    }
+   },
+   "workspace_cost": {
+    "wall_s": 0.2172626669980673,
+    "ops": 16,
+    "build_s": 0.0012718749999294232
+   },
+   "messages_chars": 9533
+  }
+ },
+ "common_batch_replay": {
+  "B": {
+   "c0": {
+    "status": "verified",
+    "claim_status": "refuted"
+   },
+   "c1": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c2": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c3": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c4": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c5": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c6": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c7": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   }
+  },
+  "C": {
+   "c0": {
+    "status": "verified",
+    "claim_status": "refuted"
+   },
+   "c1": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c2": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c3": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c4": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c5": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c6": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c7": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   }
+  },
+  "D": {
+   "c0": {
+    "status": "verified",
+    "claim_status": "refuted"
+   },
+   "c1": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c2": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c3": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c4": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c5": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c6": {
+    "status": "refuted",
+    "claim_status": "entailed"
+   },
+   "c7": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   }
+  }
+ },
+ "wall_s": 36.57243295800026,
+ "calls_used": 11,
+ "reference": {
+  "c0": {
+   "verdict": "refuted",
+   "num": "0",
+   "den": "324",
+   "truth_holds": 0,
+   "h": 1,
+   "iv": "persistent_clamp"
+  },
+  "c1": {
+   "verdict": "entailed",
+   "num": "324",
+   "den": "324",
+   "truth_holds": 1,
+   "h": 3,
+   "iv": "persistent_clamp"
+  },
+  "c2": {
+   "verdict": "entailed",
+   "num": "324",
+   "den": "324",
+   "truth_holds": 1,
+   "h": 2,
+   "iv": "persistent_clamp"
+  },
+  "c3": {
+   "verdict": "underdetermined",
+   "num": "180",
+   "den": "324",
+   "truth_holds": 0,
+   "h": 3,
+   "iv": "initial_edit"
+  },
+  "c4": {
+   "verdict": "underdetermined",
+   "num": "270",
+   "den": "324",
+   "truth_holds": 1,
+   "h": 2,
+   "iv": "initial_edit"
+  },
+  "c5": {
+   "verdict": "underdetermined",
+   "num": "216",
+   "den": "324",
+   "truth_holds": 1,
+   "h": 1,
+   "iv": "initial_edit"
+  },
+  "c6": {
+   "verdict": "entailed",
+   "num": "324",
+   "den": "324",
+   "truth_holds": 1,
+   "h": 2,
+   "iv": "persistent_clamp"
+  },
+  "c7": {
+   "verdict": "underdetermined",
+   "num": "162",
+   "den": "324",
+   "truth_holds": 0,
+   "h": 3,
+   "iv": "persistent_clamp"
+  }
+ }
+}

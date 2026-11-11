@@ -198,6 +198,7 @@ def _menu(rng: random.Random, n: int, size: int, exclude: set) -> list[dict]:
 
 
 def active_world(p: dict) -> dict:
+    from ..versionspace import posterior_from_counts
     ev = Evaluator(p["salt"], p["index"], p["family"], budget=p.get("budget", 12))
     pub = ev.public()
     refs = ev.reference(crosscheck_sat=False)
@@ -222,9 +223,10 @@ def active_world(p: dict) -> dict:
                 if step in p.get("budgets", [0, 1, 2, 4]):
                     res = ws.check(c)
                     num, den = (int(res["counts"]["num"]), int(res["counts"]["den"])) if res["counts"] else (None, None)
+                    post = None if num is None else posterior_from_counts(num, den)     # the owner's tie rule
                     curve[str(step)] = {"verdict": res["verdict"], "p": None if num is None else num / den,
-                                        "forecast_correct": None if num is None or 2 * num == den else
-                                        int((2 * num > den) == bool(r.truth_holds))}
+                                        "forecast_correct": None if post is None or post["tie"] else
+                                        int(post["majority"] == int(bool(r.truth_holds)))}
                 if step == max(p.get("budgets", [0, 1, 2, 4])) or not avail:
                     break
                 if policy == "random":

@@ -74,7 +74,7 @@ refuse to release the rest.
     correct one.
   - **Representation:** our tool ties the generic SAT tool exactly (D − B = 0.000), as predicted. The models
     did not exploit the exact probabilities offered to them; a no-LLM controller forecast underdetermined
-    outcomes better (0.77 vs 0.54–0.59).
+    outcomes better (0.78 vs 0.54–0.59).
 - **Prior negative results stay published.** Selecting the single shortest flat-index model (S2) did not beat
   compatible-set majority (+0.09 points, CI [−1.1, +1.2]). The S3 transfer study was negative.
 

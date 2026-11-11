@@ -1,0 +1,80 @@
+{
+ "schema": "causalguard-acceptance-r4",
+ "date": "2026-11-11",
+ "phase": "development (pre-sprint)",
+ "confirmatory_run": false,
+ "freeze_record": false,
+ "main_s4_study_run": false,
+ "paid_inference": false,
+ "weight_changes": false,
+ "wp10_wp11": false,
+ "P0": {
+  "R3-01": "repaired; tests/test_completeness_r4.py; reanalysis identical",
+  "R3-02": "repaired; tests/test_runner_r4.py; repro 0/5"
+ },
+ "P1": "done (docs/S4_METHOD_COVERAGE.md, docs/S4_PROTOCOL_DRAFT.md)",
+ "P2": {
+  "state": "done",
+  "partial": [
+   "no BDD/grammar reasoning backend (description lengths only)"
+  ]
+ },
+ "P3": {
+  "state": "done",
+  "partial": [
+   "isomorphism test implemented but not applied as a filter to the pilot panel"
+  ]
+ },
+ "P4": {
+  "models": [
+   "qwen2.5:7b",
+   "mistral-small-3.2-24b-instruct-2506-mlx"
+  ],
+  "worlds_per_model": 40,
+  "calls_total_including_prepilot": 888,
+  "call_ceiling": 2560,
+  "gates": "passed both models; no revision",
+  "D-B": {
+   "qwen": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ],
+   "mistral_recorded": [
+    0.021875,
+    [
+     0.0,
+     0.065625
+    ]
+   ],
+   "mistral_merged_sensitivity": [
+    0.0,
+    [
+     0.0,
+     0.0
+    ]
+   ]
+  },
+  "D-A": {
+   "qwen": [
+    0.35,
+    [
+     0.26875,
+     0.43125
+    ]
+   ],
+   "mistral": [
+    0.3625,
+    [
+     0.278125,
+     0.45
+    ]
+   ]
+  },
+  "harness_defect": "D52 (multiple commit calls in one turn); recorded + merged sensitivity reported"
+ },
+ "P5": "demo, reports, funding brief, package (release identity in REVIEW_READY_R4.md)",
+ "tests": "448 passed (reports/test-output-r4.txt)"
+}

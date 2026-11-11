@@ -1,0 +1,754 @@
+{
+ "task_id": "d9054912ab3041bb5c37cd73cd78e863b5edd891022a23ef17743200b7c16c67",
+ "world_id": "s4w-1f6a8c14681662a5",
+ "family": "ordered_motif",
+ "index": 0,
+ "model": "qwen2.5:7b",
+ "provider_metadata": {
+  "provider_kind": "real",
+  "backend": "ollama",
+  "base_url": "http://127.0.0.1:11434/v1",
+  "model": "qwen2.5:7b",
+  "seed_sent": true,
+  "seed_honoured": "not_verified",
+  "model_digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+  "server_version": "0.40.16",
+  "quantization": "Q4_K_M",
+  "parameter_size": "7.6B",
+  "format": "gguf",
+  "chat_template_sha256": "eb4402837c7829a690fa845de4d7f3fd842c2adee476d5341da8a46ea9255175",
+  "model_parameters": null,
+  "models_entry": {
+   "name": "qwen2.5:7b",
+   "modified_at": "2026-03-30T14:06:17.320877292-06:00",
+   "size": 4683087332,
+   "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e"
+  },
+  "limitations": [
+   "seed is sent but whether the backend honours it is not verified"
+  ]
+ },
+ "budget": 12,
+ "public_sha256": "8b2307f0333c433ab4472d453426e57e061a31142188f302bbb0f48b69707654",
+ "episodes": {
+  "A": {
+   "arm": "A",
+   "status": "answered",
+   "turns": 1,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "```json\n{\n  \"answers\": [\n    {\"cid\": \"c0\", \"verdict\": \"underdetermined\", \"forecast\": 0},\n    {\"cid\": \"c1\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c2\", \"verdict\": \"underdetermined\", \"forecast\": 0},\n    {\"cid\": \"c3\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c4\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c5\", \"verdict\": \"underdetermined\", \"forecast\": 1},\n    {\"cid\": \"c6\", \"verdict\": \"underdetermined\", \"forecast\": 0},\n    {\"cid\": \"c7\", \"verdict\": \"underdetermined\", \"forecast\": 1}\n  ]\n}\n```\n\nExplanation:\n- Each claim involves setting specific nodes to specific values and then observing the state of another node after a certain number of steps. Given the complexity and the unknown nature of the Boolean functions, it is not possible to definitively determine the outcome for each claim without knowing the exact functions governing the system. Therefore, the verdict for each claim is \"underdetermined.\"\n- The forecast is a best guess based on the evidence and the nature of the claims, but it is not guaranteed to be accurate without knowing the underlying functions.",
+     "failure": null,
+     "request_hash": "ce1d338a6c0ddecd8ce3318d05d0ddc60b13b0aea3a5b86ba1af8217620cff50",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 926,
+       "completion_tokens": 305,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 3.617
+      }
+     ]
+    }
+   ],
+   "final": {
+    "c0": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c1": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c2": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c3": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c4": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c5": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    },
+    "c6": {
+     "verdict": "underdetermined",
+     "forecast": 0
+    },
+    "c7": {
+     "verdict": "underdetermined",
+     "forecast": 1
+    }
+   },
+   "released_verified": {},
+   "tool_log": [],
+   "decisions": {},
+   "workspace_cost": null,
+   "messages_chars": 3466
+  },
+  "B": {
+   "arm": "B",
+   "status": "no_commit",
+   "turns": 8,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "665a2c6ed947b7ea376c9d0bb6a32a3d541ce26acb5eba42c350c5504ae3762d",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1085,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 1.1927
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "0d93615303d26b632a1336cb08615a3029598c259a75719cd54675ad996c033f",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1201,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3617
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "fb6db65d3456f7c0aa817088905db96853da7b7ffc25bd27012de588f6a59eaf",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1317,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3637
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "44d490ffba317e2f051afaad58daba020306f8e64e4faee02826f1700524d216",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1433,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3616
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "5332b9903b24bb98fc8b009567f5f28b9997a86969deee7b29b0e59f7bb380a0",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1549,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3642
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "a770cf81690dec21c81842fb5f8bb179723dc3f7ff2cb5142908c145b15e13ed",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1665,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3645
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "fff583ca517dae251ddfb4f1da799a2107e4d357b63f6737c816e09e9a347e62",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1781,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3698
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "f6d5a6fa436db32c43524a665bfc93149410324c5a0b9711f2fb84c75ddcc6dd",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1897,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3659
+      }
+     ]
+    }
+   ],
+   "final": {},
+   "released_verified": {},
+   "tool_log": [],
+   "decisions": {},
+   "workspace_cost": {
+    "wall_s": 0.0,
+    "ops": 0,
+    "build_s": 1.7649074160003693
+   },
+   "messages_chars": 6479
+  },
+  "C": {
+   "arm": "C",
+   "status": "no_commit",
+   "turns": 8,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "59f8108118889252dbe2c1a70d1ff5a66c6235b7d64c28cbfe04df8e72b8f60d",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1085,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.2737
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "bf8fc9667141d3655ccc9e230a9473ea8f7bd3678c7a760cd77eafb463e37cad",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1201,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3602
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "7161947d2e225acbf24a048876fd99a0076bfc04a955b45b197f5979ad2f40ad",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1317,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3605
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "6ae844de514a9252ee684d2b0be4b01e25b26a5d396fd96f8379157e85ca7923",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1433,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3629
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "8e33cc4c267da0f05dad57ab4dc0d83bef7032351a1bf0d3cdb7d5eddf45b8dc",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1549,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3688
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "404457ad32ae7cecf966cbc1c62dd318d0369c63dc44877362d2b118c180930b",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1665,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.364
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "132301e404bd85c2f7b2c81edebd7897b23a9a65c6ff3c87f312e8a01c5e0293",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1781,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.368
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "8d9c5587661a8324a7d2309ec0a32bd0975c189a6db4ae4ebe08df3a12b298d9",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1897,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3695
+      }
+     ]
+    }
+   ],
+   "final": {},
+   "released_verified": {},
+   "tool_log": [],
+   "decisions": {},
+   "workspace_cost": {
+    "wall_s": 0.0,
+    "ops": 0,
+    "build_s": 0.0009133339999607415
+   },
+   "messages_chars": 6479
+  },
+  "D": {
+   "arm": "D",
+   "status": "no_commit",
+   "turns": 8,
+   "calls": [
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "c47cac89d89c7d2fdbf03124394b79f5008e0deea09df3dd020aba793bcb3878",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1085,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.2737
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "32eb360514741d5c706b04cf6493d1bffe889600b52b397a56d3ba17c9d8f34d",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1201,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3601
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "9ec74ca26313bf28e171fe8492127d9785ffb8ad80179cfa4065ac56b2f3f4fc",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1317,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3611
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "18b2dfa9fbac6093b32a76d181f797f17b9331af7f0155510cf640aacabf80da",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1433,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3616
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "4ff8ebf07809f6d4f6440760a7f597cf6c853186f6b0619e8cbbd7101ced16c5",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1549,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3625
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "167c867a194bd8b97dd726e78685eca0c69e565fc9662e028fef55a0ee2dd49c",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1665,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3722
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "dc3eebf3e7179618e09dcb352ee456728be527bff9b4ced83d462cd3a58d9fab",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1781,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3697
+      }
+     ]
+    },
+    {
+     "ok": true,
+     "raw_output": "{\"tool_calls\": [\"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\", \"check\"]}",
+     "failure": null,
+     "request_hash": "4ecc37032da86fcc7d9d583490617b30249aadd29d1d318914eeb6f58da60ae5",
+     "attempts": [
+      {
+       "attempt": 0,
+       "ok": true,
+       "error": null,
+       "prompt_tokens": 1897,
+       "completion_tokens": 29,
+       "finish_reason": "stop",
+       "response_model": "qwen2.5:7b",
+       "latency_s": 0.3648
+      }
+     ]
+    }
+   ],
+   "final": {},
+   "released_verified": {},
+   "tool_log": [],
+   "decisions": {},
+   "workspace_cost": {
+    "wall_s": 0.0,
+    "ops": 0,
+    "build_s": 0.0017446669999117148
+   },
+   "messages_chars": 6479
+  }
+ },
+ "common_batch_replay": {
+  "B": {
+   "c0": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c1": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c2": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c3": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c4": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c5": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c6": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c7": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   }
+  },
+  "C": {
+   "c0": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c1": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c2": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c3": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c4": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c5": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c6": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c7": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   }
+  },
+  "D": {
+   "c0": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c1": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c2": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c3": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c4": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c5": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c6": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   },
+   "c7": {
+    "status": "verified",
+    "claim_status": "underdetermined"
+   }
+  }
+ },
+ "wall_s": 21.67225983299977,
+ "calls_used": 25,
+ "reference": {
+  "c0": {
+   "verdict": "underdetermined",
+   "num": "145897225850272",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 3,
+   "iv": "initial_edit"
+  },
+  "c1": {
+   "verdict": "underdetermined",
+   "num": "198529597131840",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 1,
+   "iv": "initial_edit"
+  },
+  "c2": {
+   "verdict": "underdetermined",
+   "num": "390625364727000",
+   "den": "421875393905160",
+   "truth_holds": 0,
+   "h": 1,
+   "iv": "initial_edit"
+  },
+  "c3": {
+   "verdict": "underdetermined",
+   "num": "305792355348036",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 2,
+   "iv": "initial_edit"
+  },
+  "c4": {
+   "verdict": "underdetermined",
+   "num": "320749391288018",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 3,
+   "iv": "initial_edit"
+  },
+  "c5": {
+   "verdict": "underdetermined",
+   "num": "343144554244997",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 3,
+   "iv": "initial_edit"
+  },
+  "c6": {
+   "verdict": "underdetermined",
+   "num": "74747882164320",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 2,
+   "iv": "persistent_clamp"
+  },
+  "c7": {
+   "verdict": "underdetermined",
+   "num": "156250145890800",
+   "den": "421875393905160",
+   "truth_holds": 1,
+   "h": 1,
+   "iv": "persistent_clamp"
+  }
+ }
+}
