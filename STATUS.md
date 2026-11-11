@@ -33,6 +33,8 @@ exists or was started (`reports/review_r2/DECISION.json`: `confirmatory_authoriz
 | dev-r3-smoke-s1 | c40c35f2e64d | complete 14/14; one deliberate supervisor-group SIGKILL and an immediate resume (D40) |
 | dev-r3-final-smoke-s2 | 2209593a0f02 | complete 6/6 (final-source repeat; identical science) |
 | dev-r3-final-smoke-s1 | 2209593a0f02 | complete 14/14 (final-source repeat; identical science) |
+| dev-r3-release-smoke-s2 | 78e68378190a | complete 6/6 (release source after D44; identical science) |
+| dev-r3-release-smoke-s1 | 78e68378190a | complete 14/14 (release source after D44; identical science) |
 
 The iteration-2 runs (S2-dev-v2, S2-dev-v2-mcdiag, S2-dev-v2-repro, S1-dev-v2-panel, s3v2-*) are unchanged and were
 reanalysed read-only.

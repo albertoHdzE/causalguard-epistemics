@@ -41,6 +41,8 @@ fixture, confirmatory) all execute and read through this module.
   the temporary and fsync the directory. `link()` fails if the name exists, so an existing attempt is never
   replaced (`RunCorruption`, original bytes untouched).
 - Failed and superseded attempts are never deleted.
+- A kill between publishing an attempt and appending its `attempt_end` line is reconciled by the next owner, which
+  appends an explicit `attempt_end` with `reconciled: true` (the attempt file is authoritative).
 - A stray temporary file from an interrupted publication is the only permitted attempt-level recovery. Its exact
   bytes go to `quarantine/` with a ledger event. Only the owning process does this, after ownership and after
   validation.

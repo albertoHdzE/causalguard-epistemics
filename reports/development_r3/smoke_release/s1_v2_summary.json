@@ -1,0 +1,422 @@
+{
+ "amortized_totals": {
+  "parity|n128": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 158520,
+    "archive_sum_bits": 11808,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 11686
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 153960,
+    "archive_sum_bits": 7248,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 7130
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 221640,
+    "archive_sum_bits": 74928,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 74808
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 151368,
+    "archive_sum_bits": 4656,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 4535
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 215136,
+    "archive_sum_bits": 68424,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 68304
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 154040,
+    "archive_sum_bits": 7328,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 7207
+   }
+  },
+  "sparse_conj|n8": {
+   "bdd": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147160,
+    "archive_sum_bits": 448,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 341
+   },
+   "circuit": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147104,
+    "archive_sum_bits": 392,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 286
+   },
+   "dnf": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147024,
+    "archive_sum_bits": 312,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 204
+   },
+   "full": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 148872,
+    "archive_sum_bits": 2160,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 2048
+   },
+   "gate": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 146920,
+    "archive_sum_bits": 208,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 105
+   },
+   "index": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 146952,
+    "archive_sum_bits": 240,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 139
+   },
+   "lut": {
+    "amortized_total_bits(archive_sum+decoder_bundle)": 147208,
+    "archive_sum_bits": 496,
+    "decoder_bundle_bits": 146712,
+    "objects": 1,
+    "payload_sum_bits": 389
+   }
+  }
+ },
+ "amortized_totals_note": "archive_sum = sum of complete archives (header+framing+payload); payload_sum is NOT added to it. The decoder charge is the gzip-9 size of the complete local dependency bundle under CPython 3.12 stdlib, identical for every codec. These are encoder-specific code lengths, not Kolmogorov complexity.",
+ "analysis_version": "s1-analysis-v3",
+ "certificate_levels": {
+  "bdd_ref|independent_exact": 15,
+  "bdd_ref|solver_only": 33,
+  "index_cube|none": 16,
+  "index_cube|solver_only": 15,
+  "index_cube|witness_replayed": 17,
+  "index_enum|exhaustive": 11,
+  "index_enum|witness_replayed": 13,
+  "index_sat|checked_proof": 15,
+  "index_sat|witness_replayed": 33,
+  "literal|exhaustive": 11,
+  "literal|witness_replayed": 13,
+  "reference|exhaustive": 11,
+  "reference|witness_replayed": 13
+ },
+ "changes_in_v3": [
+  "peak RSS read from the validated attempt envelope (R2-06); missing measurements are null, never 0",
+  "every ok item reconciled with its planned family/n/backend, shared world id and 24-query grid; absent query rows counted as 'query_missing' in completion denominators",
+  "phase derived from validated run provenance"
+ ],
+ "codec_roundtrip_failures": 0,
+ "completion": {
+  "bdd_ref|n128": {
+   "completed": 24
+  },
+  "bdd_ref|n8": {
+   "completed": 24
+  },
+  "index_cube|n128": {
+   "completed": 8,
+   "unknown_resource": 16
+  },
+  "index_cube|n8": {
+   "completed": 24
+  },
+  "index_enum|n128": {
+   "excluded_by_design": 24
+  },
+  "index_enum|n8": {
+   "completed": 24
+  },
+  "index_sat|n128": {
+   "completed": 24
+  },
+  "index_sat|n8": {
+   "completed": 24
+  },
+  "literal|n128": {
+   "excluded_by_design": 24
+  },
+  "literal|n8": {
+   "completed": 24
+  },
+  "reference|n128": {
+   "excluded_by_design": 24
+  },
+  "reference|n8": {
+   "completed": 24
+  }
+ },
+ "construction_seconds_median": {
+  "bdd_ref|n128": 0.05675862500356743,
+  "bdd_ref|n8": 0.052550000000337604,
+  "index_cube|n128": 0.0579965409997385,
+  "index_cube|n8": 0.00387566599965794,
+  "index_enum|n8": 0.0036842080007772893,
+  "index_sat|n128": 0.05694558299728669,
+  "index_sat|n8": 0.003284124999481719,
+  "literal|n8": 0.022358624999469612,
+  "reference|n8": 4.579997039400041e-07
+ },
+ "correctness": {
+  "bdd_answers_excluded_post_interrupt_legacy": 0,
+  "compared_with_exhaustive_reference": {
+   "bdd_ref": 24,
+   "index_cube": 24,
+   "index_enum": 24,
+   "index_sat": 24,
+   "literal": 24
+  },
+  "cross_backend_disagreements_total": 0,
+  "disagreement_examples": [],
+  "mismatches_vs_reference": {},
+  "unsat_proofs_checked_ok": 15,
+  "unsat_proofs_not_certified": 0,
+  "witness_replay_failures": 0
+ },
+ "decoder": {
+  "codec_version": 1,
+  "decoder": "causalguard.codec",
+  "gzip_bytes": 8340,
+  "sha256": "734cc3bc6e092384f09f3c2808135f1e0abf45c4df5f0c76b3aacbf8f00eb8a1",
+  "source_bytes": 27403
+ },
+ "decoder_bundle": {
+  "bundle_sha256": "0128a1249f17508b6656f9aa7f6bb94d636adc9dd44a4c9899ba333ebb8bd126",
+  "codec_version": 1,
+  "gzip_bytes": 18339,
+  "modules": [
+   "codec.py",
+   "index_repr.py",
+   "schema.py"
+  ],
+  "runtime": "CPython 3.12 standard library (+ package __init__ stub)",
+  "source_bytes": 64841
+ },
+ "independent_worlds": 2,
+ "index_cover_exact_worlds": {
+  "True": 2
+ },
+ "large_n_unsat_type_validation": {
+  "independently_confirmed_by_bdd_ref+index_cube": 4,
+  "total": 4
+ },
+ "latency_completed_queries": {
+  "bdd_ref|n128": {
+   "max_s": 1.2636055830007535,
+   "median_s": 0.01174447949961177,
+   "n": 24,
+   "p90_s": 0.9471229877024594
+  },
+  "bdd_ref|n8": {
+   "max_s": 0.0002857910003513098,
+   "median_s": 0.00013087500337860547,
+   "n": 24,
+   "p90_s": 0.00020489630405791102
+  },
+  "index_cube|n128": {
+   "max_s": 0.06997204200160922,
+   "median_s": 0.0006937705002201255,
+   "n": 8,
+   "p90_s": 0.036118816299131135
+  },
+  "index_cube|n8": {
+   "max_s": 0.0076402080012485385,
+   "median_s": 0.00011314549919916317,
+   "n": 24,
+   "p90_s": 0.0019183625008736267
+  },
+  "index_enum|n8": {
+   "max_s": 0.000243041999056004,
+   "median_s": 0.00014939600077923387,
+   "n": 24,
+   "p90_s": 0.00020912520121783016
+  },
+  "index_sat|n128": {
+   "max_s": 1.056552374997409,
+   "median_s": 0.05114400049933465,
+   "n": 24,
+   "p90_s": 0.37554847479987075
+  },
+  "index_sat|n8": {
+   "max_s": 0.006685416999971494,
+   "median_s": 0.0005541249993257225,
+   "n": 24,
+   "p90_s": 0.001353403500979766
+  },
+  "literal|n8": {
+   "max_s": 0.00015662499936297536,
+   "median_s": 7.685449963901192e-05,
+   "n": 24,
+   "p90_s": 9.247950438293629e-05
+  },
+  "reference|n8": {
+   "max_s": 0.000513082995894365,
+   "median_s": 0.00014622900198446587,
+   "n": 24,
+   "p90_s": 0.00032324560015695164
+  }
+ },
+ "median_archive_bits": {
+  "parity|n128": {
+   "bdd": 11808.0,
+   "best_codec": "gate",
+   "circuit": 7248.0,
+   "dnf": 74928.0,
+   "gate": 4656.0,
+   "generic_gzip": 8448.0,
+   "generic_lzma": 8456.0,
+   "generic_raw": 26096.0,
+   "index": 68424.0,
+   "index_rank_among_codecs": 7,
+   "lut": 7328.0,
+   "worlds": 1
+  },
+  "sparse_conj|n8": {
+   "bdd": 448.0,
+   "best_codec": "gate",
+   "circuit": 392.0,
+   "dnf": 312.0,
+   "full": 2160.0,
+   "gate": 208.0,
+   "generic_gzip": 912.0,
+   "generic_lzma": 840.0,
+   "generic_raw": 1288.0,
+   "index": 240.0,
+   "index_rank_among_codecs": 2,
+   "lut": 496.0,
+   "worlds": 1
+  }
+ },
+ "n_records": 14,
+ "outcome_balance_by_construction": {
+  "clamp_exists": {
+   "false": 1,
+   "true": 5
+  },
+  "clamp_forall": {
+   "false": 1,
+   "true": 1
+  },
+  "exists_free": {
+   "false": 2,
+   "true": 6
+  },
+  "exists_planted": {
+   "true": 8
+  },
+  "forall_free": {
+   "false": 3,
+   "true": 5
+  },
+  "forall_planted_counterexample": {
+   "false": 8
+  },
+  "membership": {
+   "false": 6,
+   "true": 2
+  }
+ },
+ "peak_rss_coverage": {
+  "bdd_ref|n128": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "bdd_ref|n8": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "codecs|n128": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "codecs|n8": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "index_cube|n128": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "index_cube|n8": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "index_enum|n8": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "index_sat|n128": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "index_sat|n8": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "literal|n8": {
+   "measured": 1,
+   "ok_items": 1
+  },
+  "reference|n8": {
+   "measured": 1,
+   "ok_items": 1
+  }
+ },
+ "peak_rss_mib_median": {
+  "bdd_ref|n128": 1134.296875,
+  "bdd_ref|n8": 40.890625,
+  "codecs|n128": 96.640625,
+  "codecs|n8": 94.515625,
+  "index_cube|n128": 35.546875,
+  "index_cube|n8": 25.53125,
+  "index_enum|n8": 25.3125,
+  "index_sat|n128": 89.203125,
+  "index_sat|n8": 29.84375,
+  "literal|n8": 33.90625,
+  "reference|n8": 25.09375
+ },
+ "peak_rss_note": "median over ok items of the worker's ru_maxrss (bytes on macOS; KiB x 1024 on Linux), reported in MiB = 2^20 bytes; one fresh worker per item (maxtasks=1), so the value includes the interpreter and imported-module baseline; null = no measurement",
+ "phase": "development",
+ "query_grid_reconciliation": {
+  "codec_items_missing_codecs": {},
+  "ok_items_missing_query_rows": {},
+  "queries_per_world": 24,
+  "status": "complete"
+ },
+ "run_dirs": [
+  "runs/dev-r3-release-smoke-s1"
+ ],
+ "runs": {
+  "dev-r3-release-smoke-s1": {
+   "attempts_total": 14,
+   "failed": 0,
+   "failures": {},
+   "missing": 0,
+   "ok": 14,
+   "plan_sha256": "29fa0e6657223f355a24e1db8139bf1f74f7371f3de390e9d6e81cce42690257",
+   "planned": 14,
+   "source_tree_sha256": "920e3abd8c7f436a01a5c1c9ee12aa29bf6007fbf2b9707f9057bce51550a50e"
+  }
+ },
+ "semantics_changed_from_v1": [
+  "failed/missing planned items counted in completion denominators",
+  "amortized totals: archive_sum (sum of archive bits) and payload_sum reported separately",
+  "decoder charge = gzip-9 of the complete local dependency bundle (codec+index_repr+schema)"
+ ],
+ "worlds_by_cell": {
+  "parity|n128": 1,
+  "sparse_conj|n8": 1
+ }
+}

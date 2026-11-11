@@ -155,6 +155,7 @@ no effect estimate drawn.
 | run | plan | result |
 |---|---|---|
 | `dev-r3-smoke-s2` | one realizable world per primary family + one uniform-H null; 4 regimes × 6 budgets | 6/6 ok in 2.4 s; reanalysis: structured, null and overall complete; 0 legacy rows (qid path) |
+| `dev-r3-release-smoke-s2/s1` | repeats at the release source (D44) | 6/6 and 14/14; scientific outputs identical to the first smokes |
 | `dev-r3-smoke-s1` | all 7 backends on sparse_conj n=8 (reference applies) and parity n=128; 20 s/query, 1,200 s/item, `maxtasks=1` | 14/14 ok; 0 mismatches vs the exhaustive reference; 0 cross-backend disagreements; RSS measured for every ok item |
 
 **S1 interruption (deliberate, recorded in D40).**

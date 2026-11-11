@@ -439,5 +439,5 @@
   "status": "not_ready",
   "reason": "development only in iteration 2; see reports/REVIEW_READY_R2.md S3 section and the revised S3 sizing"
  },
- "development_corpora_note": "dev-r3-final-smoke-s2 repeats dev-r3-smoke-s2 with the same salt (identical worlds), so listing one covers both; S2-dev-v2-mcdiag and S2-dev-v2-repro reuse S2-dev-v2 salts/indices"
+ "development_corpora_note": "dev-r3-final-smoke-s2 and dev-r3-release-smoke-s2 repeat dev-r3-smoke-s2 with the same salt (identical worlds), so listing one covers all three; S2-dev-v2-mcdiag and S2-dev-v2-repro reuse S2-dev-v2 salts/indices"
 }

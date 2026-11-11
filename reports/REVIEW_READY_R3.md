@@ -12,7 +12,7 @@ Start here, then read:
 - `reports/ERRATA_R3.md`;
 - `docs/EXECUTION.md`;
 - `reports/development_r3/before_after_audit.json`;
-- `DECISIONS.md` D36–D43.
+- `DECISIONS.md` D36–D44.
 
 ## 1. What changed
 
@@ -54,8 +54,9 @@ Start here, then read:
 `dev-r3-smoke-s2` (6/6) and `dev-r3-smoke-s1` (14/14) ran at `c40c35f`. The S1 run includes one deliberate
 supervisor-group SIGKILL with 4 items in flight, followed by an immediate resume, which completed (D40).
 
-Code changed after those runs (D41), so both were repeated at the final source as `dev-r3-final-smoke-s2/s1`, with
-plan source digest `40af8866…` equal to the release source. Results:
+Code changed after those runs (D41, D44), so both were repeated: first as `dev-r3-final-smoke-s2/s1`, and then, after the
+D44 ledger-reconciliation fix, at the release source as `dev-r3-release-smoke-s2/s1`, with plan source digest `920e3abd…`
+equal to the release source. Results at the release source:
 - S2: structured, null and overall completeness complete; `qid` path.
 - S1: 0 mismatches against the exhaustive reference (24 comparisons per backend); 0 cross-backend disagreements;
   RSS measured.
@@ -65,10 +66,10 @@ plan source digest `40af8866…` equal to the release source. Results:
 
 | item | value |
 |---|---|
-| source tree digest (`runner.source_tree_digest`, `src/causalguard/**.py`) | `40af8866350e3f1a74bdf2f008a7d7166ca0aaabb137ba9d975a6f612748d6fa` |
-| `configs/confirmatory.json` (proposal; allocation unchanged: S2 1,000 structured + 1,000 null; S1 grid) | `6736122ba0cdd8f9e000ec199eb449280280d8be76f39d1c09dc16113e8a6df9` |
+| source tree digest (`runner.source_tree_digest`, `src/causalguard/**.py`) | `920e3abd8c7f436a01a5c1c9ee12aa29bf6007fbf2b9707f9057bce51550a50e` |
+| `configs/confirmatory.json` (proposal; allocation unchanged: S2 1,000 structured + 1,000 null; S1 grid) | `438cf4f7b909b68596c43951c9e320f0d0d7298e17e0f6d9601f5c10ccead09d` |
 | `configs/endpoints/S2-primary-v2.json` (unchanged) | `1b797c8b293f51eadf06a9264652aa60bd6bd29a87ddf0df3e2d3ae5d98c72ac` |
-| `artifacts/manifest_r3.json` (development manifest named by the config) | `1d655765ea364adaf29df5e608cec441c168ac19a03d7db33151fd6411cf9c90` |
+| `artifacts/manifest_r3.json` (development manifest named by the config) | `a55638c73f603e7908c5ed4e08c95259dd959c31762b152d44cf272f40264756` |
 
 Config changes since R2:
 - `development_manifest` now points to manifest r3.
@@ -80,7 +81,7 @@ No N, endpoint, tie rule or generator changed.
 
 ## 6. Tests and checks
 
-- Local (macOS, Python 3.12, `CAUSALBOOL_ROOT` = upstream `376a11dd`): **218 passed, 0 skipped**
+- Local (macOS, Python 3.12, `CAUSALBOOL_ROOT` = upstream `376a11dd`): **219 passed, 0 skipped**
   (`reports/test-output-r3.txt`). Ruff is clean.
 - Mutation and plant checks:
   - disabling the watchdog kill fails the parent-death test;

@@ -338,9 +338,177 @@
    "group": "raw_run_v3"
   },
   {
+   "path": "runs/dev-r3-release-smoke-s2/attempts/7514b3cceeb54262f6f4/001.json",
+   "bytes": 345388,
+   "sha256": "d02a5f9c037d700b6ccd7027e3b2fc71d24a3dcec79777e61056523124538897",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/attempts/894db9e649a6cdc83e44/001.json",
+   "bytes": 347231,
+   "sha256": "50808ec98337bccac73c853eb20263b2373681ff16e72982e740bec5eb9289d4",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/attempts/8c463a37f5e44c107aba/001.json",
+   "bytes": 348810,
+   "sha256": "5baf4e45eb4fbe19c2fcb36403245d30e8444165f40696858a2721ec6c49e6f3",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/attempts/a1d5f83e762fdd4a28b3/001.json",
+   "bytes": 347110,
+   "sha256": "8171c7432f7e05f17d3c70991691bf84f685a375a0ee21d602188f17b138aacb",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/attempts/a53c860ecc3b9f398e06/001.json",
+   "bytes": 349890,
+   "sha256": "271d3a270a6c07812f1bf726cf8b5986c606bed2b84a19bcbcfa8b0f21edc8fc",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/attempts/c3026880d7111734f366/001.json",
+   "bytes": 348940,
+   "sha256": "09b1e24bf9c3d9954c0f818ada2171830e47ea1eee5f9857743e6c76ff608831",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/events.jsonl",
+   "bytes": 2714,
+   "sha256": "62b815d98c349e375c7c3bec9a7f5e4acedd93edebcbadba6e2f5afd2dcd24a0",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s2/plan.json",
+   "bytes": 7022,
+   "sha256": "fc79e599e7f25e3c61933263794cd3aa64b877e919b9ceb3503d5af09467d8bb",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/0a43395a8d23fd35a202/001.json",
+   "bytes": 4673,
+   "sha256": "7a7eef27621a656cafcfea0475acc9df03eb0a7d6316e2f0f5102dcf7c9db815",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/0c9ff99d19d717d0f021/001.json",
+   "bytes": 1357,
+   "sha256": "e4d7c7ee301b60381ed3bf505a794fdc7d6268f658d4dd3c1167be43f16b39dd",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/2f0011dbb5c36b44f160/001.json",
+   "bytes": 1350,
+   "sha256": "7d3b99eccba3f6572dfd05d119b01d8c901734c62ec11d9f67a47d1f0746b4a7",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/3b32d7d96c4e12cdde2c/001.json",
+   "bytes": 3201,
+   "sha256": "d4564be742e49c6911f0c319e59242d930ec544e56c5875fd609c4664144d5df",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/4ef8d0bbbdcdcfd7cefb/001.json",
+   "bytes": 3337,
+   "sha256": "cdef509f395df99b6d3d2644f9269f7b11be5d25f9eaa108d9b2dbfe9ef5b0a8",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/50207cbe284804546ba9/001.json",
+   "bytes": 4798,
+   "sha256": "24d6f8efa0c651f4e20ccf9d1aa2d09ac2a34d9ebdf00b69f5e42185bedaeaa4",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/9a1d597a5e173a9bb009/001.json",
+   "bytes": 5939,
+   "sha256": "924ecb9e87aef9c4f270b4190900e125855a4488fd631940c4ac13101c00f186",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/a34d92eadcd006c464a6/001.json",
+   "bytes": 4687,
+   "sha256": "0fd0b4abd81c42a1dd1fa44ed0508d8c79d1487e1cc4af0be50fc8f0f9e795d8",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/a4e512df0f15e0865313/001.json",
+   "bytes": 4656,
+   "sha256": "d638125c6bb68907f663f521da8e3c9580924dab2255eb282b0d6714dab82a75",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/ad6b96b0a77525486264/001.json",
+   "bytes": 1355,
+   "sha256": "2754e527b5b90a5d857634d5be5d7ff07a357022d8bbacb66f8447b179e57d0a",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/cade1d1ac674d2568ba4/001.json",
+   "bytes": 4397,
+   "sha256": "bb6f418a9522bab4b69e2881b3bbd52ec2c3f5c8f987582dbe5f7ecd09a659f8",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/df2dab2837cef170b8f2/001.json",
+   "bytes": 4712,
+   "sha256": "686410e7c31be818523063eaf50c5f7f4ff55ac85fa191e1228066dfb5129dea",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/e2e789638453240061e5/001.json",
+   "bytes": 4636,
+   "sha256": "f05369b30c1a4433e22babe05c9c1cfe0005197193424f82033b1b993f6320a4",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/attempts/f333f3959ae615d34ae9/001.json",
+   "bytes": 5962,
+   "sha256": "a2673c8b3210d10f093f7ba53d8f203b7688b8a203e5cdb4c34e29fa1861375c",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/events.jsonl",
+   "bytes": 4684,
+   "sha256": "7e42a85c2d494afc46e6f63350cc0c7b3d12e9a6c00f5c057fb9e711cdb95af1",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
+   "path": "runs/dev-r3-release-smoke-s1/plan.json",
+   "bytes": 8774,
+   "sha256": "5dd8f3a86067d38663b07e9d6cbea7c19a869b578e66e95fb19a947fc5c1f793",
+   "required": true,
+   "group": "raw_run_v3"
+  },
+  {
    "path": "runs/registry.jsonl",
-   "bytes": 10412,
-   "sha256": "6188498a686ef2e4deb7afb8e8b712747ea89bccb837ba5a2454ea65c2365780",
+   "bytes": 12379,
+   "sha256": "4c4c998b96207b782dfb841a3b439f23ffc92d7d0a4c22f3d4ad21ef100987ec",
    "required": true,
    "group": "raw_run_v3"
   },
@@ -17223,8 +17391,8 @@
   },
   {
    "path": "reports/DEVELOPMENT_REPORT_R3.md",
-   "bytes": 12226,
-   "sha256": "efff39145ae872f423cd79512f73ede1eb22c39768c2243384cc7ea9498797b7",
+   "bytes": 12363,
+   "sha256": "7a7a82a1847adce62589e47717591df0582d97380b887fae6ac9afd02d355be9",
    "required": true,
    "group": "report"
   },
@@ -17244,8 +17412,8 @@
   },
   {
    "path": "reports/R3_EVIDENCE_MATRIX.md",
-   "bytes": 4671,
-   "sha256": "18155b6f084c5683ec8732327a872ff029b81fe7112ab02fe11b33f0e1469d42",
+   "bytes": 4746,
+   "sha256": "809e4249023b692ab3bd5fb044eaefbee6e9944ed20be5108bf5ffa070051836",
    "required": true,
    "group": "report"
   },
@@ -17287,7 +17455,7 @@
   {
    "path": "reports/acceptance_r3.json",
    "bytes": 7171,
-   "sha256": "3862f86e8d9927758fd4beb28a5148330cbf0eaed2bd29edd6fc562d5390ea73",
+   "sha256": "829dc9c8f0323aa8511bd43f3a107711ecd78a84fd057278bf381c795b5f9d34",
    "required": true,
    "group": "report"
   },
@@ -17663,6 +17831,55 @@
    "group": "report"
   },
   {
+   "path": "reports/development_r3/smoke_release/s1_bits_vs_n.png",
+   "bytes": 84766,
+   "sha256": "57e25ddf631eb2d7817eee0291dc9d5131947bc071050a1dca001a10fc3af3f4",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/development_r3/smoke_release/s1_completion.png",
+   "bytes": 64124,
+   "sha256": "1ff6ba244f41aac8c20fbaea598ee5c251b94f44488ea851a09c85aaf6ab83cd",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/development_r3/smoke_release/s1_v2_summary.json",
+   "bytes": 10526,
+   "sha256": "fd8791a53e3dc144e7269e35645d205121f50023fb8a44a29e59103955f1ebb0",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/development_r3/smoke_release/s2_v2_accuracy_vs_budget.png",
+   "bytes": 105928,
+   "sha256": "7d892f47887728051c1bf39f0e7a967e0ef8556e443fa6c59916f74f6d3ac0ea",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/development_r3/smoke_release/s2_v2_per_world.csv",
+   "bytes": 90615,
+   "sha256": "90fa18f4df134b9534f81bcd2dbfc241da7625eec1dcf56b1b962b8bd1fd15c3",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/development_r3/smoke_release/s2_v2_per_world_deltas.png",
+   "bytes": 60603,
+   "sha256": "0ec53e561ceb0a8f84c1be3691b6b8d393dd3e02d1bf9997417259eda786243b",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/development_r3/smoke_release/s2_v2_summary.json",
+   "bytes": 49754,
+   "sha256": "d5140e36bb1b266cb7878b2a9ac2b204450186956943ef3e4b83db026460775b",
+   "required": true,
+   "group": "report"
+  },
+  {
    "path": "reports/review_r1/DECISION.json",
    "bytes": 1431,
    "sha256": "53481385f5b3c916a6cc5bb11b89a3b58d206c2b3c96e354cc8e860e5f137a3a",
@@ -17917,7 +18134,7 @@
   {
    "path": "reports/test-output-r3.txt",
    "bytes": 359,
-   "sha256": "98086e6f4d89b0d128dd6ebec67154910558bbdcf0003c8c3d87bc76a83b8d16",
+   "sha256": "247ab19c0e321588c4aa4c3eb391e99f49636f40e7d711a5711a6f7137402e5a",
    "required": true,
    "group": "report"
   },
@@ -17930,8 +18147,8 @@
   },
   {
    "path": "configs/confirmatory.json",
-   "bytes": 8452,
-   "sha256": "6736122ba0cdd8f9e000ec199eb449280280d8be76f39d1c09dc16113e8a6df9",
+   "bytes": 8484,
+   "sha256": "438cf4f7b909b68596c43951c9e320f0d0d7298e17e0f6d9601f5c10ccead09d",
    "required": true,
    "group": "config"
   },
@@ -17946,6 +18163,20 @@
    "path": "configs/dev_r3_final_smoke_s2.json",
    "bytes": 1063,
    "sha256": "600063b67e046904925c83287e0ee659db095999b4a7d1387f654281d2c1010f",
+   "required": true,
+   "group": "config"
+  },
+  {
+   "path": "configs/dev_r3_release_smoke_s1.json",
+   "bytes": 1302,
+   "sha256": "ec952d0aa74f6e124bc214f03367b47676e6b5df5caea23706cc54c5a09ed384",
+   "required": true,
+   "group": "config"
+  },
+  {
+   "path": "configs/dev_r3_release_smoke_s2.json",
+   "bytes": 1107,
+   "sha256": "847c99b9a0b6457c6924c7b79c7d062c945a4d591f73a50ab995780a55228fd2",
    "required": true,
    "group": "config"
   },
@@ -18077,8 +18308,8 @@
   },
   {
    "path": "docs/EXECUTION.md",
-   "bytes": 5728,
-   "sha256": "5743f2bd68325ffafcb784fd4511e60edda590b5ec1ff76426ec6b13eda4890c",
+   "bytes": 5940,
+   "sha256": "708161cc1b4d21bc234606a247dae6e9078ebf29e1e4e8d3290ca1767358036d",
    "required": true,
    "group": "doc"
   },
@@ -18112,11 +18343,11 @@
   },
   {
    "path": "dist/causalguard-dev-runs-v0.3.0-dev.tar.gz",
-   "bytes": 235861,
-   "sha256": "1115c7d0706eca2b494cf3a57606ae9ec01a607811bc8d9ef9bb2e4f50629a6e",
+   "bytes": 353036,
+   "sha256": "b6e36f77e6909aefb9b03b87a99978eba6aa70ac93f023b49b9bbea4216acb47",
    "required": false,
    "group": "release_asset",
-   "contents": "iteration-3 development runs: dev-r3-smoke-s2, dev-r3-smoke-s1, dev-r3-final-smoke-s2, dev-r3-final-smoke-s1 + runs/registry.jsonl"
+   "contents": "iteration-3 development runs: dev-r3-smoke-s2, dev-r3-smoke-s1, dev-r3-final-smoke-s2, dev-r3-final-smoke-s1, dev-r3-release-smoke-s2, dev-r3-release-smoke-s1 + runs/registry.jsonl"
   },
   {
    "path": "dist/causalguard-dev-runs-v0.2.0-dev.tar.gz",
