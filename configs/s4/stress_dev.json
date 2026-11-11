@@ -1,11 +1,103 @@
-{"study": "S4-STRESS", "mode": "development", "run_id": "s4-stress-dev-v1",
- "cells": [{"n": 8, "seeds": 3, "budget": 16, "backends": ["B", "C", "D"]},
-           {"n": 10, "seeds": 3, "budget": 16, "backends": ["B", "C", "D"]},
-           {"n": 12, "seeds": 3, "budget": 16, "backends": ["B", "C", "D"]},
-           {"n": 16, "seeds": 3, "budget": 16, "backends": ["B", "C", "D"]},
-           {"n": 20, "seeds": 3, "budget": 16, "backends": ["B", "C", "D"]},
-           {"n": 24, "seeds": 3, "budget": 16, "backends": ["B", "D"]},
-           {"n": 32, "seeds": 3, "budget": 16, "backends": ["B", "D"]},
-           {"n": 48, "seeds": 3, "budget": 16, "backends": ["B", "D"]}],
- "payload": {"claims": 4, "horizons": [1, 2]}, "workers": 6, "item_timeout_s": 300,
- "note": "Symbolic stress: which backend finishes at which n under a 300 s per-item cap (timeouts are recorded failures = resource limits). k = 3, one-step uniform evidence, h <= 2 claims."}
+{
+ "study": "S4-STRESS",
+ "mode": "development",
+ "run_id": "s4-stress-dev-v2",
+ "cells": [
+  {
+   "n": 8,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "n": 10,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "n": 12,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "n": 16,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "n": 20,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "C",
+    "D"
+   ]
+  },
+  {
+   "n": 24,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "D"
+   ]
+  },
+  {
+   "n": 32,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "D"
+   ]
+  },
+  {
+   "n": 48,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "D"
+   ]
+  },
+  {
+   "n": 64,
+   "seeds": 3,
+   "budget": 16,
+   "backends": [
+    "B",
+    "D"
+   ]
+  }
+ ],
+ "payload": {
+  "claims": 4,
+  "horizons": [
+   1,
+   2
+  ]
+ },
+ "workers": 6,
+ "item_timeout_s": 300,
+ "note": "v2: B uses the sequential-counter AMO (v1 pairwise, preserved). Symbolic stress: which backend finishes at which n under a 300 s per-item cap (timeouts are recorded failures = resource limits). k = 3, one-step uniform evidence, h <= 2 claims."
+}
