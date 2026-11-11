@@ -274,7 +274,10 @@ def test_worker_started_after_supervisor_death_never_runs_work(tmp_path):
     conn.send({"value": 1, "sleep": 30})             # work that must never complete
     proc.join(10)
     assert not proc.is_alive()
-    with pytest.raises(EOFError):                    # the pipe is closed and no result was ever produced
+    # the pipe is closed and no result was ever produced.  Since the R3-02 repair the worker dies BEFORE reading
+    # the queued payload; on Linux closing a socket with unread data resets it (ConnectionResetError), on macOS
+    # the reader sees EOF.  Both mean "no result" (iteration 4, CI on bae41b7).
+    with pytest.raises((EOFError, ConnectionResetError)):
         conn.recv()
     assert FileLock(lock).acquire(exclusive=True, timeout=5.0)
 
