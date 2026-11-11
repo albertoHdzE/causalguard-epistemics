@@ -107,4 +107,13 @@ No N, endpoint, tie rule or generator changed.
 
 ## Release identity (filled at publication)
 
-PENDING
+| item | value |
+|---|---|
+| reviewed **content commit** | `ed719eac96580d19b4ded1b563d1e402b01ec05e` (branches `main` and `iteration-3`) |
+| release commit / tag | the docs-only commit that adds this table (it changes only this file), tagged **`v0.3.0-dev`** (GitHub prerelease) |
+| superseded, untagged content | `c2975b5` (macOS CI race; D44) |
+| CI on the content commit | runs `42933004390` (main) and `42933004391` (iteration-3): **success**. Ubuntu and macOS: lint clean, 214 passed + 5 skipped (upstream tests, no checkout in that job); upstream-parity job 5/5 passed; manifest check INCOMPLETE by design (raw runs live in release assets) |
+| release asset | `causalguard-dev-runs-v0.3.0-dev.tar.gz`, 353,036 B, sha256 `b6e36f77e6909aefb9b03b87a99978eba6aa70ac93f023b49b9bbea4216acb47` (dev-r3 runs + current `runs/registry.jsonl`) |
+| manifest | `artifacts/manifest_r3.json` sha256 `a55638c73f603e7908c5ed4e08c95259dd959c31762b152d44cf272f40264756`; 2,623 entries, of which 2,620 required |
+| previous releases | `v0.1.0-dev`, `v0.2.0-dev` and their assets are unchanged |
+| download-back and fresh-clone check | recorded after tagging in `reports/RELEASE_CHECK_R3.md` (a post-tag, docs-only commit on `main`) |
