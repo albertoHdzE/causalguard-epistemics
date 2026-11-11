@@ -1,0 +1,10 @@
+{
+ "mode": "development",
+ "r5_track": "C",
+ "study": "R5-C",
+ "run_id": "r5-c-bench-v1",
+ "order_seed": 20261111,
+ "workers": 1,
+ "item_timeout_s": 900,
+ "note": "C serialized timed benchmark; nothing else may run concurrently."
+}

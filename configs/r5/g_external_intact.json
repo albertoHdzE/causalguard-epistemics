@@ -1,0 +1,12 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r5-g-ext-intact-v1",
+ "external_panel": "intact",
+ "source_manifest": "artifacts/r5_source_manifest.json",
+ "design_salt": "r5-G-design-ext-v1",
+ "note": "External intact panel (separate population)."
+}

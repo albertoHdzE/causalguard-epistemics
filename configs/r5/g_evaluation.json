@@ -1,0 +1,11 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r5-g-eval-v1",
+ "split": "evaluation",
+ "design_salt": "r5-G-design-eval-v1",
+ "note": "G held-out evaluation (320 = 40 x 8 strata). Requires docs/R5_DESIGN_LOCK.json committed first."
+}

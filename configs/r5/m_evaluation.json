@@ -1,0 +1,11 @@
+{
+ "mode": "development",
+ "r5_track": "M",
+ "study": "R5-M",
+ "run_id": "r5-m-eval-v1",
+ "salt": "r5-M-eval-v1",
+ "per_panel": 40,
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "note": "M stress panels (40 per panel); development probe used salt r5-M-v1."
+}

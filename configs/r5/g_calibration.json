@@ -1,0 +1,11 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r5-g-cal-v1",
+ "split": "calibration",
+ "design_salt": "r5-G-design-cal-v1",
+ "note": "G calibration (64 = 8 x 8 strata); champion selection only."
+}

@@ -1,0 +1,30 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-AI",
+ "run_id": "r5-a-ai-cal-qwen25_7b-v1",
+ "split": "calibration",
+ "per_stratum": 1,
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "ollama",
+  "base_url": "http://127.0.0.1:11434/v1",
+  "model": "qwen2.5:7b",
+  "max_tokens": 400,
+  "seed": 0,
+  "timeout_s": 300,
+  "max_transport_retries": 1,
+  "extra": {
+   "ollama_native_options": {
+    "num_ctx": 16384
+   }
+  }
+ },
+ "global_cap": 3072,
+ "phase": "A-calibration",
+ "phase_cap": 512,
+ "call_ledger": "RUNS/r5-calls/ledger.jsonl",
+ "workers": 1,
+ "item_timeout_s": 3600,
+ "note": "AI interface calibration smoke (8 worlds x 2 arms)."
+}

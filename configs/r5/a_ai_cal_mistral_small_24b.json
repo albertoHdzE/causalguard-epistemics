@@ -1,0 +1,25 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-AI",
+ "run_id": "r5-a-ai-cal-mistral_small_24b-v1",
+ "split": "calibration",
+ "per_stratum": 1,
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "lmstudio",
+  "base_url": "http://127.0.0.1:1234/v1",
+  "model": "mistral-small-3.2-24b-instruct-2506-mlx",
+  "max_tokens": 400,
+  "seed": 0,
+  "timeout_s": 300,
+  "max_transport_retries": 1
+ },
+ "global_cap": 3072,
+ "phase": "A-calibration",
+ "phase_cap": 512,
+ "call_ledger": "RUNS/r5-calls/ledger.jsonl",
+ "workers": 1,
+ "item_timeout_s": 3600,
+ "note": "AI interface calibration smoke (8 worlds x 2 arms)."
+}

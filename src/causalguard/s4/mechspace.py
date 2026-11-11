@@ -182,13 +182,20 @@ class ClaimCounts:
 class MechanismSpace:
     """Arm D's workspace object.  Built from PUBLIC (H, D) only."""
 
-    def __init__(self, evidence: Evidence, k: int, max_enum: int = MAX_ENUM_DEFAULT):
+    def __init__(self, evidence: Evidence, k: int, max_enum: int = MAX_ENUM_DEFAULT, node_k: list[int] | None = None):
+        """``node_k`` (R5, Track M): optional per-node indegree bounds (a product class with heterogeneous bounds,
+        e.g. one node allowed k+1).  V(D) stays a product of per-node sets, so every count below is unchanged in
+        form; ``k`` is then max(node_k)."""
         self.evidence = evidence
-        self.n, self.k = evidence.n, k
+        ks = list(node_k) if node_k is not None else [k] * evidence.n
+        if len(ks) != evidence.n:
+            raise ValueError("node_k must give one bound per node")
+        self.n, self.k = evidence.n, max(ks) if ks else k
+        self.node_k = ks
         self.max_enum = max_enum
         self.meter = Meter()
         cons, ok = node_constraints_d(evidence)
-        self.nodes = [NodeSpace(self.n, k, j, cons[j], ok[j], self.meter) for j in range(self.n)]
+        self.nodes = [NodeSpace(self.n, ks[j], j, cons[j], ok[j], self.meter) for j in range(self.n)]
 
     @property
     def empty(self) -> bool:
@@ -202,7 +209,7 @@ class MechanismSpace:
 
     def update(self, obs: list[Observation]) -> "MechanismSpace":
         return MechanismSpace(Evidence(self.n, tuple(self.evidence.observations) + tuple(obs), self.evidence.regime),
-                              self.k, self.max_enum)
+                              self.k, self.max_enum, self.node_k)
 
     # ---- claims
     @staticmethod

@@ -1,0 +1,11 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-DET",
+ "run_id": "r5-a-det-cal-v1",
+ "split": "calibration",
+ "per_stratum": 8,
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "note": "Deterministic-policy selection (calibration)."
+}

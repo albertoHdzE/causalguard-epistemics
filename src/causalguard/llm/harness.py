@@ -55,10 +55,13 @@ class CallBudget:
     Without a ledger the global cap only sees this world's attempts."""
 
     def __init__(self, world_cap: int | None, global_cap: int | None, ledger: str | Path | None = None,
-                 world_id: str = ""):
+                 world_id: str = "", phase: str | None = None, phase_cap: int | None = None):
+        """``phase``/``phase_cap`` (R5): an additional cap on the ledger lines carrying the same phase label
+        (suballocations such as calibration / evaluation / repair); the global cap still counts every line."""
         self.world_cap, self.global_cap = world_cap, global_cap
         self.ledger = Path(ledger) if ledger else None
         self.world_id = world_id
+        self.phase, self.phase_cap = phase, phase_cap
         self.n = 0
         self.current = ""
 
@@ -75,11 +78,19 @@ class CallBudget:
                     fcntl.flock(fh, fcntl.LOCK_EX)
                     try:
                         fh.seek(0)
-                        used = sum(1 for line in fh if line.strip())
+                        lines = [line for line in fh if line.strip()]
+                        used = len(lines)
                         if used >= self.global_cap:
                             raise CapExceeded("global_cap_reached", f"{used} >= {self.global_cap}")
+                        if self.phase_cap is not None:
+                            pu = sum(1 for line in lines if json.loads(line).get("phase") == self.phase)
+                            if pu >= self.phase_cap:
+                                raise CapExceeded("phase_cap_reached", f"{self.phase}: {pu} >= {self.phase_cap}")
                         fh.seek(0, 2)
-                        fh.write(json.dumps({"world_id": self.world_id, "call": self.current}) + "\n")
+                        rec = {"world_id": self.world_id, "call": self.current}
+                        if self.phase is not None:
+                            rec["phase"] = self.phase
+                        fh.write(json.dumps(rec) + "\n")
                         fh.flush()
                     finally:
                         fcntl.flock(fh, fcntl.LOCK_UN)

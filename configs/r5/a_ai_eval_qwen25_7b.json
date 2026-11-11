@@ -1,0 +1,30 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-AI",
+ "run_id": "r5-a-ai-eval-qwen25_7b-v1",
+ "split": "evaluation",
+ "per_stratum": 8,
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "ollama",
+  "base_url": "http://127.0.0.1:11434/v1",
+  "model": "qwen2.5:7b",
+  "max_tokens": 400,
+  "seed": 0,
+  "timeout_s": 300,
+  "max_transport_retries": 1,
+  "extra": {
+   "ollama_native_options": {
+    "num_ctx": 16384
+   }
+  }
+ },
+ "global_cap": 3072,
+ "phase": "A-evaluation",
+ "phase_cap": 2048,
+ "call_ledger": "RUNS/r5-calls/ledger.jsonl",
+ "workers": 1,
+ "item_timeout_s": 3600,
+ "note": "AI pilot evaluation (64 shared worlds x 2 arms, <= 8 attempts per episode)."
+}

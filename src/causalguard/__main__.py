@@ -68,12 +68,52 @@ def _items_from_config(cfg: dict):
         for n in cfg["sizes"]:
             for s in range(cfg["seeds"]):
                 yield f"n{n}|{s}", {"n": n, "seed": 7919 * n + s, "queries": cfg.get("queries", 6)}
+    elif study == "R5-G":
+        from .r5 import data as D
+        if cfg.get("external_panel"):
+            man = json.loads((Path(__file__).resolve().parents[2] / cfg["source_manifest"]).read_text())
+            for x in man[cfg["external_panel"]]:
+                yield (f"{cfg['external_panel']}|{x['key']}",
+                       {"external_key": x["key"], "panel": cfg["external_panel"], "group": x["group"],
+                        "transformation": x["transformation"], "design_salt": cfg["design_salt"]})
+        else:
+            for s in D.STRATA:
+                for i in range(D.SPLITS[cfg["split"]]["per_stratum"]):
+                    yield f"{cfg['split']}|{s}|{i}", {"split": cfg["split"], "stratum": s, "index": i,
+                                                      "design_salt": cfg["design_salt"]}
+    elif study == "R5-M":
+        from .r5.misspec import PANELS, panel_members
+        for pan in PANELS:
+            mem, _ = panel_members(pan, cfg["per_panel"], cfg["salt"])
+            for m in mem:
+                yield f"{pan}|{m['index']}", m
+    elif study == "R5-C":
+        import random as _r
+
+        from .r5.benchmark import BACKENDS, REPEAT_SUBSET, SIZES
+        items = [(f"n{n}|b{b}|{be}|r0", {"n": n, "base": b, "backend": be, "rep": 0})
+                 for n in SIZES for b in range(8) for be in BACKENDS]
+        items += [(f"n{n}|b{b}|{be}|r{r}", {"n": n, "base": b, "backend": be, "rep": r})
+                  for (n, b) in REPEAT_SUBSET for be in BACKENDS for r in (1, 2)]
+        _r.Random(cfg["order_seed"]).shuffle(items)           # randomized backend/instance order (serial run)
+        yield from items
+    elif study in ("R5-A-DET", "R5-A-AI"):
+        from .r5.investigation import population
+        keys, _ = population(cfg["split"], cfg["per_stratum"])
+        for k in keys:
+            pl = dict(k)
+            if study == "R5-A-AI":
+                pl.update({"provider": cfg["provider"], "global_cap": cfg["global_cap"],
+                           "call_ledger": cfg["call_ledger"], "phase": cfg["phase"], "phase_cap": cfg["phase_cap"],
+                           "arms": cfg.get("arms", ["D", "B"])})
+            yield f"{k['split']}|{k['stratum']}|{k['index']}", pl
     else:
         raise SystemExit(f"unknown study {study}")
 
 
 def _strata(payload: dict) -> dict:
-    return {k: payload[k] for k in ("family", "population", "label", "n", "backend", "index") if k in payload}
+    return {k: payload[k] for k in ("family", "population", "label", "n", "backend", "index", "stratum", "split",
+                                    "panel", "base") if k in payload}
 
 
 def _fn_for(study: str):
@@ -86,6 +126,18 @@ def _fn_for(study: str):
     if study == "S1":
         from .experiments.s1 import run_item
         return run_item
+    if study.startswith("R5-"):
+        if study == "R5-G":
+            from .r5.forecast import g_world
+            return g_world
+        if study == "R5-M":
+            from .r5.misspec import m_world
+            return m_world
+        if study == "R5-C":
+            from .r5.benchmark import c_item
+            return c_item
+        from .r5.investigation import a_ai_item, a_det_item
+        return a_det_item if study == "R5-A-DET" else a_ai_item
     if study.startswith("S4-"):
         from .s4 import offline
         if study == "S4-PILOT":
@@ -140,6 +192,16 @@ def main(argv=None):
     a3.add_argument("--out", default="reports/development_r3")
     sub.add_parser("fit-s3-role-baselines").add_argument("--out", default="reports/development_r3/s3_role_baselines_v3.json")
     sub.add_parser("fixtures")
+    inv = sub.add_parser("r5-inventory", help="write the external-model source manifest (no evaluation)")
+    inv.add_argument("--out", default="artifacts/r5_source_manifest.json")
+    ar = sub.add_parser("analyze-r5", help="R5 track analyses (no model calls)")
+    ar.add_argument("--track", required=True, choices=["g-champion", "g", "g-external", "m", "a-det", "a-select",
+                                                       "a-ai", "c"])
+    ar.add_argument("--run", action="append", required=True)
+    ar.add_argument("--det-run")
+    ar.add_argument("--champion")
+    ar.add_argument("--selected")
+    ar.add_argument("--out", required=True)
     dm = sub.add_parser("s4-demo")
     dm.add_argument("--live", default=None, help="provider config JSON for a local model (optional)")
     a4 = sub.add_parser("analyze-s4")
@@ -195,6 +257,32 @@ def main(argv=None):
     if args.cmd == "analyze-s1":
         from .analysis.s1_analysis import analyze
         print(json.dumps(analyze(args.run_id, Path(args.out)), indent=1)[:4000])
+        return 0
+    if args.cmd == "r5-inventory":
+        from .r5.external import inventory
+        Path(args.out).write_text(json.dumps(inventory(), indent=1, sort_keys=True) + "\n")
+        return 0
+    if args.cmd == "analyze-r5":
+        from .analysis import r5_analysis as R
+        t = args.track
+        if t == "g-champion":
+            obj = R.select_champion(args.run[0])
+        elif t == "g":
+            obj = R.analyze_g(args.run[0], args.champion)
+        elif t == "g-external":
+            obj = R.analyze_g_external(args.run[0], args.champion)
+        elif t == "m":
+            obj = R.analyze_m(args.run[0])
+        elif t == "a-det":
+            obj = R.analyze_a_det(args.run[0])
+        elif t == "a-select":
+            obj = R.select_det_policy(args.run[0])
+        elif t == "a-ai":
+            obj = R.analyze_a_ai(args.run, args.det_run, args.selected)
+        else:
+            obj = R.analyze_c(args.run[0])
+        Path(args.out).parent.mkdir(parents=True, exist_ok=True)
+        Path(args.out).write_text(json.dumps(obj, indent=1, sort_keys=True, default=float) + "\n")
         return 0
     if args.cmd == "s4-demo":
         from .s4.demo import run_demo

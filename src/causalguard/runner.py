@@ -806,6 +806,34 @@ def _refuse_if_supervisor_dead(fd: int | None) -> None:
         os.killpg(os.getpgid(0), signal.SIGKILL)
 
 
+def _group_rss_bytes(pgid: int) -> int | None:
+    """Resident memory of every process in a process group (ps; bytes) or None if unavailable."""
+    try:
+        out = subprocess.run(["ps", "-o", "rss=", "-g", str(pgid)], capture_output=True, text=True, timeout=10).stdout
+    except Exception:
+        return None
+    return sum(int(x) for x in out.split() if x.isdigit()) * 1024
+
+
+def _start_memory_guard() -> None:
+    """R5: optional per-worker process-group memory ceiling (CAUSALGUARD_WORKER_RSS_LIMIT bytes).  A worker group
+    above the ceiling is killed (recorded by the supervisor as worker_died); never a silent truncation."""
+    lim = int(os.environ.get("CAUSALGUARD_WORKER_RSS_LIMIT", "0") or 0)
+    if lim <= 0:
+        return
+    import threading
+
+    def watch():
+        pg = os.getpgrp()
+        while True:
+            time.sleep(2.0)
+            r = _group_rss_bytes(pg)
+            if r is not None and r > lim:
+                sys.stderr.write(f"memory guard: group RSS {r} > {lim}; killing worker group\n")
+                os.killpg(pg, 9)
+    threading.Thread(target=watch, daemon=True).start()
+
+
 def _worker_main(conn, fn, lifeline=None, workers_lock: str | None = None) -> None:
     os.setsid()  # own session/process group: the parent (and the watchdog) can kill everything this worker starts
     global _WORKER_HOLD
@@ -826,6 +854,7 @@ def _worker_main(conn, fn, lifeline=None, workers_lock: str | None = None) -> No
         subprocess.Popen([sys.executable, "-I", "-S", "-c", _WATCHDOG], pass_fds=(fd,),
                          env={"CAUSALGUARD_LIFELINE_FD": str(fd)}, stdin=subprocess.DEVNULL,
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    _start_memory_guard()
     import resource
     while True:
         try:

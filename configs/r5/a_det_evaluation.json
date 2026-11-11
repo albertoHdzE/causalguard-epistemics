@@ -1,0 +1,11 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-DET",
+ "run_id": "r5-a-det-eval-v1",
+ "split": "evaluation",
+ "per_stratum": 8,
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "note": "Deterministic policies on the 64 A evaluation worlds (offline)."
+}

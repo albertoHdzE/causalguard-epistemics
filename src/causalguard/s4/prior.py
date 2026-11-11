@@ -174,6 +174,11 @@ class Averager:
         return num * scale, den * scale                       # = sum 2^-sum(b_j) (header constant omitted)
 
     def probability(self, code: str, q: Query) -> float | None:
+        f = self.probability_exact(code, q)
+        return None if f is None else float(f)
+
+    def probability_exact(self, code: str, q: Query) -> Fraction | None:
+        """The exact rational P_L(q | D) (R5: Prediction records carry numerator/denominator)."""
         if self.vs.empty:
             return None
         base = code.replace("prior", "flat")
@@ -190,7 +195,7 @@ class Averager:
                     den += delta
                     if predict(network_from_choice(self.vs.cls, list(choice)), q):
                         num += delta
-        return float(num / den)
+        return num / den
 
     def shortest_prediction(self, code: str, q: Query) -> int | None:
         """Prediction of the single shortest compatible model under ``code`` (ties: fixed world-independent rank)."""
