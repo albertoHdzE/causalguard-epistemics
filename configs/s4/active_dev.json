@@ -1,0 +1,5 @@
+{"study": "S4-ACTIVE", "mode": "development", "run_id": "s4-active-dev-v1", "salt": "dev-s4-active-v1",
+ "families": ["sparse_conj", "canalizing", "repeated_modules", "ordered_motif", "parity", "bounded_random", "order_disrupted", "uniform_H"],
+ "worlds_per_family": 5, "start": 0, "payload": {"budget": 12, "targets": 2, "menu": 12, "budgets": [0, 1, 2, 4]},
+ "workers": 8, "item_timeout_s": 1800,
+ "note": "S4-B offline prototype: random vs exact-EIG measurement policy; EIG crossed with B/C/D. No model calls."}

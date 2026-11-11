@@ -47,6 +47,21 @@ def _items_from_config(cfg: dict):
                            {"salt": cfg["salt"], "index": i, "family": cell["family"], "n": cell["n"],
                             "backend": backend, "query_timeout_s": cfg["query_timeout_s"],
                             "limits": cfg["limits"]})
+    elif study in ("S4-MAP", "S4-ACTIVE"):
+        for fam in cfg["families"]:
+            for i in range(cfg.get("start", 0), cfg.get("start", 0) + cfg["worlds_per_family"]):
+                yield f"{fam}|{i}", {"salt": cfg["salt"], "index": i, "family": fam, **cfg.get("payload", {})}
+    elif study == "S4-STRESS":
+        for cell in cfg["cells"]:
+            for s in range(cell["seeds"]):
+                for backend in cell["backends"]:
+                    yield (f"n{cell['n']}|{s}|{backend}", {"n": cell["n"], "seed": 1000 * cell["n"] + s,
+                                                           "backend": backend, "budget": cell["budget"],
+                                                           **cfg.get("payload", {})})
+    elif study == "S4-KNOWN":
+        for n in cfg["sizes"]:
+            for s in range(cfg["seeds"]):
+                yield f"n{n}|{s}", {"n": n, "seed": 7919 * n + s, "queries": cfg.get("queries", 6)}
     else:
         raise SystemExit(f"unknown study {study}")
 
@@ -65,6 +80,10 @@ def _fn_for(study: str):
     if study == "S1":
         from .experiments.s1 import run_item
         return run_item
+    if study.startswith("S4-"):
+        from .s4 import offline
+        return {"S4-MAP": offline.map_world, "S4-ACTIVE": offline.active_world, "S4-STRESS": offline.stress_item,
+                "S4-KNOWN": offline.known_item}[study]
     raise SystemExit(study)
 
 

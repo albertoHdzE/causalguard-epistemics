@@ -4,11 +4,21 @@ import copy
 
 import pytest
 
-from causalguard.analysis.s2_analysis import (V2_CODECS, AnalysisRefused, OutputDefect, _check_row_values, _contrast,
-                                              required_pred_keys, validate_world_v2, world_scores)
+import test_completeness_r3 as _r3
+from causalguard.analysis.s2_analysis import (
+    V2_CODECS,
+    AnalysisRefused,
+    OutputDefect,
+    _check_row_values,
+    _contrast,
+    required_pred_keys,
+    validate_world_v2,
+    world_scores,
+)
 from causalguard.experiments.s2 import V2_SELECTORS, run_world_v2
+from test_completeness_r3 import _analyze, _b16_rows, _copy, _edit
 
-from test_completeness_r3 import _analyze, _b16_rows, _copy, _edit, s2_store  # noqa: F401  (module fixture reuse)
+s2_store = _r3.s2_store            # reuse the R3 module fixture (same generated store)
 
 ITEM = "realizable|parity|1"
 

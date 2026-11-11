@@ -1,0 +1,5 @@
+{"study": "S4-MAP", "mode": "development", "run_id": "s4-map-dev-v1", "salt": "dev-s4-map-v1",
+ "families": ["sparse_conj", "canalizing", "repeated_modules", "ordered_motif", "parity", "bounded_random", "order_disrupted", "uniform_H"],
+ "worlds_per_family": 20, "start": 0, "payload": {"prefixes": [8, 12, 16, 24], "backends": ["B", "C", "D"]},
+ "workers": 8, "item_timeout_s": 1800,
+ "note": "Fixed offline family/cost map (P3): reference verdicts, fixed-request replay B/C/D, codec-induced averaging secondary, evaluator-side description lengths. Development only; no model calls."}

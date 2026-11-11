@@ -1,0 +1,3 @@
+{"study": "S4-KNOWN", "mode": "development", "run_id": "s4-known-dev-v1", "sizes": [10, 12, 14, 32, 64], "seeds": 4, "queries": 6,
+ "workers": 4, "item_timeout_s": 600,
+ "note": "Known-mechanism checking panel (formal paper): parity, thresholds, mixed gates, overlapping supports. Exact global cross-check at n <= 14; corroboration only above. Separate from the unknown-mechanism endpoint."}

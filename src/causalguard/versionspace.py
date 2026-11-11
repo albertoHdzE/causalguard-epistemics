@@ -564,10 +564,19 @@ def _bits_matrix(n: int) -> np.ndarray:
     return ((xs[:, None] >> np.arange(n)[None, :]) & 1).astype(np.int64)  # (N, n)
 
 
-def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
-    """Exact (number of models in V(D) for which q holds, |V(D)|) for a point query with h <= 3."""
+def exact_query_counts(vs: VersionSpace, q: Query, weights: list[np.ndarray] | None = None) -> tuple[int, int]:
+    """Exact (number of models in V(D) for which q holds, |V(D)|) for a point query with h <= 3.
+
+    ``weights`` (iteration 4, codec-induced averaging): optional per-node nonnegative INTEGER weights aligned with
+    ``vs.compatible``; the result is then (sum of model weights where q holds, total weight) with the weight of a
+    model = product of its node weights.  ``None`` is the unweighted count (every weight 1; unchanged path)."""
     if vs.empty:
         raise SemanticsError("empty version space")
+    if weights is not None:
+        if len(weights) != vs.n or any(len(w) != len(c) for w, c in zip(weights, vs.compatible)):
+            raise SemanticsError("weights must align with the compatible sets")
+        if any(int(w.sum()) >= 1 << 52 for w in weights):
+            raise Unsupported("weights too large for the exact float64 Gram path (sum >= 2^52)")
     n = vs.n
     N = 1 << n
     x0 = point_query_parts(q, n)
@@ -576,7 +585,9 @@ def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
     clamp = q.intervention.kind == "persistent_clamp"
     clamped = [bool(clamp and (m >> j) & 1) for j in range(n)]
     cval = [(v >> j) & 1 for j in range(n)]
-    sizes = [int(len(c)) for c in vs.compatible]
+    W = [np.ones(len(c), dtype=np.int64) for c in vs.compatible] if weights is None else \
+        [np.asarray(w, dtype=np.int64) for w in weights]
+    sizes = [int(len(c)) for c in vs.compatible] if weights is None else [int(w.sum()) for w in W]
     den = math.prod(sizes)
     h = q.horizon
     tnodes = sorted(q.target.nodes())
@@ -599,7 +610,8 @@ def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
             for j in range(n):
                 if j in tnodes:
                     c = combo[tnodes.index(j)]
-                    w *= (sizes[j] if c == cval[j] else 0) if clamped[j] else int((A[j][:, s0] == c).sum())
+                    w *= (sizes[j] if c == cval[j] else 0) if clamped[j] else (
+                        int((A[j][:, s0] == c).sum()) if weights is None else int(W[j][A[j][:, s0] == c].sum()))
                 else:
                     w *= sizes[j]
             num += w
@@ -611,7 +623,11 @@ def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
         parts = {}
         for a in (0, 1):
             Aa = A[j][a0 == a].astype(np.float64)
-            parts[a] = (Aa, int(Aa.shape[0]), Aa.sum(axis=0).astype(np.int64))
+            if weights is None:
+                parts[a] = (Aa, int(Aa.shape[0]), Aa.sum(axis=0).astype(np.int64))
+            else:
+                wa = W[j][a0 == a].astype(np.float64)
+                parts[a] = (Aa, int(W[j][a0 == a].sum()), (Aa * wa[:, None]).sum(axis=0).astype(np.int64), wa)
         split.append(parts)
 
     def obj(x):
@@ -665,8 +681,9 @@ def exact_query_counts(vs: VersionSpace, q: Query) -> tuple[int, int]:
         # target node: joint counts at (s1, s2) need G_a = A_a^T A_a
         K = {}
         for aa in (0, 1):
-            Aa, na, col = split[j][aa]
-            G = (Aa.T @ Aa).round().astype(np.int64) if na else np.zeros((N, N), dtype=np.int64)
+            Aa, na, col = split[j][aa][:3]
+            Aw = Aa if weights is None else Aa * split[j][aa][3][:, None]
+            G = (Aa.T @ Aw).round().astype(np.int64) if na else np.zeros((N, N), dtype=np.int64)
             ci, cj = col[:, None], col[None, :]
             K[aa] = {(1, 1): G, (1, 0): ci - G, (0, 1): cj - G, (0, 0): na - ci - cj + G}
         tc = {}
