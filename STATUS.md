@@ -1,45 +1,33 @@
 # STATUS
 
-_Last updated: 2026-11-11 (iteration 3, bounded repair after Codex review R2). Pre-sprint development (the sprint
-starts 2026-11-13)._
+_Last updated: 2026-11-11 (iteration 4: P0 repairs + S4 implementation, offline programs and bounded local pilot).
+Pre-sprint development (the sprint starts 2026-11-13)._
 
 **Resume protocol.** Read, in this order:
 - this file;
-- `DECISIONS.md` (D36+ for iteration 3);
-- `git log` on branch `iteration-3`;
-- `runs/registry.jsonl` (runtime registry; the tracked `RUNS.jsonl` is the frozen iteration-1 registry).
+- `reports/REVIEW_READY_R4.md`;
+- `DECISIONS.md` (D45–D53 for iteration 4);
+- `git log` on branch `iteration-4`;
+- `runs/registry.jsonl`.
 
-Every run is reconciled with `causalguard.runner.load_run(<run dir>)`. A run is continued only with `--resume`
-under an identical plan. Only one live process may own a run (`docs/EXECUTION.md`). Runs execute from an immutable
-snapshot worktree via `scripts/run_from_snapshot.sh <commit> <log> python -m ...`.
+Runs are reconciled with `causalguard.runner.load_run`. Runs execute from immutable snapshots
+(`scripts/run_from_snapshot.sh`).
 
-**Not authorized:** `docs/FREEZE_RECORD.json`, any confirmatory run, new LLM panels, and WP10/WP11. None of these
-exists or was started (`reports/review_r2/DECISION.json`: `confirmatory_authorized: false`).
+**Not authorized and not done:** a production freeze, confirmatory runs, the 320–800-world S4 main study, paid
+inference, weight changes, and WP10/WP11.
 
-## Iteration-3 work items (reports/review_r2/REPAIR_SPEC.md A–D)
+## Iteration-4 work packages
 
-| Item | State | Evidence |
+| WP | State | Evidence |
 |---|---|---|
-| A ownership, no-clobber, parent death, status, strict validation (R2-01..04) | implemented + tested | runner.py; tests/test_runner_r3.py; docs/EXECUTION.md; D37 |
-| B completeness, RSS, phase (R2-05, R2-06) | implemented + tested; preserved data reanalysed (estimates unchanged) | analysis/s2_analysis.py, s1_analysis.py; tests/test_completeness_r3.py; reports/development_r3/; D38, D39 |
-| C S3 offline corrections (R2-07..09) | implemented + tested; no model calls | analysis/s3_analysis.py, llm/parse.py, llm/harness.py; tests/test_s3_r3.py; docs/S3_FUTURE_DESIGN_R3.md; D42 |
-| D reporting, smoke, audit, release | see REVIEW_READY_R3.md | DEVELOPMENT_REPORT_R3.md, ERRATA_R3.md, CLAIM_LEDGER_R3.csv, acceptance_r3.json, before_after_audit.json |
+| P0 R3-01 / R3-02 | repaired + tested; S2 reanalysis identical | `reports/development_r4/p0_repair_evidence.json`; D46 |
+| P1 method identity / contract | `docs/S4_METHOD_COVERAGE.md`, `docs/S4_PROTOCOL_DRAFT.md` | D47 |
+| P2 workspace + adapters + gate | `src/causalguard/s4/`; tests `tests/test_s4_*.py` | D47–D49 |
+| P3 tasks, evaluator, audits, offline map | runs `s4-map-dev-v2` (v1 preserved), `s4-stress-dev-v2` (v1 preserved), `s4-active-dev-v1`, `s4-known-dev-v1`, `s4-misspec-dev-v1` | `reports/S4_DEVELOPMENT_REPORT.md` §3–§8 |
+| P4 pilot + sizing | `s4-pilot-qwen25_7b-v1`, `s4-pilot-mistral_small_24b-v1` (40/40 each); `reports/S4_DESIGN_SIZING.md` | D50–D53 |
+| P5 prototype, reports, release | `python -m causalguard s4-demo`; `docs/S4_FUNDING_BRIEF.md`; review package | `reports/REVIEW_READY_R4.md` |
 
-## Runs (iteration 3: execution smokes only, not evidence)
+## Next exact action
 
-| run id | snapshot | state |
-|---|---|---|
-| dev-r3-smoke-s2 | c40c35f2e64d | complete 6/6 |
-| dev-r3-smoke-s1 | c40c35f2e64d | complete 14/14; one deliberate supervisor-group SIGKILL and an immediate resume (D40) |
-| dev-r3-final-smoke-s2 | 2209593a0f02 | complete 6/6 (final-source repeat; identical science) |
-| dev-r3-final-smoke-s1 | 2209593a0f02 | complete 14/14 (final-source repeat; identical science) |
-| dev-r3-release-smoke-s2 | 78e68378190a | complete 6/6 (release source after D44; identical science) |
-| dev-r3-release-smoke-s1 | 78e68378190a | complete 14/14 (release source after D44; identical science) |
-
-The iteration-2 runs (S2-dev-v2, S2-dev-v2-mcdiag, S2-dev-v2-repro, S1-dev-v2-panel, s3v2-*) are unchanged and were
-reanalysed read-only.
-
-## Next exact actions
-
-1. None in iteration 3. Await Codex review R3 (`delegation/REVIEW_R3_REQUEST_PROMPT.md`).
-2. Do not create a freeze record or run confirmation.
+Await Codex review R4 (`delegation/REVIEW_R4_REQUEST_PROMPT.md`). The main-study primary must be re-decided before
+any main run.

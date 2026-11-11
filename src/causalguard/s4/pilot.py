@@ -196,6 +196,7 @@ def run_episode(arm: str, pub: dict, provider, budget, seed: int | None, world_i
                 tool_log.append({"turn": turn, "invalid": True})
                 continue
         results = []
+        committed_this_turn = False
         for tc in tcs[:24]:
             if not isinstance(tc, dict):
                 results.append({"error": 'each tool call must be an object such as {"tool": "check", "cid": "c0"}'})
@@ -212,7 +213,10 @@ def run_episode(arm: str, pub: dict, provider, budget, seed: int | None, world_i
             elif name in ("propose", "commit"):
                 ans = parse_answers(tc.get("answers"), cids)
                 if name == "commit":
-                    final = ans
+                    # several commit calls in ONE turn are merged (first answer per claim wins).  The v1 pilot
+                    # harness overwrote earlier calls (DECISIONS D52); scored as recorded + merged sensitivity.
+                    final = {**ans, **final} if committed_this_turn else ans
+                    committed_this_turn = True
                 for cid, p in _proposals(ans, cby).items():
                     d = check(p, ws)
                     decisions[cid] = d
@@ -225,7 +229,7 @@ def run_episode(arm: str, pub: dict, provider, budget, seed: int | None, world_i
                         results.append(_gate_view(d))
                 if name == "commit":
                     committed = True
-                    results.append({"committed": len(ans), "released_verified": sum(released.values())})
+                    results.append({"committed": len(final), "released_verified": sum(released.values())})
                 else:
                     missing = [c for c in cids if c not in ans]
                     if missing:

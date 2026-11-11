@@ -1,0 +1,96 @@
+{
+ "run_id": "s4-active-dev-v1",
+ "worlds": 40,
+ "targets": 80,
+ "eig_choices_identical_across_B_C_D": 80,
+ "policies": {
+  "eig|B": {
+   "0": {
+    "resolved_fraction": 0.0,
+    "forecast_accuracy_nontie": 0.782051282051282,
+    "n": 80
+   },
+   "1": {
+    "resolved_fraction": 0.075,
+    "forecast_accuracy_nontie": 0.7875,
+    "n": 80
+   },
+   "2": {
+    "resolved_fraction": 0.075,
+    "forecast_accuracy_nontie": 0.775,
+    "n": 80
+   },
+   "4": {
+    "resolved_fraction": 0.0875,
+    "forecast_accuracy_nontie": 0.775,
+    "n": 80
+   }
+  },
+  "eig|C": {
+   "0": {
+    "resolved_fraction": 0.0,
+    "forecast_accuracy_nontie": 0.782051282051282,
+    "n": 80
+   },
+   "1": {
+    "resolved_fraction": 0.075,
+    "forecast_accuracy_nontie": 0.7875,
+    "n": 80
+   },
+   "2": {
+    "resolved_fraction": 0.075,
+    "forecast_accuracy_nontie": 0.775,
+    "n": 80
+   },
+   "4": {
+    "resolved_fraction": 0.0875,
+    "forecast_accuracy_nontie": 0.775,
+    "n": 80
+   }
+  },
+  "eig|D": {
+   "0": {
+    "resolved_fraction": 0.0,
+    "forecast_accuracy_nontie": 0.782051282051282,
+    "n": 80
+   },
+   "1": {
+    "resolved_fraction": 0.075,
+    "forecast_accuracy_nontie": 0.7875,
+    "n": 80
+   },
+   "2": {
+    "resolved_fraction": 0.075,
+    "forecast_accuracy_nontie": 0.775,
+    "n": 80
+   },
+   "4": {
+    "resolved_fraction": 0.0875,
+    "forecast_accuracy_nontie": 0.775,
+    "n": 80
+   }
+  },
+  "random|D": {
+   "0": {
+    "resolved_fraction": 0.0,
+    "forecast_accuracy_nontie": 0.782051282051282,
+    "n": 80
+   },
+   "1": {
+    "resolved_fraction": 0.0,
+    "forecast_accuracy_nontie": 0.7564102564102564,
+    "n": 80
+   },
+   "2": {
+    "resolved_fraction": 0.0,
+    "forecast_accuracy_nontie": 0.782051282051282,
+    "n": 80
+   },
+   "4": {
+    "resolved_fraction": 0.0125,
+    "forecast_accuracy_nontie": 0.7948717948717948,
+    "n": 80
+   }
+  }
+ }
+}

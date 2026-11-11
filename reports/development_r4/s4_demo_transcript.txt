@@ -1,0 +1,79 @@
+== 1. Public task (world index 30 of salt demo-s4-v1; chosen as the first world whose first underdetermined claim one permitted measurement resolves; illustration only)
+System with 8 Boolean nodes, physical order: Y0 B1 D2 Y3 V4 P5 Y6 K7.
+All nodes update synchronously. Each node's next value is a FIXED but UNKNOWN Boolean function of at most 3 nodes (any nodes, possibly itself). A 'consistent mechanism' is any such network that reproduces every evidence row exactly.
+States are written as bit strings in the physical order above.
+
+Evidence (each row: one synchronous step from a start state; a clamped node is held fixed and its next value is not observed, shown as '.'):
+ #01 from 10110010 -> 01111100
+ #02 from 00011110 -> 00001011
+ #03 from 10111100 -> 01010111
+ #04 from 00111011 -> 10001111
+ #05 from 01000111 -> 00100001
+ #06 from 11000011 -> 01100001
+ #07 from 01011100 -> 10100110
+ #08 from 00100000 -> 01010000
+ #09 from 11101110 -> 00110011
+ #10 from 10001111 clamp B1=0,D2=0 -> 1..00110
+ #11 from 11011001 clamp Y6=0 -> 011111.0
+ #12 from 11010111 clamp Y3=1,P5=1 -> 010.1.11
+
+Claims:
+ c0: start 11100100; hold D2=1,P5=0 fixed at every step; after 1 step(s): K7 = 0
+ c1: start 01001101; hold B1=0,V4=1 fixed at every step; after 1 step(s): K7 = 0
+ c2: start 11010010; hold Y0=1,B1=0 fixed at every step; after 1 step(s): P5 = 1
+ c3: start 00000000; first set B1=1 in the start state, then update freely; after 2 step(s): D2 = 0
+ c4: start 11100001; first set D2=1 in the start state, then update freely; after 2 step(s): Y6 = 0
+ c5: start 11010110; hold Y6=1 fixed at every step; after 3 step(s): B1 = 0
+ c6: start 01001000; first set V4=1,Y6=1 in the start state, then update freely; after 1 step(s): P5 = 0
+ c7: start 01001000; first set V4=1 in the start state, then update freely; after 3 step(s): Y0 = 1
+
+== 2. Proposed conclusions (fixed naive proposer (asserts certainty from the target's observed majority))
+  c0: start 11100100; hold D2=1,P5=0 fixed at every step; after 1 step(s): K7 = 0
+     proposed refuted         -> check: refuted          (claim status: underdetermined)
+  c1: start 01001101; hold B1=0,V4=1 fixed at every step; after 1 step(s): K7 = 0
+     proposed refuted         -> check: refuted          (claim status: entailed)
+  c2: start 11010010; hold Y0=1,B1=0 fixed at every step; after 1 step(s): P5 = 1
+     proposed entailed        -> check: refuted          (claim status: underdetermined)
+  c3: start 00000000; first set B1=1 in the start state, then update freely; after 2 step(s): D2 = 0
+     proposed refuted         -> check: refuted          (claim status: underdetermined)
+  c4: start 11100001; first set D2=1 in the start state, then update freely; after 2 step(s): Y6 = 0
+     proposed refuted         -> check: refuted          (claim status: underdetermined)
+  c5: start 11010110; hold Y6=1 fixed at every step; after 3 step(s): B1 = 0
+     proposed refuted         -> check: refuted          (claim status: underdetermined)
+  c6: start 01001000; first set V4=1,Y6=1 in the start state, then update freely; after 1 step(s): P5 = 0
+     proposed refuted         -> check: refuted          (claim status: entailed)
+  c7: start 01001000; first set V4=1 in the start state, then update freely; after 3 step(s): Y0 = 1
+     proposed refuted         -> check: refuted          (claim status: underdetermined)
+
+== 3. Before release: 8 of 8 proposals blocked; released as verified: []
+  counterexample for c0: {"side": 1, "mechanism": ["Y0 = LUT00101100(Y0,B1,K7)", "B1 = LUT01100101(Y0,D2,Y3)", "D2 = LUT01100101(B1,Y3,V4)", "Y3 = LUT00110101(Y0,D2,Y3)", "V4 = CANAL100[IMPLIES12](Y3,P5,Y6)", "P5 = LUT10000110(B1,D2,Y3)", "Y6 = LUT00100111(Y0,Y3,P5)", "K7 = LUT01001011(Y0,B1,Y6)", "[CGH-1 description: 169 bits, mode ordered-template]"], "trajectory": ["11100000", "00110000"], "replayed": true}
+
+== 4. Uncertainty of c0: 95040 of 190080 consistent mechanisms make it true (p = 0.500); opposing example mechanisms:
+  claim true : Y0 = LUT00101100(Y0,B1,K7); B1 = LUT01100101(Y0,D2,Y3); D2 = LUT01100101(B1,Y3,V4); Y3 = LUT00110101(Y0,D2,Y3); V4 = CANAL100[IMPLIES12](Y3,P5,Y6); P5 = LUT10000110(B1,D2,Y3); Y6 = LUT00100111(Y0,Y3,P5); K7 = LUT01001011(Y0,B1,Y6)
+  claim false: Y0 = LUT00101100(Y0,B1,K7); B1 = LUT01100101(Y0,D2,Y3); D2 = LUT01100101(B1,Y3,V4); Y3 = LUT00110101(Y0,D2,Y3); V4 = CANAL100[IMPLIES12](Y3,P5,Y6); P5 = LUT10000110(B1,D2,Y3); Y6 = LUT00100111(Y0,Y3,P5); K7 = LUT01010110(B1,Y3,V4)
+
+== 5. Permitted experiments (the claim's own experiment excluded), exact expected information about c0:
+  #07 observe K7 after one step from 10110001 clamp V4=0: EIG 1.000 bits
+  #00 observe B1 after one step from 11111001 clamp K7=1: EIG 0.000 bits
+  #01 observe B1 after one step from 11001101: EIG 0.000 bits
+  #02 observe V4 after one step from 10000010 clamp Y0=1: EIG 0.000 bits
+  #03 observe Y3 after one step from 00011101: EIG 0.000 bits
+  -> buy #07; observed K7 = 1
+
+== 6. Re-check c0 with the new observation: entailed (counts 95040/95040)
+  commit of the verified conclusion: released=True verified=True
+  the pre-measurement decision re-used after the update: refused (stale decision: the claim, assertion, assumptions or evidence changed)
+
+== 7. Reveal (evaluator): hidden mechanism
+  Y0 = LUT01001011(B1,D2,K7)
+  B1 = LUT01100101(Y0,D2,Y3)
+  D2 = LUT01100101(B1,Y3,V4)
+  Y3 = LUT01100101(D2,V4,P5)
+  V4 = LUT01100101(Y3,P5,Y6)
+  P5 = LUT01100101(V4,Y6,K7)
+  Y6 = LUT00111001(Y0,P5,K7)
+  K7 = LUT01001011(Y0,B1,Y6)
+  [CGH-1 description: 43 bits, mode ordered-template]
+  c0 in the hidden system: true; checked conclusion: entailed
+
+{"demo_world_index": 30, "salt": "demo-s4-v1", "final_verdict": "entailed", "truth_holds": 1, "stale_commit": "refused (stale decision: the claim, assertion, assumptions or evidence changed)", "hidden_cgh_bits": 43}

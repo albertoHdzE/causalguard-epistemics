@@ -1,0 +1,56 @@
+{
+ "run_id": "s4-known-dev-v1",
+ "queries": 120,
+ "exact_checked": 72,
+ "exact_matches": 72,
+ "corroboration_only": 48,
+ "witness_replayed_all": true,
+ "by_n": {
+  "10": {
+   "median_c": 6.5,
+   "median_d": 9.5,
+   "median_mu": 2.5,
+   "max_enumerated": 1024,
+   "median_wall_s": 0.00014022899995325133
+  },
+  "12": {
+   "median_c": 7.0,
+   "median_d": 9.0,
+   "median_mu": 2.0,
+   "max_enumerated": 1024,
+   "median_wall_s": 0.000154583499806904
+  },
+  "14": {
+   "median_c": 7.0,
+   "median_d": 8.0,
+   "median_mu": 1.0,
+   "max_enumerated": 1024,
+   "median_wall_s": 0.00017020900008901663
+  },
+  "32": {
+   "median_c": 8.0,
+   "median_d": 9.5,
+   "median_mu": 1.0,
+   "max_enumerated": 8192,
+   "median_wall_s": 0.0003441039998506312
+  },
+  "64": {
+   "median_c": 8.0,
+   "median_d": 8.0,
+   "median_mu": 0.0,
+   "max_enumerated": 4096,
+   "median_wall_s": 0.00030658299988317594
+  }
+ },
+ "families_covered": [
+  "AND",
+  "CANALIZING",
+  "EXACTK",
+  "IMPLIES",
+  "KOFN",
+  "MAJORITY_STRICT",
+  "OR",
+  "XNOR",
+  "XOR"
+ ]
+}

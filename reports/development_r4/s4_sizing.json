@@ -1,0 +1,456 @@
+{
+ "qwen2.5:7b": {
+  "D-B": {
+   "pilot_sd_delta": 0.0,
+   "pilot_mean_delta": 0.0,
+   "nonzero_world_deltas": 0,
+   "simulation": null,
+   "note": "per-world deltas are (almost) all zero: an exact-tool tie; power for a 5-point accuracy difference is not estimable from this pilot and a tie is the expected outcome when both backends finish",
+   "normal_approx_N_upper_sd": {
+    "sd_used": 0.1,
+    "N": 39
+   }
+  },
+  "D-A": {
+   "pilot_sd_delta": 0.315466687257515,
+   "pilot_mean_delta": 0.35,
+   "nonzero_world_deltas": 34,
+   "simulation": {
+    "assumptions": {
+     "strata": [
+      "bounded_random",
+      "canalizing",
+      "order_disrupted",
+      "ordered_motif",
+      "parity",
+      "repeated_modules",
+      "sparse_conj",
+      "uniform_H"
+     ],
+     "dev_worlds": 40,
+     "dev_stratified_mean": 0.35,
+     "dev_sd_per_stratum": {
+      "bounded_random": 0.4107919181288746,
+      "canalizing": 0.270993542358485,
+      "order_disrupted": 0.3112474899497183,
+      "ordered_motif": 0.29315098498896436,
+      "parity": 0.1767766952966369,
+      "repeated_modules": 0.3791437722025775,
+      "sparse_conj": 0.11180339887498951,
+      "uniform_H": 0.28777161083053343
+     },
+     "effect": 0.05,
+     "variance_inflation": 1.5,
+     "sims": 2000,
+     "allocation": "equal per stratum",
+     "interval": "normal with stratified SE",
+     "seed": 11
+    },
+    "grid": [
+     {
+      "N_total": 160,
+      "n_per_stratum": 20,
+      "observed": {
+       "median_half_width": 0.046875932817035754,
+       "p90_half_width": 0.0489254071402903,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.350349609375
+      },
+      "null": {
+       "median_half_width": 0.046816506204346894,
+       "p90_half_width": 0.04888283644900557,
+       "p_lower_gt_0": 0.0125,
+       "p_upper_lt_0": 0.017,
+       "mean_estimate": -0.00045273437500000733
+      },
+      "effect": {
+       "median_half_width": 0.04681392075216373,
+       "p90_half_width": 0.048941897442873306,
+       "p_lower_gt_0": 0.571,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05086757812499999
+      },
+      "effect_conservative": {
+       "median_half_width": 0.0702338076753381,
+       "p90_half_width": 0.0731978637877701,
+       "p_lower_gt_0": 0.256,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.049785546874999996
+      }
+     },
+     {
+      "N_total": 320,
+      "n_per_stratum": 40,
+      "observed": {
+       "median_half_width": 0.03306889794791145,
+       "p90_half_width": 0.03409259136535523,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.3503904296875
+      },
+      "null": {
+       "median_half_width": 0.03303529753038255,
+       "p90_half_width": 0.034134106349477764,
+       "p_lower_gt_0": 0.014,
+       "p_upper_lt_0": 0.0125,
+       "mean_estimate": 0.0001035156249999911
+      },
+      "effect": {
+       "median_half_width": 0.03304897968573292,
+       "p90_half_width": 0.0340788090219514,
+       "p_lower_gt_0": 0.876,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.04956796874999999
+      },
+      "effect_conservative": {
+       "median_half_width": 0.04963432012312044,
+       "p90_half_width": 0.051165214088133425,
+       "p_lower_gt_0": 0.5015,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05014912109375
+      }
+     },
+     {
+      "N_total": 480,
+      "n_per_stratum": 60,
+      "observed": {
+       "median_half_width": 0.026998608207455053,
+       "p90_half_width": 0.02769457665637408,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.35004453124999996
+      },
+      "null": {
+       "median_half_width": 0.027033449271574715,
+       "p90_half_width": 0.027670462195810035,
+       "p_lower_gt_0": 0.012,
+       "p_upper_lt_0": 0.0115,
+       "mean_estimate": 0.0002260416666666587
+      },
+      "effect": {
+       "median_half_width": 0.026965381836675247,
+       "p90_half_width": 0.027629036828598616,
+       "p_lower_gt_0": 0.9745,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.049732552083333326
+      },
+      "effect_conservative": {
+       "median_half_width": 0.04050216308519489,
+       "p90_half_width": 0.041469223734694596,
+       "p_lower_gt_0": 0.7045,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05045214843749999
+      }
+     },
+     {
+      "N_total": 640,
+      "n_per_stratum": 80,
+      "observed": {
+       "median_half_width": 0.023375016071829118,
+       "p90_half_width": 0.023887400792175155,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.350189453125
+      },
+      "null": {
+       "median_half_width": 0.023360248454421775,
+       "p90_half_width": 0.0238702012386497,
+       "p_lower_gt_0": 0.0125,
+       "p_upper_lt_0": 0.013,
+       "mean_estimate": -0.00018867187500000836
+      },
+      "effect": {
+       "median_half_width": 0.023362039752576558,
+       "p90_half_width": 0.02388297255786838,
+       "p_lower_gt_0": 0.9955,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.04970634765624999
+      },
+      "effect_conservative": {
+       "median_half_width": 0.0350354655572943,
+       "p90_half_width": 0.03582604335580421,
+       "p_lower_gt_0": 0.8375,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05018603515625
+      }
+     },
+     {
+      "N_total": 800,
+      "n_per_stratum": 100,
+      "observed": {
+       "median_half_width": 0.020897092655088274,
+       "p90_half_width": 0.02131109477470211,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.35000656249999995
+      },
+      "null": {
+       "median_half_width": 0.02091290145842715,
+       "p90_half_width": 0.021310057036301983,
+       "p_lower_gt_0": 0.014,
+       "p_upper_lt_0": 0.0155,
+       "mean_estimate": 9.15624999999926e-05
+      },
+      "effect": {
+       "median_half_width": 0.02089993820051872,
+       "p90_half_width": 0.021323810951562293,
+       "p_lower_gt_0": 0.9995,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.050609765625
+      },
+      "effect_conservative": {
+       "median_half_width": 0.031338990735294,
+       "p90_half_width": 0.03196682964667117,
+       "p_lower_gt_0": 0.9105,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.049724140624999996
+      }
+     }
+    ]
+   },
+   "normal_approx_N_upper_sd": {
+    "sd_used": 0.4732000308862725,
+    "N": 852
+   }
+  },
+  "D-C": {
+   "pilot_sd_delta": 0.0,
+   "pilot_mean_delta": 0.0,
+   "nonzero_world_deltas": 0,
+   "simulation": null,
+   "note": "per-world deltas are (almost) all zero: an exact-tool tie; power for a 5-point accuracy difference is not estimable from this pilot and a tie is the expected outcome when both backends finish",
+   "normal_approx_N_upper_sd": {
+    "sd_used": 0.1,
+    "N": 39
+   }
+  }
+ },
+ "mistral-small-3.2-24b-instruct-2506-mlx": {
+  "D-B": {
+   "pilot_sd_delta": 0.1383496476323666,
+   "pilot_mean_delta": 0.021875,
+   "nonzero_world_deltas": 1,
+   "simulation": null,
+   "note": "per-world deltas are (almost) all zero: an exact-tool tie; power for a 5-point accuracy difference is not estimable from this pilot and a tie is the expected outcome when both backends finish",
+   "normal_approx_N_upper_sd": {
+    "sd_used": 0.2075244714485499,
+    "N": 164
+   }
+  },
+  "D-A": {
+   "pilot_sd_delta": 0.3334935512389238,
+   "pilot_mean_delta": 0.3625,
+   "nonzero_world_deltas": 34,
+   "simulation": {
+    "assumptions": {
+     "strata": [
+      "bounded_random",
+      "canalizing",
+      "order_disrupted",
+      "ordered_motif",
+      "parity",
+      "repeated_modules",
+      "sparse_conj",
+      "uniform_H"
+     ],
+     "dev_worlds": 40,
+     "dev_stratified_mean": 0.36250000000000004,
+     "dev_sd_per_stratum": {
+      "bounded_random": 0.4107919181288746,
+      "canalizing": 0.270993542358485,
+      "order_disrupted": 0.3112474899497183,
+      "ordered_motif": 0.29315098498896436,
+      "parity": 0.1767766952966369,
+      "repeated_modules": 0.3791437722025775,
+      "sparse_conj": 0.11180339887498951,
+      "uniform_H": 0.4088856808449032
+     },
+     "effect": 0.05,
+     "variance_inflation": 1.5,
+     "sims": 2000,
+     "allocation": "equal per stratum",
+     "interval": "normal with stratified SE",
+     "seed": 11
+    },
+    "grid": [
+     {
+      "N_total": 160,
+      "n_per_stratum": 20,
+      "observed": {
+       "median_half_width": 0.04962694115704215,
+       "p90_half_width": 0.05171563940286864,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.36287929687500003
+      },
+      "null": {
+       "median_half_width": 0.049540688558352,
+       "p90_half_width": 0.05165943725566164,
+       "p_lower_gt_0": 0.011,
+       "p_upper_lt_0": 0.0165,
+       "mean_estimate": -0.0005027343750000099
+      },
+      "effect": {
+       "median_half_width": 0.04952439763762703,
+       "p90_half_width": 0.051718915969866164,
+       "p_lower_gt_0": 0.516,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05091445312499999
+      },
+      "effect_conservative": {
+       "median_half_width": 0.07436598534640067,
+       "p90_half_width": 0.0774321991215969,
+       "p_lower_gt_0": 0.22,
+       "p_upper_lt_0": 0.0005,
+       "mean_estimate": 0.049751562499999985
+      }
+     },
+     {
+      "N_total": 320,
+      "n_per_stratum": 40,
+      "observed": {
+       "median_half_width": 0.035004935722025135,
+       "p90_half_width": 0.03607206836966695,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.36294902343749996
+      },
+      "null": {
+       "median_half_width": 0.03499103532094145,
+       "p90_half_width": 0.03608462635693821,
+       "p_lower_gt_0": 0.0145,
+       "p_upper_lt_0": 0.012,
+       "mean_estimate": 0.00020507812499998855
+      },
+      "effect": {
+       "median_half_width": 0.03499215879546499,
+       "p90_half_width": 0.03603439548117105,
+       "p_lower_gt_0": 0.83,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.049548828124999986
+      },
+      "effect_conservative": {
+       "median_half_width": 0.05256590955808267,
+       "p90_half_width": 0.054063987808217945,
+       "p_lower_gt_0": 0.4485,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.050092285156249985
+      }
+     },
+     {
+      "N_total": 480,
+      "n_per_stratum": 60,
+      "observed": {
+       "median_half_width": 0.028593710880556615,
+       "p90_half_width": 0.02928739340702679,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.36261406250000006
+      },
+      "null": {
+       "median_half_width": 0.028615665069510878,
+       "p90_half_width": 0.029261700520437955,
+       "p_lower_gt_0": 0.0135,
+       "p_upper_lt_0": 0.011,
+       "mean_estimate": 0.00022786458333332184
+      },
+      "effect": {
+       "median_half_width": 0.028571133486172587,
+       "p90_half_width": 0.02923131337128587,
+       "p_lower_gt_0": 0.9575,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.04974817708333332
+      },
+      "effect_conservative": {
+       "median_half_width": 0.04288761262462169,
+       "p90_half_width": 0.04384359175957296,
+       "p_lower_gt_0": 0.651,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05050371093749998
+      }
+     },
+     {
+      "N_total": 640,
+      "n_per_stratum": 80,
+      "observed": {
+       "median_half_width": 0.024739904967881116,
+       "p90_half_width": 0.025260234667340245,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.3627298828125
+      },
+      "null": {
+       "median_half_width": 0.02474426808095869,
+       "p90_half_width": 0.025259639229968444,
+       "p_lower_gt_0": 0.014,
+       "p_upper_lt_0": 0.014,
+       "mean_estimate": -0.00018613281250000967
+      },
+      "effect": {
+       "median_half_width": 0.024748091300284308,
+       "p90_half_width": 0.0252699372715577,
+       "p_lower_gt_0": 0.991,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.04975419921874999
+      },
+      "effect_conservative": {
+       "median_half_width": 0.037101252023345924,
+       "p90_half_width": 0.03791006072545492,
+       "p_lower_gt_0": 0.7865,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.05019072265624999
+      }
+     },
+     {
+      "N_total": 800,
+      "n_per_stratum": 100,
+      "observed": {
+       "median_half_width": 0.022125922893210224,
+       "p90_half_width": 0.02254743047955437,
+       "p_lower_gt_0": 1.0,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.36249812499999995
+      },
+      "null": {
+       "median_half_width": 0.022141120106250717,
+       "p90_half_width": 0.02254264404885886,
+       "p_lower_gt_0": 0.0145,
+       "p_upper_lt_0": 0.0145,
+       "mean_estimate": 2.0156249999991217e-05
+      },
+      "effect": {
+       "median_half_width": 0.022135118034414782,
+       "p90_half_width": 0.022557033238941992,
+       "p_lower_gt_0": 0.9985,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.050681953124999984
+      },
+      "effect_conservative": {
+       "median_half_width": 0.033189892219804056,
+       "p90_half_width": 0.03381457611323981,
+       "p_lower_gt_0": 0.8745,
+       "p_upper_lt_0": 0.0,
+       "mean_estimate": 0.04974031249999999
+      }
+     }
+    ]
+   },
+   "normal_approx_N_upper_sd": {
+    "sd_used": 0.5002403268583857,
+    "N": 952
+   }
+  },
+  "D-C": {
+   "pilot_sd_delta": 0.0,
+   "pilot_mean_delta": 0.0,
+   "nonzero_world_deltas": 0,
+   "simulation": null,
+   "note": "per-world deltas are (almost) all zero: an exact-tool tie; power for a 5-point accuracy difference is not estimable from this pilot and a tie is the expected outcome when both backends finish",
+   "normal_approx_N_upper_sd": {
+    "sd_used": 0.1,
+    "N": 39
+   }
+  }
+ }
+}

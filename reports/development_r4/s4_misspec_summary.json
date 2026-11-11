@@ -1,0 +1,9 @@
+{
+ "run_id": "s4-misspec-dev-v1",
+ "worlds": 40,
+ "worlds_evidence_inconsistent": 26,
+ "claims": 320,
+ "verified_definite": 21,
+ "verified_but_postcondition_violated": 0,
+ "note": "hidden mechanism outside the declared class (one 4-input node, H declares k = 3); a verified conclusion is proof under the declared assumptions only"
+}

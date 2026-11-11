@@ -62,3 +62,22 @@ def test_global_cap_is_enforced(tmp_path):
     statuses = {a: e["status"] for a, e in out["episodes"].items()}
     assert statuses["A"] == "answered" and any(s.startswith("error:CapExceeded") for s in statuses.values())
     assert len(Path(c["call_ledger"]).read_text().splitlines()) == 3
+
+
+def test_multiple_commit_calls_in_one_turn_are_merged(tmp_path):
+    """D52: a model may split its final answers across several commit calls in one turn."""
+    from causalguard.llm.harness import CallBudget
+    from causalguard.llm.providers import MockProvider
+    from causalguard.s4.evaluator import Evaluator
+    from causalguard.s4.pilot import run_episode
+    ev = Evaluator("t-s4-merge", 0, "parity")
+    pub = ev.public()
+    refs = {r.cid: r.verdict for r in ev.reference(crosscheck_sat=False)}
+    split = json.dumps({"tool_calls": [{"tool": "commit", "answers": [{"cid": c, "verdict": v, "forecast": 0}]}
+                                       for c, v in refs.items()]})
+    ep = run_episode("D", pub, MockProvider(script=[split]), CallBudget(5, None), 0, "w")
+    assert ep["status"] == "committed" and {c: a["verdict"] for c, a in ep["final"].items()} == refs
+    assert sum(ep["released_verified"].values()) == 8
+    from causalguard.analysis.s4_analysis import merged_commit_answers
+    old = dict(ep, final={"c7": ep["final"]["c7"]})                  # what the v1 harness recorded
+    assert merged_commit_answers(old, sorted(refs)) == ep["final"]

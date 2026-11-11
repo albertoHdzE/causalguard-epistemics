@@ -256,9 +256,28 @@ def _baseline_answers(rec_pub_claims, ref, budget, bl, evidence):
 
 # --------------------------------------------------------------------------- pilot
 
-def _world_scores(ep, ref):
-    """Per-world scores of one episode (8 scheduled claims; missing = wrong)."""
-    fin = ep.get("final", {}) or {}
+def merged_commit_answers(ep, cids) -> dict | None:
+    """Sensitivity re-scoring (D52): re-parse the committing turn's raw output and MERGE all its commit calls
+    (first answer per claim wins).  Deterministic; no model call.  None if the episode never committed."""
+    from ..s4.pilot import parse_answers, parse_json
+    if ep.get("status") != "committed" or not ep.get("calls"):
+        return None
+    obj = parse_json(ep["calls"][-1]["raw_output"]) or {}
+    tcs = obj.get("tool_calls")
+    if not isinstance(tcs, list):
+        tcs = [{"tool": "commit", "answers": obj.get("answers")}] if isinstance(obj.get("answers"), list) else []
+    out: dict = {}
+    for tc in tcs[:24]:
+        if isinstance(tc, dict) and tc.get("tool") == "commit":
+            for c, a in parse_answers(tc.get("answers"), cids).items():
+                out.setdefault(c, a)
+    return out
+
+
+def _world_scores(ep, ref, final=None):
+    """Per-world scores of one episode (8 scheduled claims; missing = wrong).  ``final`` overrides the recorded
+    final answers (merged-commit sensitivity)."""
+    fin = (ep.get("final", {}) or {}) if final is None else final
     cids = sorted(ref)
     acc = [int(fin.get(c, {}).get("verdict") == ref[c]["verdict"]) for c in cids]
     wrong_def = [int(c in fin and fin[c]["verdict"] in ("entailed", "refuted") and fin[c]["verdict"] != ref[c]["verdict"])
@@ -272,10 +291,14 @@ def _world_scores(ep, ref):
         else:
             fc.append(0)
     rel = ep.get("released_verified", {}) or {}
-    wrong_released = sum(1 for c, ok in rel.items() if ok and fin.get(c, {}).get("verdict") != ref[c]["verdict"])
+    # a released answer is the COMMITTED answer; under the recorded (v1-harness) final, released answers that were
+    # overwritten are not in ``fin`` and are counted separately, never as wrong
+    wrong_released = sum(1 for c, ok in rel.items() if ok and c in fin and fin[c]["verdict"] != ref[c]["verdict"])
+    released_not_in_final = sum(1 for c, ok in rel.items() if ok and c not in fin)
     return {"acc": float(np.mean(acc)), "answered": len(fin), "wrong_definitive": int(sum(wrong_def)),
             "forecast_acc": float(np.mean(fc)) if fc else None, "n_und": len(und),
-            "released_verified": int(sum(bool(v) for v in rel.values())), "wrong_released_verified": wrong_released}
+            "released_verified": int(sum(bool(v) for v in rel.values())), "wrong_released_verified": wrong_released,
+            "released_not_in_recorded_final": released_not_in_final}
 
 
 def _actual_value(r):
@@ -329,6 +352,10 @@ def analyze_pilot(run_dirs, baselines_path, out_dir, reps=10000) -> dict:
             row = {"family": r["family"], "index": r["index"]}
             for arm, ep in r["episodes"].items():
                 row[arm] = _world_scores(ep, ref)
+                if arm != "A":
+                    mf = merged_commit_answers(ep, sorted(ref))
+                    row[f"{arm}_merged"] = _world_scores(ep, ref, mf if mf is not None else ep.get("final", {}))
+                    row[f"{arm}_merged"]["changed_by_merge"] = int(mf is not None and mf != ep.get("final", {}))
             # deterministic no-LLM controller: copy the exact tool verdict, forecast = exact majority (ties -> 0)
             ctl_final = {c: {"verdict": x["verdict"], "forecast": (x["target_value"] if 2 * int(x["num"]) > int(x["den"])
                                                                    else 1 - x["target_value"])} for c, x in ref.items()}
@@ -364,11 +391,23 @@ def analyze_pilot(run_dirs, baselines_path, out_dir, reps=10000) -> dict:
                           for a in arms + ["controller"]}
         for b in ("always_underdetermined", "cell_majority", "cell_budget_majority"):
             m["arm_means"][b] = {"verdict_acc": stratified_mean(np.array([r[b]["acc"] for r in rows]), fams)}
+        for a in ("B", "C", "D"):
+            if all(f"{a}_merged" in r for r in rows):
+                m["arm_means"][f"{a}_merged_commit_sensitivity"] = {
+                    "verdict_acc": stratified_mean(np.array([r[f"{a}_merged"]["acc"] for r in rows]), fams),
+                    "episodes_changed_by_merge": int(sum(r[f"{a}_merged"]["changed_by_merge"] for r in rows)),
+                    "wrong_released_verified_total": int(sum(r[f"{a}_merged"]["wrong_released_verified"] for r in rows))}
+        m["arm_means"]["released_not_in_recorded_final_total"] = {
+            a: int(sum(r[a]["released_not_in_recorded_final"] for r in rows)) for a in ("B", "C", "D")}
         m["arm_means"]["forecast_majority"] = {"forecast_acc_und": _sm([r["forecast_majority"]["forecast_acc"] for r in rows], fams)}
         con = {}
         for a, b in (("D", "B"), ("D", "A"), ("D", "C"), ("B", "A"), ("C", "A")):
             if a in arms and b in arms:
                 con[f"{a}-{b}"] = _boot([r[a]["acc"] for r in rows], [r[b]["acc"] for r in rows], fams, reps)
+        for a, b in (("D", "B"), ("D", "C")):
+            if all(f"{a}_merged" in r and f"{b}_merged" in r for r in rows):
+                con[f"{a}-{b}|merged_commit_sensitivity"] = _boot([r[f"{a}_merged"]["acc"] for r in rows],
+                                                                  [r[f"{b}_merged"]["acc"] for r in rows], fams, reps)
         m["contrasts_verdict_acc"] = con
         prev = defaultdict(Counter)
         for r in rows:

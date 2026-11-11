@@ -31,7 +31,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-MANIFEST_EXCLUDED = {"r2": {"reports/REVIEW_READY_R2.md"}, "r3": {"reports/REVIEW_READY_R3.md"}}
+MANIFEST_EXCLUDED = {"r2": {"reports/REVIEW_READY_R2.md"}, "r3": {"reports/REVIEW_READY_R3.md"},
+                     "r4": {"reports/REVIEW_READY_R4.md"}}
 
 
 def sha(p: Path) -> str:
@@ -56,7 +57,7 @@ def run_files(rid: str) -> list[Path]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("version", choices=["r2", "r3"])
+    ap.add_argument("version", choices=["r2", "r3", "r4"])
     ap.add_argument("--runs", nargs="+", required=True)
     ap.add_argument("--prior-runs", nargs="*", default=[], help="r3: iteration-2 runs (v0.2.0-dev asset)")
     ap.add_argument("--historical-runs", nargs="*", default=[])
@@ -68,7 +69,10 @@ def main() -> None:
     reg = ROOT / "runs" / "registry.jsonl"
     if reg.exists():
         new_raw.append(reg)
-    new_group = "raw_run_v3" if a.version == "r3" else "raw_run_v2"
+    ledger = ROOT / "runs" / "s4-calls" / "ledger.jsonl"
+    if a.version == "r4" and ledger.exists():
+        new_raw.append(ledger)                     # S4 model-call ledger (every physical attempt, incl. smokes)
+    new_group = {"r2": "raw_run_v2", "r3": "raw_run_v3", "r4": "raw_run_v4"}[a.version]
     excluded = MANIFEST_EXCLUDED[a.version]
     files += [entry(f, new_group) for f in new_raw]
     files += [entry(f, "raw_run_v2") for rid in a.prior_runs for f in run_files(rid)]
@@ -78,14 +82,14 @@ def main() -> None:
     files += [entry(f, "report") for f in sorted((ROOT / "reports").rglob("*"))
               if f.is_file() and f.relative_to(ROOT).as_posix() not in excluded]
     files += [entry(f, "config") for f in sorted((ROOT / "configs").rglob("*.json"))]
-    if a.version == "r3":
+    if a.version in ("r3", "r4"):
         files += [entry(f, "doc") for f in sorted((ROOT / "docs").rglob("*")) if f.is_file()]
     asset = ROOT / a.asset
     asset.parent.mkdir(exist_ok=True)
     with tarfile.open(asset, "w:gz") as tf:
         for f in new_raw:
             tf.add(f, arcname=str(f.relative_to(ROOT)))
-    label = "iteration-3 development runs" if a.version == "r3" else "iteration-2 development runs"
+    label = {"r2": "iteration-2", "r3": "iteration-3", "r4": "iteration-4"}[a.version] + " development runs"
     assets = [{"path": str(asset.relative_to(ROOT)), "bytes": asset.stat().st_size, "sha256": sha(asset),
                "required": False, "group": "release_asset",
                "contents": f"{label}: {', '.join(a.runs)} + runs/registry.jsonl"}]
@@ -101,6 +105,12 @@ def main() -> None:
            "historical_manifest": {"path": "artifacts/manifest.json",
                                    "sha256": sha(ROOT / "artifacts" / "manifest.json")},
            "historical_registry": {"path": "RUNS.jsonl", "sha256": sha(ROOT / "RUNS.jsonl")}}
+    if a.version == "r4":
+        man["previous_manifest"] = {"path": "artifacts/manifest_r3.json",
+                                    "sha256": sha(ROOT / "artifacts" / "manifest_r3.json")}
+        man["registry_note"] = ("iteration-1..3 raw runs are verified by manifest_r3.json from releases v0.1.0-dev.."
+                                "v0.3.0-dev; this manifest adds the iteration-4 runs (asset v0.4.0-dev) and the S4 "
+                                "call ledger. runs/registry.jsonl is append-only.")
     if a.version == "r3":
         man["previous_manifest"] = {"path": "artifacts/manifest_r2.json",
                                     "sha256": sha(ROOT / "artifacts" / "manifest_r2.json")}

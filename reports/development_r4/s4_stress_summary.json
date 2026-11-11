@@ -1,0 +1,330 @@
+{
+ "s4-stress-dev-v1": {
+  "run_id": "s4-stress-dev-v1",
+  "cells": {
+   "n8|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 1.823113750000175
+   },
+   "n8|C": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 1.7681643750001967
+   },
+   "n8|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.020553750000090076
+   },
+   "n10|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 4.010940541999844
+   },
+   "n10|C": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 3.92994091699984
+   },
+   "n10|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.03133033299991439
+   },
+   "n12|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.6921765419997428
+   },
+   "n12|C": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.00040229199976238306
+   },
+   "n12|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.09041116699972918
+   },
+   "n16|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 5.097767332999865
+   },
+   "n16|C": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.0005285420002110186
+   },
+   "n16|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.17070420800018837
+   },
+   "n20|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 24.12826158400003
+   },
+   "n20|C": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.0005912920000810118
+   },
+   "n20|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.5716437500000211
+   },
+   "n24|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 71.49495891600009
+   },
+   "n24|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.48249241600024106
+   },
+   "n32|B": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 3,
+    "median_item_wall_s": null
+   },
+   "n32|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 2.1862660419997155
+   },
+   "n48|B": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 3,
+    "median_item_wall_s": null
+   },
+   "n48|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 12.894960166000146
+   }
+  },
+  "cross_backend_agreement_where_both_finished": {
+   "agree": 72,
+   "disagree": 0
+  },
+  "item_timeout_s": 300
+ },
+ "s4-stress-dev-v2": {
+  "run_id": "s4-stress-dev-v2",
+  "cells": {
+   "n8|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 1.819353083000351
+   },
+   "n8|C": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 1.7806894579998698
+   },
+   "n8|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.021807332999742357
+   },
+   "n10|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 3.9652245830002357
+   },
+   "n10|C": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 3.9078210839998064
+   },
+   "n10|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.029310791000170866
+   },
+   "n12|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.34788429200034443
+   },
+   "n12|C": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.00037816599979123566
+   },
+   "n12|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.0917965409998942
+   },
+   "n16|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 1.1637087499993868
+   },
+   "n16|C": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.0005086660003144061
+   },
+   "n16|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.1593527080003696
+   },
+   "n20|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 3.53626499999973
+   },
+   "n20|C": {
+    "items": 3,
+    "finished_claims": 0,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.0005949159994997899
+   },
+   "n20|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.5707606659998419
+   },
+   "n24|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 6.072874417000094
+   },
+   "n24|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 0.4836900840000453
+   },
+   "n32|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 21.302120583000033
+   },
+   "n32|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 2.1495987499993134
+   },
+   "n48|B": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 116.49557829100013
+   },
+   "n48|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 12.782767292000244
+   },
+   "n64|B": {
+    "items": 3,
+    "finished_claims": 4,
+    "claims": 12,
+    "timeouts_or_errors": 2,
+    "median_item_wall_s": 254.17603775000043
+   },
+   "n64|D": {
+    "items": 3,
+    "finished_claims": 12,
+    "claims": 12,
+    "timeouts_or_errors": 0,
+    "median_item_wall_s": 24.642779625000003
+   }
+  },
+  "cross_backend_agreement_where_both_finished": {
+   "agree": 100,
+   "disagree": 0
+  },
+  "item_timeout_s": 300
+ }
+}
