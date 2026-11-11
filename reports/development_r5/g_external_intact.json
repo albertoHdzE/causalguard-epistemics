@@ -1,0 +1,59 @@
+{
+ "group_diff_champion_minus_cgh_prior": {
+  "max": 0.019428502445186034,
+  "mean": 0.006479405498142209,
+  "min": -0.0007311110157314291
+ },
+ "group_means": {
+  "xg-0f8d2422ee2f1ca7": {
+   "cgh_flat": 0.0012709673360194484,
+   "cgh_prior": 0.0012709673360194484,
+   "gate": 0.008308650290360885,
+   "uniform": 0.03606626523726135
+  },
+  "xg-1c8e27742af7b8e1": {
+   "cgh_flat": 0.013405269585067277,
+   "cgh_prior": 0.013405269585067277,
+   "gate": 0.03283377203025331,
+   "uniform": 0.08269293569507237
+  },
+  "xg-23ffd736bec0810b": {
+   "cgh_flat": 0.037972467132378056,
+   "cgh_prior": 0.037972467132378056,
+   "gate": 0.03815501474115085,
+   "uniform": 0.09913218970609305
+  },
+  "xg-df431152c4869b51": {
+   "cgh_flat": 0.000732759733676199,
+   "cgh_prior": 0.000732759733676199,
+   "gate": 1.6487179447699566e-06,
+   "uniform": 0.02031924556486583
+  }
+ },
+ "leave_one_source_out": [
+  0.006293313012742466,
+  0.002163039849127601,
+  0.008578358127932013,
+  0.008882911002766754
+ ],
+ "missing_items": [],
+ "n_groups": 4,
+ "n_instances": 4,
+ "names": [
+  "cgh_flat",
+  "cgh_flat_noanalytic",
+  "cgh_prior",
+  "cgh_prior_noanalytic",
+  "circuit",
+  "gate",
+  "gsr_a25",
+  "gsr_a50",
+  "gsr_a75",
+  "index",
+  "shortest_cgh_prior",
+  "shortest_index",
+  "uniform"
+ ],
+ "note": "fewer than 10 source groups: descriptive range and leave-one-source-out only",
+ "planned": 4
+}

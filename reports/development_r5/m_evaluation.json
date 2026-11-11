@@ -1,0 +1,291 @@
+{
+ "missing_items": [],
+ "panels": {
+  "evidence_consistent": {
+   "abstain": {
+    "class_changes": 0,
+    "correct_release": 0,
+    "cost_s": 0.0,
+    "coverage_correct_release": 0.0,
+    "false_uncertainty": 9,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": null,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 0,
+    "unnecessary_block": 93,
+    "worlds_with_false_verified": 0
+   },
+   "challenge": {
+    "class_changes": 8,
+    "correct_release": 74,
+    "cost_s": 0.7469751240087135,
+    "coverage_correct_release": 0.23125,
+    "false_uncertainty": 0,
+    "false_verified": 5,
+    "false_verified_ci95": [
+     0.003125,
+     0.03125
+    ],
+    "false_verified_given_release": 0.06329113924050633,
+    "false_verified_rate": 0.015625,
+    "measurements": 120,
+    "released": 79,
+    "unnecessary_block": 20,
+    "worlds_with_false_verified": 4
+   },
+   "current": {
+    "class_changes": 0,
+    "correct_release": 93,
+    "cost_s": 0.5313490360094875,
+    "coverage_correct_release": 0.290625,
+    "false_uncertainty": 0,
+    "false_verified": 10,
+    "false_verified_ci95": [
+     0.0125,
+     0.053125
+    ],
+    "false_verified_given_release": 0.0970873786407767,
+    "false_verified_rate": 0.03125,
+    "measurements": 0,
+    "released": 103,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 8
+   },
+   "declared_consistent": 40,
+   "expanded": {
+    "class_changes": 0,
+    "correct_release": 9,
+    "cost_s": 0.87443723899014,
+    "coverage_correct_release": 0.028125,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 9,
+    "unnecessary_block": 84,
+    "worlds_with_false_verified": 0
+   },
+   "queries": 320,
+   "robust_union": {
+    "class_changes": 0,
+    "correct_release": 9,
+    "cost_s": 0.7452769660003469,
+    "coverage_correct_release": 0.028125,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 9,
+    "unnecessary_block": 84,
+    "worlds_with_false_verified": 0
+   },
+   "worlds": 40
+  },
+  "evidence_inconsistent": {
+   "abstain": {
+    "class_changes": 0,
+    "correct_release": 0,
+    "cost_s": 0.0,
+    "coverage_correct_release": 0.0,
+    "false_uncertainty": 25,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": null,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 0,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 0
+   },
+   "challenge": {
+    "class_changes": 0,
+    "correct_release": 0,
+    "cost_s": 0.10910196099212044,
+    "coverage_correct_release": 0.0,
+    "false_uncertainty": 25,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": null,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 0,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 0
+   },
+   "current": {
+    "class_changes": 0,
+    "correct_release": 0,
+    "cost_s": 0.08460941200064553,
+    "coverage_correct_release": 0.0,
+    "false_uncertainty": 25,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": null,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 0,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 0
+   },
+   "declared_consistent": 0,
+   "expanded": {
+    "class_changes": 0,
+    "correct_release": 25,
+    "cost_s": 0.9305670009907772,
+    "coverage_correct_release": 0.078125,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 25,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 0
+   },
+   "queries": 320,
+   "robust_union": {
+    "class_changes": 0,
+    "correct_release": 123,
+    "cost_s": 0.4883121609927912,
+    "coverage_correct_release": 0.384375,
+    "false_uncertainty": 9,
+    "false_verified": 5,
+    "false_verified_ci95": [
+     0.003125,
+     0.028125
+    ],
+    "false_verified_given_release": 0.0390625,
+    "false_verified_rate": 0.015625,
+    "measurements": 0,
+    "released": 128,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 5
+   },
+   "worlds": 40
+  },
+  "realizable": {
+   "abstain": {
+    "class_changes": 0,
+    "correct_release": 0,
+    "cost_s": 0.0,
+    "coverage_correct_release": 0.0,
+    "false_uncertainty": 4,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": null,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 0,
+    "unnecessary_block": 122,
+    "worlds_with_false_verified": 0
+   },
+   "challenge": {
+    "class_changes": 0,
+    "correct_release": 122,
+    "cost_s": 0.7614867379988937,
+    "coverage_correct_release": 0.38125,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 138,
+    "released": 122,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 0
+   },
+   "current": {
+    "class_changes": 0,
+    "correct_release": 122,
+    "cost_s": 0.5905787900001087,
+    "coverage_correct_release": 0.38125,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 122,
+    "unnecessary_block": 0,
+    "worlds_with_false_verified": 0
+   },
+   "declared_consistent": 40,
+   "expanded": {
+    "class_changes": 0,
+    "correct_release": 4,
+    "cost_s": 0.86566491499525,
+    "coverage_correct_release": 0.0125,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 4,
+    "unnecessary_block": 118,
+    "worlds_with_false_verified": 0
+   },
+   "queries": 320,
+   "robust_union": {
+    "class_changes": 0,
+    "correct_release": 5,
+    "cost_s": 0.7558671679998952,
+    "coverage_correct_release": 0.015625,
+    "false_uncertainty": 0,
+    "false_verified": 0,
+    "false_verified_ci95": [
+     0.0,
+     0.0
+    ],
+    "false_verified_given_release": 0.0,
+    "false_verified_rate": 0.0,
+    "measurements": 0,
+    "released": 5,
+    "unnecessary_block": 117,
+    "worlds_with_false_verified": 0
+   },
+   "worlds": 40
+  }
+ },
+ "planned": 120
+}

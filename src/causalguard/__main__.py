@@ -192,6 +192,7 @@ def main(argv=None):
     a3.add_argument("--out", default="reports/development_r3")
     sub.add_parser("fit-s3-role-baselines").add_argument("--out", default="reports/development_r3/s3_role_baselines_v3.json")
     sub.add_parser("fixtures")
+    sub.add_parser("r5-demo", help="R5 integrated demonstration (illustration, not evidence)")
     inv = sub.add_parser("r5-inventory", help="write the external-model source manifest (no evaluation)")
     inv.add_argument("--out", default="artifacts/r5_source_manifest.json")
     ar = sub.add_parser("analyze-r5", help="R5 track analyses (no model calls)")
@@ -257,6 +258,10 @@ def main(argv=None):
     if args.cmd == "analyze-s1":
         from .analysis.s1_analysis import analyze
         print(json.dumps(analyze(args.run_id, Path(args.out)), indent=1)[:4000])
+        return 0
+    if args.cmd == "r5-demo":
+        from .r5.demo import run_demo
+        run_demo()
         return 0
     if args.cmd == "r5-inventory":
         from .r5.external import inventory
