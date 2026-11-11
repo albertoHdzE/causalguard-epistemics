@@ -2,7 +2,7 @@
  "mode": "development",
  "r5_track": "C",
  "study": "R5-C",
- "run_id": "r5-c-bench-v1",
+ "run_id": "r5-c-bench-v2",
  "order_seed": 20261111,
  "workers": 1,
  "item_timeout_s": 900,

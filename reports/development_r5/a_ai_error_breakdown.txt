@@ -1,0 +1,4 @@
+qwen25_7b D {'stopped_while_readout_underdetermined': 35, 'stopped_after_resolution': 26, 'purchases': 107, 'unsupported_certainty(readout underdetermined)': 73, 'asserted_value_false_in_simulator': 7}
+qwen25_7b B {'unsupported_certainty(readout underdetermined)': 65, 'asserted_value_false_in_simulator': 11, 'stopped_while_readout_underdetermined': 37, 'stopped_after_resolution': 27, 'purchases': 95}
+mistral_small_24b D {'stopped_while_readout_underdetermined': 18, 'stopped_after_resolution': 41, 'purchases': 139}
+mistral_small_24b B {'stopped_while_readout_underdetermined': 18, 'stopped_after_resolution': 41, 'purchases': 142}

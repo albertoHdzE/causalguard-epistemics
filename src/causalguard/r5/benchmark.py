@@ -15,7 +15,6 @@ the limit; the child and its descendants are killed at the limit).  Peak RSS of 
 """
 from __future__ import annotations
 
-import multiprocessing as mp
 import random
 import resource
 import time
@@ -129,39 +128,69 @@ def _release_phase(conn, n, base, backend):
     conn.send(("rss", 0.0, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss))
 
 
+class _Pipe:
+    """JSON-lines event sink on stdout (child side of a phase)."""
+
+    def send(self, ev):
+        import json
+        import sys
+        sys.stdout.write(json.dumps(list(ev), default=str) + "\n")
+        sys.stdout.flush()
+
+
+def child_main(argv=None) -> None:
+    """Entry point of a timed phase child: ``python -m causalguard.r5.benchmark <phase> <n> <base> <backend>``."""
+    import sys
+    phase, n, base, backend = (argv or sys.argv[1:])[:4]
+    target = _workspace_phase if phase == "workspace" else _release_phase
+    target(_Pipe(), int(n), int(base), backend)
+
+
 def _run_phase(target, n, base, backend, limit=LIMIT_S) -> dict:
-    ctx = mp.get_context("spawn")
-    a, b = ctx.Pipe(duplex=False)
-    p = ctx.Process(target=target, args=(b, n, base, backend), daemon=True)
+    """Run one phase in a plain subprocess (runner workers are daemonic and may not fork multiprocessing children,
+    R5-03); events stream as JSON lines; the child is killed at the limit."""
+    import json
+    import os
+    import selectors
+    import subprocess
+    import sys
+    phase = "workspace" if target is _workspace_phase else "release"
     t0 = time.perf_counter()
-    p.start()
-    b.close()
+    proc = subprocess.Popen([sys.executable, "-m", "causalguard.r5.benchmark", phase, str(n), str(base), backend],
+                            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, env=dict(os.environ))
+    sel = selectors.DefaultSelector()
+    sel.register(proc.stdout, selectors.EVENT_READ)
     events = []
     status = "timeout"
     rss = None
-    while True:
-        left = limit + 5.0 - (time.perf_counter() - t0)       # +5 s spawn/import allowance
-        if left <= 0 or not a.poll(left):
+    buf = ""
+    done = False
+    while not done:
+        left = limit + 5.0 - (time.perf_counter() - t0)       # +5 s interpreter start allowance
+        if left <= 0 or not sel.select(left):
             break
-        try:
-            kind, t, info = a.recv()
-        except EOFError:
-            status = "crashed"
+        chunk = proc.stdout.readline()
+        if chunk == "":
+            status = "crashed" if status == "timeout" else status
             break
+        buf = chunk.strip()
+        if not buf:
+            continue
+        kind, t, info = json.loads(buf)
         if kind == "rss":
             rss = info
-            status = status if status != "timeout" else "done"
-            break
-        if kind == "error":
+            status = "done" if status == "timeout" else status
+            done = True
+        elif kind == "error":
             status = "error"
             events.append({"t": t, "error": info})
-            continue
-        if kind == "done":
-            status = "done"
-        events.append({"kind": kind, "t": t, **({"info": info} if info is not None else {})})
-    if p.is_alive():
-        p.kill()                                               # the child has no descendants of its own
-    p.join(5)
+        else:
+            if kind == "done":
+                status = "done"
+            events.append({"kind": kind, "t": t, **({"info": info} if info is not None else {})})
+    if proc.poll() is None:
+        proc.kill()
+    proc.wait(10)
     qtimes = [e["t"] for e in events if e.get("kind") == "q"]
     build = next((e["t"] for e in events if e.get("kind") == "build"), None)
     ok_time = [e["t"] for e in events if e.get("kind") == "done"]
@@ -183,3 +212,7 @@ def c_item(p: dict) -> dict:
     if backend in ("D", "B"):
         out["release"] = _run_phase(_release_phase, n, base, backend, p.get("limit_s", LIMIT_S))
     return out
+
+
+if __name__ == "__main__":
+    child_main()
