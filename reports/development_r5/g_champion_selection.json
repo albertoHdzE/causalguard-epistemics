@@ -1,0 +1,40 @@
+{
+ "budget": "16",
+ "calibration_brier": {
+  "circuit": 0.08402199386734158,
+  "gate": 0.07273712280969587,
+  "gsr_a25": 0.08716874245847833,
+  "gsr_a50": 0.08716874244594608,
+  "gsr_a75": 0.08716874240849554,
+  "uniform": 0.08928524938160723
+ },
+ "calibration_worlds": 64,
+ "candidates": [
+  "uniform",
+  "circuit",
+  "gate",
+  "gsr_a50",
+  "gsr_a25",
+  "gsr_a75"
+ ],
+ "champion": "gate",
+ "missing_calibration_items": [],
+ "precision_planning": {
+  "approx_se_at_280_groups": 0.003118669922732226,
+  "note": "planning only, from calibration; the evaluation size is fixed",
+  "practical_target": 0.02,
+  "world_sd_of_difference": 0.05218532920608335
+ },
+ "reference_brier_not_used_for_selection": {
+  "cgh_flat": 0.07155180166585903,
+  "cgh_prior": 0.07300256468714575
+ },
+ "tie_order": [
+  "uniform",
+  "circuit",
+  "gate",
+  "gsr_a50",
+  "gsr_a25",
+  "gsr_a75"
+ ]
+}

@@ -288,3 +288,14 @@ def test_ai_episode_respects_eight_attempt_cap():
     e = I.ai_episode(w, "D", MockProvider(script=lambda m, t, s: "no json here"), CallBudget(8, None))
     assert e["n_attempts"] <= 8 and e["status"] in ("call_cap",) or e["status"].startswith("cap:")
     assert len(e["invalid"]) == e["n_attempts"]
+
+
+def test_stop_action_is_valid_and_carries_verdict():
+    from causalguard.llm.harness import CallBudget
+    from causalguard.llm.providers import MockProvider
+    from causalguard.r5 import investigation as I
+    assert I.parse_reply('{"verdict": "entailed", "p_target": 1, "measure": null}', [0], True)[0]["measure"] is None
+    w = I.world("calibration", "uniform_H", 0)
+    e = I.ai_episode(w, "D", MockProvider(script=lambda m, t, s: '{"verdict": "underdetermined", "measure": null}'),
+                     CallBudget(8, None))
+    assert e["status"] == "stopped" and e["n_attempts"] == 1 and set(e["per_turn"]) == {"0", "1", "2", "3", "4"}

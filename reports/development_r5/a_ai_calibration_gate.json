@@ -1,0 +1,215 @@
+{
+ "models": {
+  "mistral-small-3.2-24b-instruct-2506-mlx": {
+   "arms": {
+    "B": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "4": 0.0
+     },
+     "attempts": 64,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 47,
+     "mean_brier_final_ai": null,
+     "mean_brier_readout": null,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -1.0,
+       -0.625
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.875,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.11587300699095071,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      14,
+      17
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 168.3554,
+     "status": {
+      "call_cap": 8
+     },
+     "tokens": 243171,
+     "valid_action_rate": 0.265625,
+     "worlds": 8,
+     "wrong_definite_verdicts": 0
+    },
+    "D": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "4": 0.0
+     },
+     "attempts": 61,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 42,
+     "mean_brier_final_ai": 0.03189796,
+     "mean_brier_readout": 0.03188775510204082,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -1.0,
+       -0.625
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.875,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.11587300699095071,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      15,
+      18
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 200.65879999999999,
+     "status": {
+      "call_cap": 7,
+      "complete": 1
+     },
+     "tokens": 257637,
+     "valid_action_rate": 0.3114754098360656,
+     "worlds": 8,
+     "wrong_definite_verdicts": 0
+    }
+   },
+   "missing_items": [],
+   "planned": 8,
+   "secondary_D_minus_generic_resolved4": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": 0.0,
+    "n_worlds": 8,
+    "replicates": 10000,
+    "se": 0.0,
+    "seed": 20261111
+   }
+  },
+  "qwen2.5:7b": {
+   "arms": {
+    "B": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "4": 0.0
+     },
+     "attempts": 61,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 41,
+     "mean_brier_final_ai": 0.03189796,
+     "mean_brier_readout": 0.03188775510204082,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -1.0,
+       -0.625
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.875,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.11587300699095071,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      11,
+      19
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 87.95660000000001,
+     "status": {
+      "call_cap": 7,
+      "complete": 1
+     },
+     "tokens": 232256,
+     "valid_action_rate": 0.3278688524590164,
+     "worlds": 8,
+     "wrong_definite_verdicts": 3
+    },
+    "D": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "4": 0.0
+     },
+     "attempts": 64,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 48,
+     "mean_brier_final_ai": null,
+     "mean_brier_readout": null,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -1.0,
+       -0.625
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.875,
+      "n_worlds": 8,
+      "replicates": 10000,
+      "se": 0.11587300699095071,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      10,
+      16
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.375,
+      "2": 0.75,
+      "4": 0.875
+     },
+     "server_latency_s": 137.2099,
+     "status": {
+      "call_cap": 8
+     },
+     "tokens": 266999,
+     "valid_action_rate": 0.25,
+     "worlds": 8,
+     "wrong_definite_verdicts": 1
+    }
+   },
+   "missing_items": [],
+   "planned": 8,
+   "secondary_D_minus_generic_resolved4": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": 0.0,
+    "n_worlds": 8,
+    "replicates": 10000,
+    "se": 0.0,
+    "seed": 20261111
+   }
+  }
+ },
+ "selected_policy": "eig"
+}

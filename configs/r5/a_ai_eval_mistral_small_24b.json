@@ -2,7 +2,7 @@
  "mode": "development",
  "r5_track": "A",
  "study": "R5-A-AI",
- "run_id": "r5-a-ai-eval-mistral_small_24b-v1",
+ "run_id": "r5-a-ai-eval-mistral_small_24b-v2",
  "split": "evaluation",
  "per_stratum": 8,
  "provider": {

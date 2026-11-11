@@ -43,7 +43,7 @@ MAX_PURCHASES = 4
 MAX_CALLS = 8
 DET_POLICIES = ("random", "eig", "disagreement")
 REFERENCE_POLICIES = ("oracle_lookahead",)
-PROMPT_VERSION = "r5-a-prompt-v1"
+PROMPT_VERSION = "r5-a-prompt-v2"  # v2: measure null = stop (calibration defect R5-02)
 
 
 # --------------------------------------------------------------------------- worlds
@@ -291,7 +291,7 @@ def render(pub: dict, ws, ro: dict, arm: str, avail: list[int], left: int, bough
               "one; underdetermined = they disagree."]
     if left > 0 and avail:
         lines.append('Reply with ONLY one JSON object: {"verdict": "entailed|refuted|underdetermined", '
-                     '"p_target": <probability the target node is 1>, "measure": <item number to buy next>}')
+                     '"p_target": <probability the target node is 1>, "measure": <item number to buy next, or null to stop>}')
     else:
         lines.append('No purchases left. Reply with ONLY one JSON object: {"verdict": '
                      '"entailed|refuted|underdetermined", "p_target": <probability the target node is 1>}')
@@ -339,9 +339,12 @@ def parse_reply(text: str | None, avail: list[int], need_measure: bool) -> tuple
     out = {"verdict": v, "p_target": p}
     if need_measure:
         mi = obj.get("measure")
-        if not isinstance(mi, int) or isinstance(mi, bool) or mi not in avail:
+        if mi is None:
+            out["measure"] = None                      # stop investigating (valid action; stopped prefix)
+        elif not isinstance(mi, int) or isinstance(mi, bool) or mi not in avail:
             return None, "invalid_measure"
-        out["measure"] = mi
+        else:
+            out["measure"] = mi
     return out, None
 
 
@@ -391,6 +394,11 @@ def ai_episode(w: dict, arm: str, provider, budget, seed: int | None = 0) -> dic
         per_turn[str(turn)] = {"verdict": parsed["verdict"], "p_target": parsed["p_target"],
                                "readout_status": ro["status"], "readout_p": ro["p_target_1"]}
         if left == 0:
+            break
+        if parsed["measure"] is None:                  # stopped: the stated verdict holds for later budgets
+            for b in range(turn + 1, MAX_PURCHASES + 1):
+                per_turn[str(b)] = {**per_turn[str(turn)], "stopped_at": turn}
+            status = "stopped"
             break
         pick = parsed["measure"]
         val = _observe(net, menu[pick])
