@@ -186,7 +186,7 @@ def _h(*parts) -> str:
     return hashlib.sha256("|".join(map(str, parts)).encode()).hexdigest()
 
 
-def inventory(root: Path = DEFAULT_ROOT) -> dict:
+def inventory(root: Path = DEFAULT_ROOT, transformed_groups: tuple = (0, MAX_GROUPS)) -> dict:
     """Full inclusion/exclusion inventory (every model logged) and the selected panels."""
     models = sorted(p for p in (Path(root) / "models").iterdir() if p.is_dir())
     rows, intact, transformed = [], [], []
@@ -261,9 +261,10 @@ def inventory(root: Path = DEFAULT_ROOT) -> dict:
         row["status"] = "inventoried"
         rows.append(row)
 
-    def select(insts):
+    def select(insts, lo=0, hi=MAX_GROUPS):
+        """Groups lo..hi of the fixed hash ordering (R5: the first MAX_GROUPS; R6: the groups R5 never used)."""
         groups = sorted({x["group"] for x in insts}, key=lambda g: _h("select", g))
-        chosen = set(groups[:MAX_GROUPS])
+        chosen = set(groups[lo:hi])
         per: dict[str, list] = {}
         for x in sorted(insts, key=lambda x: _h("inst", x["key"])):
             if x["group"] in chosen and len(per.setdefault(x["group"], [])) < MAX_ROOTS:
@@ -273,7 +274,9 @@ def inventory(root: Path = DEFAULT_ROOT) -> dict:
                      "eligible_instances": len(insts), "selected_instances": len(sel),
                      "max_instances_per_group": MAX_ROOTS}
     si, ci = select(intact)
-    st, ct = select(transformed)
+    st, ct = select(transformed, *transformed_groups)
+    if tuple(transformed_groups) != (0, MAX_GROUPS):
+        ct["group_rank_slice"] = list(transformed_groups)
     return {"source": {"repository": BBM_REPO, "commit": BBM_COMMIT,
                        "citation": "Pastva et al., Repository of logically consistent real-world Boolean network "
                                    "models, bioRxiv 2023, doi:10.1101/2023.06.12.544361",

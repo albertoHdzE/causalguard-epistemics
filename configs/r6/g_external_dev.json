@@ -1,0 +1,12 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r6-g-ext-dev-v1",
+ "external_panel": "transformed", "source_manifest": "artifacts/r5_source_manifest.json",
+ "design_salt": "r6-G-design-extdev-v1",
+ "xdc_bases": ["gate", "cgh_flat"],
+ "note": "R6 external DEVELOPMENT panel: the 40 source groups already used in R5 (not fresh)."
+}

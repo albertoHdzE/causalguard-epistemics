@@ -20,7 +20,7 @@ from ..s4.tasks import audit_public_payload
 from ..schema import Evidence, Query
 from . import data as D
 from .contracts import Prediction
-from .priors import ALPHAS, AVERAGER_CODES, GSR
+from .priors import ALPHAS, AVERAGER_CODES, GSR, XDC
 
 SHORTEST = ("cgh_prior", "index")
 
@@ -32,8 +32,10 @@ def _node_prob(code_p, q: Query):
     return code_p
 
 
-def predict_public(pub_json: str, snapshot: str = "") -> dict:
-    """All predictor probabilities for every query of one public payload (JSON text)."""
+def predict_public(pub_json: str, snapshot: str = "", xdc_bases: tuple = ()) -> dict:
+    """All predictor probabilities for every query of one public payload (JSON text).  ``xdc_bases`` (R6) adds the
+    exchangeable dictionary code over each named flat base code: 'xdc[<base>]' (theta mixture) and its fixed-theta
+    components; the default () reproduces the R5 predictor table exactly."""
     from ..s4.prior import Averager
     pub = json.loads(pub_json)
     bad = audit_public_payload(pub)
@@ -51,11 +53,16 @@ def predict_public(pub_json: str, snapshot: str = "") -> dict:
         for qd in pub["queries"]:
             out["queries"].append({"query_id": qd["query_id"], "predictions": {
                 c: Prediction(qd["query_id"], "", snapshot, c, c, "inconsistent_evidence", None,
-                              reason="empty V(D)").to_json() for c in list(AVERAGER_CODES) + list(ALPHAS)}})
+                              reason="empty V(D)").to_json()
+                for c in list(AVERAGER_CODES) + list(ALPHAS) + [f"xdc[{b}]" for b in xdc_bases]}})
         return out
     t0 = time.perf_counter()
     gsr = GSR(ev, k, vs=av.vs)
     out["cost_s"]["gsr_build"] = time.perf_counter() - t0
+    t0 = time.perf_counter()
+    xdc = {b: XDC(ev, k, base=b, vs=av.vs) for b in xdc_bases}
+    if xdc_bases:
+        out["cost_s"]["xdc_build"] = time.perf_counter() - t0
     from ..versionspace import exact_query_counts
     for qd in pub["queries"]:
         q = Query.from_json(qd["query"])
@@ -82,6 +89,17 @@ def predict_public(pub_json: str, snapshot: str = "") -> dict:
             row["predictions"][name] = Prediction(qid, "", snapshot, name, f"gsr-v1(alpha={a})", "bounded",
                                                   _node_prob(r["p"], q), lo=r["lo"], hi=r["hi"],
                                                   cost_s=dt).to_json()
+        for b, x in xdc.items():
+            t0 = time.perf_counter()
+            pr = x.probabilities(q)
+            dt = time.perf_counter() - t0
+            post = pr.pop("theta_posterior")
+            for nm, pv in pr.items():
+                name = nm.replace("xdc", f"xdc[{b}]", 1)
+                row["predictions"][name] = Prediction(qid, "", snapshot, name, f"xdc-v1(base={b})", "bounded",
+                                                      _node_prob(pv, q), lo=max(0.0, pv - 1e-9), hi=min(1.0, pv + 1e-9),
+                                                      cost_s=dt).to_json()
+            row.setdefault("xdc_theta_posterior", {})[b] = post
         for c in SHORTEST:
             sp = av.shortest_prediction(c, q)
             row["predictions"][f"shortest_{c}"] = (
@@ -113,11 +131,14 @@ def g_world(p: dict) -> dict:
     for B in p.get("budgets", D.BUDGETS):
         ev = D.make_evidence(net, design, B)
         pub = D.public_payload(key, ev, design, net.n, D.K)
-        preds[str(B)] = predict_public(json.dumps(pub, sort_keys=True), snapshot)
+        preds[str(B)] = predict_public(json.dumps(pub, sort_keys=True), snapshot, tuple(p.get("xdc_bases", ())))
         preds[str(B)]["evidence_id"] = pub["evidence_hash"][:16]
         preds[str(B)]["public_task_id"] = pub["task_id"]
     digest = hashlib.sha256(json.dumps(preds, sort_keys=True).encode()).hexdigest()
     # ---- evaluator side: hidden outcomes (after the prediction digest is fixed)
     outcomes = {qid: D.outcome(net, q) for qid, q in design.queries}
+    if p.get("xdc_bases"):                                    # evaluator diagnostic (R6), never a predictor input
+        from .priors import rule_type
+        ident = dict(ident, hidden_rule_reuse=net.n - len({rule_type(r.canonical()) for r in net.rules}))
     return {"identity": ident, "design_seed": design.design_seed, "design_redraws": design.redraws,
             "n": net.n, "predictions_sha256": digest, "predictions": preds, "outcomes": outcomes}

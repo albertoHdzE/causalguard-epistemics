@@ -246,6 +246,64 @@ def analyze_g_external(run_dir, champion: str, reps=REPS) -> dict:
     return out
 
 
+def analyze_g_r6(run_dir, champion: str, method: str, external: bool = False, budgets=("8", "16", "24"),
+                 reps=REPS) -> dict:
+    """R6: dictionary-sharing prior ``method`` (default xdc[cgh_flat]) against the R5-locked generic champion.
+    Primary: Brier(champion) - Brier(method) at B = 16 (positive favours the method); same estimator, clustering
+    and missingness bounds as the R5 primary (``_contrast``).  Attribution contrasts are prespecified:
+    sharing = flat base - method; vocabulary = xdc[gate] - method.  ``external``: one population, source-group
+    clusters.  Dose-response uses the evaluator-side hidden rule reuse (n - distinct order-free rule types)."""
+    base = method[method.index("[") + 1:method.index("]")]
+    out = {"champion": champion, "method": method, "base": base, "external": external, "budgets": {}}
+    for B in budgets:
+        t = g_table(run_dir, B)
+        rows = t["rows"]
+        if external:
+            for r in rows:
+                r["stratum"] = "external"
+        names = _names(rows)
+        strata = [r["stratum"] for r in rows]
+        cell = {"planned": t["planned"], "missing_items": t["missing_items"], "n_worlds": len(rows),
+                "n_groups": len({r["group"] for r in rows}), "mean_brier": {}}
+        wb = {nm: [_world_brier(r["cell"]["queries"], r["outcomes"], nm)[0] for r in rows] for nm in names}
+        for nm in names:
+            if not any(np.isnan(x) for x in wb[nm]):
+                cell["mean_brier"][nm] = _strat_mean(wb[nm], strata)
+        cell["contrasts"] = {
+            "primary_champion_minus_method": _contrast(rows, champion, method, reps),
+            "sharing_flat_base_minus_method": _contrast(rows, base, method, reps),
+            "vocabulary_xdc_gate_minus_method": _contrast(rows, "xdc[gate]", method, reps),
+            "generic_sharing_gate_minus_xdc_gate": _contrast(rows, "gate", "xdc[gate]", reps),
+            "uniform_minus_method": _contrast(rows, "uniform", method, reps),
+            "gsr_a50_minus_method": _contrast(rows, "gsr_a50", method, reps),
+        }
+        d = np.array(wb[champion]) - np.array(wb[method])
+        cell["world_sign_counts"] = {"method_better": int((d > 1e-12).sum()), "champion_better": int((d < -1e-12).sum()),
+                                     "equal": int((np.abs(d) <= 1e-12).sum())}
+        cell["world_diff_quantiles"] = {str(q): float(np.quantile(d, q)) for q in (0, 0.05, 0.25, 0.5, 0.75, 0.95, 1)}
+        per = {}
+        for s in sorted(set(strata)):
+            ix = [i for i, x in enumerate(strata) if x == s]
+            per[s] = {"n_worlds": len(ix), **{nm: float(np.mean([wb[nm][i] for i in ix]))
+                                              for nm in (champion, method, base, "xdc[gate]", "uniform", "gsr_a50")},
+                      "champion_minus_method": float(np.mean(d[ix]))}
+        cell["per_stratum"] = per
+        out["budgets"][B] = cell
+    # dose-response at the primary budget (identity carries hidden_rule_reuse, evaluator side)
+    res = _ok(_load(run_dir))[0]
+    t = g_table(run_dir, "16")
+    by = defaultdict(list)
+    for r in t["rows"]:
+        k = res[r["item"]]["identity"].get("hidden_rule_reuse")
+        dv = (_world_brier(r["cell"]["queries"], r["outcomes"], champion)[0] -
+              _world_brier(r["cell"]["queries"], r["outcomes"], method)[0])
+        by["unknown" if k is None else str(min(k, 6)) + ("+" if k is not None and k >= 6 else "")].append(dv)
+    out["budgets"]["16"]["by_hidden_rule_reuse"] = {k: {"n_worlds": len(v), "champion_minus_method": float(np.mean(v))}
+                                                    for k, v in sorted(by.items())}
+    out["primary"] = out["budgets"]["16"]["contrasts"]["primary_champion_minus_method"]
+    return out
+
+
 # =========================================================================== M
 
 def analyze_m(run_dir) -> dict:

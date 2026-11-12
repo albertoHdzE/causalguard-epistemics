@@ -75,12 +75,14 @@ def _items_from_config(cfg: dict):
             for x in man[cfg["external_panel"]]:
                 yield (f"{cfg['external_panel']}|{x['key']}",
                        {"external_key": x["key"], "panel": cfg["external_panel"], "group": x["group"],
-                        "transformation": x["transformation"], "design_salt": cfg["design_salt"]})
+                        "transformation": x["transformation"], "design_salt": cfg["design_salt"],
+                        **({"xdc_bases": cfg["xdc_bases"]} if cfg.get("xdc_bases") else {})})
         else:
             for s in D.STRATA:
                 for i in range(D.SPLITS[cfg["split"]]["per_stratum"]):
                     yield f"{cfg['split']}|{s}|{i}", {"split": cfg["split"], "stratum": s, "index": i,
-                                                      "design_salt": cfg["design_salt"]}
+                                                      "design_salt": cfg["design_salt"],
+                                                      **({"xdc_bases": cfg["xdc_bases"]} if cfg.get("xdc_bases") else {})}
     elif study == "R5-M":
         from .r5.misspec import PANELS, panel_members
         for pan in PANELS:
@@ -198,9 +200,13 @@ def main(argv=None):
     sub.add_parser("r5-demo", help="R5 integrated demonstration (illustration, not evidence)")
     inv = sub.add_parser("r5-inventory", help="write the external-model source manifest (no evaluation)")
     inv.add_argument("--out", default="artifacts/r5_source_manifest.json")
+    inv.add_argument("--transformed-groups", nargs=2, type=int, default=None,
+                     help="rank slice lo hi of the fixed group hash ordering (R6 fresh panel: 40 162)")
     ar = sub.add_parser("analyze-r5", help="R5 track analyses (no model calls)")
     ar.add_argument("--track", required=True, choices=["g-champion", "g", "g-external", "m", "a-det", "a-select",
-                                                       "a-ai", "c"])
+                                                       "a-ai", "c", "g-r6"])
+    ar.add_argument("--method", default="xdc[cgh_flat]")
+    ar.add_argument("--external", action="store_true")
     ar.add_argument("--run", action="append", required=True)
     ar.add_argument("--det-run")
     ar.add_argument("--champion")
@@ -268,7 +274,8 @@ def main(argv=None):
         return 0
     if args.cmd == "r5-inventory":
         from .r5.external import inventory
-        Path(args.out).write_text(json.dumps(inventory(), indent=1, sort_keys=True) + "\n")
+        kw = {"transformed_groups": tuple(args.transformed_groups)} if args.transformed_groups else {}
+        Path(args.out).write_text(json.dumps(inventory(**kw), indent=1, sort_keys=True) + "\n")
         return 0
     if args.cmd == "analyze-r5":
         from .analysis import r5_analysis as R
@@ -279,6 +286,8 @@ def main(argv=None):
             obj = R.analyze_g(args.run[0], args.champion)
         elif t == "g-external":
             obj = R.analyze_g_external(args.run[0], args.champion)
+        elif t == "g-r6":
+            obj = R.analyze_g_r6(args.run[0], args.champion, args.method, external=args.external)
         elif t == "m":
             obj = R.analyze_m(args.run[0])
         elif t == "a-det":

@@ -1,0 +1,12 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r6-g-eval-v1",
+ "split": "evaluation_r6",
+ "design_salt": "r6-G-design-eval-v1",
+ "xdc_bases": ["gate", "cgh_flat"],
+ "note": "R6 fresh held-out evaluation (320 = 40 x 8 strata, new mechanisms). Requires docs/R6_DESIGN_LOCK.json committed first."
+}

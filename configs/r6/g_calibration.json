@@ -1,0 +1,12 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r6-g-cal-v1",
+ "split": "calibration",
+ "design_salt": "r6-G-design-cal-v1",
+ "xdc_bases": ["gate", "cgh_flat"],
+ "note": "R6 calibration: R5 calibration mechanisms, new design salt (64). Fixes nothing but go/no-go; no parameter is fitted."
+}

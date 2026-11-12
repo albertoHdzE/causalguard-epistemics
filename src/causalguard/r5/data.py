@@ -39,7 +39,9 @@ N, K = 8, 3
 STRATA = ("template_exceptions", "imperfect_modules", "shared_motifs", "feedforward_hetero",
           "feedback_canalizing", "mixed_parity_thresh", "rewired_control", "uniform_H")
 SPLITS = {"calibration": {"salt": "r5-G-cal-v1", "per_stratum": 8},
-          "evaluation": {"salt": "r5-G-eval-v1", "per_stratum": 40}}
+          "evaluation": {"salt": "r5-G-eval-v1", "per_stratum": 40},
+          # R6: fresh mechanisms from the SAME locked generators (G_POPULATION_SPEC unchanged), never scored in R5
+          "evaluation_r6": {"salt": "r6-G-eval-v1", "per_stratum": 40}}
 BUDGETS = (8, 16, 24)
 PRIMARY_BUDGET = 16
 N_QUERIES = 8

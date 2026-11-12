@@ -114,7 +114,9 @@ class GSR:
         L = u.shape[1]
         return _subset_mass(u[:, :, None], q) / (L ** q)
 
-    def masses(self, q: Query) -> dict:
+    def _phi(self, q: Query) -> np.ndarray:
+        """phi[j, l, s]: mass of node j's rules of catalogue entry l that fit the evidence and the query path
+        through intermediate state s (h = 2), or the query outcome (h = 1, S = 1).  Shared by GSR and XDC."""
         n = self.n
         x0 = point_query_parts(q, n)
         m, v = q.intervention.masks
@@ -125,27 +127,31 @@ class GSR:
             raise ValueError("literal targets only")
         if q.horizon not in (1, 2) or t in clamp:
             raise ValueError("gsr: h in {1,2}, unclamped target")
-        L = self.u.shape[1]
         out1_s0 = self.T[:, s0]                                 # each row's output at s0
         if q.horizon == 1:
             phi = self.u.copy()
             phi[t] = self._agg((self.cons[t] & (out1_s0 == 1)).astype(float))
-            S = {qq: _subset_mass(phi[:, :, None], qq) / (L ** qq) for qq in (1, 2)}
-        else:
-            N = 1 << n
-            bits = (np.arange(N)[:, None] >> np.arange(n)[None, :]) & 1          # (N, n)
-            phi = np.empty((n, L, N))
-            for j in range(n):
-                if j == t:
-                    match = (out1_s0[:, None] == bits[None, :, t])                # s1_t = f_t(s0)
-                    val = self.cons[t][:, None] & match & (self.T == 1)           # f_t(s1) = 1
-                    phi[j] = self._agg(val.astype(float))
-                elif j in clamp:
-                    phi[j] = self.u[j][:, None] * (bits[:, j] == ((v >> j) & 1))[None, :]
-                else:
-                    a = np.stack([self._agg((self.cons[j] & (out1_s0 == b)).astype(float)) for b in (0, 1)])
-                    phi[j] = a[bits[:, j]].T                                      # (L, N)
-            S = {qq: _subset_mass(phi, qq) / (L ** qq) for qq in (1, 2)}
+            return phi[:, :, None]
+        N = 1 << n
+        L = self.u.shape[1]
+        bits = (np.arange(N)[:, None] >> np.arange(n)[None, :]) & 1          # (N, n)
+        phi = np.empty((n, L, N))
+        for j in range(n):
+            if j == t:
+                match = (out1_s0[:, None] == bits[None, :, t])                # s1_t = f_t(s0)
+                val = self.cons[t][:, None] & match & (self.T == 1)           # f_t(s1) = 1
+                phi[j] = self._agg(val.astype(float))
+            elif j in clamp:
+                phi[j] = self.u[j][:, None] * (bits[:, j] == ((v >> j) & 1))[None, :]
+            else:
+                a = np.stack([self._agg((self.cons[j] & (out1_s0 == b)).astype(float)) for b in (0, 1)])
+                phi[j] = a[bits[:, j]].T                                      # (L, N)
+        return phi
+
+    def masses(self, q: Query) -> dict:
+        phi = self._phi(q)
+        L = self.u.shape[1]
+        S = {qq: _subset_mass(phi, qq) / (L ** qq) for qq in (1, 2)}
         num_u, den_u = exact_query_counts(self.vs, q)
         return {"U": self.U_den * num_u / den_u, "S1": S[1], "S2": S[2]}
 
@@ -159,6 +165,185 @@ class GSR:
         p = min(1.0, num / den)
         g = GAMMA
         return {"status": "bounded", "p": p, "lo": max(0.0, p * (1 - g) / (1 + g)), "hi": min(1.0, p * (1 + g) / (1 - g))}
+
+
+# --------------------------------------------------------------------------- XDC (R6): exchangeable dictionary code
+
+XDC_THETAS = (0.5, 2.0, 8.0, math.inf)          # fixed grid, equal prior weight (no tuning); inf = no sharing
+
+
+def rule_type(r) -> tuple:
+    """Order-free rule type: (arity, smallest table over all permutations of the local inputs)."""
+    import itertools
+    d = r.arity
+    best = None
+    for perm in itertools.permutations(range(d)):
+        t = 0
+        for z in range(1 << d):
+            z2 = 0
+            for i in range(d):
+                z2 |= ((z >> i) & 1) << perm[i]
+            t |= ((r.table >> z2) & 1) << z
+        best = t if best is None or t < best else best
+    return (d, best if best is not None else r.table)
+
+
+def _partition_mass(G: np.ndarray, n: int, theta: float) -> np.ndarray:
+    """sum over set partitions pi of [n] of CRP_theta(pi) prod_{b in pi} G[b]   (G: (2^n, S); returns (S,)).
+    CRP_theta(pi) = theta^|pi| prod_b (|b|-1)! / (theta)_n.  theta = inf: singletons only (independent nodes)."""
+    if math.isinf(theta):
+        out = np.ones(G.shape[1])
+        for j in range(n):
+            out = out * G[1 << j]
+        return out
+    fact = [math.factorial(i) for i in range(n + 1)]
+    F = np.zeros_like(G)
+    F[0] = 1.0
+    for A in range(1, 1 << n):
+        low = A & -A
+        rest = A ^ low
+        acc = np.zeros(G.shape[1])
+        sub = rest
+        while True:                                            # blocks b = low | sub, sub subset of rest
+            b = low | sub
+            acc += theta * fact[bin(b).count("1") - 1] * G[b] * F[A ^ b]
+            if sub == 0:
+                break
+            sub = (sub - 1) & rest
+        F[A] = acc
+    rising = math.prod(theta + i for i in range(n))
+    return F[(1 << n) - 1] / rising
+
+
+class XDC(GSR):
+    """Exchangeable dictionary code over a flat base code (R6; the shared-dictionary idea of the original
+    method made exactly summable).
+
+    Generative description: nodes are seated by a Chinese-restaurant process with concentration theta; every
+    table (dictionary entry) draws ONE order-free rule type lambda from G0; every node then instantiates its
+    entry's type as a concrete rule r (support + pin order) with probability w(r) / W(lambda), where
+    w(r) = 2^-bits_base(r), W(lambda) = sum of w over the type, G0(lambda) = W(lambda) / sum W.
+    Equivalently an adaptive two-part code: a node either pays for a new type under the base code or refers to
+    a type already used, at a cost that shrinks with its use count.  Properties:
+      * full support on H and one mass per distinct mechanism (masses of coinciding programs add);
+      * theta = inf is EXACTLY the base code's nodewise prior (tested), so XDC - base isolates sharing;
+      * exchangeable: no node order, cyclic offset or module size is assumed.
+    P(q | D) is summed exactly over all set partitions by a subset recursion (pointwise in the intermediate
+    state for h = 2); float64 over nonnegative terms, declared relative error GAMMA.  The reported predictor
+    'xdc' is the equal-weight Bayes mixture over XDC_THETAS (no parameter is fitted)."""
+
+    def __init__(self, evidence: Evidence, k: int, base: str = "gate", vs=None, thetas=XDC_THETAS):
+        from ..s4.prior import node_bits_table
+        from ..schema import HypothesisClass
+        from ..versionspace import build_version_space
+        self.n, self.k, self.base, self.thetas = evidence.n, k, base, tuple(thetas)
+        self.vs = vs if vs is not None else build_version_space(evidence, HypothesisClass(evidence.n, k))
+        cls = self.cls = self.vs.cls
+        self.T = cls.tables
+        key = (cls.n, cls.k, base)
+        if key not in _XDC_CACHE:
+            bits = node_bits_table(cls, base, cls.n, cls.k).astype(float)
+            w = np.exp2(-(bits - bits.min()))
+            types = [rule_type(r) for r in cls.rules]
+            names = sorted(set(types))
+            tid = np.array([names.index(t) for t in types])
+            order = np.argsort(tid, kind="stable")
+            starts = np.searchsorted(tid[order], np.arange(len(names)))
+            W = np.add.reduceat(w[order], starts)
+            _XDC_CACHE[key] = (w, order, starts, W, W / W.sum(), names)
+        self.w, self.order, self.starts, self.W, self.G0, self.type_names = _XDC_CACHE[key]
+        if self.vs.empty:
+            return
+        H = cls.size
+        self.cons = []
+        for comp in self.vs.compatible:
+            m = np.zeros(H, dtype=bool)
+            m[comp] = True
+            self.cons.append(m)
+        self.u = np.stack([self._agg(c.astype(float)) for c in self.cons])        # (n, L)
+        self.den = self._theta_masses(self.u[:, :, None])
+
+    def _agg(self, rowvals: np.ndarray) -> np.ndarray:
+        """Type-conditional mass: sum_r w(r) val(r) / W(type)."""
+        wv = rowvals * (self.w if rowvals.ndim == 1 else self.w[:, None])
+        return np.add.reduceat(wv[self.order], self.starts, axis=0) / (
+            self.W if rowvals.ndim == 1 else self.W[:, None])
+
+    def _theta_masses(self, phi: np.ndarray) -> dict:
+        n, L, S = phi.shape
+        G = np.empty((1 << n, S))
+        stack = [(0, np.broadcast_to(self.G0[:, None], (L, S)), 0)]
+        while stack:
+            A, prod, nxt = stack.pop()
+            G[A] = prod.sum(axis=0)
+            for j in range(nxt, n):
+                stack.append((A | (1 << j), prod * phi[j], j + 1))
+        return {th: float(_partition_mass(G, n, th).sum()) for th in self.thetas}
+
+    def probabilities(self, q: Query) -> dict:
+        """{'xdc': mixture, 'xdc_t<theta>': each theta} -> P(q | D); None values if the evidence is inconsistent."""
+        names = {th: "xdc_t" + ("inf" if math.isinf(th) else f"{th:g}") for th in self.thetas}
+        if self.vs.empty:
+            return dict.fromkeys(["xdc", *names.values()])
+        num = self._theta_masses(self._phi(q))
+        out = {names[th]: min(1.0, num[th] / self.den[th]) for th in self.thetas}
+        out["xdc"] = min(1.0, sum(num.values()) / sum(self.den.values()))
+        out["theta_posterior"] = {names[th]: self.den[th] / sum(self.den.values()) for th in self.thetas}
+        return out
+
+
+_XDC_CACHE: dict = {}
+
+
+def xdc_bruteforce(evidence: Evidence, k: int, q: Query, theta, base: str = "gate") -> Fraction:
+    """Exact P(q | D) under XDC(theta) by explicit enumeration of every seating, every type draw and every
+    instantiation (tiny n only); independent of the subset recursion and of the type aggregation."""
+    import itertools
+
+    from .. import reference
+    from ..s4.prior import node_bits_table
+    from ..schema import Network
+    n = evidence.n
+    cls = candidate_class(n, k)
+    bits = node_bits_table(cls, base, n, k)
+    mb = int(bits.max())
+    w = [Fraction(2) ** (mb - int(b)) for b in bits]
+    types = [rule_type(r) for r in cls.rules]
+    names = sorted(set(types))
+    members = {t: [i for i, x in enumerate(types) if x == t] for t in names}
+    Wt = {t: sum(w[i] for i in members[t]) for t in names}
+    Wsum = sum(Wt.values())
+    theta = Fraction(theta)
+
+    def partitions(items):
+        if not items:
+            yield []
+            return
+        first, rest = items[0], items[1:]
+        for p in partitions(rest):
+            for i in range(len(p)):
+                yield p[:i] + [[first] + p[i]] + p[i + 1:]
+            yield [[first]] + p
+    x0 = point_query_parts(q, n)
+    num = den = Fraction(0)
+    rising = math.prod(theta + i for i in range(n))
+    for part in partitions(list(range(n))):
+        crp = theta ** len(part) * math.prod(math.factorial(len(b) - 1) for b in part) / rising
+        for tys in itertools.product(names, repeat=len(part)):
+            pt = crp * math.prod(Wt[t] / Wsum for t in tys)
+            per_node = [None] * n
+            for b, t in zip(part, tys):
+                for j in b:
+                    per_node[j] = [(i, w[i] / Wt[t]) for i in members[t]]
+            for combo in itertools.product(*per_node):
+                net = Network(n, tuple(cls.rules[i] for i, _ in combo))
+                if not reference.consistent(net, evidence):
+                    continue
+                m = pt * math.prod(pw for _, pw in combo)
+                den += m
+                if ((reference.run(net, x0, q.intervention, q.horizon)[-1] >> q.target.node) & 1) == q.target.value:
+                    num += m
+    return num / den
 
 
 # --------------------------------------------------------------------------- independent rational oracle (tests)

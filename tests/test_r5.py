@@ -155,6 +155,36 @@ def test_gsr_matches_program_enumeration():
                 assert abs(g.probability(q, a)["p"] - float(gsr_bruteforce(ev, 1, q, a))) < 1e-10
 
 
+def test_xdc_matches_enumeration_and_reduces_to_base_code():
+    """R6: the exchangeable dictionary code is summed exactly (vs explicit enumeration of every seating, type and
+    instantiation), and theta = inf is exactly the flat base code (so XDC - base isolates sharing)."""
+    from fractions import Fraction
+
+    from causalguard.r5.priors import XDC, xdc_bruteforce
+    from causalguard.s4.prior import Averager
+    rng = random.Random(5)
+    net = Network(3, (Rule((1,), 0b10), Rule((0,), 0b01), Rule((), 1)))
+    ev = _ev(rng, net, 2, clamp=False)
+    checked = 0
+    for base in ("gate", "cgh_flat"):
+        x = XDC(ev, 1, base=base, thetas=(0.5, 3.0, float("inf")))
+        av = Averager(ev, 1, codes=(base,))
+        for h in (1, 2):
+            for iv in (Intervention("none"), Intervention("persistent_clamp", ((2, 0),)),
+                       Intervention("initial_edit", ((1, 1),))):
+                q = Query.point(rng.randrange(8), 3, iv, h, Pred.lit(rng.choice([0, 1]), 1))
+                pr = x.probabilities(q)
+                for th, name in ((Fraction(1, 2), "xdc_t0.5"), (Fraction(3), "xdc_t3")):
+                    assert abs(pr[name] - float(xdc_bruteforce(ev, 1, q, th, base))) < 1e-10
+                    checked += 1
+                assert abs(pr["xdc_tinf"] - float(av.probability_exact(base, q))) < 1e-10
+                assert abs(sum(pr["theta_posterior"].values()) - 1) < 1e-12
+    assert checked == 24
+    # sharing must matter: on evidence where two nodes are seen to copy each other the finite-theta forecast differs
+    assert any(abs(pr["xdc_t0.5"] - pr["xdc_tinf"]) > 1e-6 for pr in [x.probabilities(
+        Query.point(s, 3, Intervention("none"), 1, Pred.lit(t, 1))) for s in range(8) for t in range(3)])
+
+
 def test_outcome_is_node_value_and_literal_convention():
     from causalguard.r5 import data as D
     from causalguard.r5.forecast import _node_prob

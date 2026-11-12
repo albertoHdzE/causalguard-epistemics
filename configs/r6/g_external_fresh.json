@@ -1,0 +1,12 @@
+{
+ "mode": "development",
+ "r5_track": "G",
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "study": "R5-G",
+ "run_id": "r6-g-ext-fresh-v1",
+ "external_panel": "transformed", "source_manifest": "artifacts/r6_source_manifest.json",
+ "design_salt": "r6-G-design-ext-v1",
+ "xdc_bases": ["gate", "cgh_flat"],
+ "note": "R6 fresh external panel: the 122 source groups (hash ranks 40-161) never used in R5. Requires the lock."
+}
