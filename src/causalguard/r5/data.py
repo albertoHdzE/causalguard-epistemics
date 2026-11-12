@@ -41,7 +41,13 @@ STRATA = ("template_exceptions", "imperfect_modules", "shared_motifs", "feedforw
 SPLITS = {"calibration": {"salt": "r5-G-cal-v1", "per_stratum": 8},
           "evaluation": {"salt": "r5-G-eval-v1", "per_stratum": 40},
           # R6: fresh mechanisms from the SAME locked generators (G_POPULATION_SPEC unchanged), never scored in R5
-          "evaluation_r6": {"salt": "r6-G-eval-v1", "per_stratum": 40}}
+          "evaluation_r6": {"salt": "r6-G-eval-v1", "per_stratum": 40},
+          # R7 sprint benchmark (pre-sprint): fresh mechanisms from the SAME locked generators; never model-facing
+          # before R7.  'sprint_train' is used only to fit the surface reference rule (no model ever sees it).
+          "sprint_train": {"salt": "r7-sprint-train-v1", "per_stratum": 40},
+          "sprint_smoke": {"salt": "r7-sprint-smoke-v1", "per_stratum": 1},
+          "sprint_pilot": {"salt": "r7-sprint-pilot-v1", "per_stratum": 3},
+          "sprint_main": {"salt": "r7-sprint-main-v1", "per_stratum": 16}}
 BUDGETS = (8, 16, 24)
 PRIMARY_BUDGET = 16
 N_QUERIES = 8

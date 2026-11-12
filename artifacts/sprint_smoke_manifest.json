@@ -1,0 +1,186 @@
+{
+ "assign_salt": "r7-sprint-smoke-assign-v1",
+ "design_salt": "r7-sprint-smoke-design-v1",
+ "items": [
+  {
+   "budget": 16,
+   "condition": "P2",
+   "group": "sg-caa84365051638c0",
+   "index": 0,
+   "mechanism_sha256": "b688c97866fe28312c25cafde389459fe6f0156a97c02966305ecd4a3566bf30",
+   "named": [
+    "c0",
+    "c4",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "e38194c2a767b855ecbb149e0df215a09d842a9c0bfc2acd126294c6431daa96",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "template_exceptions",
+   "task_id": "d65c649617733953af333bd1ea8f3ba7ba57300444c7969c92d2963fc8c9371a",
+   "wkey": "smoke|synthetic|template_exceptions|0|",
+   "wording": 2,
+   "world_id": "r7w-4f19430e1ce46e6e"
+  },
+  {
+   "budget": 12,
+   "condition": "P2",
+   "group": "sg-a1208ae2dacd3f51",
+   "index": 0,
+   "mechanism_sha256": "fa74741751d7ac02c127b99994494e3c27ff7d97ab9351e719296767e4e04943",
+   "named": [
+    "c0",
+    "c1",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "96ff7fe5d436944a50aa4737896a22fa243daf054a25560ce394ade7b5995c2c",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "imperfect_modules",
+   "task_id": "330c1794fe802bb69412eb80f47830556076fdfe1ef8a2d3c0c070ef65cf803e",
+   "wkey": "smoke|synthetic|imperfect_modules|0|",
+   "wording": 1,
+   "world_id": "r7w-cb00bfda581b831e"
+  },
+  {
+   "budget": 24,
+   "condition": "P1",
+   "group": "sg-f4b2d5faf744f1e3",
+   "index": 0,
+   "mechanism_sha256": "3798114e133efdfad027b0be5d981c46f2405ffc57ff225ac23e7a7b020851c8",
+   "named": [
+    "c2",
+    "c3",
+    "c4",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "2fcb1cf8e1562b376069301b22b0e62c86a86617391a47ad0bc44d8434ae1b42",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "shared_motifs",
+   "task_id": "c2e688d421435d84c275ad4cc19390f025671575e1f537bce0335d3b0277d34c",
+   "wkey": "smoke|synthetic|shared_motifs|0|",
+   "wording": 2,
+   "world_id": "r7w-c5d943e6cdfe9537"
+  },
+  {
+   "budget": 12,
+   "condition": "P1",
+   "group": "sg-f508da05a70b748e",
+   "index": 0,
+   "mechanism_sha256": "05fdfe85e2ef58487450bc1269403326bac224518282b7a40dd15bb30740acc9",
+   "named": [
+    "c3",
+    "c5",
+    "c6",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "258a5f3ba966962f028af00f7877a1356a034986ad4d0b623bf2806dea643779",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "feedforward_hetero",
+   "task_id": "80cb72dd97c060e5ba55e4417ab44d6494257d8d82a928bb514ab7177a5d0696",
+   "wkey": "smoke|synthetic|feedforward_hetero|0|",
+   "wording": 1,
+   "world_id": "r7w-64c8b4a50106dac9"
+  },
+  {
+   "budget": 16,
+   "condition": "P0",
+   "group": "sg-8e3a0ee5edde16a1",
+   "index": 0,
+   "mechanism_sha256": "09882933dc443a4bb676437e4ed7408d08301b7792c253efaa6277ebe0a3d9e8",
+   "named": [
+    "c1",
+    "c4",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "5f05b1f52fd4605edf0f57c8e937a90a1da6b37162a041279639701969afc53a",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "feedback_canalizing",
+   "task_id": "479e13883f861e413ef6c3a3f3f97411e014ac361ef24b2d34d98e719a8ccf17",
+   "wkey": "smoke|synthetic|feedback_canalizing|0|",
+   "wording": 1,
+   "world_id": "r7w-c7bf0490df19781b"
+  },
+  {
+   "budget": 16,
+   "condition": "P3",
+   "group": "sg-48bc5139e71d40ee",
+   "index": 0,
+   "mechanism_sha256": "21d1f5007c6ef189e13de2699fde5760e665aae2c2038fc02bc18a9bab0fe330",
+   "named": [
+    "c0",
+    "c4",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "a3f36271a783d1b45b0c7fe0be826dafb49837a08f450051bac3f5a0fee9251f",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "mixed_parity_thresh",
+   "task_id": "687c70c0299a5db5f826a9ae448cd4dad6eb2cf20cb1cc058bc1c71e644d771f",
+   "wkey": "smoke|synthetic|mixed_parity_thresh|0|",
+   "wording": 1,
+   "world_id": "r7w-cd65c8350b90d316"
+  },
+  {
+   "budget": 16,
+   "condition": "P0",
+   "group": "sg-caa84365051638c0",
+   "index": 0,
+   "mechanism_sha256": "f1e8f46816aa90e62ba36b498764f205de3348fb3ecfb95d600a8a5c03cb0766",
+   "named": [
+    "c0",
+    "c2",
+    "c3",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "b3c95128d9fa670f75d732c2db4c124981085b9541c1f8ac5544e3763fd1c21e",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "rewired_control",
+   "task_id": "72cee32dbb90333b3dc4b52f4141f97f8e8180ed2cf74b408735e7758b5bca6f",
+   "wkey": "smoke|synthetic|rewired_control|0|",
+   "wording": 2,
+   "world_id": "r7w-afbc3f3321341aba"
+  },
+  {
+   "budget": 12,
+   "condition": "P3",
+   "group": "sg-57e4e68bb7a8aa8e",
+   "index": 0,
+   "mechanism_sha256": "be2fcde2f86b7dcf25463de99023870f1d9855a3fe65bc9a1683a9fa126219a6",
+   "named": [
+    "c0",
+    "c3",
+    "c4",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "adcb215828a015d29f8387e8ec43619440df89f9ff939421ee9d59a577be26fa",
+   "source_key": "",
+   "split": "smoke",
+   "stratum": "uniform_H",
+   "task_id": "ad60f82fc1058b3747965670d00d53dcfea85ea4f1272f8e430e8495d0c9ae16",
+   "wkey": "smoke|synthetic|uniform_H|0|",
+   "wording": 2,
+   "world_id": "r7w-d0333f9c0157d069"
+  }
+ ],
+ "n_worlds": 8,
+ "r5_split": "sprint_smoke",
+ "split": "smoke",
+ "version": "r7-sprint-population-v1"
+}

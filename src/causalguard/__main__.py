@@ -126,6 +126,23 @@ def _items_from_config(cfg: dict):
                            "arms": cfg.get("arms", ["D", "B"]),
                            **({"gate_loop": True} if cfg.get("gate_loop") else {})})
             yield f"{k['split']}|{k['stratum']}|{k['index']}", pl
+    elif study == "SPRINT":
+        # R7 sprint benchmark: items from a committed manifest, run in sha256 order of the world key (a model on a
+        # half panel runs the first ``max_items`` of this order; decided in the lock before its run)
+        import hashlib
+        root = Path(__file__).resolve().parents[2]
+        man = json.loads((root / cfg["manifest"]).read_text())
+        items = sorted(man["items"], key=lambda x: hashlib.sha256(f"r7-run-order|{x['wkey']}".encode()).hexdigest())
+        if cfg.get("max_items"):
+            items = items[:cfg["max_items"]]
+        for x in items:
+            world = {k: x[k] for k in ("split", "population", "stratum", "index", "source_key", "group")}
+            yield x["wkey"], {"world": world, "condition": x["condition"], "wording": x["wording"],
+                              "named": x["named"], "public_sha256": x["public_sha256"], "provider": cfg["provider"],
+                              "global_cap": cfg["global_cap"], "call_ledger": cfg["call_ledger"],
+                              "phase": cfg.get("phase", "SPRINT"), "phase_cap": cfg.get("phase_cap"),
+                              "world_cap": cfg.get("world_cap", 4), "two_turns": cfg.get("two_turns", True),
+                              "stratum": x["stratum"], "population": x["population"]}
     else:
         raise SystemExit(f"unknown study {study}")
 
@@ -160,6 +177,9 @@ def _fn_for(study: str):
     if study == "R6-S":
         from .r6.scale import s_world
         return s_world
+    if study == "SPRINT":
+        from .sprint.episode import sprint_world
+        return sprint_world
     if study.startswith("S4-"):
         from .s4 import offline
         if study == "S4-PILOT":
@@ -182,7 +202,15 @@ def build_plan(cfg: dict, run_id: str) -> dict:
     return make_plan(run_id, cfg["study"], cfg, list(_items_from_config(cfg)), strata_fn=_strata, extra=extra)
 
 
+SPRINT_COMMANDS = {"sprint-build": "build", "sprint-analyze": "analysis", "sprint-gates": "gates",
+                   "sprint-online": "online"}
+
+
 def main(argv=None):
+    argv = sys.argv[1:] if argv is None else list(argv)
+    if argv and argv[0] in SPRINT_COMMANDS:            # R7 sprint commands own their argument parsers
+        import importlib
+        return importlib.import_module(f".sprint.{SPRINT_COMMANDS[argv[0]]}", __package__).main(argv[1:])
     ap = argparse.ArgumentParser(prog="causalguard")
     sub = ap.add_subparsers(dest="cmd", required=True)
     r = sub.add_parser("run")

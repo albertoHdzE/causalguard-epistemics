@@ -1,0 +1,96 @@
+"""R7 sprint episode (pre-sprint): Task S (turn 1) then Task P (turn 2) in ONE conversation.
+
+The follow-up is sent unconditionally (whatever turn 1 returned), with the condition, wording and named claims
+fixed by the manifest (hash assignment).  The evaluator's reference is computed only after both turns are fixed and
+is written last in the record.  Reasoning-model think blocks are kept in the raw record and removed from the
+visible answer (and from the conversation history passed to turn 2).
+"""
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import time
+from pathlib import Path
+
+from ..s4.pilot import parse_json, parse_status_answers, strip_reasoning
+from . import population as P
+from . import tasks as T
+
+PHASE = "SPRINT"
+
+
+def _ledger_path(p: str | None) -> str | None:
+    if p and p.startswith("RUNS/"):
+        return str(Path(os.environ.get("CAUSALGUARD_RUNS", "runs")) / p[len("RUNS/"):])
+    return p
+
+
+def _turn(provider, msgs, budget, seed, wid, label) -> tuple[dict, dict, str | None]:
+    from ..llm.harness import derive_seed
+    budget.current = label
+    res = provider.chat(msgs, 0.0, derive_seed(seed, wid, label), budget.before_attempt)
+    rec = {k: res[k] for k in ("ok", "raw_output", "failure", "request_hash")}
+    rec["attempts"] = res["attempts"]
+    visible = strip_reasoning(res["raw_output"]) if res["ok"] else None
+    obj = parse_json(visible)
+    last = res["attempts"][-1] if res["attempts"] else {}
+    rec.update(parsed=obj is not None, truncated=last.get("finish_reason") == "length",
+               finish_reason=last.get("finish_reason"), latency_s=last.get("latency_s"),
+               prompt_tokens=last.get("prompt_tokens"), completion_tokens=last.get("completion_tokens"))
+    return rec, (obj or {}), visible
+
+
+def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None, two_turns: bool = True) -> dict:
+    cids = [c["cid"] for c in pub["claims"]]
+    wid = pub["task_id"]
+    msgs = [{"role": "system", "content": T.system()}, {"role": "user", "content": T.user_prompt(pub)}]
+    out = {"assignment": assignment, "turns": []}
+    rec1, obj1, vis1 = _turn(provider, msgs, budget, seed, wid, "S|t1")
+    a1 = parse_status_answers(obj1.get("answers"), cids)
+    out["turns"].append({**rec1, "answers": a1})
+    if not two_turns:
+        return out
+    if rec1["ok"]:
+        msgs.append({"role": "assistant", "content": vis1 if vis1 is not None else ""})
+    else:                                   # the conversation continues; the failed turn is recorded as empty
+        msgs.append({"role": "assistant", "content": ""})
+    fu = T.followup(pub, assignment["condition"], assignment["wording"], assignment["named"])
+    msgs.append({"role": "user", "content": fu})
+    rec2, obj2, _ = _turn(provider, msgs, budget, seed, wid, f"P|{assignment['condition']}|t2")
+    out["turns"].append({**rec2, "answers": parse_status_answers(obj2.get("answers"), cids),
+                         "followup_sha256": hashlib.sha256(fu.encode()).hexdigest()})
+    out["followup"] = fu
+    return out
+
+
+def sprint_world(p: dict) -> dict:
+    """Runner item: one (model, world).  Payload: the manifest item + provider + caps + ledger."""
+    from ..llm.harness import CallBudget
+    from ..llm.providers import make_provider
+    k = P.WorldKey.from_json(p["world"])
+    ev = P.evaluator(k)
+    pub = ev.public()
+    if p.get("public_sha256") and hashlib.sha256(json.dumps(pub, sort_keys=True).encode()).hexdigest() != \
+            p["public_sha256"]:
+        raise AssertionError("public task differs from the manifest")
+    provider = make_provider(p["provider"])
+    budget = CallBudget(p.get("world_cap", 4), p.get("global_cap"), _ledger_path(p.get("call_ledger")),
+                        world_id=pub["task_id"], phase=p.get("phase", PHASE), phase_cap=p.get("phase_cap"))
+    t0 = time.perf_counter()
+    assignment = {x: p[x] for x in ("condition", "wording", "named")}
+    try:
+        episode = run_episode(pub, assignment, provider, budget, p["provider"].get("seed", 0),
+                              two_turns=p.get("two_turns", True))
+        status = "ok"
+    except Exception as e:     # CapExceeded or harness error: recorded, never dropped
+        episode, status = {"assignment": assignment, "turns": [], "error": f"{type(e).__name__}: {str(e)[:400]}"}, \
+            f"error:{type(e).__name__}"
+    wall = time.perf_counter() - t0
+    # ---- evaluator (after every answer is fixed)
+    ref = P.reference(ev, crosscheck_sat=True)
+    return {"wkey": k.wkey, "world": k.to_json(), "task_id": pub["task_id"], "model": p["provider"]["model"],
+            "provider_metadata": provider.metadata(), "budget": ev.design.budget, "status": status,
+            "public_sha256": hashlib.sha256(json.dumps(pub, sort_keys=True).encode()).hexdigest(),
+            "task_version": T.TASK_VERSION, "episode": episode, "wall_s": wall, "calls_used": budget.n,
+            "reference": ref}

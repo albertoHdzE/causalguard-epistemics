@@ -134,6 +134,46 @@ def parse_answers(obj, cids: list[str]) -> dict:
     return out
 
 
+_THINK = re.compile(r"<think>.*?</think>|^.*?</think>", re.S)
+
+
+def strip_reasoning(text: str | None) -> str | None:
+    """Visible answer of a reasoning model: drops <think>...</think> blocks (and a leading block whose opening tag
+    the server already consumed).  Text without such tags is returned unchanged (R7)."""
+    if not text or "</think>" not in text:
+        return text
+    return _THINK.sub("", text).strip()
+
+
+# R7 sprint Task S vocabulary (plain words for the model; the internal labels are the S4 verdicts)
+STATUS_WORDS = {"true": "entailed", "false": "refuted", "not settled": "underdetermined"}
+
+
+def parse_status_answers(obj, cids: list[str]) -> dict:
+    """R7 Task S: {cid: {"verdict": entailed|refuted|underdetermined, "probability": float in [0, 1]}} for valid
+    entries.  Verdict words are matched case-insensitively after trimming; a numeric string probability is
+    accepted; anything else (missing, out of range, bool, duplicate cid) leaves the claim absent."""
+    out = {}
+    if not isinstance(obj, list):
+        return out
+    for a in obj:
+        if not isinstance(a, dict) or a.get("cid") not in cids or a["cid"] in out:
+            continue
+        v = a.get("verdict")
+        v = STATUS_WORDS.get(v.strip().lower()) if isinstance(v, str) else None
+        p = a.get("probability")
+        if isinstance(p, str):
+            try:
+                p = float(p.strip())
+            except ValueError:
+                p = None
+        if isinstance(p, bool) or not isinstance(p, (int, float)) or not (0.0 <= float(p) <= 1.0):
+            p = None
+        if v is not None and p is not None:
+            out[a["cid"]] = {"verdict": v, "probability": float(p)}
+    return out
+
+
 def _proposals(answers: dict, claims_by_id: dict) -> dict:
     out = {}
     for cid, a in answers.items():

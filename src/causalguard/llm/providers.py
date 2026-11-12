@@ -333,7 +333,23 @@ def mock_policy(name: str) -> Callable:
         return fixed(name[len("always_"):])
     if name == "s4_tool_copier":
         return _s4_tool_copier
+    if name == "sprint_hash":
+        return _sprint_hash
     raise ValueError(f"unknown mock policy {name!r}")
+
+
+def _sprint_hash(messages, temperature, seed):
+    """R7 sprint dry-run policy: a verdict and probability per claim id, from a hash of the conversation so far
+    (turn 2 differs from turn 1); exercises parsing, both turns and scoring without any model."""
+    import re as _re
+    user0 = next(m["content"] for m in messages if m["role"] == "user")
+    cids = sorted(set(_re.findall(r"\n (c\d+):", user0)), key=lambda c: int(c[1:]))
+    words = ("true", "false", "not settled")
+    ans = []
+    for c in cids:
+        h = hashlib.sha256(f"{len(messages)}|{c}|{user0[:200]}".encode()).digest()
+        ans.append({"cid": c, "verdict": words[h[0] % 3], "probability": round(h[1] / 255, 2)})
+    return json.dumps({"answers": ans})
 
 
 def _s4_tool_copier(messages, temperature, seed):

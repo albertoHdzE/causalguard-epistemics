@@ -38,6 +38,17 @@ class Evaluator:
         self.evidence = make_evidence(self.world, self.design)
         self._pub = public_task(self.world, self.design, self.evidence)
 
+    @classmethod
+    def from_world(cls, world, design: Design) -> "Evaluator":
+        """An evaluator over a prebuilt world and design (R7 sprint: R5 G mechanisms and published fragments with
+        the S4 evidence/claim design).  Same reference, truth and audit code as the (salt, index, family) path."""
+        self = cls.__new__(cls)
+        self.salt, self.index, self.family = None, None, world.family
+        self.world, self.design = world, design
+        self.evidence = make_evidence(world, design)
+        self._pub = public_task(world, design, self.evidence)
+        return self
+
     def public(self) -> dict:
         import json
         return json.loads(json.dumps(self._pub))          # a serialized copy: no shared objects

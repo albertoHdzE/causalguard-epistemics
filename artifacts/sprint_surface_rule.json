@@ -1,0 +1,461 @@
+{
+ "base_rates": {
+  "entailed": 0.15441176470588236,
+  "refuted": 0.14790723981900453,
+  "underdetermined": 0.6976809954751131
+ },
+ "fallback": {
+  "p": 0.4998438502179972,
+  "status": "entailed"
+ },
+ "sha256": "234b04c40c201573b10243e92b3c342df9f4ca069a5fbc6d6fd2dca4ee658e82",
+ "table": {
+  "[1, \"initial_edit\", 1, \"agree\", \"const_agree\"]": {
+   "n": 9,
+   "p": 0.9551203326426241,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 1, \"agree\", \"varies\"]": {
+   "n": 107,
+   "p": 0.8508898456112991,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 13,
+   "p": 0.10420184179835558,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 1, \"disagree\", \"varies\"]": {
+   "n": 102,
+   "p": 0.18183050814403323,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 1, \"mixed\", \"varies\"]": {
+   "n": 12,
+   "p": 0.43111111111111117,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 2, \"agree\", \"const_agree\"]": {
+   "n": 14,
+   "p": 0.7860172754399181,
+   "status": "underdetermined"
+  },
+  "[1, \"initial_edit\", 2, \"agree\", \"varies\"]": {
+   "n": 85,
+   "p": 0.7450704009238885,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 16,
+   "p": 0.17848183120691116,
+   "status": "underdetermined"
+  },
+  "[1, \"initial_edit\", 2, \"disagree\", \"varies\"]": {
+   "n": 103,
+   "p": 0.23182107496627052,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 2, \"mixed\", \"varies\"]": {
+   "n": 78,
+   "p": 0.4479268107792638,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 3, \"agree\", \"const_agree\"]": {
+   "n": 6,
+   "p": 0.7059173491025953,
+   "status": "underdetermined"
+  },
+  "[1, \"initial_edit\", 3, \"agree\", \"varies\"]": {
+   "n": 11,
+   "p": 0.5786666339327093,
+   "status": "underdetermined"
+  },
+  "[1, \"initial_edit\", 3, \"disagree\", \"varies\"]": {
+   "n": 7,
+   "p": 0.32386678049520795,
+   "status": "underdetermined"
+  },
+  "[1, \"initial_edit\", 3, \"mixed\", \"varies\"]": {
+   "n": 36,
+   "p": 0.5261507452634315,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 1, \"agree\", \"const_agree\"]": {
+   "n": 12,
+   "p": 0.8920911344125985,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 1, \"agree\", \"varies\"]": {
+   "n": 101,
+   "p": 0.8403305986608863,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 12,
+   "p": 0.07166208078997817,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 1, \"disagree\", \"varies\"]": {
+   "n": 104,
+   "p": 0.08067184079276607,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 1, \"mixed\", \"varies\"]": {
+   "n": 11,
+   "p": 0.42684208446920313,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 2, \"agree\", \"const_agree\"]": {
+   "n": 10,
+   "p": 0.8359716289175166,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 2, \"agree\", \"varies\"]": {
+   "n": 97,
+   "p": 0.7813296021714922,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 17,
+   "p": 0.21540932763314657,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 2, \"disagree\", \"varies\"]": {
+   "n": 94,
+   "p": 0.29085648971512224,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 2, \"mixed\", \"varies\"]": {
+   "n": 76,
+   "p": 0.5021739013228246,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 3, \"agree\", \"const_agree\"]": {
+   "n": 6,
+   "p": 0.6995942429890157,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 3, \"agree\", \"varies\"]": {
+   "n": 10,
+   "p": 0.6486713286713287,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 6,
+   "p": 0.3323468556533073,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 3, \"disagree\", \"varies\"]": {
+   "n": 11,
+   "p": 0.31191824729525996,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 3, \"mixed\", \"varies\"]": {
+   "n": 28,
+   "p": 0.47402139835887397,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 1, \"agree\", \"const_agree\"]": {
+   "n": 16,
+   "p": 0.8443747141364629,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 1, \"agree\", \"varies\"]": {
+   "n": 86,
+   "p": 0.6572187750972981,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 14,
+   "p": 0.16056287034977396,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 1, \"disagree\", \"varies\"]": {
+   "n": 103,
+   "p": 0.46503023136340293,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 1, \"mixed\", \"varies\"]": {
+   "n": 11,
+   "p": 0.59959697669484,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 2, \"agree\", \"const_agree\"]": {
+   "n": 19,
+   "p": 0.8549036453714189,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 2, \"agree\", \"varies\"]": {
+   "n": 84,
+   "p": 0.6147591560035474,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 16,
+   "p": 0.10877481741394407,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 2, \"disagree\", \"varies\"]": {
+   "n": 94,
+   "p": 0.3838665299993481,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 2, \"mixed\", \"varies\"]": {
+   "n": 87,
+   "p": 0.5261882127733074,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 3, \"agree\", \"const_agree\"]": {
+   "n": 4,
+   "p": 0.8715808115295709,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"agree\", \"varies\"]": {
+   "n": 9,
+   "p": 0.605393869809943,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 3,
+   "p": 0.1476907787252649,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"disagree\", \"varies\"]": {
+   "n": 10,
+   "p": 0.39163759114076196,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"mixed\", \"varies\"]": {
+   "n": 46,
+   "p": 0.5068338027032331,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 1, \"agree\", \"const_agree\"]": {
+   "n": 14,
+   "p": 0.8591450409060621,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 1, \"agree\", \"varies\"]": {
+   "n": 102,
+   "p": 0.5811242061477184,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 12,
+   "p": 0.172642950150498,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 1, \"disagree\", \"varies\"]": {
+   "n": 84,
+   "p": 0.3424741166522833,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 1, \"mixed\", \"varies\"]": {
+   "n": 16,
+   "p": 0.5713065406815406,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 2, \"agree\", \"const_agree\"]": {
+   "n": 21,
+   "p": 0.8619081479318405,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 2, \"agree\", \"varies\"]": {
+   "n": 107,
+   "p": 0.6293505237900866,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 19,
+   "p": 0.13523978545623602,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 2, \"disagree\", \"varies\"]": {
+   "n": 100,
+   "p": 0.37713566101975465,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 2, \"mixed\", \"varies\"]": {
+   "n": 74,
+   "p": 0.48155710568813515,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 3, \"agree\", \"const_agree\"]": {
+   "n": 1,
+   "p": 0.7261010662644192,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 3, \"agree\", \"varies\"]": {
+   "n": 10,
+   "p": 0.6181073583309347,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 2,
+   "p": 0.14116503276047285,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 3, \"disagree\", \"varies\"]": {
+   "n": 6,
+   "p": 0.18898443267242215,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 3, \"mixed\", \"varies\"]": {
+   "n": 24,
+   "p": 0.48826490318832194,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 1, \"agree\", \"const_agree\"]": {
+   "n": 15,
+   "p": 0.8976588953633411,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 1, \"agree\", \"varies\"]": {
+   "n": 94,
+   "p": 0.636947106630817,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 16,
+   "p": 0.14250816914846096,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 1, \"disagree\", \"varies\"]": {
+   "n": 96,
+   "p": 0.3411148562281346,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 1, \"mixed\", \"varies\"]": {
+   "n": 17,
+   "p": 0.47485091356103776,
+   "status": "entailed"
+  },
+  "[3, \"initial_edit\", 2, \"agree\", \"const_agree\"]": {
+   "n": 13,
+   "p": 0.8920515660190448,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 2, \"agree\", \"varies\"]": {
+   "n": 83,
+   "p": 0.6882945021592061,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 14,
+   "p": 0.09848253132010598,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 2, \"disagree\", \"varies\"]": {
+   "n": 81,
+   "p": 0.40235885644453545,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 2, \"mixed\", \"varies\"]": {
+   "n": 77,
+   "p": 0.5047719806830246,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"agree\", \"const_agree\"]": {
+   "n": 6,
+   "p": 0.8843331218730501,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"agree\", \"varies\"]": {
+   "n": 8,
+   "p": 0.6116764894680564,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 4,
+   "p": 0.16259455081419275,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"disagree\", \"varies\"]": {
+   "n": 7,
+   "p": 0.4051901066382947,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"mixed\", \"varies\"]": {
+   "n": 41,
+   "p": 0.4887144458833985,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 1, \"agree\", \"const_agree\"]": {
+   "n": 13,
+   "p": 0.9148765391121416,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 1, \"agree\", \"varies\"]": {
+   "n": 100,
+   "p": 0.6434079222503951,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 14,
+   "p": 0.1133606329538023,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 1, \"disagree\", \"varies\"]": {
+   "n": 92,
+   "p": 0.30865140072770564,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 1, \"mixed\", \"varies\"]": {
+   "n": 19,
+   "p": 0.4943685635086522,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 2, \"agree\", \"const_agree\"]": {
+   "n": 19,
+   "p": 0.8709710362896059,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 2, \"agree\", \"varies\"]": {
+   "n": 81,
+   "p": 0.6442717860936588,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 8,
+   "p": 0.08981864105727622,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 2, \"disagree\", \"varies\"]": {
+   "n": 85,
+   "p": 0.34327189620204523,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 2, \"mixed\", \"varies\"]": {
+   "n": 81,
+   "p": 0.45557172219251474,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 3, \"agree\", \"const_agree\"]": {
+   "n": 6,
+   "p": 0.7891091889239984,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"agree\", \"varies\"]": {
+   "n": 10,
+   "p": 0.6658940508846247,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 7,
+   "p": 0.19112132845122826,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"disagree\", \"varies\"]": {
+   "n": 10,
+   "p": 0.4393556303446826,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"mixed\", \"varies\"]": {
+   "n": 31,
+   "p": 0.4887997015060298,
+   "status": "underdetermined"
+  }
+ },
+ "train_claims": 3536,
+ "version": "r7-surface-table-v1"
+}
