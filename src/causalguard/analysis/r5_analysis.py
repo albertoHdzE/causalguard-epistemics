@@ -678,3 +678,45 @@ def analyze_s(run_dir, flat: str, method: str, panel: str, budgets=("8", "16", "
         out["budgets"][B] = cell
     out["primary"] = out["budgets"][primary_budget]["contrasts"]["primary_flat_minus_method"]
     return out
+
+
+# =========================================================================== R6 Track A2
+
+def analyze_a2(pairs: list, det_run, selected: str = "eig", reps=REPS) -> dict:
+    """R6 A2: gate in the loop.  ``pairs`` = [(control_run, loop_run), ...] (one per model, same worlds).
+    Primary per model: resolved@4 (loop) - resolved@4 (control), paired by world, world bootstrap.  Per-arm
+    summaries against the selected deterministic policy come from ``analyze_a_ai`` (same definitions as R5)."""
+    out = {"selected_policy": selected, "models": {}}
+    for ctrl, loop in pairs:
+        arms = {"control": analyze_a_ai([ctrl], det_run, selected, reps), "loop": analyze_a_ai([loop], det_run, selected, reps)}
+        model = next(iter(arms["control"]["models"]))
+        rc, rl = _ok(_load(ctrl))[0], _ok(_load(loop))[0]
+        common = sorted(i for i in rc if i in rl and not rc[i].get("excluded"))
+        if not common:
+            raise ValueError("no paired worlds")
+
+        def per(r):
+            e = r["episodes"]["D"]
+            g4 = e["gate"].get("4", {})
+            stop = next((int(v["stopped_at"]) for v in e["per_turn"].values() if "stopped_at" in v), None)
+            last = e["per_turn"].get(str(stop)) if stop is not None else None
+            return {"res4": int(g4.get("check") == "verified"),
+                    "unsupported4": int(g4.get("asserted") in ("entailed", "refuted") and g4.get("check") != "verified"),
+                    "early_correct_underdetermined": int(last is not None and last["verdict"] == "underdetermined"
+                                                         and last["readout_status"] == "underdetermined"),
+                    "purchases": len(e["purchases"]), "attempts": e["n_attempts"],
+                    "rejections": len(e.get("rejections", []))}
+        P = [(per(rc[i]), per(rl[i])) for i in common]
+        d = np.array([b["res4"] - a["res4"] for a, b in P], float)
+        u = np.array([b["unsupported4"] - a["unsupported4"] for a, b in P], float)
+        m = {"paired_worlds": len(common),
+             "primary_resolved4_loop_minus_control": cluster_bootstrap(lambda ix: float(d[ix].mean()), len(d),
+                                                                       replicates=reps, seed=SEED),
+             "unsupported_definite4_loop_minus_control": cluster_bootstrap(lambda ix: float(u[ix].mean()), len(u),
+                                                                           replicates=reps, seed=SEED),
+             "worlds_changed": {"loop_resolves_control_not": int((d > 0).sum()), "control_resolves_loop_not": int((d < 0).sum())}}
+        for k, idx in (("control", 0), ("loop", 1)):
+            m[k] = {f: int(sum(p[idx][f] for p in P)) for f in P[0][0]}
+            m[k]["vs_selected"] = arms[k]["models"][model]["arms"]["D"]
+        out["models"][model] = m
+    return out

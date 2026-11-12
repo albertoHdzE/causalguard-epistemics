@@ -1,0 +1,275 @@
+{
+ "models": {
+  "mistral-small-3.2-24b-instruct-2506-mlx": {
+   "control": {
+    "attempts": 104,
+    "early_correct_underdetermined": 4,
+    "purchases": 72,
+    "rejections": 0,
+    "res4": 25,
+    "unsupported4": 0,
+    "vs_selected": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.28125,
+      "2": 0.5625,
+      "4": 0.78125
+     },
+     "attempts": 104,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.013773521874999998,
+     "mean_brier_readout": 0.0169568703583961,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": 0.0,
+      "n_worlds": 32,
+      "replicates": 10000,
+      "se": 0.0,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      56,
+      72
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.28125,
+      "2": 0.625,
+      "4": 0.78125
+     },
+     "server_latency_s": 560.9964,
+     "status": {
+      "complete": 3,
+      "stopped": 29
+     },
+     "tokens": 373253,
+     "valid_action_rate": 1.0,
+     "worlds": 32,
+     "wrong_definite_verdicts": 0
+    }
+   },
+   "loop": {
+    "attempts": 104,
+    "early_correct_underdetermined": 4,
+    "purchases": 72,
+    "rejections": 0,
+    "res4": 25,
+    "unsupported4": 0,
+    "vs_selected": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.28125,
+      "2": 0.5625,
+      "4": 0.78125
+     },
+     "attempts": 104,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.013773521874999998,
+     "mean_brier_readout": 0.0169568703583961,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       0.0,
+       0.0
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": 0.0,
+      "n_worlds": 32,
+      "replicates": 10000,
+      "se": 0.0,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      56,
+      72
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.28125,
+      "2": 0.625,
+      "4": 0.78125
+     },
+     "server_latency_s": 567.7399,
+     "status": {
+      "complete": 3,
+      "stopped": 29
+     },
+     "tokens": 373253,
+     "valid_action_rate": 1.0,
+     "worlds": 32,
+     "wrong_definite_verdicts": 0
+    }
+   },
+   "paired_worlds": 32,
+   "primary_resolved4_loop_minus_control": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": 0.0,
+    "n_worlds": 32,
+    "replicates": 10000,
+    "se": 0.0,
+    "seed": 20261111
+   },
+   "unsupported_definite4_loop_minus_control": {
+    "ci95": [
+     0.0,
+     0.0
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": 0.0,
+    "n_worlds": 32,
+    "replicates": 10000,
+    "se": 0.0,
+    "seed": 20261111
+   },
+   "worlds_changed": {
+    "control_resolves_loop_not": 0,
+    "loop_resolves_control_not": 0
+   }
+  },
+  "qwen2.5:7b": {
+   "control": {
+    "attempts": 79,
+    "early_correct_underdetermined": 4,
+    "purchases": 47,
+    "rejections": 0,
+    "res4": 12,
+    "unsupported4": 15,
+    "vs_selected": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.125,
+      "2": 0.34375,
+      "4": 0.375
+     },
+     "attempts": 79,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.07068181968750001,
+     "mean_brier_readout": 0.05107771580156317,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -0.59375,
+       -0.25
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.40625,
+      "n_worlds": 32,
+      "replicates": 10000,
+      "se": 0.08676795392724419,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      30,
+      47
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.28125,
+      "2": 0.625,
+      "4": 0.78125
+     },
+     "server_latency_s": 125.935,
+     "status": {
+      "complete": 1,
+      "stopped": 31
+     },
+     "tokens": 232675,
+     "valid_action_rate": 1.0,
+     "worlds": 32,
+     "wrong_definite_verdicts": 42
+    }
+   },
+   "loop": {
+    "attempts": 105,
+    "early_correct_underdetermined": 14,
+    "purchases": 58,
+    "rejections": 15,
+    "res4": 13,
+    "unsupported4": 2,
+    "vs_selected": {
+     "ai_resolved_curve": {
+      "0": 0.0,
+      "1": 0.125,
+      "2": 0.375,
+      "4": 0.40625
+     },
+     "attempts": 105,
+     "false_uncertainty_turns": 0,
+     "invalid_actions": 0,
+     "mean_brier_final_ai": 0.04472229625,
+     "mean_brier_readout": 0.04472132581226837,
+     "primary_resolved4_ai_minus_selected": {
+      "ci95": [
+       -0.5625,
+       -0.21875
+      ],
+      "dropped_nan_replicates": 0,
+      "estimate": -0.375,
+      "n_worlds": 32,
+      "replicates": 10000,
+      "se": 0.08588161578840618,
+      "seed": 20261111
+     },
+     "purchases_copying_eig_argmax": [
+      33,
+      58
+     ],
+     "selected_policy_curve": {
+      "0": 0.0,
+      "1": 0.28125,
+      "2": 0.625,
+      "4": 0.78125
+     },
+     "server_latency_s": 108.666,
+     "status": {
+      "complete": 5,
+      "stopped": 27
+     },
+     "tokens": 354763,
+     "valid_action_rate": 1.0,
+     "worlds": 32,
+     "wrong_definite_verdicts": 2
+    }
+   },
+   "paired_worlds": 32,
+   "primary_resolved4_loop_minus_control": {
+    "ci95": [
+     0.0,
+     0.09375
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": 0.03125,
+    "n_worlds": 32,
+    "replicates": 10000,
+    "se": 0.031114344368424713,
+    "seed": 20261111
+   },
+   "unsupported_definite4_loop_minus_control": {
+    "ci95": [
+     -0.59375,
+     -0.25
+    ],
+    "dropped_nan_replicates": 0,
+    "estimate": -0.40625,
+    "n_worlds": 32,
+    "replicates": 10000,
+    "se": 0.08709817739617143,
+    "seed": 20261111
+   },
+   "worlds_changed": {
+    "control_resolves_loop_not": 0,
+    "loop_resolves_control_not": 1
+   }
+  }
+ },
+ "selected_policy": "eig"
+}

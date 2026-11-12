@@ -221,7 +221,7 @@ def main(argv=None):
                      help="rank slice lo hi of the fixed group hash ordering (R6 fresh panel: 40 162)")
     ar = sub.add_parser("analyze-r5", help="R5 track analyses (no model calls)")
     ar.add_argument("--track", required=True, choices=["g-champion", "g", "g-external", "m", "a-det", "a-select",
-                                                       "a-ai", "c", "g-r6", "g-r6-extras", "s-cal", "s"])
+                                                       "a-ai", "c", "g-r6", "g-r6-extras", "s-cal", "s", "a2"])
     ar.add_argument("--method", default="xdc[cgh_flat]")
     ar.add_argument("--external", action="store_true")
     ar.add_argument("--run", action="append", required=True)
@@ -305,6 +305,8 @@ def main(argv=None):
             obj = R.analyze_g_external(args.run[0], args.champion)
         elif t == "g-r6":
             obj = R.analyze_g_r6(args.run[0], args.champion, args.method, external=args.external)
+        elif t == "a2":                                       # --run control loop [control loop ...] --det-run
+            obj = R.analyze_a2(list(zip(args.run[0::2], args.run[1::2])), args.det_run)
         elif t == "s-cal":
             obj = R.analyze_s_calibration(args.run[0])
         elif t == "s":
