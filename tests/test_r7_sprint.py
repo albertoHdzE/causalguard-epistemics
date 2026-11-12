@@ -99,7 +99,10 @@ def test_parse_status_answers_and_reasoning_strip():
            {"cid": "c4", "verdict": "false", "probability": True}, {"cid": "c0", "verdict": "false",
                                                                     "probability": 0}]
     out = parse_status_answers(obj, cids)
-    assert out == {"c0": {"verdict": ENT, "probability": 1.0}, "c1": {"verdict": UND, "probability": 0.4}}
+    assert out == {"c0": {"verdict": ENT, "probability": 1.0}, "c1": {"verdict": UND, "probability": 0.4},
+                   "c3": {"verdict": REF, "probability": None}, "c4": {"verdict": REF, "probability": None}}
+    from causalguard.s4.pilot import parse_final_json
+    assert parse_final_json('Reasoning {not json} ... final: {"answers": [1]} and {"answers": [2]}') == {"answers": [2]}
     assert strip_reasoning("<think>{x}</think>\n{\"a\": 1}") == '{"a": 1}'
     assert strip_reasoning("reasoning without open tag </think> {\"a\": 1}") == '{"a": 1}'
     assert strip_reasoning('{"a": 1}') == '{"a": 1}'
@@ -134,6 +137,9 @@ def hand_case_failures(mod) -> list[str]:
                                    (UND, .5), (None, None), (None, None), (None, None)))
     if (s2["answered"], s2["missing"], s2["overclaim"], s2["underclaim"]) != (2, 6, 0.0, 0.0):
         bad.append(f"missing handling {s2}")
+    s3 = mod.task_s_world(REF8, _a((ENT, None), (ENT, 1.0), *[(None, None)] * 6))
+    if (s3["answered"], s3["with_probability"], s3["accuracy"], s3["prob_mae"]) != (2, 1, 1.0, 0.0):
+        bad.append(f"verdict-only handling {s3}")
     # Task P: t1 correct on c0 (named), c2 (unnamed), c4 (named, UND), wrong on c1 (named), c3 (named)
     a1 = _a((ENT, 1), (UND, .5), (REF, 0), (ENT, 1), (UND, .5), (UND, .5), (ENT, 1), (UND, .5))
     a2 = _a((UND, .5), (ENT, 1), (UND, .5), (REF, 0), (ENT, 1), (UND, .5), (ENT, 1), (REF, 0))

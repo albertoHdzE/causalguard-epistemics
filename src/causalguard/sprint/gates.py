@@ -33,6 +33,7 @@ def smoke_row(run_dir: str) -> dict:
     claims = sum(len(x["reference"]) for x in recs for _ in x["episode"].get("turns", []))
     valid = sum(len(t["answers"]) for t in turns)
     full = sum(len(t["answers"]) == 8 for t in turns)
+    with_p = sum(a.get("probability") is not None for t in turns for a in t["answers"].values())
     trunc = sum(bool(t.get("truncated")) for t in turns)
     lat = [t["latency_s"] for t in turns if t.get("latency_s") is not None]
     comp = [t["completion_tokens"] for t in turns if t.get("completion_tokens") is not None]
@@ -50,7 +51,7 @@ def smoke_row(run_dir: str) -> dict:
         reasons.append(f"{failures} failed or missing items")
     md = recs[0]["provider_metadata"] if recs else {}
     return {"run_dir": run_dir, "model": model, "worlds": len(recs), "requests": n_req, "claims": claims,
-            "valid_answers": valid, "valid_share": share, "full_requests": full, "truncated": trunc,
+            "valid_answers": valid, "valid_share": share, "with_probability": with_p, "full_requests": full, "truncated": trunc,
             "failed_or_missing_items": failures, "seconds_per_request_median": statistics.median(lat) if lat else None,
             "seconds_per_request_mean": statistics.mean(lat) if lat else None,
             "completion_tokens_median": statistics.median(comp) if comp else None,
@@ -70,13 +71,14 @@ def smoke(run_dirs: list[str], out: str = "reports/R7_SMOKE") -> int:
     lines = ["# R7 smoke gate (pre-sprint)", "",
              f"Each candidate local model: 4 smoke worlds (smoke manifest, hash order), Task S and one Task P turn = "
              f"8 requests. Pass: valid claim answers >= {SMOKE_PARSABLE:.0%}, no truncated response, no failed item.",
-             "", "| model | requests | valid answers | full 8/8 replies | truncated | median s / request | "
+             "A claim answer is valid when its verdict is valid; the probability is reported separately (D73).",
+             "", "| model | requests | valid answers | with probability | full 8/8 replies | truncated | median s / request | "
              "median / max completion tokens | max prompt tokens | quantization | pass | reason |",
-             "|---|---|---|---|---|---|---|---|---|---|---|"]
+             "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in rows:
         sec = f"{r['seconds_per_request_median']:.1f}" if r["seconds_per_request_median"] is not None else "-"
         lines.append(f"| {r['model']} | {r['requests']} | {r['valid_answers']}/{r['claims']} "
-                     f"({r['valid_share']:.0%}) | {r['full_requests']}/{r['requests']} | {r['truncated']} | {sec} | "
+                     f"({r['valid_share']:.0%}) | {r['with_probability']} | {r['full_requests']}/{r['requests']} | {r['truncated']} | {sec} | "
                      f"{r['completion_tokens_median']} / {r['completion_tokens_max']} | {r['prompt_tokens_max']} | "
                      f"{r['quantization']} | {'yes' if r['pass'] else 'NO'} | {'; '.join(r['reasons']) or '-'} |")
     Path(out + ".md").write_text("\n".join(lines) + "\n")

@@ -80,7 +80,8 @@ def model_summary(ws: list[dict], B: int) -> dict:
                for wd in (1, 2)}
     health = {"worlds": len(ws), "parsed_t1": sum(w["parsed_t1"] for w in ws),
               "parsed_t2": sum(w["parsed_t2"] for w in ws), "truncated_worlds": sum(w["truncated"] for w in ws),
-              "answered_t1": sum(w["S"]["answered"] for w in ws), "claims": sum(w["S"]["claims"] for w in ws),
+              "answered_t1": sum(w["S"]["answered"] for w in ws),
+              "with_probability_t1": sum(w["S"]["with_probability"] for w in ws), "claims": sum(w["S"]["claims"] for w in ws),
               "error_worlds": sum(w["status"] != "ok" for w in ws)}
     return {"S": s, "S_gated": gated, "P": p, "contrasts": contr, "by_population": by_pop,
             "discernment_by_wording": by_word, "health": health}
@@ -287,12 +288,12 @@ def render_md(res: dict, runs: list[dict]) -> str:
          f"H(8, 3).", "",
          "Status base rates (claims): " + ", ".join(f"{WORDS[k]} {v}" for k, v in res["status_base_rates"].items()),
          "", "## Runs and health", "",
-         "| model | run | planned | completed | parsed t1 / t2 | truncated worlds | valid answers t1 |",
-         "|---|---|---|---|---|---|---|"]
+         "| model | run | planned | completed | parsed t1 / t2 | truncated worlds | valid answers t1 | with probability |",
+         "|---|---|---|---|---|---|---|---|"]
     for m, v in res["models"].items():
         h = v["health"]
         L.append(f"| {m} | `{v['run_id']}` | {v['planned']} | {v['completed']} | {h['parsed_t1']} / {h['parsed_t2']} | "
-                 f"{h['truncated_worlds']} | {h['answered_t1']}/{h['claims']} |")
+                 f"{h['truncated_worlds']} | {h['answered_t1']}/{h['claims']} | {h['with_probability_t1']} |")
     L += ["", "## Task S (turn 1)", "",
           "| row | overclaim | underclaim | wrong settled | accuracy | balanced acc | prob MAE vs p* | Brier | "
           "Brier of p* | incoherent |", "|---|---|---|---|---|---|---|---|---|---|"]

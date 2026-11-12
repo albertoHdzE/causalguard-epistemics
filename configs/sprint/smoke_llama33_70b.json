@@ -15,7 +15,7 @@
   "backend": "lmstudio",
   "base_url": "http://127.0.0.1:1234/v1",
   "model": "llama-3.3-70b-instruct",
-  "max_tokens": 1500,
+  "max_tokens": 3000,
   "seed": 0,
   "timeout_s": 600,
   "max_transport_retries": 1,

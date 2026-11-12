@@ -117,6 +117,26 @@ def parse_json(text: str | None) -> dict | None:
     return None
 
 
+def parse_final_json(text: str | None, key: str = "answers") -> dict | None:
+    """R7: ``parse_json``, else the LAST JSON object in the text that carries ``key`` (a reply that reasons in prose
+    and ends with the requested object).  Earlier objects are never preferred over a later one."""
+    obj = parse_json(text)
+    if obj is not None or not text:
+        return obj
+    dec = json.JSONDecoder()
+    found = None
+    for i, ch in enumerate(text):
+        if ch != "{":
+            continue
+        try:
+            v, _ = dec.raw_decode(text, i)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(v, dict) and key in v:
+            found = v
+    return found
+
+
 def parse_answers(obj, cids: list[str]) -> dict:
     """{cid: {"verdict", "forecast"}} for valid entries; invalid/missing entries are absent."""
     out = {}
@@ -150,9 +170,10 @@ STATUS_WORDS = {"true": "entailed", "false": "refuted", "not settled": "underdet
 
 
 def parse_status_answers(obj, cids: list[str]) -> dict:
-    """R7 Task S: {cid: {"verdict": entailed|refuted|underdetermined, "probability": float in [0, 1]}} for valid
-    entries.  Verdict words are matched case-insensitively after trimming; a numeric string probability is
-    accepted; anything else (missing, out of range, bool, duplicate cid) leaves the claim absent."""
+    """R7 Task S: {cid: {"verdict": entailed|refuted|underdetermined, "probability": float in [0, 1] or None}}.
+    A claim answer is valid when its verdict is valid (words matched case-insensitively after trimming); the
+    probability is kept when it is a number (or numeric string) in [0, 1], else recorded as None (DECISIONS D73).
+    Invalid verdicts and duplicate cids leave the claim absent."""
     out = {}
     if not isinstance(obj, list):
         return out
@@ -169,8 +190,8 @@ def parse_status_answers(obj, cids: list[str]) -> dict:
                 p = None
         if isinstance(p, bool) or not isinstance(p, (int, float)) or not (0.0 <= float(p) <= 1.0):
             p = None
-        if v is not None and p is not None:
-            out[a["cid"]] = {"verdict": v, "probability": float(p)}
+        if v is not None:
+            out[a["cid"]] = {"verdict": v, "probability": None if p is None else float(p)}
     return out
 
 

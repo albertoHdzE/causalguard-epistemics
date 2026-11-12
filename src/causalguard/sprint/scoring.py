@@ -59,6 +59,10 @@ def task_s_world(ref: dict, ans: dict) -> dict:
         else:
             c["under"] += v == UND
             c["wrong"] += v in SETTLED and v != st
+        if p is None:                       # verdict without a valid probability: status scores only
+            c["no_prob"] += 1
+            continue
+        c["with_prob"] += 1
         ae.append(abs(p - r["p_star"]))
         be.append((p - r["truth"]) ** 2)
         bs.append((r["p_star"] - r["truth"]) ** 2)
@@ -70,7 +74,8 @@ def task_s_world(ref: dict, ans: dict) -> dict:
            "wrong_settled": _rate(c["wrong"], n_set), "accuracy": _rate(c["correct"], c["answered"]),
            "prob_mae": sum(ae) / len(ae) if ae else None, "brier": sum(be) / len(be) if be else None,
            "brier_pstar": sum(bs) / len(bs) if bs else None,
-           "incoherent": _rate(inc, c["answered"]), "incoherent_tol05": _rate(inc_t, c["answered"]),
+           "with_probability": c["with_prob"],
+           "incoherent": _rate(inc, c["with_prob"]), "incoherent_tol05": _rate(inc_t, c["with_prob"]),
            "pairs": {k[5:]: v for k, v in c.items() if k.startswith("pair|")}}
     return out
 

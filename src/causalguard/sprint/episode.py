@@ -13,7 +13,7 @@ import os
 import time
 from pathlib import Path
 
-from ..s4.pilot import parse_json, parse_status_answers, strip_reasoning
+from ..s4.pilot import parse_final_json, parse_status_answers, strip_reasoning
 from . import population as P
 from . import tasks as T
 
@@ -33,7 +33,7 @@ def _turn(provider, msgs, budget, seed, wid, label) -> tuple[dict, dict, str | N
     rec = {k: res[k] for k in ("ok", "raw_output", "failure", "request_hash")}
     rec["attempts"] = res["attempts"]
     visible = strip_reasoning(res["raw_output"]) if res["ok"] else None
-    obj = parse_json(visible)
+    obj = parse_final_json(visible)
     last = res["attempts"][-1] if res["attempts"] else {}
     rec.update(parsed=obj is not None, truncated=last.get("finish_reason") == "length",
                finish_reason=last.get("finish_reason"), latency_s=last.get("latency_s"),

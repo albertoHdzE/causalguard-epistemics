@@ -5,8 +5,13 @@ Owner of: transport, bounded transport retries, per-attempt cost logging, provid
 Rules
 -----
 * Only local endpoints: ``base_url`` must resolve to 127.0.0.1 / localhost / ::1 unless the
-  config explicitly sets ``allow_remote=true`` (default false).  No API keys or environment
-  secrets are ever read; no Authorization header is sent.
+  config explicitly sets ``allow_remote=true`` (default false).  No API key is read and no Authorization
+  header is sent, with ONE exception (R7 sprint, authorised in docs/SPRINT_AUTHORISATION.md): backend
+  'deepseek' reads ``extra.api_key_env`` from the process environment or ``extra.env_file`` at construction,
+  keeps it in a private attribute, sends it only to the pinned DeepSeek host, and never puts it in a record,
+  log, repr or metadata.
+* R7 sprint: ``ClaudeCLIProvider`` (kind 'claude_cli') drives the Claude Code command line non-interactively
+  in an isolated configuration (see its docstring).
 * Transport errors (connection refused/reset, HTTP 5xx, timeouts) are retried at most
   ``max_transport_retries`` times (default 2).  Every attempt -- including failed ones -- is
   logged with its latency and, when the server returns them, prompt/completion token counts.
@@ -121,6 +126,8 @@ class BaseProvider:
                 r = self._send(msgs, temperature, seed)
                 rec.update(ok=True, prompt_tokens=r.get("prompt_tokens"), completion_tokens=r.get("completion_tokens"),
                            finish_reason=r.get("finish_reason"), response_model=r.get("response_model"))
+                if "isolation" in r:                   # R7 claude_cli: per-request wire audit
+                    rec["isolation"] = r["isolation"]
                 content = r["content"]
                 ok = True
             except TransportError as e:
@@ -151,11 +158,23 @@ class OpenAICompatibleProvider(BaseProvider):
         self.base = cfg.base_url.rstrip("/")
         p = urllib.parse.urlparse(self.base)
         self.root = f"{p.scheme}://{p.netloc}"
+        self.__key = None
+        if cfg.backend == "deepseek":
+            if p.hostname != DEEPSEEK_HOST or p.scheme != "https":
+                raise ValueError("backend 'deepseek' must use https://" + DEEPSEEK_HOST)
+            self.__key = _read_key(cfg.extra.get("api_key_env", "DEEPSEEK_API_KEY"), cfg.extra.get("env_file"))
+
+    def __repr__(self) -> str:
+        return f"<{type(self).__name__} backend={self.cfg.backend} model={self.cfg.model}>"
 
     def _http(self, url: str, body: dict | None = None, timeout: float | None = None) -> dict:
         data = None if body is None else json.dumps(body).encode()
-        req = urllib.request.Request(url, data=data, method="GET" if body is None else "POST",
-                                     headers={"Content-Type": "application/json"})
+        headers = {"Content-Type": "application/json"}
+        if self.__key is not None:
+            if urllib.parse.urlparse(url).hostname != DEEPSEEK_HOST:
+                raise FatalProviderError("refusing to send the API key to a non-DeepSeek host")
+            headers["Authorization"] = "Bearer " + self.__key
+        req = urllib.request.Request(url, data=data, method="GET" if body is None else "POST", headers=headers)
         try:
             with urllib.request.urlopen(req, timeout=timeout or self.cfg.timeout_s) as resp:
                 raw = resp.read()
@@ -177,6 +196,8 @@ class OpenAICompatibleProvider(BaseProvider):
                 "max_tokens": self.cfg.max_tokens, "stream": False}
         if seed is not None:
             body["seed"] = seed
+        if self.cfg.extra.get("body"):                    # R7: provider-specific request fields (e.g. thinking)
+            body.update(self.cfg.extra["body"])
         r = self._http(self.base + "/chat/completions", body)
         try:
             choice = r["choices"][0]
@@ -184,9 +205,13 @@ class OpenAICompatibleProvider(BaseProvider):
         except (KeyError, IndexError, TypeError, AttributeError):
             raise FatalProviderError(f"malformed envelope: {str(r)[:200]}") from None
         usage = r.get("usage") or {}
-        return {"content": content if content is not None else "", "finish_reason": choice.get("finish_reason"),
-                "prompt_tokens": usage.get("prompt_tokens"), "completion_tokens": usage.get("completion_tokens"),
-                "response_model": r.get("model")}
+        out = {"content": content if content is not None else "", "finish_reason": choice.get("finish_reason"),
+               "prompt_tokens": usage.get("prompt_tokens"), "completion_tokens": usage.get("completion_tokens"),
+               "response_model": r.get("model")}
+        rc = (choice.get("message") or {}).get("reasoning_content")
+        if rc is not None:                                 # R7: hidden reasoning is not part of the answer
+            out["reasoning_chars"] = len(rc)
+        return out
 
     def _send_ollama_native(self, messages: list[dict], temperature: float, seed: int | None) -> dict:
         """Ollama native /api/chat (iteration 4): the OpenAI-compatible endpoint cannot set the context window, and
@@ -266,6 +291,175 @@ class OpenAICompatibleProvider(BaseProvider):
             md["limitations"].append("server version not exposed by this backend")
         md["limitations"].append("seed is sent but whether the backend honours it is not verified")
         return md
+
+
+DEEPSEEK_HOST = "api.deepseek.com"
+
+
+def _read_key(name: str, env_file: str | None) -> str:
+    """API key from the environment, else from a dotenv file (KEY=VALUE lines).  Never printed or logged."""
+    import os
+    v = os.environ.get(name)
+    if not v and env_file:
+        for line in open(os.path.expanduser(env_file), encoding="utf-8"):
+            k, _, val = line.strip().partition("=")
+            if k.strip() == name:
+                v = val.strip().strip('"').strip("'")
+    if not v:
+        raise ValueError(f"{name} not found in the environment or the env file")
+    return v
+
+
+class ClaudeCLIProvider(BaseProvider):
+    """R7 sprint: Claude (Opus 5.5) through the Claude Code command line, non-interactive, isolated.
+
+    Every request runs ``claude -p`` from an EMPTY temporary working directory with:
+      --system-prompt <our system message>   replaces the default system prompt
+      --tools ""                              no built-in tool
+      --strict-mcp-config                     no MCP server (none passed with --mcp-config)
+      --setting-sources ""                    no user / project / local settings (so no user hooks)
+      --disable-slash-commands                no skills or commands
+      --output-format json                    result text + usage (input token counts: the isolation evidence)
+      --model <model>                         e.g. claude-opus-5-5
+    Turn 1 starts a session with a fresh ``--session-id``; turn 2 ``--resume``s it with the follow-up, so both
+    turns are one conversation.  The provider checks that the conversation it is asked to continue is exactly the
+    one it holds (system, user, its own reply).  Sampling temperature cannot be set on this route (disclosed).
+    ``--bare`` (which would also skip hooks) is not usable: it accepts only an API key, and none exists."""
+
+    kind = "real"
+
+    def __init__(self, cfg: ProviderConfig):
+        super().__init__(cfg)
+        self.binary = cfg.extra.get("binary", "claude")
+        self.sessions: dict[str, tuple[str, str]] = {}      # hash(sys, user1, reply) -> (session id, workdir)
+        self.last_usage: dict | None = None
+
+    @staticmethod
+    def _conv_hash(msgs: list[dict]) -> str:
+        return hashlib.sha256(canonical_json(msgs).encode()).hexdigest()
+
+    def argv(self, system: str, session: str, resume: bool) -> list[str]:
+        a = [self.binary, "-p", "--model", self.cfg.model, "--system-prompt", system, "--tools", "",
+             "--strict-mcp-config", "--setting-sources", "", "--disable-slash-commands", "--output-format", "json"]
+        if self.cfg.extra.get("effort"):
+            a += ["--effort", self.cfg.extra["effort"]]
+        return a + (["--resume", session] if resume else ["--session-id", session])
+
+    def _send(self, messages, temperature, seed):
+        import os
+        import subprocess
+        import tempfile
+        import uuid
+        if not messages or messages[0]["role"] != "system" or messages[-1]["role"] != "user":
+            raise FatalProviderError("claude_cli expects [system, user, (assistant, user)*]")
+        system, prompt = messages[0]["content"], messages[-1]["content"]
+        if len(messages) == 2:
+            session, resume = str(uuid.uuid4()), False
+            workdir = tempfile.mkdtemp(prefix="r7-claude-")
+        else:
+            key = self._conv_hash(messages[:-1])
+            if key not in self.sessions:
+                raise FatalProviderError("claude_cli: unknown conversation to continue")
+            (session, workdir), resume = self.sessions[key], True
+        if os.listdir(workdir):
+            raise FatalProviderError("claude_cli: working directory is not empty")
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("CLAUDE_CODE", "CLAUDECODE"))
+               and k not in ("ANTHROPIC_API_KEY",)}
+        try:
+            p = subprocess.run(self.argv(system, session, resume), input=prompt, capture_output=True, text=True,
+                               cwd=workdir, env=env, timeout=self.cfg.timeout_s)
+        except subprocess.TimeoutExpired:
+            raise TransportError("claude_cli timeout") from None
+        if p.returncode != 0:
+            raise TransportError(f"claude_cli exit {p.returncode}: {(p.stderr or p.stdout)[-300:]}")
+        try:
+            r = json.loads(p.stdout)
+        except json.JSONDecodeError:
+            raise FatalProviderError(f"claude_cli non-JSON output: {p.stdout[:200]!r}") from None
+        if r.get("is_error"):
+            raise TransportError(f"claude_cli error result: {str(r.get('result'))[:200]}")
+        text = r.get("result") or ""
+        u = r.get("usage") or {}
+        self.last_usage = u
+        self.sessions[self._conv_hash(messages + [{"role": "assistant", "content": text}])] = (session, workdir)
+        iso = self.audit_wire(workdir, session, system, prompt)
+        if not iso["ok"]:
+            raise FatalProviderError(f"claude_cli isolation audit failed: {iso['problems']}")
+        tin = sum(int(u.get(k) or 0) for k in ("input_tokens", "cache_creation_input_tokens",
+                                                "cache_read_input_tokens"))
+        return {"content": text, "finish_reason": r.get("stop_reason") or r.get("subtype"), "prompt_tokens": tin,
+                "completion_tokens": u.get("output_tokens"), "response_model": ",".join(sorted(
+                    (r.get("modelUsage") or {}).keys())) or self.cfg.model, "isolation": iso}
+
+    SDK_PREFIX = "You are a Claude agent, built on Anthropic's Claude Agent SDK."
+
+    @staticmethod
+    def transcript(workdir: str, session: str):
+        import os
+        import re as _re
+        from pathlib import Path as _P
+        d = _re.sub(r"[^A-Za-z0-9]", "-", os.path.realpath(workdir))
+        return _P.home() / ".claude" / "projects" / d / f"{session}.jsonl"
+
+    def audit_wire(self, workdir: str, session: str, system: str, prompt: str) -> dict:
+        """Read the CLI's own record of the LAST API request of this session and classify every text block:
+        the system blocks must be exactly [SDK identity sentence, our system prompt], the tool list empty, and
+        every user-side text block must be our prompt, the fixed environment block, or the fixed account-context
+        reminder.  Anything else (project instructions, memory, hook output, skills) fails the request."""
+        path = self.transcript(workdir, session)
+        probs, kinds = [], []
+        try:
+            lines = [json.loads(x) for x in path.read_text().splitlines() if x.strip()]
+        except (OSError, json.JSONDecodeError) as e:
+            return {"ok": False, "problems": [f"transcript unreadable: {e!r}"[:200]]}
+        reqs = [i for i, x in enumerate(lines) if x.get("type") == "api-request"]
+        if not reqs:
+            return {"ok": False, "problems": ["no api-request record"]}
+        last = reqs[-1]
+        shape = next((x for x in reversed(lines[:last]) if x.get("type") == "api-request-shape"), None)
+        if shape is None:
+            probs.append("no request shape record")
+        else:
+            sysb = [b.get("text") for b in shape["shape"].get("system", [])]
+            if sysb != [self.SDK_PREFIX, system]:
+                probs.append(f"system blocks differ: {[str(t)[:60] for t in sysb]}")
+            if shape["shape"].get("tools"):
+                probs.append("tools present")
+        prev = reqs[-2] if len(reqs) > 1 else -1
+        for x in lines[prev + 1:last]:
+            if x.get("type") == "user" and isinstance(x.get("message"), dict) and \
+                    x["message"].get("content") == prompt:
+                kinds.append("our_prompt")          # a continued turn: the CLI records it as a user message
+                continue
+            if x.get("type") != "api-request-blob":
+                continue
+            for b in x.get("message", {}).get("content", []) if isinstance(x.get("message"), dict) else \
+                    (x.get("content") or []):
+                t = b.get("text", "") if isinstance(b, dict) else str(b)
+                if t == prompt:
+                    kinds.append("our_prompt")
+                elif t.startswith("# Environment\nYou have been invoked"):
+                    kinds.append("environment_block")
+                elif "# userEmail" in t and t.count("\n#") == 1:
+                    kinds.append("account_context")
+                else:
+                    kinds.append("OTHER")
+                    probs.append(f"unexpected block: {t[:80]!r}")
+        if "our_prompt" not in kinds:
+            probs.append("our prompt not found in the request record")
+        return {"ok": not probs, "problems": probs, "blocks": kinds,
+                "system_blocks": 2 if shape else None}
+
+    def metadata(self) -> dict:
+        import subprocess
+        try:
+            v = subprocess.run([self.binary, "--version"], capture_output=True, text=True, timeout=30).stdout.strip()
+        except Exception as e:  # noqa: BLE001
+            v = f"unavailable: {e!r}"[:100]
+        return {"provider_kind": self.kind, "backend": "claude_cli", "model": self.cfg.model, "cli_version": v,
+                "isolation_flags": self.argv("<system>", "<session>", False)[2:-2],
+                "limitations": ["sampling temperature cannot be set on this route", "no seed",
+                                "model revision not exposed beyond the reported model id"]}
 
 
 class MockProvider(BaseProvider):
@@ -376,6 +570,8 @@ def make_provider(d: dict) -> BaseProvider:
     cfg = ProviderConfig.from_dict(d)
     if cfg.kind == "openai_compatible":
         return OpenAICompatibleProvider(cfg)
+    if cfg.kind == "claude_cli":
+        return ClaudeCLIProvider(cfg)
     if cfg.kind == "mock":
         return MockProvider(cfg, script=mock_policy(cfg.extra.get("policy", "always_underdetermined")))
     if cfg.kind == "replay":
