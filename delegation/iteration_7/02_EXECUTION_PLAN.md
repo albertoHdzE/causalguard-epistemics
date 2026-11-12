@@ -1,39 +1,32 @@
-# R7 execution plan
+# R7 execution plan (pre-sprint day)
 
-Branch `iteration-7`, created from `iteration-6` at `7316350` plus the director's review and delegation commit.
-Keep `reports/R7_TASK_LEDGER.md` from the first step.
+Branch `iteration-7` (local; from `iteration-6` at `7316350` plus the director's commits). Keep
+`reports/R7_TASK_LEDGER.md` from the first step. Every item of R7 is dated pre-sprint.
 
 | WP | Work | Gate to pass before the next WP |
 |---|---|---|
-| WP0 | Takeover. Read the R6 review and this package. Reproduce the corpus census with tested code (essential indegree, nested canalizing, unate, by indegree), on all files for the aggregate table and separately on calibration groups. Compare with the director's provisional table and report every difference. Build the R7 inventory and group split; commit the manifest. | Population gate of protocol §2. Census differences explained. |
-| WP1 | Track K predictors for d ≤ 6: `uniform`, `unate`, `ncf`, `formula`, `cgh`. Normalisation, brute-force and independent-oracle tests, planted defect, cost by d. | All exactness tests pass with printed denominators. Earlier outputs byte-identical. |
-| WP2 | Setting W world item, evidence panels (random-state and trajectory), query schedule, public-payload audit. Calibration on calibration groups. Budget, comparator and ε chosen by the protocol rules. `docs/R7_DESIGN_LOCK.json` with your recorded predictions. | Lock committed before any evaluation-group score. |
-| WP3 | Track K evaluation from the lock snapshot. Locked analysis, figures, `reports/R7_REALISTIC_INDEGREE.md`. | Every declared secondary is in the locked analysis output (R6 defect S-D1 must not recur). |
-| WP4 | Track V analysis on the same runs. Risk–coverage figure, `reports/R7_CLAIM_CHECKING.md`. | — |
-| WP5 | Track L pilot (`docs/R7L_DESIGN.md` first). Optional exact-XDC secondary of protocol §7. | Smoke gate ≥ 90 % parsable before the 32 worlds. |
-| WP6 | Claim ledger, evidence matrix, acceptance JSON, funding brief, review entry point, release `v0.7.0-dev`. | Fresh-clone check as in R6. |
+| WP0 | Takeover. Read the R6 review and this package. Confirm the unaided-arm harness (`s4/pilot.py`) still runs on a current world and that both exact engines agree on status for 200 fresh items. | Engines agree 200 / 200. |
+| WP1 | Reference probability p*, Task S scoring, reference rows, surface-rule audit. Tests, including a planted scoring defect. | Tests pass with printed denominators. Surface rule well below the checker on pilot worlds, or generator settings changed and recorded. |
+| WP2 | Task P: four conditions, two wordings each, hash assignment, public-information audit of every follow-up message. Tests. | No hidden value appears in any follow-up outside a P3 witness (audited on all pilot items). |
+| WP3 | Smoke gate and throughput probe on every candidate model. | At least four models pass, or report the block. |
+| WP4 | Pilot: 32 pilot worlds, two models, Tasks S and P. Analysis and `reports/R7_PILOT.md` with figures. | — |
+| WP5 | Panel sizing, `docs/SPRINT_DESIGN_LOCK.json`, main-panel manifest and configs, a dry run of the full pipeline on a mock provider. | Lock committed. Dry run completes end to end. |
+| WP6 | Related work with verified references (`docs/SPRINT_RELATED_WORK.md`). Report template in `report/`, building to PDF. `PREEXISTING_WORK.md` and README updated. | Every reference has a URL that was opened and a one-line note of what was checked. |
+| WP7 | Push branch `iteration-7`. Return the summary. No release tag in R7; the sprint release comes after the main run. | — |
 
-Order of priority if time runs short: WP0–WP3 complete, then WP4, then WP6, then WP5. A complete Track K with a
-clean lock is worth more than three partial tracks.
+Priority if time runs short: WP0–WP5 first. WP6 can finish during the sprint.
 
 Engineering rules:
 
-- One owner per concept. The corpus parser stays in `r5/external.py`. The analytic catalogue stays in
-  `s4/hcode.py`; raise its limit there rather than copying it. New per-node function-class code goes in one new
-  module under `src/causalguard/r7/`. The independent oracles are the deliberate exception and live in the tests.
-- Default arguments keep every R5 and R6 output byte-identical. Prove it with `scripts/r6_regen_check.sh` (or its
-  R7 successor) and the replay check.
-- Every gate prints its denominator, refuses on empty input and exits non-zero on failure.
+- One owner per concept. Task P extends the existing episode code; do not copy the prompt builder or the parser.
+  Scoring lives in one module. The exact engines are used as they are.
+- Default arguments keep every R5 and R6 output byte-identical (`scripts/r6_regen_check.sh`).
+- Every gate prints its denominator, refuses on empty input and exits non-zero on failure. Check that loop bodies
+  actually ran.
+- Every model request goes through the existing ledger with phase `R7`, cap 600.
 - Runs execute from committed snapshots with `scripts/run_from_snapshot.sh`.
-- Verification loops: check that the loop body actually ran (R6 had two that failed silently).
-- Render the object before quoting a number about it. Each report states the figure first.
-- Date every work item by its actual timestamp as pre-sprint (before 2026-11-13) or sprint work, and keep
-  `PREEXISTING_WORK.md` current. The sprint requires this disclosure.
-- Do not stop to ask routine implementation questions. Where the protocol leaves a choice open, decide it on
-  calibration groups, record it in `DECISIONS.md` (D70 onward) and in the lock, and continue.
-- Publishing: push branch `iteration-7` and cut prerelease `v0.7.0-dev` in `albertoHdzE/causalguard-epistemics`
-  as in earlier iterations. Older tags and assets stay untouched.
+- Render before quoting: the pilot report shows the per-world points, not only means.
+- Do not stop to ask routine questions. Record choices in `DECISIONS.md` (D70 onward).
 
-Ceilings, not targets: 48 CPU-hours offline with four workers; at most 400 new model requests inside the global
-3,072 (1,498 used); 2 model-server hours. No confirmatory run, no freeze record, no paid inference, no weight
-changes.
+Ceilings: 600 model requests; 4 model-server hours; 16 CPU-hours offline. No paid inference, no weight changes, no
+main-panel run.

@@ -79,7 +79,13 @@ overclaiming into honest uncertainty in a weak model", on 32 worlds and one mode
 The question "which compact code is best inside H(n, 3)" has been answered three times: it barely matters. The
 question that the project goal actually asks is whether a compact algorithmic description helps infer unseen facts
 and check claims. That has headroom only where a node's table is too large to observe, which is indegree ≥ 4, and
-that is where about a third of published nodes and nearly all whole published models are. R7
-(`delegation/ITERATION_7_OPUS_PROMPT.md`) moves the experiment there: whole published models, wiring public, logic
-hidden, our analytic code against counting and against the field-standard monotonicity assumption, with claim
-checking under declared assumptions measured on the same worlds.
+that is where about a third of published nodes and nearly all whole published models are. The experiment that
+moves there (whole published models, wiring public, logic hidden, our analytic code against counting and against
+the field-standard monotonicity assumption) is specified in `delegation/parked/` and is the right next step for the
+research programme.
+
+**It is not the sprint entry.** The sprint judges score impact for AI epistemics, novelty, soundness and clarity.
+For that audience the project's asset is not a prior but exact ground truth for what evidence settles, with model
+failures already measured against it (R5 Track A, R6 Track A2). R7 (`delegation/ITERATION_7_OPUS_PROMPT.md`)
+redirects the sprint work to a benchmark of evidential status, behaviour under pressure, and the exact check as a
+remedy.
