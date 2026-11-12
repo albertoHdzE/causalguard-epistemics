@@ -1,0 +1,285 @@
+{
+ "champion": {
+  "name": "gate",
+  "source": "R5 lock docs/R5_DESIGN_LOCK.json (calibration-selected generic comparator)"
+ },
+ "configs": {
+  "configs/r6/g_calibration.json": "ac5f8ab7a7d6e71f7e58c403463cc6f723efcc9379ea5b0d25de87980a39e9cb",
+  "configs/r6/g_evaluation.json": "eac2d9cd51306316a8524aeb3de46e5ad6d22b6aae8e226afaa3d451490fbf8a",
+  "configs/r6/g_external_dev.json": "15f9c37eb5a60a928fc74824dc9a596d8c5ee6e48ad489c5a17205635d163dde",
+  "configs/r6/g_external_fresh.json": "8a1c5c6c8e01ff59934e109f351b9e3d17aaf641aa923bd715a97e44f5dc7084"
+ },
+ "development_results_seen_before_lock": {
+  "also_seen": "unrecorded probes of the same two panels with a probe design salt (same qualitative result); a Track M Occam-risk probe on salt r5-M-v1 (negative; reports/review_r5/REVIEW.md F4)",
+  "calibration_by_hidden_rule_reuse_B16": {
+   "0": {
+    "champion_minus_method": 0.0243906891977218,
+    "n_worlds": 4
+   },
+   "1": {
+    "champion_minus_method": 0.0021206636541491186,
+    "n_worlds": 9
+   },
+   "2": {
+    "champion_minus_method": -0.003182215801441172,
+    "n_worlds": 9
+   },
+   "3": {
+    "champion_minus_method": 0.0046418827251999365,
+    "n_worlds": 12
+   },
+   "4": {
+    "champion_minus_method": 0.0008907987061516396,
+    "n_worlds": 9
+   },
+   "6+": {
+    "champion_minus_method": 0.10144134634464118,
+    "n_worlds": 21
+   }
+  },
+  "calibration_contrasts_B16": {
+   "generic_sharing_gate_minus_xdc_gate": {
+    "ci95": [
+     0.017181696497590777,
+     0.05295631131160346
+    ],
+    "estimate": 0.033946888130691966
+   },
+   "gsr_a50_minus_method": {
+    "ci95": [
+     0.024737263645148194,
+     0.05299867313635421
+    ],
+    "estimate": 0.03885985868660293
+   },
+   "primary_champion_minus_method": {
+    "ci95": [
+     0.018390585554616614,
+     0.055336928791221186
+    ],
+    "estimate": 0.03565620065250762
+   },
+   "sharing_flat_base_minus_method": {
+    "ci95": [
+     0.006950508447115478,
+     0.036368290657773625
+    ],
+    "estimate": 0.02084861350622811
+   },
+   "uniform_minus_method": {
+    "ci95": [
+     0.02545310898448656,
+     0.051906734438526954
+    ],
+    "estimate": 0.03871248848429781
+   },
+   "vocabulary_xdc_gate_minus_method": {
+    "ci95": [
+     -0.004634870059811566,
+     0.007274033140452868
+    ],
+    "estimate": 0.0017093125218156542
+   }
+  },
+  "calibration_run": "r6-g-cal-v1 (64 worlds)",
+  "external_dev_contrasts": {
+   "16": {
+    "generic_sharing_gate_minus_xdc_gate": {
+     "ci95": [
+      -0.0007242100891756628,
+      0.0038787606829181346
+     ],
+     "estimate": 0.0015598406375511489
+    },
+    "gsr_a50_minus_method": {
+     "ci95": [
+      0.03254350997926908,
+      0.04731929639204655
+     ],
+     "estimate": 0.039857572310634394
+    },
+    "primary_champion_minus_method": {
+     "ci95": [
+      -0.002248397975678761,
+      0.005459940637966507
+     ],
+     "estimate": 0.0018143062140136097
+    },
+    "sharing_flat_base_minus_method": {
+     "ci95": [
+      -0.0013510300397290022,
+      0.0032018746327595977
+     ],
+     "estimate": 0.0008813651419512068
+    },
+    "uniform_minus_method": {
+     "ci95": [
+      0.0387650432161335,
+      0.05377865054207985
+     ],
+     "estimate": 0.046349664269648524
+    },
+    "vocabulary_xdc_gate_minus_method": {
+     "ci95": [
+      -0.0034612763046947648,
+      0.003786853891306804
+     ],
+     "estimate": 0.0002544655764624611
+    }
+   },
+   "24": {
+    "generic_sharing_gate_minus_xdc_gate": {
+     "ci95": [
+      -0.001100328397889433,
+      0.002131743465816236
+     ],
+     "estimate": 0.0005939502634112952
+    },
+    "gsr_a50_minus_method": {
+     "ci95": [
+      0.03221449790555066,
+      0.04783712450379275
+     ],
+     "estimate": 0.03973962667167427
+    },
+    "primary_champion_minus_method": {
+     "ci95": [
+      -0.0010432753852018552,
+      0.002415653281294719
+     ],
+     "estimate": 0.0007716477733971362
+    },
+    "sharing_flat_base_minus_method": {
+     "ci95": [
+      -0.0020193805016189043,
+      0.002685962796663624
+     ],
+     "estimate": 0.0004667636835272872
+    },
+    "uniform_minus_method": {
+     "ci95": [
+      0.036138553524091226,
+      0.05108993971196289
+     ],
+     "estimate": 0.04352834390818887
+    },
+    "vocabulary_xdc_gate_minus_method": {
+     "ci95": [
+      -0.0005842397337473742,
+      0.0010172518711918412
+     ],
+     "estimate": 0.000177697509985841
+    }
+   },
+   "8": {
+    "generic_sharing_gate_minus_xdc_gate": {
+     "ci95": [
+      0.0038243603674357474,
+      0.018267125641190908
+     ],
+     "estimate": 0.010967161205813295
+    },
+    "gsr_a50_minus_method": {
+     "ci95": [
+      0.028057366423198334,
+      0.04310185490265789
+     ],
+     "estimate": 0.035509447570921365
+    },
+    "primary_champion_minus_method": {
+     "ci95": [
+      0.012181160612699322,
+      0.026557210138693978
+     ],
+     "estimate": 0.019085009667414502
+    },
+    "sharing_flat_base_minus_method": {
+     "ci95": [
+      -0.0015154289767497647,
+      0.007416383504851811
+     ],
+     "estimate": 0.0029724632543819667
+    },
+    "uniform_minus_method": {
+     "ci95": [
+      0.047873395354526484,
+      0.06382641862477831
+     ],
+     "estimate": 0.05565508449531104
+    },
+    "vocabulary_xdc_gate_minus_method": {
+     "ci95": [
+      0.0033577286595431145,
+      0.012836558065101351
+     ],
+     "estimate": 0.008117848461601204
+    }
+   }
+  },
+  "external_dev_run": "r6-g-ext-dev-v1 (159 instances, 40 groups already used in R5)"
+ },
+ "external_primary": "same contrast on the fresh external panel, source-group clusters; never pooled",
+ "implementation_commit": "f640e70b7f705079608070ce35c294c160db38c6",
+ "interpretation_rules": {
+  "generalizes_to_published_models": "only if the external primary interval at B=16 excludes 0 with positive sign",
+  "no_claim": "universal priors, Kolmogorov complexity, biological accuracy",
+  "supported_in_scope": "synthetic primary interval excludes 0 with positive sign; scope = worlds with reused rule types"
+ },
+ "method": {
+  "definition": "src/causalguard/r5/priors.py::XDC",
+  "name": "xdc[cgh_flat]",
+  "rule_type": "local table up to input permutation",
+  "theta_rule": "equal-weight Bayes mixture; nothing fitted",
+  "thetas": [
+   "0.5",
+   "2.0",
+   "8.0",
+   "inf"
+  ]
+ },
+ "not_authorized": {
+  "confirmatory_run": false,
+  "freeze_record": false,
+  "model_calls": 0,
+  "paid_inference": false
+ },
+ "populations": {
+  "external_manifest": {
+   "groups": 122,
+   "hash_rank_slice": [
+    40,
+    162
+   ],
+   "instances": 449,
+   "overlap_with_r5_groups": 0,
+   "path": "artifacts/r6_source_manifest.json",
+   "sha256": "7c84322cc51dd1fa38017bbad0868459decdd8f82cab27638f8eabdcc0e034f6"
+  },
+  "g_population_spec_sha256": "5339688be28d98546b3546f378da9f922025d7fa98bdd3ddbeaa950155bb3467",
+  "synthetic_salt": "r6-G-eval-v1",
+  "synthetic_split": "evaluation_r6"
+ },
+ "practical_planning_value": 0.02,
+ "predictions_recorded_before_evaluation": {
+  "external_B8": "positive, mostly vocabulary plus a smaller sharing part",
+  "external_primary_B16": "small (|estimate| < 0.006), interval probably including 0",
+  "synthetic_primary": "positive, at or above 0.02, interval excluding 0; concentrated in worlds with hidden rule reuse >= 6; negative on uniform_H"
+ },
+ "primary": "Brier(gate) - Brier(xdc[cgh_flat]) at B=16, fresh synthetic evaluation, equal stratum weights, source-group cluster bootstrap 10,000 reps seed 20261111, worst-case missingness bounds",
+ "protocol": {
+  "path": "docs/R6_PROTOCOL.md",
+  "sha256": "1ba0b05792c7addfceadcdfe7b80609e05b013e4894b6e9b8e36da4336d09598"
+ },
+ "secondaries": [
+  "sharing_flat_base_minus_method",
+  "vocabulary_xdc_gate_minus_method",
+  "generic_sharing_gate_minus_xdc_gate",
+  "uniform_minus_method",
+  "gsr_a50_minus_method",
+  "budgets 8 and 24",
+  "per stratum",
+  "world difference distribution",
+  "by hidden rule reuse"
+ ],
+ "status": "DEVELOPMENT design lock (not a confirmatory freeze); committed before any R6 evaluation run"
+}

@@ -185,6 +185,26 @@ def test_xdc_matches_enumeration_and_reduces_to_base_code():
         Query.point(s, 3, Intervention("none"), 1, Pred.lit(t, 1))) for s in range(8) for t in range(3)])
 
 
+def test_r6_fresh_split_is_disjoint_and_xdc_predictions_are_recorded():
+    """R6: the fresh evaluation split shares no mechanism or source group with the R5 splits, and a run payload
+    with xdc_bases records the mixture, its theta components and the evaluator-side reuse diagnostic."""
+    from causalguard.r5 import data as D
+    from causalguard.r5.forecast import g_world
+    ids = {sp: {(i.mechanism_id, i.source_group_id, i.net.rules) for i in D.population(sp)} for sp in D.SPLITS}
+    assert len(ids["evaluation_r6"]) == 320
+    for other in ("calibration", "evaluation"):
+        assert not {x[0] for x in ids["evaluation_r6"]} & {x[0] for x in ids[other]}
+        assert not {x[1] for x in ids["evaluation_r6"]} & {x[1] for x in ids[other]}
+    r = g_world({"split": "evaluation_r6", "stratum": "shared_motifs", "index": 0, "design_salt": "t",
+                 "budgets": [16], "xdc_bases": ["gate"]})
+    preds = r["predictions"]["16"]["queries"][0]["predictions"]
+    assert {"xdc[gate]", "xdc[gate]_t0.5", "xdc[gate]_tinf", "gate"} <= set(preds)
+    assert abs(preds["xdc[gate]_tinf"]["p"] - preds["gate"]["p"]) < 1e-9
+    assert 0 <= r["identity"]["hidden_rule_reuse"] <= 7
+    r0 = g_world({"split": "evaluation_r6", "stratum": "shared_motifs", "index": 0, "design_salt": "t", "budgets": [16]})
+    assert not any(k.startswith("xdc") for k in r0["predictions"]["16"]["queries"][0]["predictions"])
+
+
 def test_outcome_is_node_value_and_literal_convention():
     from causalguard.r5 import data as D
     from causalguard.r5.forecast import _node_prob
