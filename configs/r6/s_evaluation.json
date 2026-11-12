@@ -1,0 +1,23 @@
+{
+ "mode": "development",
+ "study": "R6-S",
+ "run_id": "r6-s-eval-v1",
+ "source_manifest": "artifacts/r6s_source_manifest.json",
+ "panels": [
+  "sub24",
+  "intact",
+  "sub12",
+  "sub48"
+ ],
+ "split": "evaluation",
+ "design_salt": "r6s-design-v1",
+ "budgets": [
+  4,
+  8,
+  16
+ ],
+ "max_budget": 64,
+ "workers": 4,
+ "item_timeout_s": 3600,
+ "note": "R6 Track S evaluation groups (3/4 by hash). Requires docs/R6S_DESIGN_LOCK.json committed first."
+}

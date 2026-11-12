@@ -1,0 +1,212 @@
+{
+ "budget_rule": "probe {4,8,16,32,64} on calibration groups of sub24; middle budget = the probe at which the best flat code's mean Brier lies in [0.03, 0.12] (only 8: 0.0642; 16: 0.0154 near ceiling; 32: 0.0039; 64: 0.0); budgets = its neighbours",
+ "budgets": [
+  "4",
+  "8",
+  "16"
+ ],
+ "evaluation_config": {
+  "path": "configs/r6/s_evaluation.json",
+  "sha256": "c989958d0a6fa72557f6851a9dc61e807b5a3c2b04f4b76dc4b5eb40b420e8fe"
+ },
+ "fit_certificate": "Frank-Wolfe gap <= 1e-6 nats on every fit (calibration v2: 89,400/89,400 certified, max 1.0e-6)",
+ "flat": "flat[circuit]",
+ "flat_rule": "lowest calibration mean Brier at B=8 on sub24 among gate, cgh_flat, circuit, index (tie order as listed)",
+ "flat_scores_B8_sub24_cal": {
+  "flat[cgh_flat]": 0.07514,
+  "flat[circuit]": 0.06419,
+  "flat[gate]": 0.08961,
+  "flat[index]": 0.07683
+ },
+ "implementation_commit": "4dbdd91f2778920c3cbf266c9502beec3948c32b",
+ "interpretation_rules": {
+  "growing_with_n": "requires the intact correlation with n and the ladder sub12<sub24<sub48 to agree in sign; sub48 has 2 groups and cannot carry a claim",
+  "null": "interval includes 0 -> no detected advantage at scale",
+  "positive_on_published_models": "sub24 primary interval at B=8 excludes 0 with positive sign and survives missingness bounds"
+ },
+ "method": "xdc_eb[circuit]|a16|loo",
+ "method_rule": "lowest calibration mean Brier at B=8 on sub24 among a in {1,4,16} x {full, leave-target-out} for XDC-EB over the chosen flat base",
+ "method_scores_B8_sub24_cal": {
+  "xdc_eb[circuit]|a16|full": 0.06184,
+  "xdc_eb[circuit]|a16|loo": 0.06052,
+  "xdc_eb[circuit]|a1|full": 0.06743,
+  "xdc_eb[circuit]|a1|loo": 0.06653,
+  "xdc_eb[circuit]|a4|full": 0.06475,
+  "xdc_eb[circuit]|a4|loo": 0.06447
+ },
+ "not_authorized": {
+  "confirmatory_run": false,
+  "freeze_record": false,
+  "model_calls": 0
+ },
+ "population": {
+  "groups_seen_in_n8": "every evaluation group of every panel also contributed 8-node fragments to an R5 or R6 n=8 panel; the without-seen-groups analysis is therefore empty and is reported as not computable",
+  "manifest": {
+   "path": "artifacts/r6s_source_manifest.json",
+   "sha256": "6b2ea7e6d15ae4084e098dda7782fe8cef49e160f5f12cb2e664a2f2647e2714"
+  },
+  "primary_panel": "sub24",
+  "summary": {
+   "intact": {
+    "calibration_groups": 1,
+    "evaluation_groups": 12,
+    "evaluation_groups_seen_in_n8": 12,
+    "groups": 13,
+    "instances": 14
+   },
+   "sub12": {
+    "calibration_groups": 31,
+    "evaluation_groups": 91,
+    "evaluation_groups_seen_in_n8": 91,
+    "groups": 122,
+    "instances": 562
+   },
+   "sub24": {
+    "calibration_groups": 8,
+    "evaluation_groups": 28,
+    "evaluation_groups_seen_in_n8": 28,
+    "groups": 36,
+    "instances": 151
+   },
+   "sub48": {
+    "calibration_groups": 0,
+    "evaluation_groups": 2,
+    "evaluation_groups_seen_in_n8": 2,
+    "groups": 2,
+    "instances": 8
+   }
+  },
+  "why": "intact if >= 20 eligible intact groups, else sub24 (protocol S2 fallback); intact has 13 groups"
+ },
+ "predictions_recorded_before_evaluation": {
+  "growth_with_n": "not expected: the sharing gain at calibration does not increase from sub12 to sub24 materially",
+  "intact": "near ceiling at B>=8; any effect at B=4 only; too few groups (12) for a firm statement",
+  "sub12": "about zero or negative (calibration: method 0.0620 vs flat[circuit] 0.0598 at B=8)",
+  "sub24_primary_B8": "small positive (calibration +0.004), |estimate| < 0.01, interval may include 0"
+ },
+ "primary": "Brier(flat[circuit]) - Brier(xdc_eb[circuit]|a16|loo) at B=8 on sub24 evaluation groups; source-group cluster bootstrap 10,000 reps seed 20261111; worst-case missingness bounds. Positive favours sharing.",
+ "primary_budget": "8",
+ "report_panels": [
+  "sub24",
+  "intact",
+  "sub12",
+  "sub48"
+ ],
+ "secondaries": [
+  "budgets 4 and 16",
+  "vocabulary xdc_eb[gate] - xdc_eb[cgh_flat] (same a/mode)",
+  "uniform - method",
+  "exact xdc[gate|cgh_flat] where n<=12 (sub12, intact n<=12)",
+  "intact panel (n 9-60): effect and correlation with n",
+  "size ladder sub12/sub24/sub48",
+  "effect vs non-constant rule reuse and clamped-edge fraction",
+  "world-difference distribution"
+ ],
+ "seen_before_lock": {
+  "calibration_v1": "identical to 4 decimals; 27/89,400 fits uncertified under plain EM (fixed by SQUAREM, tolerance declared 1e-6)",
+  "calibration_v2_sub12": {
+   "16": {
+    "flat[cgh_flat]": 0.01723,
+    "flat[circuit]": 0.01709,
+    "flat[gate]": 0.01912,
+    "flat[index]": 0.01611,
+    "flat[uniform]": 0.04713,
+    "xdc[cgh_flat]": 0.01636,
+    "xdc[gate]": 0.01856,
+    "xdc_eb[cgh_flat]|a16|loo": 0.01564,
+    "xdc_eb[circuit]|a16|loo": 0.0174,
+    "xdc_eb[gate]|a16|loo": 0.01687,
+    "xdc_eb[index]|a16|loo": 0.01662
+   },
+   "4": {
+    "flat[cgh_flat]": 0.14343,
+    "flat[circuit]": 0.13773,
+    "flat[gate]": 0.15364,
+    "flat[index]": 0.15912,
+    "flat[uniform]": 0.17836,
+    "xdc[cgh_flat]": 0.13392,
+    "xdc[gate]": 0.14235,
+    "xdc_eb[cgh_flat]|a16|loo": 0.13735,
+    "xdc_eb[circuit]|a16|loo": 0.13426,
+    "xdc_eb[gate]|a16|loo": 0.14771,
+    "xdc_eb[index]|a16|loo": 0.14475
+   },
+   "8": {
+    "flat[cgh_flat]": 0.0641,
+    "flat[circuit]": 0.05977,
+    "flat[gate]": 0.07879,
+    "flat[index]": 0.06705,
+    "flat[uniform]": 0.11307,
+    "xdc[cgh_flat]": 0.05963,
+    "xdc[gate]": 0.06377,
+    "xdc_eb[cgh_flat]|a16|loo": 0.05904,
+    "xdc_eb[circuit]|a16|loo": 0.06202,
+    "xdc_eb[gate]|a16|loo": 0.0643,
+    "xdc_eb[index]|a16|loo": 0.06527
+   }
+  },
+  "calibration_v2_sub24": {
+   "16": {
+    "flat[cgh_flat]": 0.02009,
+    "flat[circuit]": 0.01536,
+    "flat[gate]": 0.02025,
+    "flat[index]": 0.01991,
+    "flat[uniform]": 0.05199,
+    "xdc_eb[cgh_flat]|a16|loo": 0.01315,
+    "xdc_eb[circuit]|a16|loo": 0.01163,
+    "xdc_eb[gate]|a16|loo": 0.01362,
+    "xdc_eb[index]|a16|loo": 0.01313
+   },
+   "4": {
+    "flat[cgh_flat]": 0.16446,
+    "flat[circuit]": 0.14619,
+    "flat[gate]": 0.17459,
+    "flat[index]": 0.1857,
+    "flat[uniform]": 0.19297,
+    "xdc_eb[cgh_flat]|a16|loo": 0.15769,
+    "xdc_eb[circuit]|a16|loo": 0.14765,
+    "xdc_eb[gate]|a16|loo": 0.16853,
+    "xdc_eb[index]|a16|loo": 0.16412
+   },
+   "8": {
+    "flat[cgh_flat]": 0.07514,
+    "flat[circuit]": 0.06419,
+    "flat[gate]": 0.08961,
+    "flat[index]": 0.07683,
+    "flat[uniform]": 0.12601,
+    "xdc_eb[cgh_flat]|a16|loo": 0.0659,
+    "xdc_eb[circuit]|a16|loo": 0.06052,
+    "xdc_eb[gate]|a16|loo": 0.06741,
+    "xdc_eb[index]|a16|loo": 0.06379
+   }
+  },
+  "eb_vs_exact_xdc_n8_calibration": {
+   "cgh_flat|B16": {
+    "a16|loo_minus_xdc": 0.0073,
+    "brier_xdc": 0.0528
+   },
+   "cgh_flat|B24": {
+    "a16|loo_minus_xdc": 0.0011,
+    "brier_xdc": 0.0186
+   },
+   "cgh_flat|B8": {
+    "a16|loo_minus_xdc": 0.0031,
+    "brier_xdc": 0.1621
+   },
+   "gate|B16": {
+    "a16|loo_minus_xdc": 0.0139,
+    "brier_xdc": 0.0545
+   },
+   "gate|B24": {
+    "a16|loo_minus_xdc": 0.0042,
+    "brier_xdc": 0.0172
+   },
+   "gate|B8": {
+    "a16|loo_minus_xdc": 0.0006,
+    "brier_xdc": 0.1729
+   }
+  },
+  "track_G6_results": "reports/R6_GENERALIZATION.md (n=8 locked evaluations) were known"
+ },
+ "status": "DEVELOPMENT design lock for Track S (not a confirmatory freeze); committed before any evaluation-group score"
+}
