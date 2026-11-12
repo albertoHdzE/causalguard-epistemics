@@ -304,6 +304,82 @@ def analyze_g_r6(run_dir, champion: str, method: str, external: bool = False, bu
     return out
 
 
+REUSE_BY_CONSTRUCTION = ("template_exceptions", "imperfect_modules", "shared_motifs", "rewired_control")
+
+
+def analyze_g_r6_extras(run_dir, champion: str, method: str, external: bool = False, budget: str = "16",
+                        reps=REPS) -> dict:
+    """R6 supplementary reporting required by the R6 assignment (NOT in the design lock; labelled post hoc):
+    the primary contrast without the two strata richest in hidden rule reuse (ranked by mean reuse on this run),
+    without all four reuse-by-construction strata, the reuse distribution per stratum, per-world difference
+    quantiles with a cluster-bootstrap interval for the median, and the reliability of both predictors on
+    underdetermined queries (the R5 'uniform' prediction strictly inside (0, 1), i.e. V(D) does not fix the answer)."""
+    res = _ok(_load(run_dir))[0]
+    t = g_table(run_dir, budget)
+    rows = t["rows"]
+    if not rows:
+        raise ValueError("no completed worlds")
+    for r in rows:
+        r["reuse"] = res[r["item"]]["identity"].get("hidden_rule_reuse")
+        if external:
+            r["stratum"] = "external"
+    strata = sorted({r["stratum"] for r in rows})
+    reuse = {s: [r["reuse"] for r in rows if r["stratum"] == s] for s in strata}
+    out = {"label": "post hoc supplementary (not locked)", "budget": budget, "n_worlds": len(rows),
+           "n_groups": len({r["group"] for r in rows}),
+           "reuse_by_stratum": {s: {"mean": float(np.mean(v)), "min": int(min(v)), "max": int(max(v)),
+                                    "share_ge_6": float(np.mean([x >= 6 for x in v]))} for s, v in reuse.items()}}
+    d = np.array([_world_brier(r["cell"]["queries"], r["outcomes"], champion)[0] -
+                  _world_brier(r["cell"]["queries"], r["outcomes"], method)[0] for r in rows])
+    groups = sorted({r["group"] for r in rows})
+    gw = defaultdict(list)
+    for i, r in enumerate(rows):
+        gw[groups.index(r["group"])].append(i)
+    med = cluster_bootstrap(lambda ix: float(np.median(d[[w for g in ix for w in gw[g]]])), len(groups),
+                            replicates=min(reps, 2000), seed=SEED)
+    out["world_diff"] = {"n": int(d.size), "mean_unweighted": float(d.mean()),
+                         "median": med["estimate"], "median_ci95": med["ci95"],
+                         "quartiles": [float(np.quantile(d, 0.25)), float(np.quantile(d, 0.75))],
+                         "share_method_better": float((d > 1e-12).mean()),
+                         "share_champion_better": float((d < -1e-12).mean()),
+                         "share_of_total_gain_from_top_10pct_worlds":
+                             float(np.sort(d)[::-1][:max(1, d.size // 10)].sum() / d.sum()) if d.sum() > 0 else None}
+    if not external:
+        top2 = sorted(strata, key=lambda s: (-np.mean(reuse[s]), s))[:2]
+        keep = [r for r in rows if r["stratum"] not in top2]
+        keep4 = [r for r in rows if r["stratum"] not in REUSE_BY_CONSTRUCTION]
+        out["without_top2_reuse_strata"] = {"dropped": top2, **_contrast(keep, champion, method, reps)}
+        out["without_reuse_by_construction_strata"] = {"dropped": list(REUSE_BY_CONSTRUCTION),
+                                                       **_contrast(keep4, champion, method, reps)}
+        out["only_reuse_by_construction_strata"] = _contrast(
+            [r for r in rows if r["stratum"] in REUSE_BY_CONSTRUCTION], champion, method, reps)
+    bins = np.linspace(0, 1, 11)
+    rel = {}
+    for nm in (champion, method):
+        ps, ys = [], []
+        for r in rows:
+            for q in r["cell"]["queries"]:
+                u = q["predictions"].get("uniform")
+                pr = q["predictions"].get(nm)
+                if u is None or u["p"] is None or not (0 < u["p"] < 1) or pr is None or pr["p"] is None:
+                    continue
+                ps.append(pr["p"])
+                ys.append(r["outcomes"][q["query_id"]])
+        ps, ys = np.array(ps), np.array(ys, dtype=float)
+        if ps.size == 0:
+            rel[nm] = {"n_queries": 0}
+            continue
+        ix = np.clip(np.digitize(ps, bins) - 1, 0, 9)
+        table = [{"bin": [float(bins[b]), float(bins[b + 1])], "n": int((ix == b).sum()),
+                  "mean_p": float(ps[ix == b].mean()), "freq": float(ys[ix == b].mean())}
+                 for b in range(10) if (ix == b).any()]
+        rel[nm] = {"n_queries": int(ps.size), "brier": float(((ps - ys) ** 2).mean()),
+                   "ece": float(sum(c["n"] * abs(c["mean_p"] - c["freq"]) for c in table) / ps.size),
+                   "mean_p": float(ps.mean()), "base_rate": float(ys.mean()), "bins": table}
+    out["reliability_underdetermined"] = rel
+    return out
+
+
 # =========================================================================== M
 
 def analyze_m(run_dir) -> dict:
