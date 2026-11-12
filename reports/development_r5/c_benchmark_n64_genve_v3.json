@@ -1,0 +1,40 @@
+{
+ "count_agreement": {
+  "compared": 0,
+  "mismatch": 0
+ },
+ "missing_items": [],
+ "planned": 8,
+ "table": {
+  "n64|GEN-VE": {
+   "by_kind": {
+    "matched": {
+     "done": 4,
+     "items": 4
+    },
+    "rewired": {
+     "done": 4,
+     "items": 4
+    }
+   },
+   "items": 8,
+   "max_peak_rss_bytes": 796688384,
+   "median_build_s": 1.2053035414992337,
+   "median_reuse_s": {
+    "1": 1.4805214375001015,
+    "16": 5.720843957999932,
+    "4": 2.3144562284996937
+   },
+   "queries_done_by_checkpoint": {
+    "1": 0,
+    "10": 128,
+    "300": 128,
+    "60": 128
+   },
+   "queries_planned": 128,
+   "status": {
+    "done": 8
+   }
+  }
+ }
+}

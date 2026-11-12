@@ -1,7 +1,22 @@
 # STATUS
 
-_Last updated: 2026-11-11 (iteration 4: P0 repairs + S4 implementation, offline programs and bounded local pilot).
-Pre-sprint development (the sprint starts 2026-11-13)._
+_Last updated: 2026-11-11 (iteration 5: R5 batch G/C/A/M executed; development release v0.5.0-dev)._
+
+**Resume protocol.** Read `reports/R5_TASK_LEDGER.md`, then `reports/REVIEW_READY_R5.md`, `docs/R5_DESIGN_LOCK.json`,
+`DECISIONS.md` D54–D61, `git log` on branch `iteration-5`.
+
+**Not authorized and not done:** production freeze, confirmatory runs, old S4 main study, paid inference, weight
+changes. `docs/FREEZE_RECORD.json` absent.
+
+## Next exact action
+
+Independent review of R5 (`delegation/REVIEW_R5_REQUEST_PROMPT.md`). Optional, needs Alberto's permission: run the
+ganak projected-counter comparison (`CAUSALGUARD_GANAK=<binary>`), which R5 could not run (D55).
+
+---
+
+## Iteration 4 status (historical)
+
 
 **Resume protocol.** Read, in this order:
 - this file;

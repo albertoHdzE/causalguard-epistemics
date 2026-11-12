@@ -22,7 +22,7 @@ A reproducible, public research system that, for a declared class of mechanisms 
 | Does OUR hierarchical prior beat the best generic codec chosen on calibration? | **No detected advantage.** gate − CGH +0.0020 [−0.0041, 0.0082]; external +0.0013 [−0.0025, 0.0048]. The hierarchy adds ≈ 0 outside generator-matched families. |
 | Does an AI improve investigation over the exact controller? | **No — it degrades it.** Resolved@4: −0.11 (Mistral 24B), −0.34 (Qwen 7B); premature stopping and (Qwen) unsupported certainty, all blocked by the gate. |
 | Can verified claims be false in the world? | **Yes, by construction and in stress tests**: 10 of 103 verified releases false under evidence-consistent misspecification; a public challenge policy halves this at modest coverage cost and no loss on realizable worlds. |
-| Is our exact counting computationally distinctive? | See `reports/R5_COUNTING_AND_COST.md`: a generic explicit-domain counter matches it exactly and is competitive or faster at k = 3; the full checked release cost is dominated by the common SAT cross-check at large n. The comparison against a knowledge compiler is incomplete (tool not authorized). |
+| Is our exact counting computationally distinctive? | **Not against a competent counter.** An independent generic counter matches it exactly (640 comparisons, 0 mismatches) and is 4–11× faster at n = 32–64 (k = 3). It does beat generic SAT (n = 64: 128/128 vs 99/128 queries within 300 s; SAT gives no counts above n = 10). Knowledge-compiler comparison incomplete (tool not authorized). |
 
 ## Independent value even where our method did not win
 

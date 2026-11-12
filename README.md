@@ -1,7 +1,8 @@
 # CausalGuard — compressed symbolic models for auditable epistemic improvement
 
-**Status: development release `v0.3.0-dev` (iteration 3, bounded repair, 2026-11-10/11, pre-sprint; the AI × Epistemics sprint runs 2026-11-13 to 11-15). Not a final study release. No confirmatory result exists; confirmatory runs are prepared but NOT authorized (no freeze record).** The review package is `reports/REVIEW_READY_R3.md`. The releases `v0.1.0-dev` and `v0.2.0-dev` and their records are preserved unchanged; corrections to them are listed in `reports/ERRATA_R3.md`.
+**Status: development release `v0.5.0-dev` (iteration 5, R5 batch, 2026-11-11; four bounded tracks G/C/A/M). Not a final study release; no confirmatory result exists; confirmatory runs are NOT authorized (no freeze record). Start at `reports/REVIEW_READY_R5.md`. Releases `v0.1.0-dev`..`v0.4.0-dev` and their records are preserved unchanged.**
 
+**R5 in one paragraph (development evidence):** description-length-weighted averaging beats uniform averaging on held-out worlds, but OUR hierarchical prior shows no detected advantage over the best generic codec (gate − CGH +0.002 [−0.004, 0.008] Brier) and its hierarchy adds ≈ 0 outside generator-matched families; an independent generic counter matches our exact counts and is faster at k = 3 (ours still beats generic SAT); two local LLMs investigate worse than the exact EIG controller (−0.11, −0.34 resolved@4); verified claims can be false under wrong-but-consistent assumptions (10/103), and a public challenge policy halves that at modest coverage cost. Run `python -m causalguard r5-demo` for an illustration.
 ## What this is
 
 A reproducible research system that asks, operationally, whether *compact executable symbolic models* help reasoning about mechanisms from **incomplete evidence**:
