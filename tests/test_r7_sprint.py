@@ -243,7 +243,7 @@ def test_p3_message_is_invariant_to_the_hidden_mechanism(pilot_keys):
 
 def test_template_hashes_are_stable_and_complete():
     h = T.template_hashes()
-    assert len([k for k in h if k[0] == "P"]) == 8
+    assert len([k for k in h if k[0] == "P"]) == 10 and len([k for k in h if k[:2] == "WP"]) == 10
     assert all(len(v) == 64 for v in h.values())
 
 

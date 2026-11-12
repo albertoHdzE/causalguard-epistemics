@@ -1,0 +1,30 @@
+{
+ "study": "SPRINT",
+ "mode": "development",
+ "global_cap": 6000,
+ "phase": "SPRINT",
+ "phase_cap": 6000,
+ "call_ledger": "RUNS/sprint-calls/ledger.jsonl",
+ "workers": 1,
+ "item_timeout_s": 7200,
+ "world_cap": 4,
+ "run_id": "r7b-pilot4-qwen25_7b-v1",
+ "manifest": "artifacts/sprint_pilot4_manifest.json",
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "ollama",
+  "base_url": "http://127.0.0.1:11434/v1",
+  "model": "qwen2.5:7b",
+  "max_tokens": 6000,
+  "seed": 0,
+  "timeout_s": 600,
+  "max_transport_retries": 1,
+  "extra": {
+   "ollama_native_options": {
+    "num_ctx": 16384
+   }
+  }
+ },
+ "note": "R7B sprint pilot4 (pre-sprint), local inference only",
+ "task_wording": "v3"
+}

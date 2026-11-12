@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import statistics
 import sys
+from collections import Counter
 from pathlib import Path
 
 from . import population as P
@@ -253,14 +254,300 @@ def earlier_model_facing(roots: tuple[str, ...]) -> dict:
 def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="causalguard sprint-gates")
-    ap.add_argument("step", choices=("smoke", "prerun"))
+    ap.add_argument("step", choices=("smoke", "prerun", "r7b"))
     ap.add_argument("--run-dir", action="append", default=[])
     ap.add_argument("--pilot-run-dir", action="append", default=[])
     a = ap.parse_args(argv)
     if a.step == "smoke":
         return smoke(a.run_dir)
+    if a.step == "r7b":
+        return prerun_r7b(a.pilot_run_dir)
     return prerun(a.pilot_run_dir)
 
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+# =========================================================================== R7b gates (D79)
+
+def g6_checks(manifest: str) -> dict:
+    """G6 on every world of an R7b manifest, for EVERY named claim whatever the world's condition (the message
+    that would be sent): Tier W, the valid derivation passes ``tierw.verify`` and the forged one fails it; Tier H,
+    the forged status differs from the true status.  Also: the manifest's checker / forged statuses equal the ones
+    recomputed from the public task."""
+    from . import tasks as T
+    from . import tierw as TW
+    m = json.loads((P.REPO / manifest).read_text())
+    if not m["items"]:
+        raise SystemExit("g6: empty manifest")
+    salt = m["assign_salt"]
+    r = {"manifest": manifest, "W_claims": 0, "W_p3_pass": 0, "W_p4_fail": 0, "H_claims": 0, "H_forged_differs": 0,
+         "manifest_mismatch": 0, "problems": [], "forgery_kinds": Counter(), "forged_status_W": Counter(),
+         "forged_status_H": Counter()}
+    for x in m["items"]:
+        k = P.WorldKey.from_json(x)
+        ev, pub = P.tier_public(k, x["tier"])
+        again = T.check_statuses(pub, x["tier"], x["named"], salt)
+        if any(again[f] != x[f] for f in ("checker_status", "forged_status", "forgery_kind")):
+            r["manifest_mismatch"] += 1
+            r["problems"].append({"wkey": x["wkey"], "problem": "manifest statuses differ from recomputation"})
+        if x["tier"] == "W":
+            tab = TW.Table.from_public(pub)
+            for c in x["named"]:
+                pk = TW.claim_package(pub, c, salt, tab)
+                r["W_claims"] += 1
+                ok = not TW.verify(pub, c, pk["tree"], pk["status"], pk["lines"])
+                bad = TW.verify(pub, c, pk["forged"]["tree"], pk["forged"]["status"], pk["forged"]["lines"])
+                r["W_p3_pass"] += ok
+                r["W_p4_fail"] += bool(bad) and pk["forged"]["status"] != pk["status"]
+                r["forgery_kinds"][pk["forged"]["kind"]] += 1
+                r["forged_status_W"][f"{pk['status']}->{pk['forged']['status']}"] += 1
+                if not ok or not bad:
+                    r["problems"].append({"wkey": x["wkey"], "cid": c, "p3_ok": ok, "p4_problems": bad})
+        else:
+            for c in x["named"]:
+                r["H_claims"] += 1
+                d = x["forged_status"][c] != x["checker_status"][c]
+                r["H_forged_differs"] += d
+                r["forged_status_H"][f"{x['checker_status'][c]}->{x['forged_status'][c]}"] += 1
+                if not d:
+                    r["problems"].append({"wkey": x["wkey"], "cid": c, "problem": "forged status equals true"})
+    for f in ("forgery_kinds", "forged_status_W", "forged_status_H"):
+        r[f] = dict(sorted(r[f].items()))
+    r["pass"] = (r["W_p3_pass"] == r["W_claims"] and r["W_p4_fail"] == r["W_claims"] and
+                 r["H_forged_differs"] == r["H_claims"] and r["manifest_mismatch"] == 0 and
+                 r["W_claims"] + r["H_claims"] > 0)
+    print(f"G6 {manifest}: Tier W {r['W_p3_pass']}/{r['W_claims']} P3 pass, {r['W_p4_fail']}/{r['W_claims']} P4 fail; "
+          f"Tier H {r['H_forged_differs']}/{r['H_claims']} forged differ; manifest mismatches {r['manifest_mismatch']}")
+    return r
+
+
+def g4_r7b(manifest: str, swap: bool = True) -> dict:
+    """G4 on an R7b manifest: every follow-up of every condition (the five messages per world, not only the
+    assigned one) passes ``tasks.leak_audit``; and, with ``swap``, the message is unchanged when the hidden
+    mechanism is replaced by another fitting mechanism of the tier's class (evidence regenerated from it)."""
+    from . import tasks as T
+    m = json.loads((P.REPO / manifest).read_text())
+    salt = m["assign_salt"]
+    n = ok = swapped = swap_ok = 0
+    probs = []
+    for x in m["items"]:
+        k = P.WorldKey.from_json(x)
+        ev, pub = P.tier_public(k, x["tier"])
+        alt_pub = _swapped_public(ev, pub, x["tier"]) if swap else None
+        for cond in ("P0", "P1", "P2", "P3", "P4"):
+            for wd in (1, 2):
+                r = T.leak_audit(pub, cond, wd, x["named"], salt=salt)
+                n += 1
+                ok += r["ok"]
+                if not r["ok"]:
+                    probs.append({"wkey": x["wkey"], "condition": cond, "wording": wd, "problems": r["problems"]})
+                if alt_pub is not None:
+                    swapped += 1
+                    same = T.followup(alt_pub, cond, wd, x["named"], salt) == T.followup(pub, cond, wd, x["named"],
+                                                                                        salt)
+                    swap_ok += same
+                    if not same:
+                        probs.append({"wkey": x["wkey"], "condition": cond, "problem": "changes under swap"})
+    res = {"manifest": manifest, "denominator_messages": n, "pass_messages": ok, "swap_messages": swapped,
+           "swap_unchanged": swap_ok, "problems": probs[:50],
+           "pass": n > 0 and ok == n and swap_ok == swapped}
+    print(f"G4 {manifest}: {ok}/{n} messages pass the audit; {swap_ok}/{swapped} unchanged under a mechanism swap")
+    return res
+
+
+def _swapped_public(ev, pub: dict, tier: str) -> dict:
+    """The public task regenerated from ANOTHER fitting mechanism of the tier's class (every unobserved table entry
+    filled by hash; listed inputs kept), with the same design.  Raises if the alternative does not fit."""
+    import hashlib
+
+    from .. import reference as R
+    from ..s4.tasks import make_evidence, public_task
+    from ..schema import Network, Rule
+    from . import tierw as TW
+    W = pub["wiring"] if tier == "W" else [sorted(r.canonical().inputs) for r in ev.world.net.rules]
+    tab = TW.Table.from_public({**pub, "wiring": W})
+    rules = []
+    for j, ins in enumerate(W):
+        t = 0
+        for y in range(1 << len(ins)):
+            key = (j, tuple((a, (y >> i) & 1) for i, a in enumerate(ins)))
+            if key in tab.entries:
+                b = tab.entries[key][0]
+            else:
+                b = hashlib.sha256(f"r7b-swap|{pub['task_id']}|{j}|{y}".encode()).digest()[0] & 1
+            t |= b << y
+        rules.append(Rule(tuple(ins), t))
+    alt = Network(ev.world.net.n, tuple(rules))
+    if not R.consistent(alt, ev.evidence):
+        raise AssertionError("swapped mechanism does not fit the evidence")
+    from ..generators import World
+    w2 = World(ev.world.world_id, ev.world.study, ev.world.family, ev.world.population, ev.world.seed, alt,
+               ev.world.max_indegree)
+    ev2 = make_evidence(w2, ev.design)
+    p2 = json.loads(json.dumps(public_task(w2, ev.design, ev2)))
+    if tier == "W":
+        p2["wiring"] = pub["wiring"]
+        p2["tier"] = "W"
+    if p2 != pub:
+        raise AssertionError("public task changed under the swap")
+    return p2
+
+
+def g2_r7b(manifest: str = "artifacts/sprint_main_manifest.json") -> dict:
+    """G2 per tier on the main-panel items (no model): the surface rule's balanced accuracy (Tier H: the R7 rule
+    fitted on train Tier H items; Tier W: the R7b rule fitted on train Tier W items) against the 0.667 threshold,
+    with the checker, always-not-settled and majority rows on the same items."""
+    m = json.loads((P.REPO / manifest).read_text())
+    rules = {"H": json.loads((P.REPO / "artifacts/sprint_surface_rule.json").read_text()),
+             "W": json.loads((P.REPO / "artifacts/sprint_surface_rule_w.json").read_text())}
+    out = {}
+    for tier in P.TIERS:
+        items = []
+        for x in m["items"]:
+            if x["tier"] != tier:
+                continue
+            k = P.WorldKey.from_json(x)
+            ev, pub = P.tier_public(k, tier)
+            items.append((pub, P.tier_reference(ev, pub, tier, crosscheck_sat=False), k.to_json()))
+        rows = S.reference_rows(items, rules[tier])
+        ba = {name: S.balanced_accuracy(ws) for name, ws in rows.items()}
+        by_h = {}
+        for h in (1, 2, 3):
+            sub = [(p, {c: r for c, r in ref.items() if r["h"] == h}, w) for p, ref, w in items]
+            sub_rows = S.reference_rows([s for s in sub if s[1]], rules[tier])
+            by_h[h] = S.balanced_accuracy(sub_rows["surface_rule"])
+        out[tier] = {"denominator_worlds": len(items), "denominator_claims": sum(len(r) for _, r, _ in items),
+                     "balanced_accuracy": ba, "surface_by_horizon": by_h, "threshold": 0.667,
+                     "surface_rule_sha256": rules[tier]["sha256"],
+                     "pass": ba["surface_rule"] <= 0.667, "stop": ba["surface_rule"] > 0.80}
+        print(f"G2 tier {tier}: surface balanced accuracy {ba['surface_rule']:.3f} on {len(items)} worlds "
+              f"(checker {ba['checker']:.3f}, majority {ba['majority_status']:.3f}); by horizon {by_h}")
+    return out
+
+
+def g5_r7b(manifest: str = "artifacts/sprint_main_manifest.json", prior_runs_roots=("runs",)) -> dict:
+    """G5: main-panel mechanisms and public tasks against every world shown to a model so far (R7 smoke and
+    pilots 1-3, R7b pilot 4, and the earlier model-facing runs)."""
+    main = json.loads((P.REPO / manifest).read_text())
+    seen_mech, seen_task, n_seen = set(), set(), 0
+    for s in ("smoke", "pilot", "pilot2", "pilot3", "pilot4"):
+        mm = json.loads((P.REPO / f"artifacts/sprint_{s}_manifest.json").read_text())
+        seen_mech |= {x["mechanism_sha256"] for x in mm["items"]}
+        seen_task |= {x["task_id"] for x in mm["items"]}
+        n_seen += len(mm["items"])
+    earlier = earlier_model_facing(prior_runs_roots)
+    mm_ = {x["mechanism_sha256"] for x in main["items"]}
+    mt = {x["task_id"] for x in main["items"]}
+    r = {"denominator_main_worlds": len(main["items"]), "shown_sprint_worlds": n_seen,
+         "earlier_model_facing_mechanisms": earlier["mechanisms"], "earlier_runs": len(earlier["runs"]),
+         "overlap_mechanism_sprint": len(mm_ & seen_mech), "overlap_task_sprint": len(mt & seen_task),
+         "overlap_mechanism_earlier": len(mm_ & earlier["mechanism_set"])}
+    r["pass"] = len(main["items"]) > 0 and not (r["overlap_mechanism_sprint"] or r["overlap_task_sprint"] or
+                                                 r["overlap_mechanism_earlier"])
+    print(f"G5: {r}")
+    return r
+
+
+def g3_r7b(pilot_runs: list[str]) -> dict:
+    """G3 (recorded, not blocking): each pilot model's Tier W balanced accuracy and accuracy against the checker,
+    always-not-settled and majority rows on the SAME worlds; 'floor' = within 0.05 of always-not-settled or
+    majority on balanced accuracy, 'ceiling' = within 0.05 of the checker."""
+    out = {}
+    for d in pilot_runs:
+        model, ws = _scored(d)
+        _, recs = _load(d)
+        for tier in P.TIERS:
+            tw = [w for w in ws if w["tier"] == tier]
+            tr = [x for x in recs if x.get("tier", "H") == tier]
+            if not tw:
+                continue
+            items = [(P.tier_public(P.WorldKey.from_json(x["world"]), tier)[1], x["reference"], x["world"])
+                     for x in tr]
+            same = S.reference_rows(items, None)
+            rba = {k: S.balanced_accuracy(v) for k, v in same.items()}
+            mba = S.balanced_accuracy(tw)
+            floor = mba is not None and min(abs(mba - rba["always_not_settled"]),
+                                            abs(mba - rba["majority_status"])) <= 0.05
+            ceil = mba is not None and abs(mba - rba["checker"]) <= 0.05
+            out[f"{model}|{tier}"] = {"worlds": len(tw), "answered": sum(w["S"]["answered"] for w in tw),
+                                      "balanced_accuracy": mba,
+                                      "accuracy": S.mean_of(tw, lambda w: w["S"]["accuracy"])[0],
+                                      "overclaim": S.mean_of(tw, lambda w: w["S"]["overclaim"])[0],
+                                      "underclaim": S.mean_of(tw, lambda w: w["S"]["underclaim"])[0],
+                                      "same_worlds": rba, "at_floor": floor, "at_ceiling": ceil}
+    return out
+
+
+def prerun_r7b(pilot_runs: list[str], out: str = "reports/R7B_GATES") -> int:
+    """All six R7b gates; G3 recorded only.  G1 is read from reports/r7b/G1_main.json and G1_pilot4.json (written
+    by ``sprint-build r7b-engines``), recomputed here if missing."""
+    from .build import engines_r7b
+    g = {}
+    g1 = {}
+    for name, man in (("main", "artifacts/sprint_main_manifest.json"),
+                      ("pilot4", "artifacts/sprint_pilot4_manifest.json")):
+        f = P.REPO / f"reports/r7b/G1_{name}.json"
+        g1[name] = json.loads(f.read_text()) if f.exists() else engines_r7b(man)
+    g["G1_ground_truth"] = {**g1, "pass": all(v["pass"] for v in g1.values())}
+    g["G2_surface"] = g2_r7b()
+    g["G2_surface"]["pass"] = all(v["pass"] for v in g["G2_surface"].values() if isinstance(v, dict))
+    g["G3_floor_ceiling_recorded"] = g3_r7b(pilot_runs) if pilot_runs else {}
+    g["G4_no_leak"] = {"main": g4_r7b("artifacts/sprint_main_manifest.json"),
+                       "pilot4": g4_r7b("artifacts/sprint_pilot4_manifest.json")}
+    g["G4_no_leak"]["pass"] = g["G4_no_leak"]["main"]["pass"] and g["G4_no_leak"]["pilot4"]["pass"]
+    g["G5_disjoint"] = g5_r7b()
+    g["G6_checks"] = {"main": g6_checks("artifacts/sprint_main_manifest.json"),
+                      "pilot4": g6_checks("artifacts/sprint_pilot4_manifest.json")}
+    g["G6_checks"]["pass"] = g["G6_checks"]["main"]["pass"] and g["G6_checks"]["pilot4"]["pass"]
+    blocking = ("G1_ground_truth", "G2_surface", "G4_no_leak", "G5_disjoint", "G6_checks")
+    allpass = all(g[k]["pass"] for k in blocking)
+    Path(out + ".json").write_text(json.dumps({"gates": g, "blocking_pass": allpass}, indent=1, sort_keys=True,
+                                              default=str) + "\n")
+    L = ["# R7b pre-run gates (pre-sprint)", "", "Generated by `python -m causalguard sprint-gates r7b --pilot-run-dir "
+         "...`. Every gate states its denominator. G3 is recorded, not blocking.", "",
+         "| gate | denominator | value | rule | pass |", "|---|---|---|---|---|"]
+    for name in ("main", "pilot4"):
+        e = g1[name]
+        L.append(f"| G1 ground truth ({name}) | {e['worlds']} worlds, {e['claims']} claims | {e['worlds_agree']} worlds "
+                 f"agree (Tier W: lazy = restricted explicit engine = SAT; Tier H: explicit = D = SAT); cross-tier on "
+                 f"{e['cross_tier_worlds']} worlds, {e['cross_tier_claims_settled_h']} claims settled on Tier H, "
+                 f"{len(e['cross_tier_violations'])} violations | all agree, 0 violations | "
+                 f"{'yes' if e['pass'] else 'NO'} |")
+    for tier in P.TIERS:
+        v = g["G2_surface"][tier]
+        ba = v["balanced_accuracy"]
+        L.append(f"| G2 surface, Tier {tier} | {v['denominator_worlds']} main worlds, {v['denominator_claims']} claims | "
+                 f"surface {ba['surface_rule']:.3f} (checker {ba['checker']:.3f}, majority "
+                 f"{ba['majority_status']:.3f}, always not settled {ba['always_not_settled']:.3f}); by horizon "
+                 + ", ".join(f"h{h} {x:.3f}" for h, x in v["surface_by_horizon"].items() if x is not None) +
+                 f" | <= 0.667 | {'yes' if v['pass'] else 'NO'} |")
+    for k, v in g["G3_floor_ceiling_recorded"].items():
+        L.append(f"| G3 (recorded) {k} | {v['worlds']} pilot worlds, {v['answered']} answered claims | balanced acc "
+                 f"{v['balanced_accuracy']:.3f}, acc {v['accuracy']:.3f}, overclaim "
+                 f"{v['overclaim'] if v['overclaim'] is None else round(v['overclaim'], 3)}, underclaim "
+                 f"{v['underclaim'] if v['underclaim'] is None else round(v['underclaim'], 3)}; same worlds: checker "
+                 f"{v['same_worlds']['checker']:.3f}, always not settled {v['same_worlds']['always_not_settled']:.3f}, "
+                 f"majority {v['same_worlds']['majority_status']:.3f} | floor {v['at_floor']}, ceiling "
+                 f"{v['at_ceiling']} | recorded |")
+    for name in ("main", "pilot4"):
+        v = g["G4_no_leak"][name]
+        L.append(f"| G4 no leak ({name}) | {v['denominator_messages']} messages (5 conditions x 2 wordings x every "
+                 f"world) | {v['pass_messages']} pass; {v['swap_unchanged']}/{v['swap_messages']} unchanged under a "
+                 f"mechanism swap | all | {'yes' if v['pass'] else 'NO'} |")
+    v = g["G5_disjoint"]
+    L.append(f"| G5 disjoint | {v['denominator_main_worlds']} main worlds vs {v['shown_sprint_worlds']} sprint worlds "
+             f"shown and {v['earlier_model_facing_mechanisms']} earlier model-facing mechanisms | overlaps "
+             f"{v['overlap_mechanism_sprint']}/{v['overlap_task_sprint']}/{v['overlap_mechanism_earlier']} | 0 | "
+             f"{'yes' if v['pass'] else 'NO'} |")
+    for name in ("main", "pilot4"):
+        v = g["G6_checks"][name]
+        L.append(f"| G6 checks ({name}) | Tier W {v['W_claims']} named claims, Tier H {v['H_claims']} | Tier W: "
+                 f"{v['W_p3_pass']} P3 pass the verifier, {v['W_p4_fail']} P4 fail it; Tier H: "
+                 f"{v['H_forged_differs']} forged statuses differ; forgery kinds {v['forgery_kinds']} | all | "
+                 f"{'yes' if v['pass'] else 'NO'} |")
+    L += ["", f"Blocking gates pass: **{'yes' if allpass else 'NO'}**."]
+    Path(out + ".md").write_text("\n".join(L) + "\n")
+    print(L[-1])
+    return 0 if allpass else 1

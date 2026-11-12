@@ -36,16 +36,27 @@ def provider(m: dict) -> dict:
             "max_transport_retries": 1, "extra": s["extra"]}
 
 
+# R7b (D79): reasoning-first wording for every model; completion cap raised so truncation is rare.  Two turns of
+# 6,000 tokens plus a ~2,000-token prompt fit the 16,384-token context.  The R1 distill keeps 12,000 (its reasoning
+# is stripped from the history passed to turn 2).
+R7B_MAX_TOKENS = 6000
+
+
 def write_configs(stage: str, manifest: str, max_items: int | None = None, version: str = "v1",
-                  tags: list[str] | None = None, task_wording: str | None = None) -> list[Path]:
+                  tags: list[str] | None = None, task_wording: str | None = None, extra: dict | None = None,
+                  prefix: str = "r7") -> list[Path]:
     out = []
     d = REPO / "configs" / "sprint"
     d.mkdir(parents=True, exist_ok=True)
     for m in LOCAL:
         if tags and m["tag"] not in tags:
             continue
-        cfg = {**COMMON, "run_id": f"r7-{stage}-{m['tag']}-{version}", "manifest": manifest,
-               "provider": provider(m), "note": f"R7 sprint {stage} (pre-sprint), local inference only"}
+        prov = provider(m)
+        if prefix == "r7b" and not m.get("reasoning"):
+            prov["max_tokens"] = R7B_MAX_TOKENS
+        cfg = {**COMMON, "run_id": f"{prefix}-{stage}-{m['tag']}-{version}", "manifest": manifest,
+               "provider": prov, "note": f"{prefix.upper()} sprint {stage} (pre-sprint), local inference only",
+               **(extra or {}).get(m["tag"], {})}
         if max_items:
             cfg["max_items"] = max_items
         if task_wording:

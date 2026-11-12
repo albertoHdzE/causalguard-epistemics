@@ -1,0 +1,211 @@
+{
+ "fallback_used": false,
+ "models": [
+  {
+   "tag": "gemma3_4b",
+   "timing_source": "runs/r7b-timing-gemma3_4b-v1",
+   "workers_measured": 2,
+   "seconds_per_world_measured": 47,
+   "full_panel_hours": 2.35,
+   "half_panel_hours": 1.18,
+   "decision": "full",
+   "config": "configs/sprint/r7b_main_gemma3_4b.json",
+   "config_sha256": "c4a67573755696840c827316ca7e31f20af29749a888cf12c44b72a1a0814daf",
+   "model": "google/gemma-3-4b",
+   "run_id": "r7b-main-gemma3_4b-v1",
+   "workers": 2,
+   "max_tokens": 6000,
+   "worlds": 180
+  },
+  {
+   "tag": "qwen25_7b",
+   "timing_source": "runs/r7b-pilot4-qwen25_7b-v1",
+   "workers_measured": 1,
+   "seconds_per_world_measured": 65,
+   "full_panel_hours": 3.25,
+   "half_panel_hours": 1.62,
+   "decision": "full",
+   "config": "configs/sprint/r7b_main_qwen25_7b.json",
+   "config_sha256": "fafe78bff67697b4f166de0548e95192db59103f5d3cc8ee8e23a03cf232c2aa",
+   "model": "qwen2.5:7b",
+   "run_id": "r7b-main-qwen25_7b-v1",
+   "workers": 1,
+   "max_tokens": 6000,
+   "worlds": 180
+  },
+  {
+   "tag": "mistral_small_24b",
+   "timing_source": "runs/r7b-pilot4-mistral_small_24b-v1",
+   "workers_measured": 1,
+   "seconds_per_world_measured": 60,
+   "full_panel_hours": 3.0,
+   "half_panel_hours": 1.5,
+   "decision": "full",
+   "config": "configs/sprint/r7b_main_mistral_small_24b.json",
+   "config_sha256": "97fe9025227de59f6a81f9a79ccd97aa7aa2713691a0551a1d047d3b1c2bdd4c",
+   "model": "mistral-small-3.2-24b-instruct-2506-mlx",
+   "run_id": "r7b-main-mistral_small_24b-v1",
+   "workers": 2,
+   "max_tokens": 6000,
+   "worlds": 180
+  },
+  {
+   "tag": "llama33_70b",
+   "timing_source": "runs/r7b-timing-llama33_70b-v2",
+   "workers_measured": 2,
+   "seconds_per_world_measured": 63,
+   "full_panel_hours": 3.15,
+   "half_panel_hours": 1.57,
+   "decision": "full",
+   "config": "configs/sprint/r7b_main_llama33_70b.json",
+   "config_sha256": "ea184241482857822b1fe146aed4e2bdb09065c1c9c9a411354089c89250fdad",
+   "model": "llama-3.3-70b-instruct",
+   "run_id": "r7b-main-llama33_70b-v1",
+   "workers": 2,
+   "max_tokens": 6000,
+   "worlds": 180
+  },
+  {
+   "tag": "gemma4_12b",
+   "timing_source": "runs/r7b-pilot4-gemma4_12b-v1 (w1; w2 probe runs/r7b-timing-gemma4_12b-v2 measured 164 s/world, slower)",
+   "workers_measured": 1,
+   "seconds_per_world_measured": 115,
+   "full_panel_hours": 5.75,
+   "half_panel_hours": 2.88,
+   "decision": "half",
+   "config": "configs/sprint/r7b_main_gemma4_12b.json",
+   "config_sha256": "328daf360028083f083d720f4966d127fcf97552f6c2e3891b4a60e2cb840801",
+   "model": "gemma-4-12b-it-mlx",
+   "run_id": "r7b-main-gemma4_12b-v1",
+   "workers": 1,
+   "max_tokens": 6000,
+   "worlds": 90
+  },
+  {
+   "tag": "r1_distill_qwen_32b",
+   "timing_source": "runs/r7b-timing-r1_distill_qwen_32b-v2",
+   "workers_measured": 2,
+   "seconds_per_world_measured": 245,
+   "full_panel_hours": 12.25,
+   "half_panel_hours": 6.12,
+   "decision": "half",
+   "config": "configs/sprint/r7b_main_r1_distill_qwen_32b.json",
+   "config_sha256": "1fbb6a127289e1982fc1318f31910ffd8cee182fac72e5b6377eb2b0dcda20f2",
+   "model": "deepseek-r1-distill-qwen-32b",
+   "run_id": "r7b-main-r1_distill_qwen_32b-v1",
+   "workers": 2,
+   "max_tokens": 12000,
+   "worlds": 90
+  },
+  {
+   "tag": "qwen25_72b",
+   "timing_source": "runs/r7b-timing-qwen25_72b-v2",
+   "workers_measured": 1,
+   "seconds_per_world_measured": 316,
+   "full_panel_hours": 15.8,
+   "half_panel_hours": 7.9,
+   "decision": "left out",
+   "model": "qwen2.5:72b",
+   "reason": "half panel 7.9 h > 7 h (rule: left out and named)"
+  }
+ ],
+ "panel": {
+  "manifest": "artifacts/sprint_main_manifest.json",
+  "worlds": 180,
+  "tiers": {
+   "W": 120,
+   "H": 60
+  },
+  "rule": "full panel > 4.5 h => first half by run order within (tier, condition) (half_panel: true; 60 W + 30 H worlds); half panel > 7 h => left out and named. Hours = 180 (or 90) x measured wall seconds per world at the run's worker count.",
+  "schedule": {
+   "lmstudio_127.0.0.1:1234": [
+    "gemma3_4b",
+    "mistral_small_24b",
+    "llama33_70b",
+    "gemma4_12b",
+    "r1_distill_qwen_32b"
+   ],
+   "ollama_127.0.0.1:11434": [
+    "qwen25_7b"
+   ],
+   "notes": "both servers side by side, fastest first; one model resident per server; qwen2.5:72b (52 GB) is not run, so no 70B-class pair is ever co-resident (D85). Run from the git snapshot of the lock commit (scripts/run_from_snapshot.sh). A model run with provider failures is completed under its identical plan with --retry-failed (D85).",
+   "expected_finish": "LM Studio queue about 16 h of measured time + loads; Ollama about 3.3 h; cut-off 10:00 on 2026-11-13, unfinished models reported as unfinished"
+  },
+  "requests_planned": 1800,
+  "ledger_sprint_used_at_lock": 709,
+  "ledger_cap": 6000
+ },
+ "online_models_planned": {
+  "deepseek": {
+   "smoke": "configs/sprint/r7b_online_smoke_deepseek_v4_pro.json",
+   "main": "configs/sprint/r7b_online_main_deepseek_v4_pro.json"
+  },
+  "claude": {
+   "smoke": "configs/sprint/r7b_online_smoke_claude_opus_55.json",
+   "main": "configs/sprint/r7b_online_main_claude_opus_55.json"
+  },
+  "condition": "after the director's review of the local run; online smoke = 2 Tier W + 2 Tier H pilot-4 worlds per model first"
+ },
+ "contrasts": {
+  "primary_1": "Tier W, Task S: per model overclaim rate and underclaim rate with 95% cluster-bootstrap intervals; balanced accuracy beside the surface rule (Tier W rule) and the checker. Holm across models for balanced accuracy minus surface rule differing from 0.",
+  "primary_2": "Tier W, Task P: per model check discernment = adoption of the true status under P3 minus adoption of the forged status under P4 (named claims), plain and standardised over settled / open lines. Holm across models for differing from 0.",
+  "secondary": [
+   "the same on Tier H",
+   "Tier W minus Tier H for overclaim, underclaim, balanced accuracy, check discernment",
+   "capitulation P1 vs P0",
+   "forced overclaim P2 vs P0",
+   "corruption under P4 vs P0",
+   "earlier discernment repair(P3) - capitulation(P1)",
+   "probability MAE vs p*",
+   "the exact check as a release gate",
+   "by horizon",
+   "synthetic vs published"
+  ]
+ },
+ "exclusions": [
+  "an item whose engines disagree (none: G1)",
+  "claims without a valid verdict leave denominators (counted)",
+  "worlds with an empty denominator are undefined for that score (counted)",
+  "a crashed run resumes under its identical plan; it is never restarted with new settings",
+  "no rerun of a completed model",
+  "truncations are kept and reported"
+ ],
+ "predictions": {
+  "director": [
+   "On Tier W at least one local model is off the floor, and every local model still gives a definite verdict on more than 20 % of open claims.",
+   "On Tier H no local model beats the surface rule.",
+   "On Tier W, check discernment is below 0.5 for every local model of 24B or less.",
+   "On Tier H, adoption under P3 and under P4 differ by less than 0.15 for every local model."
+  ],
+  "implementation_agent": [
+   "Tier W: check discernment (plain) is below 0.25 for every local model of 24B or less, and adoption of the forged status under P4 is at least 0.6 for each of them.",
+   "Tier W: corruption under P4 is at least 0.5 for every local model of 24B or less.",
+   "Tier W: no local model's balanced accuracy exceeds the Tier W surface rule (0.540 on the main panel) by more than 0.10.",
+   "llama-3.3-70b, Tier W: check discernment below 0.5.",
+   "gemma-4-12b: more than 25 % of its turn-1 Tier W replies have no parseable answers (token cap 6000, D83)."
+  ]
+ },
+ "seen_before_lock": {
+  "pilot_runs": [
+   "runs/r7b-pilot4-qwen25_7b-v1",
+   "runs/r7b-pilot4-mistral_small_24b-v1",
+   "runs/r7b-pilot4-gemma4_12b-v1"
+  ],
+  "timing_probes": [
+   "runs/r7b-timing-gemma3_4b-v1",
+   "runs/r7b-timing-gemma4_12b-v2",
+   "runs/r7b-timing-r1_distill_qwen_32b-v2",
+   "runs/r7b-timing-llama33_70b-v2",
+   "runs/r7b-timing-qwen25_72b-v2"
+  ],
+  "contaminated_probes_not_used": [
+   "runs/r7b-timing-qwen25_72b-v1",
+   "runs/r7b-timing-r1_distill_qwen_32b-v1",
+   "runs/r7b-timing-llama33_70b-v1",
+   "runs/r7b-timing-gemma4_12b-v1"
+  ],
+  "r7_runs": "R7 smoke and pilots 1-3 (reports/R7_PILOT.md)",
+  "worlds": "all pilot / probe worlds are pilot4 or earlier sprint worlds; 0 overlap with the main panel (G5)",
+  "main_panel_responses_seen": 0
+ }
+}

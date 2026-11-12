@@ -1,0 +1,467 @@
+{
+ "base_rates": {
+  "entailed": 0.3042986425339366,
+  "refuted": 0.31391402714932126,
+  "underdetermined": 0.38178733031674206
+ },
+ "fallback": {
+  "p": 0.492948368124293,
+  "status": "entailed"
+ },
+ "sha256": "d860557a8f97c69fdaf68c4886cafdf294d257fe64516db3c72e68414777535a",
+ "table": {
+  "[1, \"initial_edit\", 1, \"agree\", \"const_agree\"]": {
+   "n": 7,
+   "p": 1.0,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 1, \"agree\", \"varies\"]": {
+   "n": 34,
+   "p": 0.8823529411764706,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 15,
+   "p": 0.0,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 1, \"disagree\", \"varies\"]": {
+   "n": 44,
+   "p": 0.09090909090909091,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 1, \"mixed\", \"varies\"]": {
+   "n": 2,
+   "p": 0.5,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 2, \"agree\", \"const_agree\"]": {
+   "n": 30,
+   "p": 0.9166666666666666,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 2, \"agree\", \"varies\"]": {
+   "n": 94,
+   "p": 0.75,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 31,
+   "p": 0.12903225806451613,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 2, \"disagree\", \"varies\"]": {
+   "n": 98,
+   "p": 0.34183673469387754,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 2, \"mixed\", \"varies\"]": {
+   "n": 18,
+   "p": 0.6388888888888888,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 3, \"agree\", \"const_agree\"]": {
+   "n": 21,
+   "p": 0.8333333333333334,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 3, \"agree\", \"varies\"]": {
+   "n": 47,
+   "p": 0.5957446808510638,
+   "status": "entailed"
+  },
+  "[1, \"initial_edit\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 21,
+   "p": 0.23809523809523808,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 3, \"disagree\", \"varies\"]": {
+   "n": 65,
+   "p": 0.35384615384615387,
+   "status": "refuted"
+  },
+  "[1, \"initial_edit\", 3, \"mixed\", \"varies\"]": {
+   "n": 63,
+   "p": 0.5396825396825397,
+   "status": "underdetermined"
+  },
+  "[1, \"persistent_clamp\", 1, \"agree\", \"const_agree\"]": {
+   "n": 9,
+   "p": 0.9444444444444444,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 1, \"agree\", \"varies\"]": {
+   "n": 48,
+   "p": 0.84375,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 9,
+   "p": 0.05555555555555555,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 1, \"disagree\", \"varies\"]": {
+   "n": 44,
+   "p": 0.14772727272727273,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 1, \"mixed\", \"varies\"]": {
+   "n": 1,
+   "p": 0.0,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 2, \"agree\", \"const_agree\"]": {
+   "n": 22,
+   "p": 0.9090909090909091,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 2, \"agree\", \"varies\"]": {
+   "n": 104,
+   "p": 0.7019230769230769,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 30,
+   "p": 0.08333333333333333,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 2, \"disagree\", \"varies\"]": {
+   "n": 111,
+   "p": 0.24324324324324326,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 2, \"mixed\", \"varies\"]": {
+   "n": 25,
+   "p": 0.52,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 3, \"agree\", \"const_agree\"]": {
+   "n": 26,
+   "p": 0.75,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 3, \"agree\", \"varies\"]": {
+   "n": 48,
+   "p": 0.6875,
+   "status": "entailed"
+  },
+  "[1, \"persistent_clamp\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 9,
+   "p": 0.16666666666666666,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 3, \"disagree\", \"varies\"]": {
+   "n": 56,
+   "p": 0.30357142857142855,
+   "status": "refuted"
+  },
+  "[1, \"persistent_clamp\", 3, \"mixed\", \"varies\"]": {
+   "n": 64,
+   "p": 0.5859375,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 1, \"agree\", \"const_agree\"]": {
+   "n": 12,
+   "p": 0.8333333333333334,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 1, \"agree\", \"varies\"]": {
+   "n": 39,
+   "p": 0.6666666666666666,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 10,
+   "p": 0.08125,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 1, \"disagree\", \"varies\"]": {
+   "n": 49,
+   "p": 0.3877551020408163,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 1, \"mixed\", \"varies\"]": {
+   "n": 4,
+   "p": 0.125,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 2, \"agree\", \"const_agree\"]": {
+   "n": 24,
+   "p": 0.84375,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 2, \"agree\", \"varies\"]": {
+   "n": 100,
+   "p": 0.605,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 31,
+   "p": 0.0625,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 2, \"disagree\", \"varies\"]": {
+   "n": 89,
+   "p": 0.351123595505618,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 2, \"mixed\", \"varies\"]": {
+   "n": 22,
+   "p": 0.4375,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"agree\", \"const_agree\"]": {
+   "n": 29,
+   "p": 0.8599137931034483,
+   "status": "entailed"
+  },
+  "[2, \"initial_edit\", 3, \"agree\", \"varies\"]": {
+   "n": 49,
+   "p": 0.5739795918367347,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 30,
+   "p": 0.12083333333333333,
+   "status": "refuted"
+  },
+  "[2, \"initial_edit\", 3, \"disagree\", \"varies\"]": {
+   "n": 56,
+   "p": 0.46316964285714285,
+   "status": "underdetermined"
+  },
+  "[2, \"initial_edit\", 3, \"mixed\", \"varies\"]": {
+   "n": 66,
+   "p": 0.5160984848484849,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 1, \"agree\", \"const_agree\"]": {
+   "n": 8,
+   "p": 0.84375,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 1, \"agree\", \"varies\"]": {
+   "n": 39,
+   "p": 0.6089743589743589,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 10,
+   "p": 0.075,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 1, \"disagree\", \"varies\"]": {
+   "n": 36,
+   "p": 0.5069444444444444,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 1, \"mixed\", \"varies\"]": {
+   "n": 1,
+   "p": 0.0,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 2, \"agree\", \"const_agree\"]": {
+   "n": 19,
+   "p": 0.9342105263157895,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 2, \"agree\", \"varies\"]": {
+   "n": 91,
+   "p": 0.6098901098901099,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 32,
+   "p": 0.080078125,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 2, \"disagree\", \"varies\"]": {
+   "n": 92,
+   "p": 0.4001358695652174,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 2, \"mixed\", \"varies\"]": {
+   "n": 19,
+   "p": 0.5131578947368421,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 3, \"agree\", \"const_agree\"]": {
+   "n": 26,
+   "p": 0.8894230769230769,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 3, \"agree\", \"varies\"]": {
+   "n": 36,
+   "p": 0.65625,
+   "status": "entailed"
+  },
+  "[2, \"persistent_clamp\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 28,
+   "p": 0.13392857142857142,
+   "status": "refuted"
+  },
+  "[2, \"persistent_clamp\", 3, \"disagree\", \"varies\"]": {
+   "n": 59,
+   "p": 0.3718220338983051,
+   "status": "underdetermined"
+  },
+  "[2, \"persistent_clamp\", 3, \"mixed\", \"varies\"]": {
+   "n": 63,
+   "p": 0.45337301587301587,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 1, \"agree\", \"const_agree\"]": {
+   "n": 6,
+   "p": 0.9270833333333334,
+   "status": "entailed"
+  },
+  "[3, \"initial_edit\", 1, \"agree\", \"varies\"]": {
+   "n": 48,
+   "p": 0.5572916666666666,
+   "status": "entailed"
+  },
+  "[3, \"initial_edit\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 11,
+   "p": 0.09090909090909091,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 1, \"disagree\", \"varies\"]": {
+   "n": 50,
+   "p": 0.360546875,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 1, \"mixed\", \"varies\"]": {
+   "n": 5,
+   "p": 0.225,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 2, \"agree\", \"const_agree\"]": {
+   "n": 18,
+   "p": 0.8888888888888888,
+   "status": "entailed"
+  },
+  "[3, \"initial_edit\", 2, \"agree\", \"varies\"]": {
+   "n": 87,
+   "p": 0.579034213362069,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 28,
+   "p": 0.13169642857142858,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 2, \"disagree\", \"varies\"]": {
+   "n": 99,
+   "p": 0.41907354797979796,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 2, \"mixed\", \"varies\"]": {
+   "n": 23,
+   "p": 0.5760869565217391,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"agree\", \"const_agree\"]": {
+   "n": 29,
+   "p": 0.900323275862069,
+   "status": "entailed"
+  },
+  "[3, \"initial_edit\", 3, \"agree\", \"varies\"]": {
+   "n": 53,
+   "p": 0.5602152122641509,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 21,
+   "p": 0.15904017857142858,
+   "status": "refuted"
+  },
+  "[3, \"initial_edit\", 3, \"disagree\", \"varies\"]": {
+   "n": 49,
+   "p": 0.4344905931122449,
+   "status": "underdetermined"
+  },
+  "[3, \"initial_edit\", 3, \"mixed\", \"varies\"]": {
+   "n": 62,
+   "p": 0.4441311743951613,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 1, \"agree\", \"const_agree\"]": {
+   "n": 6,
+   "p": 0.875,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 1, \"agree\", \"varies\"]": {
+   "n": 40,
+   "p": 0.615625,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 1, \"disagree\", \"const_disagree\"]": {
+   "n": 7,
+   "p": 0.0,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 1, \"disagree\", \"varies\"]": {
+   "n": 40,
+   "p": 0.337890625,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 1, \"mixed\", \"varies\"]": {
+   "n": 4,
+   "p": 0.8125,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 2, \"agree\", \"const_agree\"]": {
+   "n": 29,
+   "p": 0.9073275862068966,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 2, \"agree\", \"varies\"]": {
+   "n": 88,
+   "p": 0.6956232244318182,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 2, \"disagree\", \"const_disagree\"]": {
+   "n": 20,
+   "p": 0.0515625,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 2, \"disagree\", \"varies\"]": {
+   "n": 100,
+   "p": 0.3313671875,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 2, \"mixed\", \"varies\"]": {
+   "n": 34,
+   "p": 0.4889705882352941,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"agree\", \"const_agree\"]": {
+   "n": 24,
+   "p": 0.869140625,
+   "status": "entailed"
+  },
+  "[3, \"persistent_clamp\", 3, \"agree\", \"varies\"]": {
+   "n": 48,
+   "p": 0.599365234375,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"disagree\", \"const_disagree\"]": {
+   "n": 18,
+   "p": 0.1753472222222222,
+   "status": "refuted"
+  },
+  "[3, \"persistent_clamp\", 3, \"disagree\", \"varies\"]": {
+   "n": 56,
+   "p": 0.3672572544642857,
+   "status": "underdetermined"
+  },
+  "[3, \"persistent_clamp\", 3, \"mixed\", \"varies\"]": {
+   "n": 68,
+   "p": 0.4938534007352941,
+   "status": "underdetermined"
+  }
+ },
+ "tier": "W",
+ "train_claims": 3536,
+ "version": "r7-surface-table-v1"
+}

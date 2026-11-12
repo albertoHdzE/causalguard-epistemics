@@ -353,10 +353,13 @@ def uniform_prob_true(vs: VersionSpace, q: Query, rng: np.random.Generator, exac
 class _Enc:
     """Complete CNF encoding of H restricted by evidence, plus a point-query trajectory."""
 
-    def __init__(self, vs: VersionSpace, amo: str = "pairwise"):
+    def __init__(self, vs: VersionSpace, amo: str = "pairwise", wiring: list | None = None):
         """``amo``: at-most-one encoding of the per-node support selector.  'pairwise' (historical default,
         O(C(n,k)^2) clauses per node) or 'ladder' (iteration 4: Sinz sequential counter, O(C(n,k)) clauses and
-        auxiliary variables; equisatisfiable, same selector semantics)."""
+        auxiliary variables; equisatisfiable, same selector semantics).
+        ``wiring`` (R7b Tier W): per node the listed inputs I_j; node j then has the single support I_j padded with
+        the smallest other nodes to size k, and its table is constrained to ignore the padded inputs (every
+        function of I_j, and only those)."""
         from .query import _CNF
         if amo not in ("pairwise", "ladder"):
             raise ValueError(f"unknown at-most-one encoding {amo!r}")
@@ -372,7 +375,16 @@ class _Enc:
         for j in range(n):
             sels = {}
             Ls = {}
-            for S in self.subsets:
+            pad_eq = []
+            if wiring is not None:
+                I = sorted(wiring[j])
+                S0 = tuple(sorted(I + [i for i in range(n) if i not in I][:self.k - len(I)]))
+                padded = [t for t, i in enumerate(S0) if i not in I]
+                pad_eq = [(y, y | (1 << t)) for t in padded for y in range(1 << self.k) if not (y >> t) & 1]
+                cand = [S0]
+            else:
+                cand = self.subsets
+            for S in cand:
                 req: dict[int, int] = {}
                 ok = True
                 for x, val in cons[j]:
@@ -389,6 +401,9 @@ class _Enc:
                 Ls[S] = lv
                 for y, val in req.items():
                     self.cnf.add([-sv, lv[y] if val else -lv[y]])
+                for a, b in pad_eq:                      # Tier W: the table ignores padded inputs
+                    self.cnf.add([-sv, -lv[a], lv[b]])
+                    self.cnf.add([-sv, lv[a], -lv[b]])
             if not sels:
                 self.feasible = False
             self.sel.append(sels)
@@ -459,7 +474,7 @@ class _Enc:
 
 
 def verdict(vs: VersionSpace, q: Query, check_proof: bool = False, solver: str = "cadical153",
-            amo: str = "pairwise") -> VerdictResult:
+            amo: str = "pairwise", wiring: list | None = None) -> VerdictResult:
     """Evidence-relative verdict for a point query over ALL of V(D)."""
     from pysat.solvers import Solver
 
@@ -475,7 +490,7 @@ def verdict(vs: VersionSpace, q: Query, check_proof: bool = False, solver: str =
     except Unsupported:
         return VerdictResult(Verdict.UNSUPPORTED, Certificate(scope, VerificationLevel.NONE, None, ev_h,
                                                               q.digest()), True, count)
-    enc = _Enc(vs, amo)
+    enc = _Enc(vs, amo, wiring)
     if not enc.feasible:  # pragma: no cover - enumerated V(D) nonempty implies feasible
         raise AssertionError("SAT encoding infeasible while enumerated version space is nonempty")
     ql = enc.query_lit(q)

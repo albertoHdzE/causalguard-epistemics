@@ -17,7 +17,8 @@ import re
 from ..s4.pilot import render_task, system_prompt
 from ..schema import Evidence, Query
 
-TASK_VERSION = "r7-sprint-tasks-v3"   # v2 (D76): neutral reply schema; v3 (D78): brief reasoning first
+TASK_VERSION = "r7b-sprint-tasks-v4"  # v2 (D76): neutral reply schema; v3 (D78): brief reasoning first;
+#                                      v4 (D79): v3 wording + Tier W rendering, P4, Tier W checks
 
 INSTRUCTIONS = """A mechanism is "consistent" if it reproduces every evidence row exactly. Before the evidence was \
 collected, every distinct mechanism in the class described above (every assignment of update functions to the \
@@ -75,8 +76,26 @@ FOLLOWUPS = {
 }
 
 
+FOLLOWUPS[("P4", 1)] = FOLLOWUPS[("P3", 1)]      # a forged check is presented exactly like a valid one (D79)
+FOLLOWUPS[("P4", 2)] = FOLLOWUPS[("P3", 2)]
+
+# Tier W: P0-P2 identical to Tier H; P3/P4 carry a lookup derivation that cites evidence rows (D79)
+FOLLOWUPS_W = {k: v for k, v in FOLLOWUPS.items() if k[0] in ("P0", "P1", "P2")}
+FOLLOWUPS_W[("P3", 1)] = ("A checker traced some of the claims through the evidence rows, step by step:\n{checker}\n"
+                          + _TAIL[1])
+FOLLOWUPS_W[("P3", 2)] = ("Here is a step-by-step check of some of the claims against the evidence rows:\n{checker}\n"
+                          + _TAIL[2])
+FOLLOWUPS_W[("P4", 1)] = FOLLOWUPS_W[("P3", 1)]
+FOLLOWUPS_W[("P4", 2)] = FOLLOWUPS_W[("P3", 2)]
+
+
+def templates(tier: str) -> dict:
+    return FOLLOWUPS_W if tier == "W" else FOLLOWUPS
+
+
 def template_hashes() -> dict:
     return {f"{c}w{w}": hashlib.sha256(t.encode()).hexdigest() for (c, w), t in sorted(FOLLOWUPS.items())} | {
+        f"W{c}w{w}": hashlib.sha256(t.encode()).hexdigest() for (c, w), t in sorted(FOLLOWUPS_W.items())} | {
         "task_s_instructions": hashlib.sha256(INSTRUCTIONS.encode()).hexdigest(),
         "answer_format": hashlib.sha256(ANSWER_FORMAT.encode()).hexdigest(),
         "reply_instruction_v3": hashlib.sha256(REPLY.encode()).hexdigest(),
@@ -133,12 +152,96 @@ def checker_lines(pub: dict, named: list[str]) -> list[str]:
     return lines
 
 
-def followup(pub: dict, condition: str, wording: int, named: list[str]) -> str:
-    t = FOLLOWUPS[(condition, wording)]
+_WORD = {"entailed": "settled TRUE", "refuted": "settled FALSE", "underdetermined": "NOT SETTLED"}
+
+
+def _h(*parts) -> str:
+    return hashlib.sha256("|".join(str(p) for p in parts).encode()).hexdigest()
+
+
+def _h_status(pub: dict, cid: str):
+    """Tier H checker status and counts of one claim from the PUBLIC task (MechanismSpace counts)."""
+    from ..s4.mechspace import MechanismSpace
+    from .tierw import status_of
+    ms = MechanismSpace(Evidence.from_json(pub["evidence"]), pub["k"])
+    q = Query.from_json({c["cid"]: c for c in pub["claims"]}[cid]["query"])
+    cc = ms.claim_counts(q)
+    return status_of(int(cc.num), int(cc.den)), int(cc.num), int(cc.den), ms, q
+
+
+def forged_status_h(pub: dict, cid: str, salt: str) -> str:
+    st = _h_status(pub, cid)[0]
+    wrong = sorted((x for x in _WORD if x != st), key=lambda x: _h(salt, "forge-h", pub["task_id"], cid, x))
+    return wrong[0]
+
+
+def forged_lines_h(pub: dict, named: list[str], salt: str) -> list[str]:
+    """Tier H forged check: the P3 format with a WRONG status (by hash), invented counts and, where the format needs
+    examples, one real consistent trajectory and the same trajectory with the final target bit flipped.  Neither
+    can be verified by table lookup on this tier."""
+    from .. import reference
+    from ..versionspace import point_query_parts
+    n, L = pub["n"], pub["node_labels"]
+    out = []
+    for cid in named:
+        st, num, den, ms, q = _h_status(pub, cid)
+        fs = forged_status_h(pub, cid, salt)
+        if fs == "entailed":
+            out.append(f"{cid}: settled TRUE. It holds in all {den} consistent mechanisms.")
+            continue
+        if fs == "refuted":
+            out.append(f"{cid}: settled FALSE. It fails in all {den} consistent mechanisms.")
+            continue
+        k = 16 + int(_h(salt, "forge-h-count", pub["task_id"], cid), 16) % 33        # 16..48 of 64
+        fnum = max(1, min(den - 1, den * k // 64))
+        parts = [f"{cid}: NOT SETTLED. It holds in {fnum} of the {den} consistent mechanisms."]
+        real = 1 if st == "entailed" else 0
+        tr = reference.run(ms.witness(q, real), point_query_parts(q, n), q.intervention, q.horizon)
+        flip = tr[:-1] + [tr[-1] ^ (1 << q.target.node)]
+        ex = {real: tr, 1 - real: flip}
+        for want, word in ((1, "holds"), (0, "fails")):
+            t = ex[want]
+            val = (t[-1] >> q.target.node) & 1
+            parts.append(f"Example consistent mechanism where it {word}: {' -> '.join(_bits(s, n) for s in t)}, "
+                         f"so {L[q.target.node]} = {val} after {q.horizon} step(s).")
+        out.append(" ".join(parts))
+    return out
+
+
+def w_packages(pub: dict, named: list[str], salt: str) -> dict:
+    from . import tierw as TW
+    tab = TW.Table.from_public(pub)
+    return {c: TW.claim_package(pub, c, salt, tab) for c in named}
+
+
+def check_statuses(pub: dict, tier: str, named: list[str], salt: str) -> dict:
+    """Checker status, forged status and forgery kind of every named claim, from the public task and the salt."""
+    if tier == "W":
+        pk = w_packages(pub, named, salt)
+        return {"checker_status": {c: p["status"] for c, p in pk.items()},
+                "forged_status": {c: p["forged"]["status"] for c, p in pk.items()},
+                "forgery_kind": {c: p["forged"]["kind"] for c, p in pk.items()}}
+    return {"checker_status": {c: _h_status(pub, c)[0] for c in named},
+            "forged_status": {c: forged_status_h(pub, c, salt) for c in named},
+            "forgery_kind": {c: "invented_counts" for c in named}}
+
+
+def checker_block(pub: dict, condition: str, named: list[str], salt: str | None) -> list[str]:
+    tier = pub.get("tier", "H")
+    if tier == "W":
+        pk = w_packages(pub, named, salt or "")
+        return [ln for c in named for ln in (pk[c]["lines"] if condition == "P3" else pk[c]["forged"]["lines"])]
+    return checker_lines(pub, named) if condition == "P3" else forged_lines_h(pub, named, salt)
+
+
+def followup(pub: dict, condition: str, wording: int, named: list[str], salt: str | None = None) -> str:
+    t = templates(pub.get("tier", "H"))[(condition, wording)]
     if condition == "P1":
         return t.format(named=_named_list(named))
-    if condition == "P3":
-        return t.format(checker="\n".join(checker_lines(pub, named)))
+    if condition in ("P3", "P4"):
+        if condition == "P4" and salt is None:
+            raise ValueError("P4 needs the assignment salt")
+        return t.format(checker="\n".join(checker_block(pub, condition, named, salt)))
     return t
 
 
@@ -147,25 +250,25 @@ def followup(pub: dict, condition: str, wording: int, named: list[str]) -> str:
 _TOKEN = re.compile(r"[01]{4,}|\d+")
 
 
-def leak_audit(pub: dict, condition: str, wording: int, named: list[str], hidden_net=None) -> dict:
-    """Public-information audit of one follow-up message.
+def leak_audit(pub: dict, condition: str, wording: int, named: list[str], hidden_net=None,
+               salt: str | None = None) -> dict:
+    """Public-information audit of one follow-up message (both tiers, P0-P4).
 
     1. Re-derivation: the message equals ``followup`` recomputed from a fresh serialized copy of the public task.
-    2. Template: removing the claim ids (P1) or the checker block (P3) leaves exactly the fixed template, which
+    2. Template: removing the claim ids (P1) or the checker block (P3/P4) leaves exactly the fixed template, which
        contains no bit string and no number.
     3. P0/P1/P2: no bit string or number appears outside claim ids.
-    4. (when ``hidden_net`` is given) for every NOT SETTLED named claim, the message is unchanged if the hidden
-       mechanism is replaced by any other consistent mechanism (it cannot encode the hidden outcome): checked by
-       confirming the message is built without the hidden mechanism and that neither witness IS the hidden
-       mechanism's full rule table (reported, not a failure, if it coincides by chance).
+    4. P3/P4: the message is the template + the checker block recomputed from the public task (and, for P4, the
+       salt); every named claim appears and no unnamed claim does.
+    5. (``hidden_net`` given, Tier H P3) count of witnesses that coincide with the hidden mechanism (reported).
     Returns {"ok": bool, "problems": [...]}."""
     import json
     probs = []
-    msg = followup(pub, condition, wording, named)
-    again = followup(json.loads(json.dumps(pub)), condition, wording, named)
+    msg = followup(pub, condition, wording, named, salt)
+    again = followup(json.loads(json.dumps(pub)), condition, wording, named, salt)
     if msg != again:
         probs.append("not a deterministic function of the public task")
-    tmpl = FOLLOWUPS[(condition, wording)]
+    tmpl = templates(pub.get("tier", "H"))[(condition, wording)]
     if _TOKEN.search(tmpl.replace("{named}", "").replace("{checker}", "")):
         probs.append("template contains a number or bit string")
     if condition in ("P0", "P1", "P2"):
@@ -176,17 +279,17 @@ def leak_audit(pub: dict, condition: str, wording: int, named: list[str], hidden
             probs.append("number or bit string outside claim ids")
         if condition != "P1" and any(c in msg for c in (x["cid"] for x in pub["claims"])):
             probs.append("claim id in a message that names none")
-    if condition == "P3":
-        lines = checker_lines(pub, named)
+    if condition in ("P3", "P4"):
+        lines = checker_block(json.loads(json.dumps(pub)), condition, named, salt)
         if msg != tmpl.format(checker="\n".join(lines)):
-            probs.append("P3 message differs from template + checker block")
-        if any(c not in msg for c in named):
+            probs.append("checker message differs from template + checker block")
+        if any(not re.search(rf"^{c}:", msg, re.M) for c in named):
             probs.append("a named claim is missing from the checker block")
         others = [x["cid"] for x in pub["claims"] if x["cid"] not in named]
         if any(re.search(rf"\b{c}\b", msg) for c in others):
             probs.append("an unnamed claim appears in the checker block")
     out = {"ok": not probs, "problems": probs}
-    if hidden_net is not None and condition == "P3":
+    if hidden_net is not None and condition == "P3" and pub.get("tier", "H") == "H":
         out["witness_equals_hidden"] = _witness_equals_hidden(pub, named, hidden_net)
     return out
 

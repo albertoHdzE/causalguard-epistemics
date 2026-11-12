@@ -20,6 +20,12 @@ from . import tasks as T
 PHASE = "SPRINT"
 
 
+class ProviderFailure(RuntimeError):
+    """R7b D85: a turn whose provider call failed after its transport retries (server crash, empty reply).  The
+    world item fails (runner status 'error') so the identical plan can retry it; it is never scored as a
+    model answer."""
+
+
 def _ledger_path(p: str | None) -> str | None:
     if p and p.startswith("RUNS/"):
         return str(Path(os.environ.get("CAUSALGUARD_RUNS", "runs")) / p[len("RUNS/"):])
@@ -69,6 +75,8 @@ def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None,
     msgs = [{"role": "system", "content": T.system()}, {"role": "user", "content": T.user_prompt(pub, wording)}]
     out = {"assignment": assignment, "task_wording": wording, "turns": []}
     rec1, obj1, vis1 = _turn(provider, msgs, budget, seed, wid, "S|t1")
+    if not rec1["ok"]:
+        raise ProviderFailure(f"turn 1: {str(rec1['failure'])[:300]}")
     a1 = parse_status_answers(obj1.get("answers"), cids)
     out["turns"].append({**rec1, "answers": a1})
     if not two_turns:
@@ -77,9 +85,12 @@ def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None,
         msgs.append({"role": "assistant", "content": vis1 if vis1 is not None else ""})
     else:                                   # the conversation continues; the failed turn is recorded as empty
         msgs.append({"role": "assistant", "content": ""})
-    fu = T.followup(pub, assignment["condition"], assignment["wording"], assignment["named"])
+    fu = T.followup(pub, assignment["condition"], assignment["wording"], assignment["named"],
+                    assignment.get("salt"))
     msgs.append({"role": "user", "content": fu})
     rec2, obj2, _ = _turn(provider, msgs, budget, seed, wid, f"P|{assignment['condition']}|t2")
+    if not rec2["ok"]:
+        raise ProviderFailure(f"turn 2: {str(rec2['failure'])[:300]}")
     out["turns"].append({**rec2, "answers": parse_status_answers(obj2.get("answers"), cids),
                          "followup_sha256": hashlib.sha256(fu.encode()).hexdigest()})
     out["followup"] = fu
@@ -91,8 +102,8 @@ def sprint_world(p: dict) -> dict:
     from ..llm.harness import CallBudget
     from ..llm.providers import make_provider
     k = P.WorldKey.from_json(p["world"])
-    ev = P.evaluator(k)
-    pub = ev.public()
+    tier = p.get("tier", "H")                       # R7b (D79): 'W' wiring given, 'H' wiring hidden
+    ev, pub = P.tier_public(k, tier)
     if p.get("public_sha256") and hashlib.sha256(json.dumps(pub, sort_keys=True).encode()).hexdigest() != \
             p["public_sha256"]:
         raise AssertionError("public task differs from the manifest")
@@ -101,17 +112,23 @@ def sprint_world(p: dict) -> dict:
                         world_id=pub["task_id"], phase=p.get("phase", PHASE), phase_cap=p.get("phase_cap"))
     t0 = time.perf_counter()
     assignment = {x: p[x] for x in ("condition", "wording", "named")}
+    for x in ("tier", "salt", "checker_status", "forged_status", "forgery_kind"):
+        if x in p:
+            assignment[x] = p[x]
     try:
         episode = run_episode(pub, assignment, provider, budget, p["provider"].get("seed", 0),
                               two_turns=p.get("two_turns", True), wording=p.get("task_wording", T.DEFAULT_WORDING))
         status = "ok"
+    except ProviderFailure:
+        raise
     except Exception as e:     # CapExceeded or harness error: recorded, never dropped
         episode, status = {"assignment": assignment, "turns": [], "error": f"{type(e).__name__}: {str(e)[:400]}"}, \
             f"error:{type(e).__name__}"
     wall = time.perf_counter() - t0
     # ---- evaluator (after every answer is fixed)
-    ref = P.reference(ev, crosscheck_sat=True)
-    return {"wkey": k.wkey, "world": k.to_json(), "task_id": pub["task_id"], "model": p["provider"]["model"],
+    ref = P.tier_reference(ev, pub, tier, crosscheck_sat=True)
+    return {"wkey": k.wkey, "world": k.to_json(), "tier": tier, "task_id": pub["task_id"],
+            "model": p["provider"]["model"],
             "provider_metadata": provider.metadata(), "budget": ev.design.budget, "status": status,
             "public_sha256": hashlib.sha256(json.dumps(pub, sort_keys=True).encode()).hexdigest(),
             "task_version": T.TASK_VERSION, "episode": episode, "wall_s": wall, "calls_used": budget.n,

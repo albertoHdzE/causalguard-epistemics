@@ -1,0 +1,23 @@
+{
+ "claims": 1440,
+ "cross_tier_claims_settled_h": 147,
+ "cross_tier_violations": [],
+ "cross_tier_worlds": 180,
+ "failures": [],
+ "manifest": "artifacts/sprint_main_manifest.json",
+ "pass": true,
+ "status_counts": {
+  "H": {
+   "entailed": 75,
+   "refuted": 68,
+   "underdetermined": 337
+  },
+  "W": {
+   "entailed": 255,
+   "refuted": 270,
+   "underdetermined": 435
+  }
+ },
+ "worlds": 180,
+ "worlds_agree": 180
+}

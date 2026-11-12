@@ -124,6 +124,9 @@ class BaseProvider:
                    "finish_reason": None}
             try:
                 r = self._send(msgs, temperature, seed)
+                if not (r.get("content") or "").strip() and r.get("finish_reason") is None:
+                    # R7b D85: a server under memory pressure answered 200 with nothing; never a model answer
+                    raise TransportError("empty response without finish_reason")
                 rec.update(ok=True, prompt_tokens=r.get("prompt_tokens"), completion_tokens=r.get("completion_tokens"),
                            finish_reason=r.get("finish_reason"), response_model=r.get("response_model"))
                 if "isolation" in r:                   # R7 claude_cli: per-request wire audit

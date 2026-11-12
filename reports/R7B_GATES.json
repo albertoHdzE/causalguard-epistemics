@@ -1,0 +1,270 @@
+{
+ "blocking_pass": true,
+ "gates": {
+  "G1_ground_truth": {
+   "main": {
+    "claims": 1440,
+    "cross_tier_claims_settled_h": 147,
+    "cross_tier_violations": [],
+    "cross_tier_worlds": 180,
+    "failures": [],
+    "manifest": "artifacts/sprint_main_manifest.json",
+    "pass": true,
+    "status_counts": {
+     "H": {
+      "entailed": 75,
+      "refuted": 68,
+      "underdetermined": 337
+     },
+     "W": {
+      "entailed": 255,
+      "refuted": 270,
+      "underdetermined": 435
+     }
+    },
+    "worlds": 180,
+    "worlds_agree": 180
+   },
+   "pass": true,
+   "pilot4": {
+    "claims": 256,
+    "cross_tier_claims_settled_h": 20,
+    "cross_tier_violations": [],
+    "cross_tier_worlds": 32,
+    "failures": [],
+    "manifest": "artifacts/sprint_pilot4_manifest.json",
+    "pass": true,
+    "status_counts": {
+     "H": {
+      "entailed": 8,
+      "refuted": 12,
+      "underdetermined": 44
+     },
+     "W": {
+      "entailed": 58,
+      "refuted": 44,
+      "underdetermined": 90
+     }
+    },
+    "worlds": 32,
+    "worlds_agree": 32
+   }
+  },
+  "G2_surface": {
+   "H": {
+    "balanced_accuracy": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333,
+     "surface_rule": 0.5902724927755475
+    },
+    "denominator_claims": 480,
+    "denominator_worlds": 60,
+    "pass": true,
+    "stop": false,
+    "surface_by_horizon": {
+     "1": 0.6357812201185695,
+     "2": 0.46655099286678237,
+     "3": 0.46998264893001734
+    },
+    "surface_rule_sha256": "234b04c40c201573b10243e92b3c342df9f4ca069a5fbc6d6fd2dca4ee658e82",
+    "threshold": 0.667
+   },
+   "W": {
+    "balanced_accuracy": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333,
+     "surface_rule": 0.5396664412891593
+    },
+    "denominator_claims": 960,
+    "denominator_worlds": 120,
+    "pass": true,
+    "stop": false,
+    "surface_by_horizon": {
+     "1": 0.5509229300005453,
+     "2": 0.43772979131065193,
+     "3": 0.49113552542725053
+    },
+    "surface_rule_sha256": "d860557a8f97c69fdaf68c4886cafdf294d257fe64516db3c72e68414777535a",
+    "threshold": 0.667
+   },
+   "pass": true
+  },
+  "G3_floor_ceiling_recorded": {
+   "gemma-4-12b-it-mlx|W": {
+    "accuracy": 0.6136363636363636,
+    "answered": 88,
+    "at_ceiling": false,
+    "at_floor": false,
+    "balanced_accuracy": 0.41600066600066604,
+    "overclaim": 0.18181818181818182,
+    "same_worlds": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333
+    },
+    "underclaim": 0.7833333333333333,
+    "worlds": 24
+   },
+   "mistral-small-3.2-24b-instruct-2506-mlx|H": {
+    "accuracy": 0.6875,
+    "answered": 64,
+    "at_ceiling": false,
+    "at_floor": true,
+    "balanced_accuracy": 0.3333333333333333,
+    "overclaim": 0.0,
+    "same_worlds": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333
+    },
+    "underclaim": 0.9523809523809524,
+    "worlds": 8
+   },
+   "mistral-small-3.2-24b-instruct-2506-mlx|W": {
+    "accuracy": 0.4427083333333333,
+    "answered": 192,
+    "at_ceiling": false,
+    "at_floor": true,
+    "balanced_accuracy": 0.3350342505514919,
+    "overclaim": 0.18405797101449275,
+    "same_worlds": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333
+    },
+    "underclaim": 0.8053830227743272,
+    "worlds": 24
+   },
+   "qwen2.5:7b|H": {
+    "accuracy": 0.609375,
+    "answered": 64,
+    "at_ceiling": false,
+    "at_floor": false,
+    "balanced_accuracy": 0.40404040404040403,
+    "overclaim": 0.21369047619047618,
+    "same_worlds": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333
+    },
+    "underclaim": 0.511904761904762,
+    "worlds": 8
+   },
+   "qwen2.5:7b|W": {
+    "accuracy": 0.3641304347826087,
+    "answered": 184,
+    "at_ceiling": false,
+    "at_floor": true,
+    "balanced_accuracy": 0.3236688640547025,
+    "overclaim": 0.45606060606060606,
+    "same_worlds": {
+     "always_not_settled": 0.3333333333333333,
+     "checker": 1.0,
+     "majority_status": 0.3333333333333333
+    },
+    "underclaim": 0.5151515151515151,
+    "worlds": 24
+   }
+  },
+  "G4_no_leak": {
+   "main": {
+    "denominator_messages": 1800,
+    "manifest": "artifacts/sprint_main_manifest.json",
+    "pass": true,
+    "pass_messages": 1800,
+    "problems": [],
+    "swap_messages": 1800,
+    "swap_unchanged": 1800
+   },
+   "pass": true,
+   "pilot4": {
+    "denominator_messages": 320,
+    "manifest": "artifacts/sprint_pilot4_manifest.json",
+    "pass": true,
+    "pass_messages": 320,
+    "problems": [],
+    "swap_messages": 320,
+    "swap_unchanged": 320
+   }
+  },
+  "G5_disjoint": {
+   "denominator_main_worlds": 180,
+   "earlier_model_facing_mechanisms": 148,
+   "earlier_runs": 14,
+   "overlap_mechanism_earlier": 0,
+   "overlap_mechanism_sprint": 0,
+   "overlap_task_sprint": 0,
+   "pass": true,
+   "shown_sprint_worlds": 136
+  },
+  "G6_checks": {
+   "main": {
+    "H_claims": 240,
+    "H_forged_differs": 240,
+    "W_claims": 464,
+    "W_p3_pass": 464,
+    "W_p4_fail": 464,
+    "forged_status_H": {
+     "entailed->refuted": 14,
+     "entailed->underdetermined": 21,
+     "refuted->entailed": 18,
+     "refuted->underdetermined": 17,
+     "underdetermined->entailed": 83,
+     "underdetermined->refuted": 87
+    },
+    "forged_status_W": {
+     "entailed->refuted": 80,
+     "entailed->underdetermined": 78,
+     "refuted->entailed": 78,
+     "refuted->underdetermined": 68,
+     "underdetermined->entailed": 68,
+     "underdetermined->refuted": 92
+    },
+    "forgery_kinds": {
+     "hidden_row": 131,
+     "phantom_row": 121,
+     "wrong_value": 212
+    },
+    "manifest": "artifacts/sprint_main_manifest.json",
+    "manifest_mismatch": 0,
+    "pass": true,
+    "problems": []
+   },
+   "pass": true,
+   "pilot4": {
+    "H_claims": 32,
+    "H_forged_differs": 32,
+    "W_claims": 88,
+    "W_p3_pass": 88,
+    "W_p4_fail": 88,
+    "forged_status_H": {
+     "entailed->refuted": 1,
+     "entailed->underdetermined": 1,
+     "refuted->entailed": 4,
+     "refuted->underdetermined": 6,
+     "underdetermined->entailed": 10,
+     "underdetermined->refuted": 10
+    },
+    "forged_status_W": {
+     "entailed->refuted": 11,
+     "entailed->underdetermined": 23,
+     "refuted->entailed": 8,
+     "refuted->underdetermined": 17,
+     "underdetermined->entailed": 11,
+     "underdetermined->refuted": 18
+    },
+    "forgery_kinds": {
+     "hidden_row": 35,
+     "phantom_row": 23,
+     "wrong_value": 30
+    },
+    "manifest": "artifacts/sprint_pilot4_manifest.json",
+    "manifest_mismatch": 0,
+    "pass": true,
+    "problems": []
+   }
+  }
+ }
+}

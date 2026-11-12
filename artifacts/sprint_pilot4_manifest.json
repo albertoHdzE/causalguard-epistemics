@@ -1,0 +1,1333 @@
+{
+ "assign_salt": "r7b-sprint-pilot4-assign-v1",
+ "design_salt": {
+  "H": "r7-sprint-pilot4-design-v1",
+  "W": "r7b-sprint-pilot4-W-design-v1"
+ },
+ "items": [
+  {
+   "budget": 6,
+   "checker_status": {
+    "c3": "refuted",
+    "c4": "refuted",
+    "c5": "refuted",
+    "c6": "entailed"
+   },
+   "condition": "P3",
+   "eligible_claims": 7,
+   "forged_status": {
+    "c3": "underdetermined",
+    "c4": "entailed",
+    "c5": "underdetermined",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c3": "hidden_row",
+    "c4": "wrong_value",
+    "c5": "hidden_row",
+    "c6": "hidden_row"
+   },
+   "group": "sg-32497040c4a1b243",
+   "index": 0,
+   "mechanism_sha256": "9375c6093fc0af840a6a00d46463a494fed14f53d706f1b772df6fa3c13505f6",
+   "named": [
+    "c3",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "e2249060ef5e0326369ac6e24ef330d1f3478d3726117037d4a8e3313d852568",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "template_exceptions",
+   "task_id": "da0b7b4cd390778e7eb240d191ee433d8e864b53169aa0cf6996f5aa96282c08",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|template_exceptions|0|",
+   "wording": 2,
+   "world_id": "r7w-39458732a222a3c4"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c1": "underdetermined",
+    "c5": "underdetermined"
+   },
+   "condition": "P4",
+   "eligible_claims": 2,
+   "forged_status": {
+    "c1": "refuted",
+    "c5": "entailed"
+   },
+   "forgery_kind": {
+    "c1": "phantom_row",
+    "c5": "phantom_row"
+   },
+   "group": "sg-df7e6a8b2d879202",
+   "index": 1,
+   "mechanism_sha256": "28fb92a6004b967d5ebece1b0075700b813484d0b8bff1f2aec746c9da92f0f0",
+   "named": [
+    "c1",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "5cf41eb2dcd58ff3389fc05bb37049e1af281233b5946edbcddb95acb457c49d",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "template_exceptions",
+   "task_id": "ddb7d4a45071b5f11dcb689db4c44248e500322d4a1fb246fc040bacd0202a45",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|template_exceptions|1|",
+   "wording": 2,
+   "world_id": "r7w-4e0edc3f75eeb7c6"
+  },
+  {
+   "budget": 16,
+   "checker_status": {
+    "c0": "refuted",
+    "c2": "refuted",
+    "c3": "underdetermined",
+    "c4": "underdetermined"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c2": "entailed",
+    "c3": "refuted",
+    "c4": "entailed"
+   },
+   "forgery_kind": {
+    "c0": "invented_counts",
+    "c2": "invented_counts",
+    "c3": "invented_counts",
+    "c4": "invented_counts"
+   },
+   "group": "sg-4d11afbac11c5b76",
+   "index": 2,
+   "mechanism_sha256": "0e117b6b32791a336b9d57d0b3d949dc67cb5c842b81fcf527c5b8e9d1b7964c",
+   "named": [
+    "c0",
+    "c2",
+    "c3",
+    "c4"
+   ],
+   "population": "synthetic",
+   "public_sha256": "118c95c2216f3202f6df2e945d59ab79096a9503ee2b6700799ff8c03b3d0f55",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "template_exceptions",
+   "task_id": "2fb3ec57e244dd555902effd5eff5c9a6741997c26e4d95c777874e0d82a9d96",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|template_exceptions|2|",
+   "wording": 2,
+   "world_id": "r7w-1330df85f26acaed"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c3": "underdetermined",
+    "c5": "entailed",
+    "c6": "underdetermined",
+    "c7": "underdetermined"
+   },
+   "condition": "P0",
+   "eligible_claims": 4,
+   "forged_status": {
+    "c3": "entailed",
+    "c5": "underdetermined",
+    "c6": "entailed",
+    "c7": "refuted"
+   },
+   "forgery_kind": {
+    "c3": "phantom_row",
+    "c5": "hidden_row",
+    "c6": "phantom_row",
+    "c7": "wrong_value"
+   },
+   "group": "sg-453532caf8036b49",
+   "index": 3,
+   "mechanism_sha256": "22ed5425d941d8b18efdbcc06d763f162ed00c2c50a86bb4fce7429e5b988f14",
+   "named": [
+    "c3",
+    "c5",
+    "c6",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "bac1efa6a3e59330213920991df35896678632f961077673bd33e4b8a1249b36",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "template_exceptions",
+   "task_id": "4723c1197c626f7cdb314fd5378be8cdc9a0d0c0be83b271d0975a4828839d0c",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|template_exceptions|3|",
+   "wording": 1,
+   "world_id": "r7w-431d16bdba358e5c"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c1": "underdetermined",
+    "c4": "underdetermined",
+    "c5": "underdetermined",
+    "c6": "entailed"
+   },
+   "condition": "P3",
+   "eligible_claims": 5,
+   "forged_status": {
+    "c1": "entailed",
+    "c4": "refuted",
+    "c5": "refuted",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c1": "phantom_row",
+    "c4": "phantom_row",
+    "c5": "phantom_row",
+    "c6": "wrong_value"
+   },
+   "group": "sg-8c57bace512d3b6f",
+   "index": 0,
+   "mechanism_sha256": "69952f63b36ecb7ada22aa00b9e9338894b212d153c4f64eb6d498c6e49444e7",
+   "named": [
+    "c1",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "101438897fb39ef7bba6e72e6231a71e5ce1ebec8de98006525c925321644f2b",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "imperfect_modules",
+   "task_id": "dd534515409994572738998ab74182dac0e2c424e0e17a5e3657e725d01a3635",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|imperfect_modules|0|",
+   "wording": 2,
+   "world_id": "r7w-ad26c5531553bdcc"
+  },
+  {
+   "budget": 24,
+   "checker_status": {
+    "c0": "entailed",
+    "c2": "underdetermined",
+    "c4": "underdetermined",
+    "c6": "refuted"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c2": "refuted",
+    "c4": "refuted",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c0": "invented_counts",
+    "c2": "invented_counts",
+    "c4": "invented_counts",
+    "c6": "invented_counts"
+   },
+   "group": "sg-e5a78aa7af85406f",
+   "index": 1,
+   "mechanism_sha256": "fc5e2b0c80e8cc81023c33ad950cf5c1a97855899cb32cf6546be1e9664c05b2",
+   "named": [
+    "c0",
+    "c2",
+    "c4",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "e9cad4370eb549186e01765c1d8f29a911f357ef922b1f8f00d7a12322e21171",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "imperfect_modules",
+   "task_id": "116acf64e7e933c58860fb251d40518f68c5b27075ab8802fd161a1d4beb42e2",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|imperfect_modules|1|",
+   "wording": 1,
+   "world_id": "r7w-6fdfb1417f95de74"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c0": "entailed",
+    "c2": "entailed",
+    "c5": "underdetermined",
+    "c7": "entailed"
+   },
+   "condition": "P1",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "refuted",
+    "c2": "underdetermined",
+    "c5": "entailed",
+    "c7": "refuted"
+   },
+   "forgery_kind": {
+    "c0": "wrong_value",
+    "c2": "wrong_value",
+    "c5": "phantom_row",
+    "c7": "wrong_value"
+   },
+   "group": "sg-c4086a5b440ab07e",
+   "index": 2,
+   "mechanism_sha256": "a4e6d3100b372b795a4f4430752aad0ddb7fb2df9fefa5a25b5bbbd75b42c349",
+   "named": [
+    "c0",
+    "c2",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "59e45fb42a2fc03efdf74a7205c92f16a28074095516e7a631d05e01f22b03f1",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "imperfect_modules",
+   "task_id": "1615269c15a2233de24faedbb4144be34adb6c67c6dcdd4c2f1d052828e5132f",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|imperfect_modules|2|",
+   "wording": 2,
+   "world_id": "r7w-bf499aef10a2b75a"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c1": "entailed",
+    "c3": "underdetermined",
+    "c4": "entailed"
+   },
+   "condition": "P2",
+   "eligible_claims": 3,
+   "forged_status": {
+    "c1": "refuted",
+    "c3": "refuted",
+    "c4": "underdetermined"
+   },
+   "forgery_kind": {
+    "c1": "wrong_value",
+    "c3": "phantom_row",
+    "c4": "hidden_row"
+   },
+   "group": "sg-4b644f515c61adb4",
+   "index": 3,
+   "mechanism_sha256": "3568b2ebcb1dd1037398cd2422aa0a4472333defb2f3ed345852bfc5c4ffd090",
+   "named": [
+    "c1",
+    "c3",
+    "c4"
+   ],
+   "population": "synthetic",
+   "public_sha256": "26e6457c0173cff1cead1b4c67129383c749b9ddeb08071e4315aa15a0a01a4e",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "imperfect_modules",
+   "task_id": "e08c988afcdee9429256dccd3cec5c07c03cf8047eb472a84ce825408f826be6",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|imperfect_modules|3|",
+   "wording": 2,
+   "world_id": "r7w-181cf7faa99fa655"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c1": "underdetermined"
+   },
+   "condition": "P1",
+   "eligible_claims": 1,
+   "forged_status": {
+    "c1": "refuted"
+   },
+   "forgery_kind": {
+    "c1": "wrong_value"
+   },
+   "group": "sg-f76b360f2bdb41ab",
+   "index": 0,
+   "mechanism_sha256": "4c1e2bff9f9348776f6dfbcc72a2744ccae66954ea375b9e0fed186ff6db471f",
+   "named": [
+    "c1"
+   ],
+   "population": "synthetic",
+   "public_sha256": "6025ff7b6a126fdb33c2b6a00ecff9c535d07c57ab886c293b3ab488353e80fd",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "shared_motifs",
+   "task_id": "03f74b56830427967f9e6a1bb2d10c50c94f03fc8384d3005ad5323529061e77",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|shared_motifs|0|",
+   "wording": 2,
+   "world_id": "r7w-fcc45d1d75ac2513"
+  },
+  {
+   "budget": 12,
+   "checker_status": {
+    "c3": "underdetermined",
+    "c4": "underdetermined",
+    "c6": "refuted",
+    "c7": "underdetermined"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c3": "entailed",
+    "c4": "entailed",
+    "c6": "entailed",
+    "c7": "refuted"
+   },
+   "forgery_kind": {
+    "c3": "invented_counts",
+    "c4": "invented_counts",
+    "c6": "invented_counts",
+    "c7": "invented_counts"
+   },
+   "group": "sg-4c0967eba6fe4157",
+   "index": 1,
+   "mechanism_sha256": "43b06e8cdc28dac62da09beab00ac2b4c7f5b400cadefb19fc5234a66368c099",
+   "named": [
+    "c3",
+    "c4",
+    "c6",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "85514ec14b3fbc48e7caf012a84bd0e60d76f67db2392100e7935b097ebe0ce5",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "shared_motifs",
+   "task_id": "b7bae3adc794d1542336554ef2b823e1f0479ab62adfb833495ee186b8c8a73e",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|shared_motifs|1|",
+   "wording": 2,
+   "world_id": "r7w-452e47fcc2fc0003"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c0": "entailed",
+    "c1": "entailed",
+    "c5": "entailed",
+    "c6": "entailed"
+   },
+   "condition": "P0",
+   "eligible_claims": 7,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c1": "underdetermined",
+    "c5": "underdetermined",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c1": "wrong_value",
+    "c5": "hidden_row",
+    "c6": "hidden_row"
+   },
+   "group": "sg-08c71d957d7c20f6",
+   "index": 2,
+   "mechanism_sha256": "187dbafd84615a8b6d4dcf3b6404143ed95eb267035058339827ebfaf73dd113",
+   "named": [
+    "c0",
+    "c1",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "2e7cc6bdd79460d94adcbe6b8342e7a3da254d3b24628348ee3f09616ef38592",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "shared_motifs",
+   "task_id": "5c6dc5d1953f7cc639f4d2c79bc975e9cdf11ec5d30dbc0504e816a9ee4bda6e",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|shared_motifs|2|",
+   "wording": 2,
+   "world_id": "r7w-1f7dd91e9085d6d6"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c0": "underdetermined",
+    "c2": "entailed",
+    "c3": "entailed",
+    "c5": "entailed"
+   },
+   "condition": "P2",
+   "eligible_claims": 6,
+   "forged_status": {
+    "c0": "refuted",
+    "c2": "underdetermined",
+    "c3": "underdetermined",
+    "c5": "refuted"
+   },
+   "forgery_kind": {
+    "c0": "phantom_row",
+    "c2": "hidden_row",
+    "c3": "hidden_row",
+    "c5": "wrong_value"
+   },
+   "group": "sg-9d570912c909697f",
+   "index": 3,
+   "mechanism_sha256": "53076fce6198e83a25c7edb19a692988560757f97164480f37d7f63288556a3c",
+   "named": [
+    "c0",
+    "c2",
+    "c3",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "5ce737d86fe61649f949194ccc5fb41ad8e4c41f81facd2dbb4be722b24ed9d5",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "shared_motifs",
+   "task_id": "92632dcb1468419533ffc1dad09d5dcc5c67943e1352a7b2506bd2c5bf3c4977",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|shared_motifs|3|",
+   "wording": 2,
+   "world_id": "r7w-fc2c94c591186d0a"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "entailed",
+    "c1": "refuted",
+    "c3": "refuted",
+    "c5": "entailed"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c1": "entailed",
+    "c3": "underdetermined",
+    "c5": "underdetermined"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c1": "wrong_value",
+    "c3": "hidden_row",
+    "c5": "hidden_row"
+   },
+   "group": "sg-231f0ce7468e1bc5",
+   "index": 0,
+   "mechanism_sha256": "53bcd6ee18dfc16cbc802cdf950777f654ba2967ad29fbc0fd251eeb667227f3",
+   "named": [
+    "c0",
+    "c1",
+    "c3",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "ae369ae9bb0f5dd1d83fa370a7a16d3b93ec8d05bd5d266787ab4f085af67f79",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedforward_hetero",
+   "task_id": "8aa11a4967438eb6b24f7ad39ff5e44d65c7207be719d6ed97b354af0693243e",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|feedforward_hetero|0|",
+   "wording": 1,
+   "world_id": "r7w-d7d33325b77e73c2"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c0": "refuted",
+    "c1": "refuted",
+    "c4": "refuted",
+    "c5": "entailed"
+   },
+   "condition": "P3",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c1": "underdetermined",
+    "c4": "entailed",
+    "c5": "underdetermined"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c1": "hidden_row",
+    "c4": "wrong_value",
+    "c5": "hidden_row"
+   },
+   "group": "sg-5470df4b32f938f8",
+   "index": 1,
+   "mechanism_sha256": "2459d894260bd2395240e4689d15f83355f394d75d96708c88982b20da3a8bfc",
+   "named": [
+    "c0",
+    "c1",
+    "c4",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "c73c3c8e0985b4f632c52d5248ede03070ccdd7922af0800ca69f26444b5093f",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedforward_hetero",
+   "task_id": "79a2049b2f2dd0dd880ef5450c8dd728de4821e0824c696dc547aa1454e27ee0",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|feedforward_hetero|1|",
+   "wording": 1,
+   "world_id": "r7w-0dcfdec5b6195d7f"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c1": "refuted",
+    "c3": "entailed",
+    "c6": "entailed",
+    "c7": "underdetermined"
+   },
+   "condition": "P0",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c1": "underdetermined",
+    "c3": "refuted",
+    "c6": "refuted",
+    "c7": "refuted"
+   },
+   "forgery_kind": {
+    "c1": "hidden_row",
+    "c3": "wrong_value",
+    "c6": "wrong_value",
+    "c7": "phantom_row"
+   },
+   "group": "sg-86257ce48367d2d6",
+   "index": 2,
+   "mechanism_sha256": "9cdd5d63ee9b17a8e6267cf04d225f63693483eba916dbe143ddae88c82133a8",
+   "named": [
+    "c1",
+    "c3",
+    "c6",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "88806f68409406bdfa1bf9cb9e4f63c469f3c86a884240940d15ebcbf7b0ea18",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedforward_hetero",
+   "task_id": "d4a8f9e976542351fbc6f94144422ef3d70169fc2c2937d538fb52827b54f2ee",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|feedforward_hetero|2|",
+   "wording": 2,
+   "world_id": "r7w-8b22df2778bf8c73"
+  },
+  {
+   "budget": 16,
+   "checker_status": {
+    "c1": "underdetermined",
+    "c3": "underdetermined",
+    "c5": "underdetermined",
+    "c7": "refuted"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c1": "refuted",
+    "c3": "refuted",
+    "c5": "entailed",
+    "c7": "underdetermined"
+   },
+   "forgery_kind": {
+    "c1": "invented_counts",
+    "c3": "invented_counts",
+    "c5": "invented_counts",
+    "c7": "invented_counts"
+   },
+   "group": "sg-53f85b94686f6372",
+   "index": 3,
+   "mechanism_sha256": "9c662b1d9e69731d441c9d1c33eec7066c4de0ee63a5cc2fe38e59611e0bf9f2",
+   "named": [
+    "c1",
+    "c3",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "9648cd3ced043f504470c1a6788c39a5836b21f50b527bb6f22fe680bab9cabc",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedforward_hetero",
+   "task_id": "5d1f9fea220f615aaece6491e78291cdef32e21f201ebcb8b6f2532f62f47095",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|feedforward_hetero|3|",
+   "wording": 1,
+   "world_id": "r7w-c3cc540669a1424a"
+  },
+  {
+   "budget": 24,
+   "checker_status": {
+    "c0": "refuted",
+    "c1": "entailed",
+    "c2": "underdetermined",
+    "c4": "refuted"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "entailed",
+    "c1": "refuted",
+    "c2": "refuted",
+    "c4": "entailed"
+   },
+   "forgery_kind": {
+    "c0": "invented_counts",
+    "c1": "invented_counts",
+    "c2": "invented_counts",
+    "c4": "invented_counts"
+   },
+   "group": "sg-a3dcfb4325b49fc2",
+   "index": 0,
+   "mechanism_sha256": "8d375040d24e43c5a54204f6600886ff2373aa4a14feca52c392688998ce3783",
+   "named": [
+    "c0",
+    "c1",
+    "c2",
+    "c4"
+   ],
+   "population": "synthetic",
+   "public_sha256": "bb015ac1ec42b5b4fea29db2f2ae6d68002a0a3c2001442792945d410f7b93f4",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedback_canalizing",
+   "task_id": "794715f5d24462d9eefb55685182a48833187d31ff1192ef4f6535f05019eb82",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|feedback_canalizing|0|",
+   "wording": 1,
+   "world_id": "r7w-196cde48c8df73fa"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c4": "refuted",
+    "c5": "underdetermined"
+   },
+   "condition": "P1",
+   "eligible_claims": 2,
+   "forged_status": {
+    "c4": "entailed",
+    "c5": "refuted"
+   },
+   "forgery_kind": {
+    "c4": "wrong_value",
+    "c5": "phantom_row"
+   },
+   "group": "sg-e6e0d3e304deb489",
+   "index": 1,
+   "mechanism_sha256": "e00125d302e40b4d9b76d88a69a27bfe51ea4864795d5b1844512667a4d3d811",
+   "named": [
+    "c4",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "7a2079059e705c6a025c4b5dbfbd9733af956f12e95cdbe9ede29ee8123bf397",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedback_canalizing",
+   "task_id": "cb809398b2b0dcdd579d31aeeebc4f4df2d5501dd758016ba3e5abb9ef500641",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|feedback_canalizing|1|",
+   "wording": 1,
+   "world_id": "r7w-09d255d7684d7682"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c2": "entailed",
+    "c4": "underdetermined",
+    "c5": "underdetermined",
+    "c6": "entailed"
+   },
+   "condition": "P0",
+   "eligible_claims": 7,
+   "forged_status": {
+    "c2": "underdetermined",
+    "c4": "refuted",
+    "c5": "refuted",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c2": "hidden_row",
+    "c4": "wrong_value",
+    "c5": "phantom_row",
+    "c6": "hidden_row"
+   },
+   "group": "sg-845887321ba1afe2",
+   "index": 2,
+   "mechanism_sha256": "83cc04f1ef38c1fb729cb32690b2142c099cd718f1a77af6b0f636609b3f8564",
+   "named": [
+    "c2",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "53d82bc7be94daaf245c07095f360495e65b8698a42be9fa3654e7651a8f1f21",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedback_canalizing",
+   "task_id": "fd1af144372be115f683f7d4ba0fe4a822d8363c74d539031f7d061293bef864",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|feedback_canalizing|2|",
+   "wording": 1,
+   "world_id": "r7w-a85d68eab2612df6"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c2": "refuted",
+    "c3": "entailed",
+    "c4": "underdetermined",
+    "c6": "underdetermined"
+   },
+   "condition": "P2",
+   "eligible_claims": 4,
+   "forged_status": {
+    "c2": "underdetermined",
+    "c3": "underdetermined",
+    "c4": "entailed",
+    "c6": "entailed"
+   },
+   "forgery_kind": {
+    "c2": "wrong_value",
+    "c3": "hidden_row",
+    "c4": "wrong_value",
+    "c6": "phantom_row"
+   },
+   "group": "sg-c0453167d5d0b9ef",
+   "index": 3,
+   "mechanism_sha256": "bb830c916335b427c75f7831b7b3f70658f986a8c4a14d75e19cceed1439fa82",
+   "named": [
+    "c2",
+    "c3",
+    "c4",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "c4317575a4d8ea40f35d8f0a17d705693c04948a204eab70789bcbc30eecf2f9",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "feedback_canalizing",
+   "task_id": "36698f58f280d22421243ce3fd1b5c9d9d9a01c5d711bed43279ba12df18e489",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|feedback_canalizing|3|",
+   "wording": 1,
+   "world_id": "r7w-338bcdf6a7c7dee1"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c1": "entailed",
+    "c4": "underdetermined",
+    "c5": "entailed",
+    "c6": "entailed"
+   },
+   "condition": "P0",
+   "eligible_claims": 7,
+   "forged_status": {
+    "c1": "refuted",
+    "c4": "refuted",
+    "c5": "underdetermined",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c1": "wrong_value",
+    "c4": "phantom_row",
+    "c5": "hidden_row",
+    "c6": "wrong_value"
+   },
+   "group": "sg-d1f3f160107e17a9",
+   "index": 0,
+   "mechanism_sha256": "448874b4b5bd0f957551abfb994fc3392f33546c8cc0b454101bd9871ce1b1a5",
+   "named": [
+    "c1",
+    "c4",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "e92e49c60afd5e56bf3761a81b54f1e5b3b9964e3ddf3a45eaacaf265b3e32fd",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "mixed_parity_thresh",
+   "task_id": "bf35012d7741ead784c3b3e1e8b2957ac9b7706e4ce9b141044c71bbfebf5ee3",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|mixed_parity_thresh|0|",
+   "wording": 1,
+   "world_id": "r7w-f34b2e52e19bf674"
+  },
+  {
+   "budget": 16,
+   "checker_status": {
+    "c1": "refuted",
+    "c3": "underdetermined",
+    "c5": "underdetermined",
+    "c6": "refuted"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c1": "underdetermined",
+    "c3": "entailed",
+    "c5": "refuted",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c1": "invented_counts",
+    "c3": "invented_counts",
+    "c5": "invented_counts",
+    "c6": "invented_counts"
+   },
+   "group": "sg-2618b5ea853b13b9",
+   "index": 1,
+   "mechanism_sha256": "4775cd0514c58cfa0c9b481865f969de152ad7838860706712d216f8397f73dc",
+   "named": [
+    "c1",
+    "c3",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "42fcfa2ee7404541770a10f342de8d42c5f2f3bc3964749c0d59d592c4bca3e0",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "mixed_parity_thresh",
+   "task_id": "86c7a3b8c164908ac980a363439650d65d728e65c7b7a49ba99f0949eded2700",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|mixed_parity_thresh|1|",
+   "wording": 1,
+   "world_id": "r7w-a0d67efc66db88a3"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "refuted",
+    "c2": "entailed",
+    "c3": "entailed",
+    "c5": "entailed"
+   },
+   "condition": "P4",
+   "eligible_claims": 6,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c2": "underdetermined",
+    "c3": "underdetermined",
+    "c5": "refuted"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c2": "hidden_row",
+    "c3": "hidden_row",
+    "c5": "wrong_value"
+   },
+   "group": "sg-5c9719b0bf104392",
+   "index": 2,
+   "mechanism_sha256": "a76266f650b9f1b69430e47879b1012e328785c4f54d069790cb02d46741c209",
+   "named": [
+    "c0",
+    "c2",
+    "c3",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "6db641d9b85b060824d75a66bc5d2b1c7f18b36266cbd44f37e10f1febce39d4",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "mixed_parity_thresh",
+   "task_id": "d2a06b67a567fd999528fa3f809a23ebd3a39880b0b5b3bfef41419d23641040",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|mixed_parity_thresh|2|",
+   "wording": 2,
+   "world_id": "r7w-db8c1cc342686043"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c1": "entailed",
+    "c3": "refuted",
+    "c5": "refuted",
+    "c7": "refuted"
+   },
+   "condition": "P1",
+   "eligible_claims": 7,
+   "forged_status": {
+    "c1": "refuted",
+    "c3": "underdetermined",
+    "c5": "entailed",
+    "c7": "underdetermined"
+   },
+   "forgery_kind": {
+    "c1": "wrong_value",
+    "c3": "hidden_row",
+    "c5": "wrong_value",
+    "c7": "hidden_row"
+   },
+   "group": "sg-281757432e56cf98",
+   "index": 3,
+   "mechanism_sha256": "e5be2847bd3e875d5293a1532d9efd378b10a12ff7706794535663310bbc54b6",
+   "named": [
+    "c1",
+    "c3",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "6c67486f3646c4a7e6ebe40f0fa894c28d7aecbe0d1196845ab825de4b3cd7bc",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "mixed_parity_thresh",
+   "task_id": "0cee4434c5f35b6e2d06652d0216e972a9d383056d2142c38fd82a4378090b5f",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|mixed_parity_thresh|3|",
+   "wording": 1,
+   "world_id": "r7w-6663263c6ff2a00c"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "underdetermined",
+    "c4": "refuted",
+    "c5": "refuted",
+    "c7": "refuted"
+   },
+   "condition": "P2",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c0": "entailed",
+    "c4": "entailed",
+    "c5": "entailed",
+    "c7": "underdetermined"
+   },
+   "forgery_kind": {
+    "c0": "phantom_row",
+    "c4": "wrong_value",
+    "c5": "wrong_value",
+    "c7": "hidden_row"
+   },
+   "group": "sg-32497040c4a1b243",
+   "index": 0,
+   "mechanism_sha256": "09440aae0e68e79fb15954362bea2b2d6f111e1955d3df689b0c7170754c874d",
+   "named": [
+    "c0",
+    "c4",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "88cd077a0c578090747ea2d445bf564eeb3258b7ff0599bef9a7c79c342853ee",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "rewired_control",
+   "task_id": "454aac82656510d7837dd20f5cec06f37ca09bc3adaeb357c02afbb86bd34847",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|rewired_control|0|",
+   "wording": 1,
+   "world_id": "r7w-9fe09c40b052ae96"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "refuted",
+    "c2": "refuted",
+    "c6": "underdetermined",
+    "c7": "entailed"
+   },
+   "condition": "P4",
+   "eligible_claims": 6,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c2": "entailed",
+    "c6": "entailed",
+    "c7": "refuted"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c2": "wrong_value",
+    "c6": "phantom_row",
+    "c7": "wrong_value"
+   },
+   "group": "sg-e5a78aa7af85406f",
+   "index": 1,
+   "mechanism_sha256": "1ed04712381bb10135ee28294f96a03c50198023ea362d95a46af063d1cfee49",
+   "named": [
+    "c0",
+    "c2",
+    "c6",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "d80be9de3428990adefa01428418a36bec8920ed4f7627f65dc0ef28c5786563",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "rewired_control",
+   "task_id": "ded435e7234d01eef36e9b1f721459ae66df929bfde6ee2369e1986e9cc647be",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|rewired_control|1|",
+   "wording": 1,
+   "world_id": "r7w-4a089f43e170c409"
+  },
+  {
+   "budget": 12,
+   "checker_status": {
+    "c2": "underdetermined",
+    "c5": "underdetermined",
+    "c6": "underdetermined",
+    "c7": "underdetermined"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c2": "refuted",
+    "c5": "refuted",
+    "c6": "entailed",
+    "c7": "entailed"
+   },
+   "forgery_kind": {
+    "c2": "invented_counts",
+    "c5": "invented_counts",
+    "c6": "invented_counts",
+    "c7": "invented_counts"
+   },
+   "group": "sg-08c71d957d7c20f6",
+   "index": 2,
+   "mechanism_sha256": "aad5b8dc110a1ceea2aa4ca57b5d8d295a4c7d96b50b298a8d97343a014522bc",
+   "named": [
+    "c2",
+    "c5",
+    "c6",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "791766086a12be41a29af7f938e31c49ba84a8554daf3373345e99ffdd0fad0c",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "rewired_control",
+   "task_id": "b9490b765e9c1bb9f8d0ac2f341001478a083ce5451dabdefd74076262666853",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|rewired_control|2|",
+   "wording": 1,
+   "world_id": "r7w-ad790f470e41decc"
+  },
+  {
+   "budget": 6,
+   "checker_status": {
+    "c0": "refuted",
+    "c3": "refuted",
+    "c4": "underdetermined",
+    "c6": "underdetermined"
+   },
+   "condition": "P3",
+   "eligible_claims": 5,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c3": "underdetermined",
+    "c4": "entailed",
+    "c6": "refuted"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c3": "hidden_row",
+    "c4": "phantom_row",
+    "c6": "phantom_row"
+   },
+   "group": "sg-453532caf8036b49",
+   "index": 3,
+   "mechanism_sha256": "6cf99682156b2c28e9a801c0ddef48f1b63924050d60080c4885711d26b14e9e",
+   "named": [
+    "c0",
+    "c3",
+    "c4",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "4d4c7f69513a59c72798a74a125cc9978bcae15b3aa8d3d7eb673d935b200d0f",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "rewired_control",
+   "task_id": "1041ddb68d17b2cea34608f01601add9fa7f543ad9fcc7752724fd278fe67c9c",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|rewired_control|3|",
+   "wording": 1,
+   "world_id": "r7w-afe995ee10005f7f"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "refuted",
+    "c1": "underdetermined",
+    "c3": "entailed",
+    "c5": "underdetermined"
+   },
+   "condition": "P2",
+   "eligible_claims": 5,
+   "forged_status": {
+    "c0": "underdetermined",
+    "c1": "refuted",
+    "c3": "underdetermined",
+    "c5": "entailed"
+   },
+   "forgery_kind": {
+    "c0": "hidden_row",
+    "c1": "wrong_value",
+    "c3": "hidden_row",
+    "c5": "wrong_value"
+   },
+   "group": "sg-a174561da1a96f63",
+   "index": 0,
+   "mechanism_sha256": "1ab0c6d8474b775bb561acefb5ad4ade44fda2520f5c4ede868bdcb1ae7ea324",
+   "named": [
+    "c0",
+    "c1",
+    "c3",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "3f529d48fb27c75febd3e5bb14ea6a1a9aa78a6011e0537bdf433cf4ea941a77",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "uniform_H",
+   "task_id": "f44ae398cc194252e518dc4490c726f44859f6ff050f252d3dbebe3b2578307d",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|uniform_H|0|",
+   "wording": 1,
+   "world_id": "r7w-b44bef0c1831b83b"
+  },
+  {
+   "budget": 12,
+   "checker_status": {
+    "c1": "underdetermined",
+    "c4": "underdetermined",
+    "c5": "refuted",
+    "c7": "underdetermined"
+   },
+   "condition": "P4",
+   "eligible_claims": 8,
+   "forged_status": {
+    "c1": "entailed",
+    "c4": "entailed",
+    "c5": "underdetermined",
+    "c7": "entailed"
+   },
+   "forgery_kind": {
+    "c1": "invented_counts",
+    "c4": "invented_counts",
+    "c5": "invented_counts",
+    "c7": "invented_counts"
+   },
+   "group": "sg-baf683034aa17b41",
+   "index": 1,
+   "mechanism_sha256": "6e3ab7915addf5eda00c8c655fdc47e66dbc39b2156ba681b5a2a0f84e676691",
+   "named": [
+    "c1",
+    "c4",
+    "c5",
+    "c7"
+   ],
+   "population": "synthetic",
+   "public_sha256": "e297c52513d6a1adca9d4201e5fc634f0f359878c66abd7dfc484f1355149b95",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "uniform_H",
+   "task_id": "c080b7cdea622f63bc68e060ede85a548677ee4f33aed3ea8e9b0103afe44ca1",
+   "tier": "H",
+   "wkey": "pilot4|synthetic|uniform_H|1|",
+   "wording": 2,
+   "world_id": "r7w-db2812b1cd04462e"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "entailed",
+    "c3": "entailed",
+    "c5": "underdetermined",
+    "c6": "refuted"
+   },
+   "condition": "P3",
+   "eligible_claims": 5,
+   "forged_status": {
+    "c0": "refuted",
+    "c3": "underdetermined",
+    "c5": "refuted",
+    "c6": "underdetermined"
+   },
+   "forgery_kind": {
+    "c0": "wrong_value",
+    "c3": "hidden_row",
+    "c5": "phantom_row",
+    "c6": "hidden_row"
+   },
+   "group": "sg-f20d5f95252bb67b",
+   "index": 2,
+   "mechanism_sha256": "430eb530813a939acdf55f18ee546e24f699b9d07a2dc2e160d715b5be091ee5",
+   "named": [
+    "c0",
+    "c3",
+    "c5",
+    "c6"
+   ],
+   "population": "synthetic",
+   "public_sha256": "e64cefef195b9d09b3fb8c724c91ee1231bb282b0b5fa41d3af321057b7ae89e",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "uniform_H",
+   "task_id": "5d87eceea2c5527d55d370ed4b522c6b5227658fa8d70ea35ff9126c213d04e2",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|uniform_H|2|",
+   "wording": 1,
+   "world_id": "r7w-4ceb678af571f101"
+  },
+  {
+   "budget": 8,
+   "checker_status": {
+    "c0": "underdetermined",
+    "c1": "underdetermined",
+    "c3": "refuted",
+    "c5": "underdetermined"
+   },
+   "condition": "P1",
+   "eligible_claims": 7,
+   "forged_status": {
+    "c0": "refuted",
+    "c1": "refuted",
+    "c3": "underdetermined",
+    "c5": "refuted"
+   },
+   "forgery_kind": {
+    "c0": "phantom_row",
+    "c1": "phantom_row",
+    "c3": "hidden_row",
+    "c5": "phantom_row"
+   },
+   "group": "sg-d3a04e35a823b940",
+   "index": 3,
+   "mechanism_sha256": "ad5f6d4657424e3114566c5b978e2ef1e99772945f437b97aabfba55ee587393",
+   "named": [
+    "c0",
+    "c1",
+    "c3",
+    "c5"
+   ],
+   "population": "synthetic",
+   "public_sha256": "eadd099c6211ae2f69dba85ea33d3cafb06a028329cc34c6dd562d65422f28cf",
+   "source_key": "",
+   "split": "pilot4",
+   "stratum": "uniform_H",
+   "task_id": "5d0e80531ba1785e1908381b886dc48ab9ad218300e3d48820792ecd5d601630",
+   "tier": "W",
+   "wkey": "pilot4|synthetic|uniform_H|3|",
+   "wording": 1,
+   "world_id": "r7w-33f3dd9bd5bbc3fb"
+  }
+ ],
+ "n_worlds": 32,
+ "r5_split": "sprint_pilot4",
+ "split": "pilot4",
+ "tier_counts": {
+  "H": 8,
+  "W": 24
+ },
+ "tierw_budgets": [
+  6,
+  8
+ ],
+ "version": "r7b-sprint-population-v1"
+}

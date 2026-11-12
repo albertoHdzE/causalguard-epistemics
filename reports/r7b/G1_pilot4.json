@@ -1,0 +1,23 @@
+{
+ "claims": 256,
+ "cross_tier_claims_settled_h": 20,
+ "cross_tier_violations": [],
+ "cross_tier_worlds": 32,
+ "failures": [],
+ "manifest": "artifacts/sprint_pilot4_manifest.json",
+ "pass": true,
+ "status_counts": {
+  "H": {
+   "entailed": 8,
+   "refuted": 12,
+   "underdetermined": 44
+  },
+  "W": {
+   "entailed": 58,
+   "refuted": 44,
+   "underdetermined": 90
+  }
+ },
+ "worlds": 32,
+ "worlds_agree": 32
+}

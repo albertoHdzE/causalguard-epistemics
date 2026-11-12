@@ -50,7 +50,8 @@ SPLITS = {"calibration": {"salt": "r5-G-cal-v1", "per_stratum": 8},
           "sprint_main": {"salt": "r7-sprint-main-v1", "per_stratum": 26},
           # R7 pilot revision 1 (D76): fresh pilot worlds after the wording change
           "sprint_pilot2": {"salt": "r7-sprint-pilot2-v1", "per_stratum": 4},
-          "sprint_pilot3": {"salt": "r7-sprint-pilot3-v1", "per_stratum": 4}}       # revision 2 (D78)
+          "sprint_pilot3": {"salt": "r7-sprint-pilot3-v1", "per_stratum": 4},       # revision 2 (D78)
+          "sprint_pilot4": {"salt": "r7b-sprint-pilot4-v1", "per_stratum": 4}}      # R7b Tier W / P4 pilot (D79)
 BUDGETS = (8, 16, 24)
 PRIMARY_BUDGET = 16
 N_QUERIES = 8

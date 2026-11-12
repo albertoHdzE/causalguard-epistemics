@@ -133,6 +133,30 @@ def _items_from_config(cfg: dict):
         root = Path(__file__).resolve().parents[2]
         man = json.loads((root / cfg["manifest"]).read_text())
         items = sorted(man["items"], key=lambda x: hashlib.sha256(f"r7-run-order|{x['wkey']}".encode()).hexdigest())
+        if cfg.get("tiers"):                # R7b pilot: restrict a model to some tiers
+            items = [x for x in items if x.get("tier") in cfg["tiers"]]
+        if cfg.get("per_tier"):             # R7b online smoke: the first k worlds per tier in run order
+            cnt: dict = {}
+            keep = []
+            for x in items:
+                t = x.get("tier")
+                if cnt.get(t, 0) < cfg["per_tier"]:
+                    keep.append(x)
+                cnt[t] = cnt.get(t, 0) + 1
+            items = keep
+        if cfg.get("half_panel"):           # R7b (D79): the first half by run order within (tier, condition)
+            seen: dict = {}
+            tot: dict = {}
+            for x in items:
+                g = (x.get("tier"), x["condition"])
+                tot[g] = tot.get(g, 0) + 1
+            keep = []
+            for x in items:
+                g = (x.get("tier"), x["condition"])
+                if seen.get(g, 0) < (tot[g] + 1) // 2:
+                    keep.append(x)
+                seen[g] = seen.get(g, 0) + 1
+            items = keep
         if cfg.get("max_items"):
             items = items[:cfg["max_items"]]
         for x in items:
@@ -143,6 +167,9 @@ def _items_from_config(cfg: dict):
                               "phase": cfg.get("phase", "SPRINT"), "phase_cap": cfg.get("phase_cap"),
                               "world_cap": cfg.get("world_cap", 4), "two_turns": cfg.get("two_turns", True),
                               **({"task_wording": cfg["task_wording"]} if cfg.get("task_wording") else {}),
+                              **{f: x[f] for f in ("tier", "checker_status", "forged_status", "forgery_kind")
+                                 if f in x},
+                              **({"salt": man["assign_salt"]} if "tier" in x else {}),
                               "stratum": x["stratum"], "population": x["population"]}
     else:
         raise SystemExit(f"unknown study {study}")

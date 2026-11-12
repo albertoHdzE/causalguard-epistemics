@@ -33,11 +33,20 @@ def _bits(x: int, n: int) -> str:
 def render_task(pub: dict) -> str:
     n, L = pub["n"], pub["node_labels"]
     ev = Evidence.from_json(pub["evidence"])
-    lines = [f"System with {n} Boolean nodes, physical order: {' '.join(L)}.",
-             "All nodes update synchronously. Each node's next value is a FIXED but UNKNOWN Boolean function of at "
-             f"most {pub['k']} nodes (any nodes, possibly itself). A 'consistent mechanism' is any such network "
-             "that reproduces every evidence row exactly.",
-             "States are written as bit strings in the physical order above.",
+    if pub.get("wiring") is None:
+        cls_line = ("All nodes update synchronously. Each node's next value is a FIXED but UNKNOWN Boolean function of "
+                    f"at most {pub['k']} nodes (any nodes, possibly itself). A 'consistent mechanism' is any such "
+                    "network that reproduces every evidence row exactly.")
+        wiring = []
+    else:                        # R7b Tier W: each node's input nodes are listed (D79)
+        cls_line = ("All nodes update synchronously. Each node's next value is a FIXED but UNKNOWN Boolean function of "
+                    "its listed input nodes (below; it may ignore some of them). A 'consistent mechanism' is any such "
+                    "network that reproduces every evidence row exactly.")
+        wiring = ["", "Inputs of each node (its next value depends only on these nodes' current values):"]
+        for j, ins in enumerate(pub["wiring"]):
+            wiring.append(f" {L[j]} <- " + (", ".join(L[a] for a in ins) if ins else "no inputs (constant)"))
+    lines = [f"System with {n} Boolean nodes, physical order: {' '.join(L)}.", cls_line,
+             "States are written as bit strings in the physical order above.", *wiring,
              "", "Evidence (each row: one synchronous step from a start state; a clamped node is held fixed and "
              "its next value is not observed, shown as '.'):"]
     for i, o in enumerate(ev.observations, 1):
