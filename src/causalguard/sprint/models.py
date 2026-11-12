@@ -14,15 +14,15 @@ CTX = 16384            # LM Studio models are loaded with `lms load <id> --conte
 
 # order = ascending size; 'tag' is the run-id suffix
 LOCAL = [
-    {"tag": "gemma3_4b", "server": LMSTUDIO, "model": "google/gemma-3-4b", "params_b": 4, "max_tokens": 3000},
-    {"tag": "qwen25_7b", "server": OLLAMA, "model": "qwen2.5:7b", "params_b": 7, "max_tokens": 3000},
-    {"tag": "gemma4_12b", "server": LMSTUDIO, "model": "gemma-4-12b-it-mlx", "params_b": 12, "max_tokens": 3000},
+    {"tag": "gemma3_4b", "server": LMSTUDIO, "model": "google/gemma-3-4b", "params_b": 4, "max_tokens": 4000},
+    {"tag": "qwen25_7b", "server": OLLAMA, "model": "qwen2.5:7b", "params_b": 7, "max_tokens": 4000},
+    {"tag": "gemma4_12b", "server": LMSTUDIO, "model": "gemma-4-12b-it-mlx", "params_b": 12, "max_tokens": 4000},
     {"tag": "mistral_small_24b", "server": LMSTUDIO, "model": "mistral-small-3.2-24b-instruct-2506-mlx",
-     "params_b": 24, "max_tokens": 3000},
+     "params_b": 24, "max_tokens": 4000},
     {"tag": "r1_distill_qwen_32b", "server": LMSTUDIO, "model": "deepseek-r1-distill-qwen-32b", "params_b": 32,
      "max_tokens": 12000, "reasoning": True},
-    {"tag": "llama33_70b", "server": LMSTUDIO, "model": "llama-3.3-70b-instruct", "params_b": 70, "max_tokens": 3000},
-    {"tag": "qwen25_72b", "server": OLLAMA, "model": "qwen2.5:72b", "params_b": 72, "max_tokens": 3000},
+    {"tag": "llama33_70b", "server": LMSTUDIO, "model": "llama-3.3-70b-instruct", "params_b": 70, "max_tokens": 4000},
+    {"tag": "qwen25_72b", "server": OLLAMA, "model": "qwen2.5:72b", "params_b": 72, "max_tokens": 4000},
 ]
 
 COMMON = {"study": "SPRINT", "mode": "development", "global_cap": 6000, "phase": "SPRINT", "phase_cap": 6000,

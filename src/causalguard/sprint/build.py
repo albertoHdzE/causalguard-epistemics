@@ -22,7 +22,7 @@ def write_json(path: Path, obj) -> None:
     path.write_text(json.dumps(obj, indent=1, sort_keys=True) + "\n")
 
 
-def manifests(splits=("smoke", "pilot", "main", "pilot2")) -> dict:
+def manifests(splits=("smoke", "pilot", "main", "pilot2", "pilot3")) -> dict:
     out = {}
     for s in splits:
         m = P.manifest(s)

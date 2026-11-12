@@ -41,8 +41,14 @@ def load(run_dirs: list[str]) -> list[dict]:
     out = []
     for d in run_dirs:
         r = load_run(Path(d))
-        recs = [r["results"][k] for k in sorted(r["results"])]
+        from .episode import reparse
+        recs, reparsed = [], 0
+        for k in sorted(r["results"]):
+            x, n = reparse(r["results"][k])
+            recs.append(x)
+            reparsed += n
         out.append({"run_dir": str(d), "run_id": r["plan"]["run_id"], "model": r["plan"]["config"]["provider"]["model"],
+                    "answers_changed_by_reparse": reparsed,
                     "manifest": r["plan"]["config"]["manifest"], "planned": len(r["plan"]["items"]),
                     "completed": len(recs), "failed": sorted(r["failures"]), "missing": sorted(r["missing"]),
                     "records": recs, "worlds": [S.score_world(x) for x in recs]})
@@ -115,6 +121,7 @@ def analyze(run_dirs: list[str], out: str, label: str = "main", B: int = S.B_DEF
     models = {}
     for r in runs:
         models[r["model"]] = {"run_id": r["run_id"], "planned": r["planned"], "completed": r["completed"],
+                              "answers_changed_by_reparse": r["answers_changed_by_reparse"],
                               "failed": r["failed"], "missing": r["missing"], **model_summary(r["worlds"], B)}
     pv = {m: v["contrasts"]["discernment_p_two_sided"] for m, v in models.items()
           if v["contrasts"]["discernment_p_two_sided"] is not None}

@@ -89,8 +89,9 @@ def smoke(run_dirs: list[str], out: str = "reports/R7_SMOKE") -> int:
 # --------------------------------------------------------------------------- the five pre-run gates
 
 def _scored(run_dir: str) -> tuple[str, list[dict]]:
+    from .episode import reparse
     r, recs = _load(run_dir)
-    return r["plan"]["config"]["provider"]["model"], [S.score_world(x) for x in recs]
+    return r["plan"]["config"]["provider"]["model"], [S.score_world(reparse(x)[0]) for x in recs]
 
 
 def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_surface_rule.json",
@@ -103,6 +104,7 @@ def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_sur
     pilot = json.loads((P.REPO / "artifacts/sprint_pilot_manifest.json").read_text())
     smoke_m = json.loads((P.REPO / "artifacts/sprint_smoke_manifest.json").read_text())
     pilot2 = json.loads((P.REPO / "artifacts/sprint_pilot2_manifest.json").read_text())
+    pilot3 = json.loads((P.REPO / "artifacts/sprint_pilot3_manifest.json").read_text())
     if not main["items"] or not pilot["items"]:
         raise SystemExit("prerun: empty manifest")
 
@@ -133,12 +135,18 @@ def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_sur
     g3 = {"denominators": {}, "models": {}, "pass": True}
     for d in pilot_runs:
         model, ws = _scored(d)
+        _, recs = _load(d)
+        same = S.reference_rows([(P.evaluator(P.WorldKey.from_json(x["world"])).public(), x["reference"], x["world"])
+                                 for x in recs], None)        # checker / majority on THESE pilot worlds
+        rba = {k: S.balanced_accuracy(v) for k, v in same.items()}
+        racc = {k: S.mean_of(v, lambda w: w["S"]["accuracy"])[0] for k, v in same.items()}
         mba = S.balanced_accuracy(ws)
         macc = S.mean_of(ws, lambda w: w["S"]["accuracy"])[0]
         ok = all(v is not None for v in (mba, macc)) and \
-            abs(mba - ba["checker"]) > 0.05 and abs(mba - ba["majority_status"]) > 0.05 and \
-            abs(macc - acc["checker"]) > 0.05 and abs(macc - acc["majority_status"]) > 0.05
-        g3["models"][model] = {"balanced_accuracy": mba, "accuracy": macc, "pass": ok}
+            abs(mba - rba["checker"]) > 0.05 and abs(mba - rba["majority_status"]) > 0.05 and \
+            abs(macc - racc["checker"]) > 0.05 and abs(macc - racc["majority_status"]) > 0.05
+        g3["models"][model] = {"balanced_accuracy": mba, "accuracy": macc, "pass": ok,
+                               "same_worlds_reference": {"balanced_accuracy": rba, "accuracy": racc}}
         g3["denominators"][model] = {"worlds": len(ws), "answered_claims": sum(w["S"]["answered"] for w in ws)}
         g3["pass"] &= ok
     gates["G3_not_at_floor_or_ceiling"] = g3
@@ -159,14 +167,15 @@ def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_sur
 
     # G5 disjoint: no main-panel mechanism or public task in the pilot, the smoke runs or any earlier model-facing run
     seen_mech, seen_task = set(), set()
-    for m in (pilot, pilot2, smoke_m):
+    for m in (pilot, pilot2, pilot3, smoke_m):
         seen_mech |= {x["mechanism_sha256"] for x in m["items"]}
         seen_task |= {x["task_id"] for x in m["items"]}
     earlier = earlier_model_facing(prior_runs_roots)
     main_mech = {x["mechanism_sha256"] for x in main["items"]}
     main_task = {x["task_id"] for x in main["items"]}
     gates["G5_disjoint"] = {"denominator_main_worlds": len(main["items"]),
-                            "pilot_and_smoke_worlds": len(pilot["items"]) + len(pilot2["items"]) + len(smoke_m["items"]),
+                            "pilot_and_smoke_worlds": len(pilot["items"]) + len(pilot2["items"]) + len(pilot3["items"]) +
+                            len(smoke_m["items"]),
                             "earlier_model_facing_mechanisms": earlier["mechanisms"],
                             "earlier_model_facing_runs": earlier["runs"],
                             "overlap_mechanism_pilot_smoke": len(main_mech & seen_mech),
@@ -191,8 +200,10 @@ def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_sur
     for m, v in g3["models"].items():
         lines.append(f"| G3 floor/ceiling: {m} | {g3['denominators'][m]['worlds']} pilot worlds, "
                      f"{g3['denominators'][m]['answered_claims']} answered claims | balanced acc "
-                     f"{v['balanced_accuracy']:.3f}, acc {v['accuracy']:.3f} | > 0.05 from checker and majority "
-                     f"(acc: checker {acc['checker']:.3f}, majority {acc['majority_status']:.3f}) | "
+                     f"{v['balanced_accuracy']:.3f}, acc {v['accuracy']:.3f} | > 0.05 from checker and majority on the same "
+                     f"worlds (acc: checker {v['same_worlds_reference']['accuracy']['checker']:.3f}, majority "
+                     f"{v['same_worlds_reference']['accuracy']['majority_status']:.3f}; balanced: majority "
+                     f"{v['same_worlds_reference']['balanced_accuracy']['majority_status']:.3f}) | "
                      f"{'yes' if v['pass'] else 'NO'} |")
     g4 = g["G4_no_leak"]
     lines.append(f"| G4 no leak | {g4['denominator_messages']} main-panel follow-ups | {g4['pass_messages']} pass | all | "

@@ -63,8 +63,8 @@ def test_planted_engine_disagreement_fails_the_item(pilot_keys, monkeypatch):
 
 
 def test_populations_are_disjoint_and_balanced():
-    keys = {s: P.world_keys(s) for s in ("train", "smoke", "pilot", "main", "pilot2")}
-    assert [len(keys[s]) for s in ("smoke", "pilot", "main", "pilot2")] == [8, 32, 240, 32]
+    keys = {s: P.world_keys(s) for s in ("train", "smoke", "pilot", "main", "pilot2", "pilot3")}
+    assert [len(keys[s]) for s in ("smoke", "pilot", "main", "pilot2", "pilot3")] == [8, 32, 240, 32, 32]
     mech = {s: {P.build_world(k).net.canonical() for k in v} for s, v in keys.items() if s != "train"}
     for a_ in mech:
         for b_ in mech:
@@ -104,6 +104,8 @@ def test_parse_status_answers_and_reasoning_strip():
     out = parse_status_answers(obj, cids)
     assert out == {"c0": {"verdict": ENT, "probability": 1.0}, "c1": {"verdict": UND, "probability": 0.4},
                    "c3": {"verdict": REF, "probability": None}, "c4": {"verdict": REF, "probability": None}}
+    assert parse_status_answers([{"cid": 2, "verdict": "false", "probability": 0}, {"cid": True, "verdict": "true"},
+                                 {"cid": 9, "verdict": "true"}], cids) == {"c2": {"verdict": REF, "probability": 0.0}}
     from causalguard.s4.pilot import parse_final_json
     assert parse_final_json('Reasoning {not json} ... final: {"answers": [1]} and {"answers": [2]}') == {"answers": [2]}
     assert strip_reasoning("<think>{x}</think>\n{\"a\": 1}") == '{"a": 1}'

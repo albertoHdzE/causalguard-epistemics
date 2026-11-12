@@ -26,6 +26,27 @@ def _ledger_path(p: str | None) -> str | None:
     return p
 
 
+def answers_from_raw(raw: str | None, cids: list[str]) -> tuple[bool, dict]:
+    """The ONE parse path from a raw reply to answers (used at run time and by the analysis, which always re-derives
+    answers from the stored raw outputs with the current parser)."""
+    obj = parse_final_json(strip_reasoning(raw)) if raw else None
+    return obj is not None, parse_status_answers((obj or {}).get("answers"), cids)
+
+
+def reparse(rec: dict) -> tuple[dict, int]:
+    """A copy of a run record with every turn's answers re-derived from its raw output; returns (record, number of
+    claim answers that differ from the recorded ones)."""
+    import copy
+    cids = sorted(rec["reference"], key=lambda c: int(c[1:]))
+    out = copy.deepcopy(rec)
+    changed = 0
+    for t in out["episode"].get("turns", []):
+        parsed, a = answers_from_raw(t.get("raw_output") if t.get("ok") else None, cids)
+        changed += sum(1 for c in cids if a.get(c) != t.get("answers", {}).get(c))
+        t["parsed"], t["answers"] = parsed, a
+    return out, changed
+
+
 def _turn(provider, msgs, budget, seed, wid, label) -> tuple[dict, dict, str | None]:
     from ..llm.harness import derive_seed
     budget.current = label

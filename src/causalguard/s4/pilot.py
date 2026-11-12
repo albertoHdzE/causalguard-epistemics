@@ -178,8 +178,14 @@ def parse_status_answers(obj, cids: list[str]) -> dict:
     if not isinstance(obj, list):
         return out
     for a in obj:
-        if not isinstance(a, dict) or a.get("cid") not in cids or a["cid"] in out:
+        if not isinstance(a, dict):
             continue
+        cid = a.get("cid")
+        if isinstance(cid, int) and not isinstance(cid, bool) and f"c{cid}" in cids:
+            cid = f"c{cid}"                 # tasks v2 schema says <claim id>; an integer k names claim ck (D77)
+        if cid not in cids or cid in out:
+            continue
+        a = {**a, "cid": cid}
         v = a.get("verdict")
         v = STATUS_WORDS.get(v.strip().lower()) if isinstance(v, str) else None
         p = a.get("probability")

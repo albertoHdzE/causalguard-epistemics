@@ -1,0 +1,85 @@
+{
+ "all_pass": false,
+ "gates": {
+  "G1_ground_truth": {
+   "agree_worlds": 240,
+   "denominator_claims": 1920,
+   "denominator_worlds": 240,
+   "pass": true
+  },
+  "G2_not_readable_from_surface": {
+   "accuracy": {
+    "always_not_settled": 0.6171875,
+    "checker": 1.0,
+    "majority_status": 0.6171875,
+    "surface_rule": 0.50390625
+   },
+   "balanced_accuracy": {
+    "always_not_settled": 0.3333333333333333,
+    "checker": 1.0,
+    "majority_status": 0.3333333333333333,
+    "surface_rule": 0.5121460605578112
+   },
+   "denominator_claims": 256,
+   "denominator_worlds": 32,
+   "pass": true,
+   "threshold": 0.6666666666666666
+  },
+  "G3_not_at_floor_or_ceiling": {
+   "denominators": {
+    "mistral-small-3.2-24b-instruct-2506-mlx": {
+     "answered_claims": 256,
+     "worlds": 32
+    },
+    "qwen2.5:7b": {
+     "answered_claims": 256,
+     "worlds": 32
+    }
+   },
+   "models": {
+    "mistral-small-3.2-24b-instruct-2506-mlx": {
+     "accuracy": 0.65234375,
+     "balanced_accuracy": 0.3333333333333333,
+     "pass": false
+    },
+    "qwen2.5:7b": {
+     "accuracy": 0.5625,
+     "balanced_accuracy": 0.4446593444127787,
+     "pass": true
+    }
+   },
+   "pass": false
+  },
+  "G4_no_leak": {
+   "denominator_messages": 240,
+   "pass": true,
+   "pass_messages": 240,
+   "problems": []
+  },
+  "G5_disjoint": {
+   "denominator_main_worlds": 240,
+   "earlier_model_facing_mechanisms": 148,
+   "earlier_model_facing_runs": [
+    "r5-a-ai-cal-mistral_small_24b-v1",
+    "r5-a-ai-cal-mistral_small_24b-v2",
+    "r5-a-ai-cal-qwen25_7b-v1",
+    "r5-a-ai-cal-qwen25_7b-v2",
+    "r5-a-ai-eval-mistral_small_24b-v2",
+    "r5-a-ai-eval-qwen25_7b-v2",
+    "r6-a2-control-mistral_small_24b-v1",
+    "r6-a2-control-qwen25_7b-v1",
+    "r6-a2-loop-mistral_small_24b-v1",
+    "r6-a2-loop-qwen25_7b-v1",
+    "r6-a2-smoke-mistral_small_24b-v1",
+    "r6-a2-smoke-qwen25_7b-v1",
+    "s4-pilot-mistral_small_24b-v1",
+    "s4-pilot-qwen25_7b-v1"
+   ],
+   "overlap_mechanism_earlier": 0,
+   "overlap_mechanism_pilot_smoke": 0,
+   "overlap_task_pilot_smoke": 0,
+   "pass": true,
+   "pilot_and_smoke_worlds": 72
+  }
+ }
+}

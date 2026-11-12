@@ -17,7 +17,7 @@ import re
 from ..s4.pilot import render_task, system_prompt
 from ..schema import Evidence, Query
 
-TASK_VERSION = "r7-sprint-tasks-v2"   # v2 (D76): neutral reply schema, no example values
+TASK_VERSION = "r7-sprint-tasks-v3"   # v2 (D76): neutral reply schema; v3 (D78): brief reasoning first
 
 INSTRUCTIONS = """A mechanism is "consistent" if it reproduces every evidence row exactly. Before the evidence was \
 collected, every distinct mechanism in the class described above (every assignment of update functions to the \
@@ -36,8 +36,14 @@ ANSWER_FORMAT = ('{"answers": [{"cid": <claim id>, "verdict": <"true", "false" o
                  '<your probability that the claim is true>}, ...]} with one entry per claim')
 
 
+# v1/v2 asked for "ONLY one JSON object"; one pilot model then answered "not settled" / 0.5 on all 512 claims of two
+# pilots (D76, D78).  v3 asks for brief reasoning first and the JSON object at the end (parsed as the last object).
+REPLY = ("First reason briefly, claim by claim, about which evidence rows constrain it. Then end your reply with one "
+         "JSON object: ")
+
+
 def user_prompt(pub: dict) -> str:
-    return render_task(pub) + "\n\n" + INSTRUCTIONS + f"\nReply with ONLY one JSON object: {ANSWER_FORMAT}."
+    return render_task(pub) + "\n\n" + INSTRUCTIONS + "\n" + REPLY + ANSWER_FORMAT + "."
 
 
 def system() -> str:
@@ -66,6 +72,7 @@ def template_hashes() -> dict:
     return {f"{c}w{w}": hashlib.sha256(t.encode()).hexdigest() for (c, w), t in sorted(FOLLOWUPS.items())} | {
         "task_s_instructions": hashlib.sha256(INSTRUCTIONS.encode()).hexdigest(),
         "answer_format": hashlib.sha256(ANSWER_FORMAT.encode()).hexdigest(),
+        "reply_instruction": hashlib.sha256(REPLY.encode()).hexdigest(),
         "system": hashlib.sha256(system().encode()).hexdigest()}
 
 

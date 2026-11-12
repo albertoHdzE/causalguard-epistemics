@@ -1,0 +1,29 @@
+{
+ "gate": "smoke",
+ "rows": [
+  {
+   "chat_template_sha256": null,
+   "claims": 64,
+   "completion_tokens_max": 204,
+   "completion_tokens_median": 202.0,
+   "failed_or_missing_items": 0,
+   "full_requests": 8,
+   "model": "llama-3.3-70b-instruct",
+   "model_digest": null,
+   "pass": true,
+   "prompt_tokens_max": 1268,
+   "quantization": "4bit",
+   "reasons": [],
+   "requests": 8,
+   "run_dir": "runs/r7-smoke-llama33_70b-v1",
+   "seconds_per_request_mean": 25.534725,
+   "seconds_per_request_median": 24.7637,
+   "truncated": 0,
+   "valid_answers": 64,
+   "valid_share": 1.0,
+   "with_probability": 64,
+   "worlds": 4
+  }
+ ],
+ "threshold_valid_share": 0.9
+}
