@@ -63,10 +63,13 @@ def test_planted_engine_disagreement_fails_the_item(pilot_keys, monkeypatch):
 
 
 def test_populations_are_disjoint_and_balanced():
-    keys = {s: P.world_keys(s) for s in ("train", "smoke", "pilot", "main")}
-    assert [len(keys[s]) for s in ("smoke", "pilot", "main")] == [8, 32, 160]
+    keys = {s: P.world_keys(s) for s in ("train", "smoke", "pilot", "main", "pilot2")}
+    assert [len(keys[s]) for s in ("smoke", "pilot", "main", "pilot2")] == [8, 32, 240, 32]
     mech = {s: {P.build_world(k).net.canonical() for k in v} for s, v in keys.items() if s != "train"}
-    assert not mech["main"] & mech["pilot"] and not mech["main"] & mech["smoke"] and not mech["pilot"] & mech["smoke"]
+    for a_ in mech:
+        for b_ in mech:
+            if a_ < b_:
+                assert not mech[a_] & mech[b_], (a_, b_)
     groups = {s: {k.group for k in v if k.population == "published"} for s, v in keys.items()}
     for a in groups:
         for b in groups:
@@ -74,10 +77,10 @@ def test_populations_are_disjoint_and_balanced():
                 assert not groups[a] & groups[b], (a, b)
     a = P.assign(keys["main"])
     cond = Counter(x["condition"] for x in a.values())
-    assert cond == {"P0": 40, "P1": 40, "P2": 40, "P3": 40}
+    assert cond == {"P0": 60, "P1": 60, "P2": 60, "P3": 60}
     pub = Counter((x["condition"]) for k, x in a.items() if "|published|" in k)
     assert pub == {"P0": 8, "P1": 8, "P2": 8, "P3": 8}
-    assert Counter(x["wording"] for x in a.values()) == {1: 80, 2: 80}
+    assert Counter(x["wording"] for x in a.values()) == {1: 120, 2: 120}
     assert all(len(x["named"]) == 4 for x in a.values())
 
 

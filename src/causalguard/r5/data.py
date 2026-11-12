@@ -47,7 +47,9 @@ SPLITS = {"calibration": {"salt": "r5-G-cal-v1", "per_stratum": 8},
           "sprint_train": {"salt": "r7-sprint-train-v1", "per_stratum": 40},
           "sprint_smoke": {"salt": "r7-sprint-smoke-v1", "per_stratum": 1},
           "sprint_pilot": {"salt": "r7-sprint-pilot-v1", "per_stratum": 3},
-          "sprint_main": {"salt": "r7-sprint-main-v1", "per_stratum": 16}}
+          "sprint_main": {"salt": "r7-sprint-main-v1", "per_stratum": 26},
+          # R7 pilot revision 1 (D76): fresh pilot worlds after the wording change
+          "sprint_pilot2": {"salt": "r7-sprint-pilot2-v1", "per_stratum": 4}}
 BUDGETS = (8, 16, 24)
 PRIMARY_BUDGET = 16
 N_QUERIES = 8

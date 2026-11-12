@@ -102,6 +102,7 @@ def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_sur
     main = json.loads((P.REPO / "artifacts/sprint_main_manifest.json").read_text())
     pilot = json.loads((P.REPO / "artifacts/sprint_pilot_manifest.json").read_text())
     smoke_m = json.loads((P.REPO / "artifacts/sprint_smoke_manifest.json").read_text())
+    pilot2 = json.loads((P.REPO / "artifacts/sprint_pilot2_manifest.json").read_text())
     if not main["items"] or not pilot["items"]:
         raise SystemExit("prerun: empty manifest")
 
@@ -158,14 +159,14 @@ def prerun(pilot_runs: list[str], surface_rule_path: str = "artifacts/sprint_sur
 
     # G5 disjoint: no main-panel mechanism or public task in the pilot, the smoke runs or any earlier model-facing run
     seen_mech, seen_task = set(), set()
-    for m in (pilot, smoke_m):
+    for m in (pilot, pilot2, smoke_m):
         seen_mech |= {x["mechanism_sha256"] for x in m["items"]}
         seen_task |= {x["task_id"] for x in m["items"]}
     earlier = earlier_model_facing(prior_runs_roots)
     main_mech = {x["mechanism_sha256"] for x in main["items"]}
     main_task = {x["task_id"] for x in main["items"]}
     gates["G5_disjoint"] = {"denominator_main_worlds": len(main["items"]),
-                            "pilot_and_smoke_worlds": len(pilot["items"]) + len(smoke_m["items"]),
+                            "pilot_and_smoke_worlds": len(pilot["items"]) + len(pilot2["items"]) + len(smoke_m["items"]),
                             "earlier_model_facing_mechanisms": earlier["mechanisms"],
                             "earlier_model_facing_runs": earlier["runs"],
                             "overlap_mechanism_pilot_smoke": len(main_mech & seen_mech),

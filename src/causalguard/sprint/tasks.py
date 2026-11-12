@@ -17,7 +17,7 @@ import re
 from ..s4.pilot import render_task, system_prompt
 from ..schema import Evidence, Query
 
-TASK_VERSION = "r7-sprint-tasks-v1"
+TASK_VERSION = "r7-sprint-tasks-v2"   # v2 (D76): neutral reply schema, no example values
 
 INSTRUCTIONS = """A mechanism is "consistent" if it reproduces every evidence row exactly. Before the evidence was \
 collected, every distinct mechanism in the class described above (every assignment of update functions to the \
@@ -29,8 +29,11 @@ the evidence settles it as false (it fails in every consistent mechanism); "not 
 mechanisms make it true and others make it false.
 - "probability": the probability that the claim is true, given the evidence (a number from 0 to 1)."""
 
-ANSWER_FORMAT = ('{"answers": [{"cid": "c0", "verdict": "true|false|not settled", "probability": 0.5}, ...]} '
-                 "with one entry per claim")
+# v1 (pilot revision 0) showed an example entry {"cid": "c0", "verdict": "true|false|not settled",
+# "probability": 0.5}; one pilot model copied "not settled" / 0.5 into every answer (D76).  v2 states the schema
+# without proposing any value.
+ANSWER_FORMAT = ('{"answers": [{"cid": <claim id>, "verdict": <"true", "false" or "not settled">, "probability": '
+                 '<your probability that the claim is true>}, ...]} with one entry per claim')
 
 
 def user_prompt(pub: dict) -> str:

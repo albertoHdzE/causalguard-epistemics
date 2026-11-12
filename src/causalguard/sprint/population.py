@@ -30,7 +30,7 @@ from ..s4.evaluator import Evaluator
 from ..s4.tasks import make_design
 
 REPO = Path(__file__).resolve().parents[3]
-SPLITS = ("train", "smoke", "pilot", "main")
+SPLITS = ("train", "smoke", "pilot", "main", "pilot2")
 R5_SPLIT = {s: f"sprint_{s}" for s in SPLITS}
 DESIGN_SALT = {s: f"r7-sprint-{s}-design-v1" for s in SPLITS}
 ASSIGN_SALT = {s: f"r7-sprint-{s}-assign-v1" for s in SPLITS}
@@ -87,6 +87,7 @@ def published_split() -> dict[str, list[str]]:
         out[s] = groups[i:i + PUBLISHED_GROUPS[s]]
         i += PUBLISHED_GROUPS[s]
     out["train"] = groups[i:]
+    out["pilot2"] = []                    # revision-1 pilot (D76): synthetic worlds only
     return out
 
 
