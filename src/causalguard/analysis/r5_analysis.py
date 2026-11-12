@@ -571,3 +571,110 @@ def write(out_dir, name, obj):
     p = Path(out_dir)
     p.mkdir(parents=True, exist_ok=True)
     (p / name).write_text(json.dumps(obj, indent=1, sort_keys=True, default=float) + "\n")
+
+
+# =========================================================================== R6 Track S
+
+S_FLAT_CANDIDATES = ("flat[gate]", "flat[cgh_flat]", "flat[circuit]", "flat[index]")      # fixed tie order
+
+
+def _s_rows(run_dir, budget: str, panel: str | None = None, split: str | None = None) -> tuple[list, dict]:
+    res = _ok(_load(run_dir))[0]
+    t = g_table(run_dir, budget)
+    rows = []
+    for r in t["rows"]:
+        ident = res[r["item"]]["identity"]
+        if (panel and ident["panel"] != panel) or (split and ident["split"] != split) or r["cell"] is None:
+            continue
+        r.update(ident=ident, stratum=ident["panel"])
+        rows.append(r)
+    return rows, t
+
+
+def _mean_brier(rows, name):
+    vals = [_world_brier(r["cell"]["queries"], r["outcomes"], name)[0] for r in rows]
+    return None if not vals or any(np.isnan(v) for v in vals) else float(np.mean(vals))
+
+
+def analyze_s_calibration(run_dir, budgets=("4", "8", "16", "32", "64")) -> dict:
+    """Track S calibration summary (calibration groups only): mean Brier of every predictor per panel and budget,
+    fit certificates, cost and signature counts against n.  Used to choose budgets, the best flat code and the
+    XDC-EB regulariser/fit mode BEFORE the Track S lock; never run on evaluation groups before the lock."""
+    out = {"budgets": {}, "fits": {}, "cost": {}}
+    res = _ok(_load(run_dir))[0]
+    if any(r["identity"]["split"] != "calibration" for r in res.values()):
+        raise ValueError("calibration analysis received a non-calibration world")
+    for B in budgets:
+        cell = {}
+        for pan in sorted({r["identity"]["panel"] for r in res.values()}):
+            rows, _ = _s_rows(run_dir, B, pan)
+            if not rows:
+                continue
+            names = sorted({nm for r in rows for q in r["cell"]["queries"] for nm in q["predictions"]})
+            cell[pan] = {"n_worlds": len(rows), "n_groups": len({r["group"] for r in rows}),
+                         "mean_brier": {nm: _mean_brier(rows, nm) for nm in names}}
+        out["budgets"][B] = cell
+    gaps, iters, cert, cost = [], [], [], defaultdict(list)
+    for r in res.values():
+        for c in r["predictions"].values():
+            for f in c.get("fits", {}).values():
+                gaps.append(f["gap"])
+                iters.append(f["iterations"])
+                cert.append(f["certified"])
+            cost[r["n"]].append(c["cost_s"].get("total", 0.0))
+    out["fits"] = {"n_fits": len(gaps), "all_certified": all(cert), "max_gap": max(gaps) if gaps else None,
+                   "max_iterations": max(iters) if iters else None}
+    out["cost"] = {str(n): {"worlds_x_budgets": len(v), "median_s": float(np.median(v)), "max_s": float(max(v))}
+                   for n, v in sorted(cost.items())}
+    return out
+
+
+def analyze_s(run_dir, flat: str, method: str, panel: str, budgets=("8", "16", "32"), primary_budget="16",
+              reps=REPS) -> dict:
+    """Track S evaluation: Brier(flat) - Brier(method) per budget on one panel (positive favours the method; with
+    the method = XDC-EB over the same base this IS the sharing attribution),
+    source-group cluster bootstrap and missingness bounds (``_contrast``); attribution and dose-response."""
+    base = flat[flat.index("[") + 1:flat.index("]")]
+    suffix = method[method.index("]") + 1:]
+    out = {"flat": flat, "method": method, "panel": panel, "budgets": {}}
+    for B in budgets:
+        rows, t = _s_rows(run_dir, B, panel, "evaluation")
+        if not rows:
+            raise ValueError(f"no evaluation worlds for {panel} at B={B}")
+        names = sorted({nm for r in rows for q in r["cell"]["queries"] for nm in q["predictions"]})
+        cell = {"planned_items_in_run": t["planned"], "missing_items_in_run": t["missing_items"],
+                "n_worlds": len(rows), "n_groups": len({r["group"] for r in rows}),
+                "mean_brier": {nm: _mean_brier(rows, nm) for nm in names}}
+        con = {"primary_flat_minus_method": _contrast(rows, flat, method, reps),
+               "vocabulary_eb_gate_minus_eb_cgh_flat": _contrast(rows, f"xdc_eb[gate]{suffix}",
+                                                                 f"xdc_eb[cgh_flat]{suffix}", reps),
+               "uniform_minus_method": _contrast(rows, "flat[uniform]", method, reps)}
+        if all(f"xdc[{base}]" in q["predictions"] for r in rows for q in r["cell"]["queries"]):
+            con["exact_xdc_minus_method"] = _contrast(rows, f"xdc[{base}]", method, reps)
+        unseen = [r for r in rows if not r["ident"].get("group_seen_in_n8")]
+        if unseen and len(unseen) < len(rows):
+            con["primary_without_groups_seen_in_n8"] = _contrast(unseen, flat, method, reps)
+        cell["contrasts"] = con
+        d = np.array([_world_brier(r["cell"]["queries"], r["outcomes"], flat)[0] -
+                      _world_brier(r["cell"]["queries"], r["outcomes"], method)[0] for r in rows])
+        cell["world_diff"] = {"median": float(np.median(d)), "quartiles": [float(np.quantile(d, .25)),
+                                                                           float(np.quantile(d, .75))],
+                              "share_method_better": float((d > 1e-12).mean()),
+                              "share_flat_better": float((d < -1e-12).mean())}
+        by = {"n": defaultdict(list), "reuse_nonconstant": defaultdict(list), "clamped_edge_fraction": defaultdict(list)}
+        for r, dv in zip(rows, d):
+            i = r["ident"]
+            by["n"][str(i["n"])].append(dv)
+            by["reuse_nonconstant"][str(min(i["reuse_nonconstant"], 12)) + ("+" if i["reuse_nonconstant"] >= 12 else "")].append(dv)
+            cf = i.get("clamped_edge_fraction") or 0.0
+            by["clamped_edge_fraction"]["<0.1" if cf < .1 else "0.1-0.3" if cf < .3 else ">=0.3"].append(dv)
+        cell["by"] = {k: {kk: {"n_worlds": len(vv), "mean": float(np.mean(vv))} for kk, vv in sorted(v.items())}
+                      for k, v in by.items()}
+        x = np.array([r["ident"]["reuse_nonconstant"] / r["ident"]["n"] for r in rows])
+        cell["corr_diff_vs_reuse_share"] = float(np.corrcoef(x, d)[0, 1]) if x.std() > 0 and d.std() > 0 else None
+        if panel == "intact":
+            nn = np.array([r["ident"]["n"] for r in rows], dtype=float)
+            cell["corr_diff_vs_n"] = float(np.corrcoef(nn, d)[0, 1]) if nn.std() > 0 and d.std() > 0 else None
+        out["budgets"][B] = cell
+    out["primary"] = out["budgets"][primary_budget]["contrasts"]["primary_flat_minus_method"]
+    return out

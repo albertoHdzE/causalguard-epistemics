@@ -1,0 +1,28 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-AI",
+ "global_cap": 3072,
+ "phase": "A2",
+ "phase_cap": 512,
+ "call_ledger": "RUNS/r5-calls/ledger.jsonl",
+ "workers": 1,
+ "item_timeout_s": 3600,
+ "arms": [
+  "D"
+ ],
+ "run_id": "r6-a2-control-mistral_small_24b-v1",
+ "split": "pilot_r6",
+ "per_stratum": 4,
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "lmstudio",
+  "base_url": "http://127.0.0.1:1234/v1",
+  "model": "mistral-small-3.2-24b-instruct-2506-mlx",
+  "max_tokens": 400,
+  "seed": 0,
+  "timeout_s": 300,
+  "max_transport_retries": 1
+ },
+ "note": "R6 A2 pilot, control arm (gate_loop=False), 32 fresh worlds, backend D only (generic arm dropped to fit the 512-request allocation, as the protocol permits)"
+}

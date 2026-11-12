@@ -35,7 +35,9 @@ from ..versionspace import point_query_parts
 from . import data as D
 from .contracts import investigation_step
 
-A_SPLITS = {"calibration": "r5-A-cal-v1", "evaluation": "r5-A-eval-v1"}
+A_SPLITS = {"calibration": "r5-A-cal-v1", "evaluation": "r5-A-eval-v1",
+            # R6 Track A2 (gate in the loop): fresh diagnostic worlds, and a separate smoke salt
+            "pilot_r6": "r6-A2-v1", "smoke_r6": "r6-A2-smoke-v1"}
 A_BUDGET_OBS = 8
 MENU = 16
 BUDGETS = (0, 1, 2, 4)
@@ -348,17 +350,32 @@ def parse_reply(text: str | None, avail: list[int], need_measure: bool) -> tuple
     return out, None
 
 
-def ai_episode(w: dict, arm: str, provider, budget, seed: int | None = 0) -> dict:
+def _rejection(target_status: str, left: int) -> str:
+    """Rejection text from the TARGET's own status over the current evidence (the gate's epistemic verdict)."""
+    why = {"underdetermined": "the evidence does not determine the target",
+           "entailed": "the evidence contradicts this verdict", "refuted": "the evidence contradicts this verdict"
+           }.get(target_status, f"the claim could not be verified ({target_status})")
+    return (f"Checked and rejected: {why}; {left} purchase(s) left. You may buy a measurement, or stop with a "
+            "verdict the evidence supports. Reply with ONLY the JSON object described above.")
+
+
+def ai_episode(w: dict, arm: str, provider, budget, seed: int | None = 0, gate_loop: bool = False) -> dict:
     """One AI investigation episode (<= MAX_CALLS physical attempts incl. retries; ``budget`` reserves ledger lines
-    before dispatch).  The AI's stated verdict at turn b is its verdict at budget b."""
+    before dispatch).  The AI's stated verdict at turn b is its verdict at budget b.
+
+    ``gate_loop`` (R6 Track A2): when the model STOPS with a definite verdict (entailed/refuted) that the common
+    gate does not verify on the current evidence, and purchases and request attempts remain, the rejection is
+    returned to the model and the same turn continues (no purchase is made by the harness).  A stop with
+    'underdetermined' is never rejected.  Default False is the R5 harness exactly."""
     from ..llm.harness import derive_seed
     from ..llm.providers import CapExceeded
+    from ..s4.checking import check, validate_proposal
     pub, net = w["pub"], w["net"]
     menu = pub["menu"]
     ws = make_workspace(arm, pub)
     avail = list(range(len(menu)))
     msgs = [{"role": "system", "content": SYSTEM}]
-    calls, invalid, bought, steps, per_turn = [], [], [], [], {}
+    calls, invalid, bought, steps, per_turn, rejections = [], [], [], [], {}, []
     status = "complete"
     turn = 0
     attempts_used = 0
@@ -389,6 +406,15 @@ def ai_episode(w: dict, arm: str, provider, budget, seed: int | None = 0) -> dic
                 invalid.append({"turn": turn, "reason": why})
                 msgs.append({"role": "user", "content": f"Invalid reply ({why}). Reply with ONLY the JSON object "
                                                         "described above."})
+            elif (gate_loop and left > 0 and parsed.get("measure") is None and
+                  parsed["verdict"] in ("entailed", "refuted") and attempts_used < MAX_CALLS):
+                d = check(validate_proposal({"cid": "target", "asserted": parsed["verdict"]},
+                                            {"target": pub["claims"][0]}), ws)
+                if d.proposal_check_status != "verified":
+                    rejections.append({"turn": turn, "asserted": parsed["verdict"], "check": d.proposal_check_status,
+                                       "target_status": d.epistemic_verdict, "attempts_used": attempts_used})
+                    msgs.append({"role": "user", "content": _rejection(d.epistemic_verdict, left)})
+                    parsed = None
         if parsed is None:
             break
         per_turn[str(turn)] = {"verdict": parsed["verdict"], "p_target": parsed["p_target"],
@@ -414,7 +440,6 @@ def ai_episode(w: dict, arm: str, provider, budget, seed: int | None = 0) -> dic
                                         model_calls=len(calls), tool_calls=1))
         turn += 1
     # gate checks of the AI's stated definite verdicts at each budget prefix (common checker)
-    from ..s4.checking import check, validate_proposal
     resolved = {}
     ws_b = make_workspace(arm, pub)
     claim = pub["claims"][0]
@@ -432,9 +457,12 @@ def ai_episode(w: dict, arm: str, provider, budget, seed: int | None = 0) -> dic
     lat = sum(a.get("latency_s") or 0 for c in calls for a in (c.get("attempts") or []))
     toks = sum((a.get("prompt_tokens") or 0) + (a.get("completion_tokens") or 0)
                for c in calls for a in (c.get("attempts") or []))
-    return {"arm": arm, "status": status, "calls": calls, "n_attempts": attempts_used, "invalid": invalid,
-            "per_turn": per_turn, "purchases": bought, "steps": steps, "gate": resolved,
-            "server_latency_s": lat, "tokens": toks, "prompt_version": PROMPT_VERSION}
+    out = {"arm": arm, "status": status, "calls": calls, "n_attempts": attempts_used, "invalid": invalid,
+           "per_turn": per_turn, "purchases": bought, "steps": steps, "gate": resolved,
+           "server_latency_s": lat, "tokens": toks, "prompt_version": PROMPT_VERSION}
+    if gate_loop:
+        out.update(gate_loop=True, rejections=rejections)
+    return out
 
 
 # --------------------------------------------------------------------------- runner items
@@ -466,7 +494,8 @@ def a_ai_item(p: dict) -> dict:
     for arm in p.get("arms", ("D", "B")):
         budget = CallBudget(MAX_CALLS, p["global_cap"], ledger, world_id=f"{w['pub']['task_id']}|{arm}",
                             phase=p["phase"], phase_cap=p["phase_cap"])
-        out["episodes"][arm] = ai_episode(w, arm, make_provider(p["provider"]), budget, seed=0)
+        out["episodes"][arm] = ai_episode(w, arm, make_provider(p["provider"]), budget, seed=0,
+                                          gate_loop=bool(p.get("gate_loop", False)))
     # evaluator side, after both episodes are fixed
     out["truth"] = _truth(w["net"], make_workspace("D", w["pub"]))
     return out

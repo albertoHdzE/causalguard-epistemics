@@ -83,6 +83,17 @@ def _items_from_config(cfg: dict):
                     yield f"{cfg['split']}|{s}|{i}", {"split": cfg["split"], "stratum": s, "index": i,
                                                       "design_salt": cfg["design_salt"],
                                                       **({"xdc_bases": cfg["xdc_bases"]} if cfg.get("xdc_bases") else {})}
+    elif study == "R6-S":
+        man = json.loads(Path(cfg["source_manifest"]).read_text())
+        for pan in cfg["panels"]:
+            for x in man[pan]:
+                if x["split"] != cfg["split"]:
+                    continue
+                yield (f"{pan}|{x['key']}",
+                       {"key": x["key"], "panel": pan, "group": x["group"], "split": x["split"],
+                        "design_salt": cfg["design_salt"], "budgets": cfg["budgets"], "max_budget": cfg["max_budget"],
+                        "clamped_edge_fraction": x["clamped_edge_fraction"],
+                        "group_seen_in_n8": x["group_seen_in_n8_panels"]})
     elif study == "R5-M":
         from .r5.misspec import PANELS, panel_members
         for pan in PANELS:
@@ -105,12 +116,15 @@ def _items_from_config(cfg: dict):
     elif study in ("R5-A-DET", "R5-A-AI"):
         from .r5.investigation import population
         keys, _ = population(cfg["split"], cfg["per_stratum"])
+        if cfg.get("max_items"):                                  # R6 A2 smoke: first worlds of the order only
+            keys = keys[:cfg["max_items"]]
         for k in keys:
             pl = dict(k)
             if study == "R5-A-AI":
                 pl.update({"provider": cfg["provider"], "global_cap": cfg["global_cap"],
                            "call_ledger": cfg["call_ledger"], "phase": cfg["phase"], "phase_cap": cfg["phase_cap"],
-                           "arms": cfg.get("arms", ["D", "B"])})
+                           "arms": cfg.get("arms", ["D", "B"]),
+                           **({"gate_loop": True} if cfg.get("gate_loop") else {})})
             yield f"{k['split']}|{k['stratum']}|{k['index']}", pl
     else:
         raise SystemExit(f"unknown study {study}")
@@ -143,6 +157,9 @@ def _fn_for(study: str):
             return c_item
         from .r5.investigation import a_ai_item, a_det_item
         return a_det_item if study == "R5-A-DET" else a_ai_item
+    if study == "R6-S":
+        from .r6.scale import s_world
+        return s_world
     if study.startswith("S4-"):
         from .s4 import offline
         if study == "S4-PILOT":
@@ -204,7 +221,7 @@ def main(argv=None):
                      help="rank slice lo hi of the fixed group hash ordering (R6 fresh panel: 40 162)")
     ar = sub.add_parser("analyze-r5", help="R5 track analyses (no model calls)")
     ar.add_argument("--track", required=True, choices=["g-champion", "g", "g-external", "m", "a-det", "a-select",
-                                                       "a-ai", "c", "g-r6", "g-r6-extras"])
+                                                       "a-ai", "c", "g-r6", "g-r6-extras", "s-cal", "s"])
     ar.add_argument("--method", default="xdc[cgh_flat]")
     ar.add_argument("--external", action="store_true")
     ar.add_argument("--run", action="append", required=True)
@@ -288,6 +305,12 @@ def main(argv=None):
             obj = R.analyze_g_external(args.run[0], args.champion)
         elif t == "g-r6":
             obj = R.analyze_g_r6(args.run[0], args.champion, args.method, external=args.external)
+        elif t == "s-cal":
+            obj = R.analyze_s_calibration(args.run[0])
+        elif t == "s":
+            lock = json.loads(Path("docs/R6S_DESIGN_LOCK.json").read_text())
+            obj = {pan: R.analyze_s(args.run[0], lock["flat"], lock["method"], pan, tuple(lock["budgets"]),
+                                    lock["primary_budget"]) for pan in lock["report_panels"]}
         elif t == "g-r6-extras":
             obj = R.analyze_g_r6_extras(args.run[0], args.champion, args.method, external=args.external)
         elif t == "m":

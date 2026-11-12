@@ -270,15 +270,7 @@ class XDC(GSR):
             self.W if rowvals.ndim == 1 else self.W[:, None])
 
     def _theta_masses(self, phi: np.ndarray) -> dict:
-        n, L, S = phi.shape
-        G = np.empty((1 << n, S))
-        stack = [(0, np.broadcast_to(self.G0[:, None], (L, S)), 0)]
-        while stack:
-            A, prod, nxt = stack.pop()
-            G[A] = prod.sum(axis=0)
-            for j in range(nxt, n):
-                stack.append((A | (1 << j), prod * phi[j], j + 1))
-        return {th: float(_partition_mass(G, n, th).sum()) for th in self.thetas}
+        return theta_masses(phi, self.G0, self.thetas)
 
     def probabilities(self, q: Query) -> dict:
         """{'xdc': mixture, 'xdc_t<theta>': each theta} -> P(q | D); None values if the evidence is inconsistent."""
@@ -293,6 +285,93 @@ class XDC(GSR):
 
 
 _XDC_CACHE: dict = {}
+
+
+def theta_masses(phi: np.ndarray, G0: np.ndarray, thetas) -> dict:
+    """{theta: sum_s sum_pi CRP_theta(pi) prod_b G[b, s]} with G[b, s] = sum_l G0[l] prod_{j in b} phi[j, l, s].
+    The one owner of the XDC sum (dense XDC, XDC-EB and the sparse large-n path all call it).  theta = inf with
+    G0 = p is the nodewise-independent type-mixture prior used by XDC-EB."""
+    n, L, S = phi.shape
+    if all(math.isinf(th) for th in thetas):                  # singletons only: no subset table needed
+        out = np.ones(S)
+        for j in range(n):
+            out = out * (G0[:, None] * phi[j]).sum(axis=0)
+        return {th: float(out.sum()) for th in thetas}
+    G = np.empty((1 << n, S))
+    stack = [(0, np.broadcast_to(G0[:, None], (L, S)), 0)]
+    while stack:
+        A, prod, nxt = stack.pop()
+        G[A] = prod.sum(axis=0)
+        for j in range(nxt, n):
+            stack.append((A | (1 << j), prod * phi[j], j + 1))
+    return {th: float(_partition_mass(G, n, th).sum()) for th in thetas}
+
+
+# --------------------------------------------------------------------------- XDC-EB (R6 Track S)
+
+EB_TOL = 1e-9                    # certified Frank-Wolfe gap (nats) required of every fit
+
+
+def fit_type_weights(u: np.ndarray, G0: np.ndarray, a: float, tol: float = EB_TOL, max_iter: int = 200000) -> dict:
+    """Empirical-Bayes type weights for XDC-EB: maximise the concave objective
+        F(p) = sum_j log(sum_l p_l u[j, l]) + sum_l a G0_l log p_l      over the simplex,
+    i.e. the marginal likelihood of 'node rules are iid draws from the type mixture p' plus a Dirichlet(1 + a G0)
+    log-prior pulling p toward the base code (a = 0: maximum likelihood; a -> inf: the base code).  Solved by EM
+    (monotone).  Certificate: with g = grad F(p), concavity gives F(p*) - F(p) <= max_l g_l - p.g = max_l g_l - (n + a)
+    (the Frank-Wolfe duality gap); the fit is returned only with that gap and the iteration count.  Rows of u that
+    are identically equal across types carry no information and are kept (they add a constant)."""
+    u = np.asarray(u, dtype=float)
+    if u.ndim != 2 or u.shape[0] == 0:
+        raise ValueError("fit_type_weights: need at least one node row")
+    if (u.sum(axis=1) <= 0).any():
+        raise ValueError("fit_type_weights: a node has no evidence-compatible rule")
+    n = u.shape[0]
+    c = a * np.asarray(G0, dtype=float)
+    p = np.asarray(G0, dtype=float).copy()
+    it, gap = 0, math.inf
+    for it in range(1, max_iter + 1):  # noqa: B007  (it is reported)
+        r = u.T @ (1.0 / (u @ p))                               # sum_j u_jl / (p . u_j)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            g = r + np.where(c > 0, c / p, 0.0)
+        gap = float(np.max(g) - (n + a))
+        if gap <= tol:
+            break
+        p = (p * r + c) / (n + a)
+        p = p / p.sum()
+    F = float(np.log(u @ p).sum() + (c[c > 0] * np.log(p[c > 0])).sum())
+    return {"p": p, "gap": gap, "iterations": it, "objective": F, "certified": gap <= tol}
+
+
+class XDCEB(XDC):
+    """XDC-EB over a flat base code (R6 Track S): node rules independent given type weights p, p fitted on the
+    PUBLIC evidence by ``fit_type_weights`` (pseudo-count ``a`` toward the base code's type masses G0).  Given p it
+    is a flat code with rule weights p_type(r) w(r) / W(type(r)), summed exactly (h = 1, 2) by ``theta_masses``
+    at theta = inf.  ``loo``: forecasts for target t use a fit without node t's evidence row.  This is an
+    approximation to XDC (a plug-in for its theta mixture), not the same prior."""
+
+    def __init__(self, evidence: Evidence, k: int, base: str = "gate", vs=None, a: float = 4.0, loo: bool = False):
+        super().__init__(evidence, k, base=base, vs=vs, thetas=(math.inf,))
+        self.a, self.loo = float(a), bool(loo)
+        if self.vs.empty:
+            return
+        self.fit = fit_type_weights(self.u, self.G0, self.a)
+        self._loo: dict = {}
+
+    def fit_for(self, t: int) -> dict:
+        if not self.loo:
+            return self.fit
+        if t not in self._loo:
+            keep = [j for j in range(self.n) if j != t]
+            self._loo[t] = fit_type_weights(self.u[keep], self.G0, self.a)
+        return self._loo[t]
+
+    def probabilities(self, q: Query) -> dict:
+        if self.vs.empty:
+            return {"xdc_eb": None}
+        f = self.fit_for(q.target.node)
+        num = theta_masses(self._phi(q), f["p"], (math.inf,))[math.inf]
+        den = theta_masses(self.u[:, :, None], f["p"], (math.inf,))[math.inf]
+        return {"xdc_eb": min(1.0, num / den), "fit_gap": f["gap"], "fit_iterations": f["iterations"]}
 
 
 def xdc_bruteforce(evidence: Evidence, k: int, q: Query, theta, base: str = "gate") -> Fraction:

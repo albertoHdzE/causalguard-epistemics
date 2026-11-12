@@ -155,21 +155,32 @@ def close_inputs(funcs: dict[str, tuple]) -> tuple[dict[str, tuple], list[str]]:
     return out, free
 
 
-def to_network(funcs: dict[str, tuple], order: list[str], clamp0: set[str] = frozenset()) -> tuple[Network, list[int]]:
+def to_network(funcs: dict[str, tuple], order: list[str], clamp0: set[str] = frozenset(),
+               cache: dict | None = None) -> tuple[Network, list[int]]:
     """Network over ``order`` (node i = order[i]); names in ``clamp0`` are constant 0 inside factors.  Returns the
-    canonical network and the essential indegree per node (canonicalization removes inessential regulators)."""
+    canonical network and the essential indegree per node (canonicalization removes inessential regulators).
+    ``cache`` (R6, optional, one dict per model): memo of each factor's table keyed by (node, clamped regulators);
+    valid because ``order`` is always sorted by name, so the local input order of a factor never changes."""
     idx = {nm: i for i, nm in enumerate(order)}
     rules = []
     for nm in order:
         e = funcs[nm]
-        regs = sorted((variables(e) - set(clamp0)), key=lambda x: idx[x])
-        if len(regs) > MAX_FACTOR_INPUTS:
-            raise ParseError(f"factor of {nm} has {len(regs)} regulators")
-        table = 0
-        for y in range(1 << len(regs)):
-            env = {r: (y >> t) & 1 for t, r in enumerate(regs)}
-            env.update({c: 0 for c in clamp0})
-            table |= evaluate(e, env) << y
+        ck = (nm, frozenset(variables(e) & set(clamp0)))
+        if cache is not None and ck in cache:
+            regs, table = cache[ck]
+        else:
+            regs = sorted((variables(e) - set(clamp0)), key=lambda x: idx[x])
+            if len(regs) > MAX_FACTOR_INPUTS:
+                raise ParseError(f"factor of {nm} has {len(regs)} regulators")
+            table = 0
+            for y in range(1 << len(regs)):
+                env = {r: (y >> t) & 1 for t, r in enumerate(regs)}
+                env.update({c: 0 for c in clamp0})
+                table |= evaluate(e, env) << y
+            if cache is not None:
+                if order != sorted(order):
+                    raise ValueError("to_network cache requires name-sorted order")
+                cache[ck] = (regs, table)
         rules.append(Rule(tuple(idx[r] for r in regs), table).canonical())
     net = Network(len(order), tuple(rules))
     return net, [r.arity for r in net.rules]
@@ -184,6 +195,21 @@ def _group_id(meta: dict, model_dir: str) -> str:
 
 def _h(*parts) -> str:
     return hashlib.sha256("|".join(map(str, parts)).encode()).hexdigest()
+
+
+def backward_subnetwork(funcs: dict, root_nm: str, size: int = SUB_N) -> list[str]:
+    """Backward BFS over regulators (sorted names) from root until ``size`` nodes (the R5 procedure; one owner)."""
+    regs = {nm: sorted(variables(e)) for nm, e in funcs.items()}
+    sub, frontier = [root_nm], [root_nm]
+    while frontier and len(sub) < size:
+        nxt = []
+        for x in frontier:
+            for r in regs[x]:
+                if r not in sub and len(sub) < size:
+                    sub.append(r)
+                    nxt.append(r)
+        frontier = nxt
+    return sub
 
 
 def inventory(root: Path = DEFAULT_ROOT, transformed_groups: tuple = (0, MAX_GROUPS)) -> dict:
@@ -220,20 +246,11 @@ def inventory(root: Path = DEFAULT_ROOT, transformed_groups: tuple = (0, MAX_GRO
         # transformed panel (every model with >= 8 nodes, including intact-eligible ones of size >= 9)
         acc, rej = [], {}
         if len(names) > SUB_N:
-            regs = {nm: sorted(variables(funcs[nm])) for nm in names}
             seen_sets = set()
             for root_nm in sorted(names, key=lambda nm: _h(d.name, nm)):
                 if len(acc) >= MAX_ROOTS:
                     break
-                sub, frontier = [root_nm], [root_nm]
-                while frontier and len(sub) < SUB_N:
-                    nxt = []
-                    for x in frontier:
-                        for r in regs[x]:
-                            if r not in sub and len(sub) < SUB_N:
-                                sub.append(r)
-                                nxt.append(r)
-                    frontier = nxt
+                sub = backward_subnetwork(funcs, root_nm, SUB_N)
                 if len(sub) < SUB_N:
                     rej["component_too_small"] = rej.get("component_too_small", 0) + 1
                     continue
@@ -295,20 +312,11 @@ def load_instance(key: str, root: Path = DEFAULT_ROOT) -> Network:
     if kind == "intact":
         return to_network(funcs, names)[0]
     want = rest[0]
+    size = SUB_N if kind == "sub" else int(kind[3:])          # 'sub' (R5, 8 nodes) or 'sub<size>' (R6 Track S)
     for root_nm in names:
         if _h(model_dir, root_nm)[:12] != want:
             continue
-        regs = {nm: sorted(variables(funcs[nm])) for nm in names}
-        sub, frontier = [root_nm], [root_nm]
-        while frontier and len(sub) < SUB_N:
-            nxt = []
-            for x in frontier:
-                for r in regs[x]:
-                    if r not in sub and len(sub) < SUB_N:
-                        sub.append(r)
-                        nxt.append(r)
-            frontier = nxt
-        order = sorted(sub)
+        order = sorted(backward_subnetwork(funcs, root_nm, size))
         outside = set().union(*(variables(funcs[x]) for x in order)) - set(order)
         return to_network(funcs, order, clamp0=outside)[0]
     raise KeyError(key)

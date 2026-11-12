@@ -343,12 +343,15 @@ def _eff(x: int, iv: Intervention) -> int:
     return (x & ~m) | v if iv.kind != "none" else x
 
 
-def make_design(salt: str, key: str, n: int = N) -> GDesign:
+def make_design(salt: str, key: str, n: int = N, max_budget: int | None = None,
+                horizons: tuple | None = None) -> GDesign:
     """Evidence (24 nested one-step observations) and 8 queries.  Drawn from a design stream that never touches
-    the mechanism; redraws only enforce novelty against the PUBLIC evidence inputs and distinctness."""
+    the mechanism; redraws only enforce novelty against the PUBLIC evidence inputs and distinctness.
+    R6 Track S: ``max_budget`` (largest nested budget) and ``horizons`` (one per query, e.g. all 1); the defaults
+    reproduce the R5 design exactly."""
     seed = world_seed(salt, "R5G-design", 0, key)
     rng = random.Random(seed)
-    B = max(BUDGETS)
+    B = max(BUDGETS) if max_budget is None else max_budget
     states = rng.sample(range(1 << n), B)
     specs = []
     for i, x in enumerate(states):
@@ -361,8 +364,8 @@ def make_design(salt: str, key: str, n: int = N) -> GDesign:
     queries: list[tuple[str, Query]] = []
     keys = set()
     redraw = {"novelty": 0, "duplicate": 0}
-    hs = [1] * (N_QUERIES // 2) + [2] * (N_QUERIES // 2)
-    while len(queries) < N_QUERIES:
+    hs = [1] * (N_QUERIES // 2) + [2] * (N_QUERIES // 2) if horizons is None else list(horizons)
+    while len(queries) < len(hs):
         h = hs[len(queries)]
         x = rng.randrange(1 << n)
         kind = rng.choice(["none", "initial_edit", "persistent_clamp"])

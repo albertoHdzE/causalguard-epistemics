@@ -1,0 +1,11 @@
+{
+ "mode": "development",
+ "r5_track": "A",
+ "study": "R5-A-DET",
+ "run_id": "r6-a2-det-v1",
+ "split": "pilot_r6",
+ "per_stratum": 4,
+ "workers": 4,
+ "item_timeout_s": 1800,
+ "note": "R6 A2: deterministic policies (EIG, random, disagreement, privileged oracle) on the same 32 worlds"
+}
