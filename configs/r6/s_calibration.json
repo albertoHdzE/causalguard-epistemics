@@ -1,0 +1,14 @@
+{
+ "mode": "development",
+ "study": "R6-S",
+ "run_id": "r6-s-cal-v1",
+ "source_manifest": "artifacts/r6s_source_manifest.json",
+ "panels": ["sub24", "intact", "sub12", "sub48"],
+ "split": "calibration",
+ "design_salt": "r6s-design-v1",
+ "budgets": [4, 8, 16, 32, 64],
+ "max_budget": 64,
+ "workers": 4,
+ "item_timeout_s": 3600,
+ "note": "R6 Track S calibration groups only (1/4 of eligible groups by hash): budget probe, best flat code, XDC-EB regulariser and fit mode. No evaluation group is scored before docs/R6S_DESIGN_LOCK.json."
+}

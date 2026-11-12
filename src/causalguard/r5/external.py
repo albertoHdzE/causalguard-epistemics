@@ -155,6 +155,30 @@ def close_inputs(funcs: dict[str, tuple]) -> tuple[dict[str, tuple], list[str]]:
     return out, free
 
 
+def _tabulate(e, regs: list[str], clamp0) -> int:
+    """Truth table of factor e over ``regs`` (local bit t = regs[t]), clamped names = 0: the same values as
+    ``evaluate`` at every assignment, computed for all 2^len(regs) assignments at once (numpy, R6)."""
+    import numpy as np
+    m = len(regs)
+    y = np.arange(1 << m, dtype=np.int64)
+    env = {r: ((y >> t) & 1).astype(bool) for t, r in enumerate(regs)}
+    zero = np.zeros(1 << m, dtype=bool)
+    st = []
+    for it in e:
+        op = it[0]
+        if op == "var":
+            st.append(env.get(it[1], zero) if it[1] not in clamp0 else zero)
+        elif op == "const":
+            st.append(np.full(1 << m, bool(it[1])))
+        elif op == "not":
+            st.append(~st.pop())
+        else:
+            b, a = st.pop(), st.pop()
+            st.append(a & b if op == "and" else a | b)
+    bits = np.broadcast_to(st[0], (1 << m,))
+    return int(sum(1 << int(i) for i in np.nonzero(bits)[0]))
+
+
 def to_network(funcs: dict[str, tuple], order: list[str], clamp0: set[str] = frozenset(),
                cache: dict | None = None) -> tuple[Network, list[int]]:
     """Network over ``order`` (node i = order[i]); names in ``clamp0`` are constant 0 inside factors.  Returns the
@@ -172,11 +196,7 @@ def to_network(funcs: dict[str, tuple], order: list[str], clamp0: set[str] = fro
             regs = sorted((variables(e) - set(clamp0)), key=lambda x: idx[x])
             if len(regs) > MAX_FACTOR_INPUTS:
                 raise ParseError(f"factor of {nm} has {len(regs)} regulators")
-            table = 0
-            for y in range(1 << len(regs)):
-                env = {r: (y >> t) & 1 for t, r in enumerate(regs)}
-                env.update({c: 0 for c in clamp0})
-                table |= evaluate(e, env) << y
+            table = _tabulate(e, regs, clamp0)
             if cache is not None:
                 if order != sorted(order):
                     raise ValueError("to_network cache requires name-sorted order")
