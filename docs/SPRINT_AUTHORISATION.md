@@ -22,3 +22,16 @@ record, or commit it. `.env` is ignored by git and lives outside the repository.
 
 The earlier boundaries that still hold: no fabricated or tuned results, locks before evaluation, preexisting work
 labelled as such, `doc/Gemini-Talk.txt` private.
+
+## Addendum, 2026-11-12 (director, after the R7 review)
+
+Alberto's authorisation is unchanged: the full local panel today, the two online models during the sprint after
+the director's review. The director changes two of his own limits for the redesigned panel (R7b):
+
+| Item | Before | Now | Why |
+|---|---|---|---|
+| Model-server time for the main local panel | 14 hours | 30 server-hours across the two local servers, finishing by 10:00 local time on 2026-11-13 | The locked wording is reasoning-first, which costs 5–10 times the tokens |
+| Local request cap | 6,000 | 6,000 (466 used) | unchanged |
+| Online requests today | at most 5 connectivity probes per provider | unchanged; 3 used | no benchmark-like item goes online today |
+
+The online run during the sprint will begin with two smoke worlds per tier per model, after the director's review.
