@@ -1,0 +1,178 @@
+{
+ "schema": "causalguard-acceptance-r5-v1",
+ "date": "2026-11-11",
+ "content_commit": "b6aeab3d4e26cc9344001116838fde8f6d668024",
+ "peeled_tag": "see reports/RELEASE_CHECK_R5.md (v0.5.0-dev; this file is part of the tagged docs commit)",
+ "design_lock": {
+  "path": "docs/R5_DESIGN_LOCK.json",
+  "sha256": "e75c63a766e11a378bdfe229d33e3dc92f5dd66d5ebfd239da780fa917eb3614",
+  "lock_commit": "dd193ce"
+ },
+ "protocol": {
+  "path": "docs/R5_PROTOCOL.md",
+  "sha256_at_lock": "0de083b27a68b340b21a2d55ff3a5a70c1b913a26669a604a5a0dd56ed217222",
+  "sha256_now": "0de083b27a68b340b21a2d55ff3a5a70c1b913a26669a604a5a0dd56ed217222"
+ },
+ "manifest": {
+  "path": "artifacts/manifest_r5.json",
+  "sha256": "dd6cce580d4c401d7b356a073b6fa486e43890b457ed17c98e3e3e496d775984"
+ },
+ "release_asset": {
+  "name": "causalguard-dev-runs-v0.5.0-dev.tar.gz",
+  "sha256": "e0627fe50efc2bc414c2524e6f9c67828e13d1b057ef04206b196a6353f65089"
+ },
+ "source_snapshots": {
+  "calibration": "927d1eb",
+  "ai_calibration_v2": "941d220",
+  "evaluation_G_M_A": "dd193ce",
+  "C_v2": "9c1ae3f",
+  "C_v3_genve_n64": "post-R5-04 commit (see run plan)"
+ },
+ "code_changes_after_runs": [
+  "R5-02 (before lock; AI stop action)",
+  "R5-03 (C runner path; no timing produced before)",
+  "R5-04 (GEN-VE uint64; 8 cells rerun as v3)",
+  "analysis/report code only otherwise"
+ ],
+ "calibration_use": "G 64 + A det 64 + AI smoke v1/v2 (342 calls) + A design calibration on det policies + M dev probe (other salt)",
+ "cumulative_model_requests": 1081,
+ "offline_cpu_hours_upper": 3.86,
+ "model_server_hours": 1.23,
+ "incomplete_panels": [
+  "C external knowledge-compiler/projected-#SAT comparator not run (D55)",
+  "G external intact panel: 4 source groups (< 20 target)"
+ ],
+ "tracks": {
+  "G": {
+   "implementation_status": "complete",
+   "evaluation_status": "complete",
+   "scientific_outcome": "no_detected_advantage",
+   "planned": 320,
+   "attempted": 320,
+   "completed": 320,
+   "failed": 0,
+   "unrun": 0,
+   "source_groups": 280,
+   "primary_comparator": "gate (calibration-selected)",
+   "endpoint": "B16 world Brier(gate)-Brier(cgh_prior)",
+   "effect_direction": "positive favours CGH",
+   "estimate": 0.0019565366272373146,
+   "ci95": [
+    -0.00413874057314639,
+    0.008201077695613072
+   ],
+   "missingness_bounds": [
+    0.0019565366272373146,
+    0.0019565366272373146
+   ],
+   "external": {
+    "intact": {
+     "groups": 4,
+     "status": "descriptive"
+    },
+    "transformed": {
+     "groups": 40,
+     "instances": 159,
+     "estimate": 0.0012871214387126522,
+     "ci95": [
+      -0.002548619459100812,
+      0.004847600809825854
+     ]
+    }
+   },
+   "exactness": "codec averages exact rational; GSR bounded (1e-9 relative)",
+   "artifacts": [
+    "reports/R5_GENERALIZATION.md"
+   ]
+  },
+  "C": {
+   "implementation_status": "partial",
+   "evaluation_status": "complete",
+   "scientific_outcome": "adverse",
+   "planned": 144,
+   "attempted": 144,
+   "completed": 144,
+   "failed": 0,
+   "unrun": 0,
+   "supplementary": "8 GEN-VE n=64 cells rerun (v3) after R5-04",
+   "primary_comparator": "GEN-VE (independent explicit-domain VE); SAT; knowledge compiler NOT run",
+   "count_agreement": "640 compared, 0 mismatches",
+   "certificate_levels": "unsat_rup_checked where impossible sides arose; witness replay; HMAC = authentication only",
+   "finding": "GEN-VE 4-11x faster than D at n=32-64; D beats SAT (128/128 vs 99/128 at n=64)",
+   "artifacts": [
+    "reports/R5_COUNTING_AND_COST.md",
+    "docs/R5_COUNTING_DERIVATION.md"
+   ]
+  },
+  "A": {
+   "implementation_status": "complete",
+   "evaluation_status": "complete",
+   "scientific_outcome": "adverse",
+   "planned": 128,
+   "attempted": 128,
+   "completed": 128,
+   "failed": 0,
+   "unrun": 0,
+   "worlds": 64,
+   "primary_comparator": "exact EIG on D (calibration-selected)",
+   "endpoint": "resolved@4 AI+D - EIG",
+   "estimates": {
+    "mistral-small-3.2-24b-instruct-2506-mlx": {
+     "ci95": [
+      -0.1875,
+      -0.046875
+     ],
+     "dropped_nan_replicates": 0,
+     "estimate": -0.109375,
+     "n_worlds": 64,
+     "replicates": 10000,
+     "se": 0.03876515669188904,
+     "seed": 20261111
+    },
+    "qwen2.5:7b": {
+     "ci95": [
+      -0.46875,
+      -0.234375
+     ],
+     "dropped_nan_replicates": 0,
+     "estimate": -0.34375,
+     "n_worlds": 64,
+     "replicates": 10000,
+     "se": 0.05984223899839652,
+     "seed": 20261111
+    }
+   },
+   "calls": {
+    "calibration": 342,
+    "evaluation": 739,
+    "repair": 0
+   },
+   "validity_gate": "v1 failed (R5-02), v2 passed (1.0)",
+   "artifacts": [
+    "reports/R5_AI_INVESTIGATION.md"
+   ]
+  },
+  "M": {
+   "implementation_status": "complete",
+   "evaluation_status": "complete",
+   "scientific_outcome": "supported_in_scope",
+   "planned": 120,
+   "attempted": 120,
+   "completed": 120,
+   "failed": 0,
+   "unrun": 0,
+   "finding": "current gate 10/103 false verified (evidence-consistent misspec); challenge policy 5 false at coverage 0.231 vs 0.291, realizable coverage unchanged",
+   "exact_counterexample": "tested",
+   "artifacts": [
+    "reports/R5_ASSUMPTION_FAILURES.md"
+   ]
+  }
+ },
+ "release_verification": "see reports/RELEASE_CHECK_R5.md",
+ "confirmatory_authorized": false,
+ "confirmatory_run": false,
+ "freeze_record": false,
+ "paid_inference": false,
+ "weight_changes": false,
+ "independent_review_complete": false
+}
