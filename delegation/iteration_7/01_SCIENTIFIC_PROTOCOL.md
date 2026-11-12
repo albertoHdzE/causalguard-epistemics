@@ -1,8 +1,9 @@
 # R7 protocol — sprint preparation: an exact benchmark of whether a model knows what its evidence settles
 
 Director: Claude Fable, 2026-11-12. Implementation: Claude Opus. Everything in R7 is **pre-sprint** work and must be
-labelled so. The sprint (Apart Research, AI x Epistemics, 2026-11-13 to 2026-11-15) will run the locked main panel
-and write the report. This document is binding.
+labelled so. R7 builds the benchmark and runs the locked main panel on local models. The sprint (Apart Research,
+AI x Epistemics, 2026-11-13 to 2026-11-15) adds two online models on the same locked panel, reruns the analysis and
+writes the report. This document is binding.
 
 ## 0. Why the project is redirected
 
@@ -102,50 +103,112 @@ class is wrong. Do not run new wrong-assumption experiments in R7.
   model-facing run. They show the task is not an artefact of our generators.
 - Claims are scheduled independently of their status. Report the status base rates. Add a label-balanced diagnostic
   subset, labelled as such.
-- Pilot worlds (R7, today) and main-panel worlds (sprint) use different salts and never overlap. Commit both
-  manifests.
+- Pilot worlds and main-panel worlds use different salts and never overlap. Commit both manifests.
 
 ## 6. Models
 
-Local models only unless Alberto authorises paid inference in writing in the repository
-(`docs/SPRINT_AUTHORISATION.md`); do not assume it. Candidate ladder, to be confirmed by a throughput and
-parsability probe: gemma-3-4b, qwen2.5:7b, gemma-4-12b, mistral-small-3.2-24b, deepseek-r1-distill-qwen-32b
-(a reasoning model), llama-3.3-70b, qwen2.5:72b. Temperature 0. Record model hashes, quantisation, context length
-and template. If frontier models are authorised later, they join the main panel under the same lock; the harness
-must accept an OpenAI-compatible or Anthropic endpoint by configuration without code changes.
+Authorisation: `docs/SPRINT_AUTHORISATION.md`. Read it; it is the limit.
 
-## 7. What R7 does today (pre-sprint) and what it must not do
+**Local ladder (run today).** Candidates, to be confirmed by the smoke gate: gemma-3-4b, qwen2.5:7b, gemma-4-12b,
+mistral-small-3.2-24b, deepseek-r1-distill-qwen-32b (a reasoning model), llama-3.3-70b, qwen2.5:72b. Temperature 0.
+Record model hashes, quantisation, context length and template.
 
-Do:
+**Online models (run tomorrow, after the director's review; today only make them ready).**
+
+- **DeepSeek**, through the key and model name in `/Users/alberto/Documents/projects/AI-security/.env`
+  (`DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`). Check the provider's current documentation for the endpoint and for
+  whether a reasoning variant is available under the same key; do not guess model names.
+- **Claude Opus 5.5**, through the Claude Code command line in non-interactive mode. There is no Anthropic API
+  key. The subject model must see our prompt and nothing else, so the adapter must:
+  - replace the system prompt, disable every tool, and load no project instructions, memory, hooks or settings.
+    This machine has session hooks that inject text; they must not reach the subject. Read the command-line help
+    and documentation for the exact flags; do not guess them;
+  - run from an empty working directory;
+  - keep the two turns of Task P in one conversation;
+  - prove isolation: compare the reported input-token count of a probe request with the size of our prompt, and
+    record the result. If isolation cannot be shown, say so and do not run it.
+  - Disclose in the report that sampling temperature cannot be set on this route, and that the model family that
+    implemented the benchmark is also evaluated on it, in fresh contexts with no access to the repository.
+- Both adapters are selected by configuration. Tomorrow's run must be the locked main panel with only the model
+  changed, on the same worlds, so every model is paired with every other.
+- Today: a dry run of each adapter on a mock provider, and at most 5 connectivity requests each on a
+  non-benchmark prompt. **No benchmark item goes to an online model today.**
+- Never print, log, record or commit the key.
+
+## 7. What R7 does today
+
+Everything today is pre-sprint work, dated by timestamp and disclosed as preexisting in the report.
+
+**Stage 1: build and pilot.**
 
 1. Build Task P on top of the Task S harness; build the reference rows, the scoring and the analysis with
    world-level bootstrap intervals; test all of it, including a planted scoring defect.
-2. Smoke gate on every candidate model: 4 worlds, Task S and one Task P turn; at least 90 % parsable answers and
-   no truncation. Record seconds per request. Drop models that fail and say why.
+2. Smoke gate on every candidate local model: 4 worlds, Task S and one Task P turn; at least 90 % parsable answers
+   and no truncation. Record seconds per request. Drop models that fail and say why.
 3. Pilot on two small models that pass (qwen2.5:7b and mistral-small-3.2-24b unless the probe says otherwise):
-   32 pilot worlds, all four conditions. The pilot exists to fix wording, find ceiling or floor effects and
-   estimate variance. Report its numbers as pilot numbers.
-4. From pilot variance and measured throughput, size the main panel for the sprint: worlds per condition, which
-   models, expected wall time on this machine, and the precision that buys. Prefer a panel that finishes in 12
-   hours of model time.
-5. Write `docs/SPRINT_DESIGN_LOCK.json`: tasks, wordings (hashed), conditions, populations and salts, models,
-   scores, primary and secondary contrasts, exclusion rules, your predictions. Commit it. It is the lock for the
-   sprint's main run.
-6. Related work, with every reference opened and verified, never recalled from memory: three-valued entailment
-   benchmarks (ProofWriter, FOLIO), abstention and "known unknowns" benchmarks, verbalised-confidence calibration,
-   sycophancy and answer-flipping under challenge, and information-seeking evaluations. For each, one sentence on
-   what it measures and what it cannot. State plainly which parts of our design already exist elsewhere. A made-up
-   reference disqualifies the submission.
-7. Get the official report template from the sprint page and set up `report/` so it builds to PDF, with the
-   required appendix "Limitations and Dual-Use / Ethical Considerations" and a section that separates preexisting
-   from sprint work. Update `PREEXISTING_WORK.md` and the README.
+   32 pilot worlds, all four conditions. The pilot fixes wording, finds ceiling or floor effects and estimates
+   variance. Its numbers are pilot numbers.
 
-Do not:
+**Stage 2: gates before the main panel. All must pass; each prints its denominator.**
 
-- run the main panel, or any model on main-panel worlds;
-- tune wording on anything but pilot worlds;
-- spend more than 600 model requests (global ledger: 1,498 of 3,072 used);
-- start new prior, counting or scale experiments.
+| Gate | Requirement |
+|---|---|
+| Ground truth | Both exact engines agree on status and p* for every main-panel item. |
+| Not readable from the surface | The surface rule's balanced status accuracy on pilot worlds is at most halfway between the majority rule and the checker. |
+| Not at floor or ceiling | On the pilot, neither model is within 0.05 of the checker or of the majority rule on status accuracy. |
+| No leak | No follow-up message contains a hidden value outside a P3 witness, audited on every main-panel item. |
+| Disjoint | No main-panel world appears in the pilot, the smoke runs or any earlier model-facing run. |
+
+If a gate fails, change the generator settings or the wording, record why, and repeat the pilot on **new** pilot
+worlds. Allow two such revisions. If the gates still fail, stop before the main panel and report.
+
+**Stage 3: lock.** Write and commit `docs/SPRINT_DESIGN_LOCK.json`: tasks, wordings (hashed), conditions,
+populations and salts, models and their order, panel size, scores, primary and secondary contrasts, exclusion
+rules, your predictions and what was seen before the lock.
+
+Panel sizing rule:
+
+- The same main-panel worlds for every model. Default 160 worlds: 40 per condition, with synthetic strata and
+  published-mechanism worlds balanced across conditions.
+- If the pilot puts the standard error of discernment above 0.06 at 160 worlds, raise to 240 if time allows.
+- A model too slow to finish its share runs the first half of the worlds in hash order. Decide and write this in
+  the lock before that model's run, from measured seconds per request, not from its results.
+- Total model-server time for the main panel: at most 14 hours. Run the two servers side by side where memory
+  allows.
+
+**Stage 4: main local panel.** From the lock snapshot, once, for every local model that passed the smoke gate.
+No rerun of a completed model. A crashed run resumes; it does not restart with new settings.
+
+**Stage 5: analysis.** One analysis command that takes a list of runs, so that adding the two online models
+tomorrow is the same command with two more runs. `reports/SPRINT_LOCAL_RESULTS.md` with figures:
+
+- one point per model in the plane of overclaim rate against underclaim rate, with intervals, and the checker and
+  reference rows marked;
+- capitulation, forced overclaim and repair by model and condition, relative to P0;
+- per-world distributions behind every mean;
+- one worked example, chosen by hash: the evidence, a claim, the exact status, what a model said, the follow-up,
+  and what it said next.
+
+**Stage 6: ready the sprint.**
+
+- Online adapters as in §6, with the dry run and the isolation proof.
+- `configs/sprint/online_*.json` for the two online models on the locked panel, ready to launch.
+- Related work, with every reference opened and verified, never recalled from memory: three-valued entailment
+  benchmarks (ProofWriter, FOLIO), abstention and "known unknowns" benchmarks, verbalised-confidence calibration,
+  sycophancy and answer-flipping under challenge, and information-seeking evaluations. For each, one sentence on
+  what it measures and what it cannot. State plainly which parts of our design already exist elsewhere. A made-up
+  reference disqualifies the submission.
+- The official report template from the sprint page in `report/`, building to PDF, with the required appendix
+  "Limitations and Dual-Use / Ethical Considerations" and a section separating preexisting from sprint work.
+  Update `PREEXISTING_WORK.md` and the README.
+
+**Must not happen today:**
+
+- a benchmark item sent to an online model;
+- wording or settings tuned on main-panel worlds, or changed after the lock;
+- a second main-panel run of a model because its numbers were disappointing;
+- more than 6,000 local model requests in total (ledger phase `SPRINT`);
+- new prior, counting or scale experiments.
 
 ## 8. Primary and secondary contrasts for the lock (director's proposal; revise from the pilot if needed, with reasons)
 
