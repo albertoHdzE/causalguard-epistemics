@@ -15,5 +15,13 @@ Date 2026-11-12. Performed by the implementation agent (not independent).
 
 Not checked here: re-running the external panels from a fresh machine (this needs the pinned Biodivine checkout) and re-running model calls.
 
-## Post-tag verification
-Recorded in the commit after the tag (see below).
+## Post-tag verification (2026-11-12, recorded in the commit after the tag)
+
+| Item | Result |
+|---|---|
+| Tag `v0.6.0-dev` peeled commit | `766e07031ef9041d72f4e490d393911776853eb6` (docs only on top of `ec16507`) |
+| Release | Prerelease created with the asset; v0.1.0-dev to v0.5.0-dev unchanged |
+| Asset downloaded back | sha256 `8f63026d23f7b0b6ec9b2dcdc786927f209dc8ae9c41d6eee078fa614950b3e8`, identical |
+| Fresh clone at tag + locked install (`requirements-lock.txt`, `pip install --no-deps -e .`), asset extracted | `verify_artifacts.py artifacts/manifest_r6.json`: COMPLETE, 2,425 required files |
+| Tests in the fresh clone | 480 passed, 5 skipped (upstream parity), 225 s |
+| Reanalysis in the fresh clone (s, s-cal v2, g-r6 evaluation, a2) | 4/4 byte-identical to `reports/development_r6/` |
