@@ -3,6 +3,23 @@
 **Status: development release `v0.5.0-dev` (iteration 5, R5 batch, 2026-11-11; four bounded tracks G/C/A/M). Not a final study release; no confirmatory result exists; confirmatory runs are NOT authorized (no freeze record). Start at `reports/REVIEW_READY_R5.md`. Releases `v0.1.0-dev`..`v0.4.0-dev` and their records are preserved unchanged.**
 
 **R5 in one paragraph (development evidence):** description-length-weighted averaging beats uniform averaging on held-out worlds, but OUR hierarchical prior shows no detected advantage over the best generic codec (gate − CGH +0.002 [−0.004, 0.008] Brier) and its hierarchy adds ≈ 0 outside generator-matched families; an independent generic counter matches our exact counts and is faster at k = 3 (ours still beats generic SAT); two local LLMs investigate worse than the exact EIG controller (−0.11, −0.34 resolved@4); verified claims can be false under wrong-but-consistent assumptions (10/103), and a public challenge policy halves that at modest coverage cost. Run `python -m causalguard r5-demo` for an illustration.
+## Sprint benchmark (R7, pre-sprint): *What does the evidence settle?*
+
+An exact benchmark of whether a model knows what its evidence settles. For every claim the answer key is its exact
+status (settled true / settled false / not settled) inside the declared class, plus, for open claims, the exact
+probability p*. Two independent engines compute them and must agree. Task S scores verdicts and probabilities.
+Task P adds one randomised follow-up (neutral, empty disagreement, demand to commit, checked challenge with a
+witness) and scores capitulation, forced overclaiming, repair and discernment. Entry points: `docs/SPRINT_TASKS.md`,
+`docs/SPRINT_DESIGN_LOCK.json`, `reports/SPRINT_LOCAL_RESULTS.md`, `reports/REVIEW_READY_R7.md`.
+
+```bash
+python -m causalguard sprint-build engines --split main          # exact engines agree on every main-panel claim
+python -m causalguard run --config configs/sprint/main_<model>.json
+python -m causalguard sprint-analyze --run-dir runs/<run1> --run-dir runs/<run2> ... --out reports/sprint_local
+```
+
+All of R7 was done on 2026-11-12, before the sprint, and is disclosed as preexisting work (`PREEXISTING_WORK.md`).
+
 ## What this is
 
 A reproducible research system that asks, operationally, whether *compact executable symbolic models* help reasoning about mechanisms from **incomplete evidence**:

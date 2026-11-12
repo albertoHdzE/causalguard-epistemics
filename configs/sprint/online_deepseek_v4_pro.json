@@ -1,0 +1,35 @@
+{
+ "study": "SPRINT",
+ "mode": "development",
+ "global_cap": 400,
+ "phase": "SPRINT",
+ "phase_cap": 400,
+ "call_ledger": "RUNS/sprint-online-calls/deepseek_v4_pro.jsonl",
+ "workers": 8,
+ "item_timeout_s": 7200,
+ "world_cap": 4,
+ "run_id": "r7-main-deepseek_v4_pro-v1",
+ "manifest": "artifacts/sprint_main_manifest.json",
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "deepseek",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-v4-pro",
+  "allow_remote": true,
+  "max_tokens": 16000,
+  "timeout_s": 900,
+  "max_transport_retries": 1,
+  "seed": 0,
+  "extra": {
+   "api_key_env": "DEEPSEEK_API_KEY",
+   "env_file": "/Users/alberto/Documents/projects/AI-security/.env",
+   "body": {
+    "thinking": {
+     "type": "enabled"
+    },
+    "reasoning_effort": "high"
+   }
+  }
+ },
+ "note": "SPRINT main panel, online model; LAUNCH ONLY after the director's review (docs/SPRINT_AUTHORISATION.md). Same locked panel as the local models; only the model changes."
+}
