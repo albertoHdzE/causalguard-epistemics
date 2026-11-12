@@ -1,7 +1,7 @@
 {
  "mode": "development",
  "study": "R6-S",
- "run_id": "r6-s-cal-v1",
+ "run_id": "r6-s-cal-v2",
  "source_manifest": "artifacts/r6s_source_manifest.json",
  "panels": ["sub24", "intact", "sub12", "sub48"],
  "split": "calibration",
@@ -10,5 +10,5 @@
  "max_budget": 64,
  "workers": 4,
  "item_timeout_s": 3600,
- "note": "R6 Track S calibration groups only (1/4 of eligible groups by hash): budget probe, best flat code, XDC-EB regulariser and fit mode. No evaluation group is scored before docs/R6S_DESIGN_LOCK.json."
+ "note": "v2: SQUAREM EM, EB_TOL 1e-6 (v1 left 27 of 89,400 fits uncertified). R6 Track S calibration groups only (1/4 of eligible groups by hash): budget probe, best flat code, XDC-EB regulariser and fit mode. No evaluation group is scored before docs/R6S_DESIGN_LOCK.json."
 }

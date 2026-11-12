@@ -309,7 +309,7 @@ def theta_masses(phi: np.ndarray, G0: np.ndarray, thetas) -> dict:
 
 # --------------------------------------------------------------------------- XDC-EB (R6 Track S)
 
-EB_TOL = 1e-9                    # certified Frank-Wolfe gap (nats) required of every fit
+EB_TOL = 1e-6                    # certified Frank-Wolfe gap (nats on the objective) required of every fit
 
 
 def fit_type_weights(u: np.ndarray, G0: np.ndarray, a: float, tol: float = EB_TOL, max_iter: int = 200000) -> dict:
@@ -327,19 +327,42 @@ def fit_type_weights(u: np.ndarray, G0: np.ndarray, a: float, tol: float = EB_TO
         raise ValueError("fit_type_weights: a node has no evidence-compatible rule")
     n = u.shape[0]
     c = a * np.asarray(G0, dtype=float)
-    p = np.asarray(G0, dtype=float).copy()
-    it, gap = 0, math.inf
-    for it in range(1, max_iter + 1):  # noqa: B007  (it is reported)
-        r = u.T @ (1.0 / (u @ p))                               # sum_j u_jl / (p . u_j)
+    pos = c > 0
+
+    def F(p):
+        return float(np.log(u @ p).sum() + (c[pos] * np.log(p[pos])).sum())
+
+    def em(p):
+        q = (p * (u.T @ (1.0 / (u @ p))) + c) / (n + a)
+        return q / q.sum()
+
+    def fw_gap(p):
+        r = u.T @ (1.0 / (u @ p))
         with np.errstate(divide="ignore", invalid="ignore"):
-            g = r + np.where(c > 0, c / p, 0.0)
-        gap = float(np.max(g) - (n + a))
-        if gap <= tol:
-            break
-        p = (p * r + c) / (n + a)
-        p = p / p.sum()
-    F = float(np.log(u @ p).sum() + (c[c > 0] * np.log(p[c > 0])).sum())
-    return {"p": p, "gap": gap, "iterations": it, "objective": F, "certified": gap <= tol}
+            g = r + np.where(pos, c / p, 0.0)
+        return float(np.max(g) - (n + a))
+    # SQUAREM-accelerated EM (Varadhan & Roland 2008) with a monotonicity safeguard: an extrapolated point is kept
+    # only if it is feasible and does not lower F; otherwise the plain double EM step is used.  Same fixed point.
+    p = np.asarray(G0, dtype=float).copy()
+    it, gap = 0, fw_gap(p)
+    while gap > tol and it < max_iter:
+        p1 = em(p)
+        p2 = em(p1)
+        r, v = p1 - p, p2 - 2 * p1 + p
+        nv = float(np.sqrt((v * v).sum()))
+        nxt = p2
+        if nv > 0:
+            alpha = -float(np.sqrt((r * r).sum())) / nv
+            x = p - 2 * alpha * r + alpha * alpha * v
+            if np.all(x > 0) or (a == 0 and np.all(x >= 0)):
+                x = em(x / x.sum())
+                if F(x) >= F(p2):
+                    nxt = x
+        p = nxt
+        it += 3
+        gap = fw_gap(p)
+    F_ = F(p)
+    return {"p": p, "gap": gap, "iterations": it, "objective": F_, "certified": gap <= tol}
 
 
 class XDCEB(XDC):

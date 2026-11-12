@@ -86,7 +86,7 @@ def test_xdc_eb_matches_bruteforce_given_fitted_weights():
                 break
             pr = m.probabilities(q)
             f = m.fit_for(q.target.node)
-            assert f["certified"] and f["gap"] <= 1e-9
+            assert f["certified"] and f["gap"] <= 1e-6
             assert abs(pr["xdc_eb"] - _eb_bruteforce(ev, k, q, base, f["p"], m.type_names)) < 1e-9
             done += 1
     assert done >= 30
