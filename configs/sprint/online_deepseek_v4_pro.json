@@ -31,5 +31,6 @@
    }
   }
  },
- "note": "SPRINT main panel, online model; LAUNCH ONLY after the director's review (docs/SPRINT_AUTHORISATION.md). Same locked panel as the local models; only the model changes."
+ "note": "SPRINT main panel, online model; LAUNCH ONLY after the director's review (docs/SPRINT_AUTHORISATION.md). Same locked panel as the local models; only the model changes. | OPTION A of reports/REVIEW_READY_R7.md: NOT authorised to run until the director decides (R7 gates failed).",
+ "task_wording": "v2"
 }

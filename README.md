@@ -10,7 +10,8 @@ status (settled true / settled false / not settled) inside the declared class, p
 probability p*. Two independent engines compute them and must agree. Task S scores verdicts and probabilities.
 Task P adds one randomised follow-up (neutral, empty disagreement, demand to commit, checked challenge with a
 witness) and scores capitulation, forced overclaiming, repair and discernment. Entry points: `docs/SPRINT_TASKS.md`,
-`docs/SPRINT_DESIGN_LOCK.json`, `reports/SPRINT_LOCAL_RESULTS.md`, `reports/REVIEW_READY_R7.md`.
+`reports/R7_PILOT.md`, `reports/R7_GATES.md`, `reports/REVIEW_READY_R7.md`. Status 2026-11-12: the pre-run gates failed
+after two revisions, so no main panel has been run; see the review entry point.
 
 ```bash
 python -m causalguard sprint-build engines --split main          # exact engines agree on every main-panel claim

@@ -37,7 +37,7 @@ def provider(m: dict) -> dict:
 
 
 def write_configs(stage: str, manifest: str, max_items: int | None = None, version: str = "v1",
-                  tags: list[str] | None = None) -> list[Path]:
+                  tags: list[str] | None = None, task_wording: str | None = None) -> list[Path]:
     out = []
     d = REPO / "configs" / "sprint"
     d.mkdir(parents=True, exist_ok=True)
@@ -48,6 +48,8 @@ def write_configs(stage: str, manifest: str, max_items: int | None = None, versi
                "provider": provider(m), "note": f"R7 sprint {stage} (pre-sprint), local inference only"}
         if max_items:
             cfg["max_items"] = max_items
+        if task_wording:
+            cfg["task_wording"] = task_wording
         p = d / f"{stage}_{m['tag']}.json"
         p.write_text(json.dumps(cfg, indent=1) + "\n")
         out.append(p)

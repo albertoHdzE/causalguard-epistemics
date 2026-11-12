@@ -142,6 +142,7 @@ def _items_from_config(cfg: dict):
                               "global_cap": cfg["global_cap"], "call_ledger": cfg["call_ledger"],
                               "phase": cfg.get("phase", "SPRINT"), "phase_cap": cfg.get("phase_cap"),
                               "world_cap": cfg.get("world_cap", 4), "two_turns": cfg.get("two_turns", True),
+                              **({"task_wording": cfg["task_wording"]} if cfg.get("task_wording") else {}),
                               "stratum": x["stratum"], "population": x["population"]}
     else:
         raise SystemExit(f"unknown study {study}")

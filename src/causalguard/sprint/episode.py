@@ -62,11 +62,12 @@ def _turn(provider, msgs, budget, seed, wid, label) -> tuple[dict, dict, str | N
     return rec, (obj or {}), visible
 
 
-def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None, two_turns: bool = True) -> dict:
+def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None, two_turns: bool = True,
+                wording: str = T.DEFAULT_WORDING) -> dict:
     cids = [c["cid"] for c in pub["claims"]]
     wid = pub["task_id"]
-    msgs = [{"role": "system", "content": T.system()}, {"role": "user", "content": T.user_prompt(pub)}]
-    out = {"assignment": assignment, "turns": []}
+    msgs = [{"role": "system", "content": T.system()}, {"role": "user", "content": T.user_prompt(pub, wording)}]
+    out = {"assignment": assignment, "task_wording": wording, "turns": []}
     rec1, obj1, vis1 = _turn(provider, msgs, budget, seed, wid, "S|t1")
     a1 = parse_status_answers(obj1.get("answers"), cids)
     out["turns"].append({**rec1, "answers": a1})
@@ -102,7 +103,7 @@ def sprint_world(p: dict) -> dict:
     assignment = {x: p[x] for x in ("condition", "wording", "named")}
     try:
         episode = run_episode(pub, assignment, provider, budget, p["provider"].get("seed", 0),
-                              two_turns=p.get("two_turns", True))
+                              two_turns=p.get("two_turns", True), wording=p.get("task_wording", T.DEFAULT_WORDING))
         status = "ok"
     except Exception as e:     # CapExceeded or harness error: recorded, never dropped
         episode, status = {"assignment": assignment, "turns": [], "error": f"{type(e).__name__}: {str(e)[:400]}"}, \

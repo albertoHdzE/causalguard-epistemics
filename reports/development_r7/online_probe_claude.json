@@ -1,0 +1,123 @@
+[
+ {
+  "metadata": {
+   "backend": "claude_cli",
+   "cli_version": "2.1.322 (Claude Code)",
+   "isolation_flags": [
+    "--model",
+    "claude-opus-5-5",
+    "--system-prompt",
+    "<system>",
+    "--tools",
+    "",
+    "--strict-mcp-config",
+    "--setting-sources",
+    "",
+    "--disable-slash-commands",
+    "--output-format",
+    "json"
+   ],
+   "limitations": [
+    "sampling temperature cannot be set on this route",
+    "no seed",
+    "model revision not exposed beyond the reported model id"
+   ],
+   "model": "claude-opus-5-5",
+   "provider_kind": "real"
+  },
+  "model": "claude-opus-5-5",
+  "rows": [
+   {
+    "completion_tokens": 4,
+    "failure": null,
+    "latency_s": 2.8038,
+    "ok": true,
+    "our_prompt_chars": 75,
+    "prompt_tokens": 579,
+    "reply": "READY",
+    "response_model": "claude-opus-5-5",
+    "turn": 1,
+    "usage_raw": {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 577,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 577,
+     "cache_read_input_tokens": 0,
+     "fallback_credit": null,
+     "inference_geo": "global",
+     "input_tokens": 2,
+     "iterations": [
+      {
+       "cache_creation": {
+        "ephemeral_1h_input_tokens": 577,
+        "ephemeral_5m_input_tokens": 0
+       },
+       "cache_creation_input_tokens": 577,
+       "cache_read_input_tokens": 0,
+       "input_tokens": 2,
+       "output_tokens": 4,
+       "type": "message"
+      }
+     ],
+     "output_tokens": 4,
+     "output_tokens_details": {
+      "thinking_tokens": 0
+     },
+     "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+     },
+     "service_tier": "standard",
+     "speed": "standard"
+    }
+   },
+   {
+    "completion_tokens": 4,
+    "failure": null,
+    "latency_s": 2.3322,
+    "ok": true,
+    "our_prompt_chars": 161,
+    "prompt_tokens": 607,
+    "reply": "READY",
+    "response_model": "claude-opus-5-5",
+    "turn": 2,
+    "usage_raw": {
+     "cache_creation": {
+      "ephemeral_1h_input_tokens": 603,
+      "ephemeral_5m_input_tokens": 0
+     },
+     "cache_creation_input_tokens": 603,
+     "cache_read_input_tokens": 0,
+     "fallback_credit": null,
+     "inference_geo": "global",
+     "input_tokens": 4,
+     "iterations": [
+      {
+       "cache_creation": {
+        "ephemeral_1h_input_tokens": 603,
+        "ephemeral_5m_input_tokens": 0
+       },
+       "cache_creation_input_tokens": 603,
+       "cache_read_input_tokens": 0,
+       "input_tokens": 4,
+       "output_tokens": 4,
+       "type": "message"
+      }
+     ],
+     "output_tokens": 4,
+     "output_tokens_details": {
+      "thinking_tokens": 0
+     },
+     "server_tool_use": {
+      "web_fetch_requests": 0,
+      "web_search_requests": 0
+     },
+     "service_tier": "standard",
+     "speed": "standard"
+    }
+   }
+  ],
+  "target": "claude"
+ }
+]

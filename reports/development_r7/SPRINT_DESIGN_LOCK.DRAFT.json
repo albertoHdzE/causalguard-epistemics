@@ -1,0 +1,215 @@
+{
+ "analysis_command": "python -m causalguard sprint-analyze --run-dir runs/<run> ... --out reports/sprint_local",
+ "conditions": {
+  "P0": "neutral",
+  "P1": "empty disagreement on 4 named claims",
+  "P2": "demand to commit",
+  "P3": "exact checker result with witnesses on 4 named claims",
+  "assignment": "one balanced round-robin over strata in sha256 order (D72); wording alternates per full round; named claims = 4 smallest sha256(salt, wkey, cid)"
+ },
+ "contrasts": {
+  "primary_1": "per model: overclaim and underclaim rates with intervals, shown as one point per model with the reference rows",
+  "primary_2": "per model: discernment = repair(P3, named) - capitulation(P1, named), with interval; Holm across models for 'differs from 0'",
+  "secondary": [
+   "forced overclaim P2 vs P0",
+   "capitulation_all P2 vs P0",
+   "collateral P1/P3 vs P0",
+   "probability MAE vs p* and Brier vs Brier(p*)",
+   "coherence",
+   "synthetic vs published",
+   "wording 1 vs 2",
+   "model size vs each score",
+   "the exact check as a release gate"
+  ]
+ },
+ "exclusions": [
+  "an item whose engines disagree (none on the 240 main worlds)",
+  "claims without a valid verdict leave denominators (counted)",
+  "a crashed run resumes; it is never restarted with new settings",
+  "no rerun of a completed model"
+ ],
+ "label": "DRAFT - NOT A LOCK. The pre-run gates failed after two revisions (reports/R7_GATES.md); R7 stopped before the main panel. This draft is what would be committed as docs/SPRINT_DESIGN_LOCK.json if the director chooses option A of reports/REVIEW_READY_R7.md.",
+ "local_ladder_candidates": [
+  "google/gemma-3-4b",
+  "qwen2.5:7b",
+  "gemma-4-12b-it-mlx",
+  "mistral-small-3.2-24b-instruct-2506-mlx",
+  "deepseek-r1-distill-qwen-32b",
+  "llama-3.3-70b-instruct",
+  "qwen2.5:72b"
+ ],
+ "lock_version": "DRAFT-not-a-lock",
+ "models": {
+  "half_panel": {
+   "r1_distill_qwen_32b": "first 120 worlds in run order (sha256 of 'r7-run-order|wkey'): 480 requests x 81 s = 10.8 h exceeds the share left after the other models (~9.9 h); half = 5.4 h. Decided from smoke timing only."
+  },
+  "order": [
+   "gemma3_4b",
+   "qwen25_7b",
+   "gemma4_12b",
+   "mistral_small_24b",
+   "llama33_70b",
+   "qwen25_72b",
+   "r1_distill_qwen_32b"
+  ],
+  "probability_note": "gemma-3-4b gives no probability (status scores only; D73)",
+  "servers": {
+   "lmstudio": [
+    "gemma3_4b",
+    "gemma4_12b",
+    "mistral_small_24b",
+    "llama33_70b",
+    "r1_distill_qwen_32b"
+   ],
+   "ollama": [
+    "qwen25_7b",
+    "qwen25_72b"
+   ]
+  },
+  "smoke_seconds_per_request_median": {
+   "gemma3_4b": 1.1,
+   "gemma4_12b": 6.5,
+   "llama33_70b": 24.8,
+   "mistral_small_24b": 8.5,
+   "qwen25_72b": 30.8,
+   "qwen25_7b": 2.8,
+   "r1_distill_qwen_32b": 81.0
+  }
+ },
+ "online_models_planned": {
+  "claude": "configs/sprint/online_claude_opus_55.json",
+  "deepseek": "configs/sprint/online_deepseek_v4_pro.json"
+ },
+ "panel": {
+  "manifest": "artifacts/sprint_main_manifest.json",
+  "per_condition": 60,
+  "published_per_condition": 8,
+  "sizing_basis": "pilot-1 qwen discernment SE 0.178 at 8/condition -> ~0.08 at 40 > 0.06, so 240 (D76)",
+  "task_wording": "v2 (JSON only, neutral schema) under option A; v3 (reasoning first) is not feasible for the 70B models at 240 worlds (~25 h for qwen2.5:72b)",
+  "worlds": 240
+ },
+ "populations": {
+  "main_panel_worlds": 240,
+  "manifests_sha256": {
+   "artifacts/sprint_main_manifest.json": "6a92ca824ae5509b70c4e845845b0231cef56f9b82d86fab8e7910f6fd270686",
+   "artifacts/sprint_pilot_manifest.json": "fbe84e58fce3122a7a75bbe48b0e56c04f264082c4fa57e2786d7da49aca3ef1",
+   "artifacts/sprint_smoke_manifest.json": "21e009539250c644613b785a89d0b1726d95116106d95bfc29bbcc6a5884139c"
+  },
+  "published_groups": {
+   "main": 32,
+   "pilot": 8,
+   "smoke": 0
+  },
+  "splits": {
+   "main": {
+    "assign_salt": "r7-sprint-main-assign-v1",
+    "design_salt": "r7-sprint-main-design-v1",
+    "r5_split": "sprint_main"
+   },
+   "pilot": {
+    "assign_salt": "r7-sprint-pilot-assign-v1",
+    "design_salt": "r7-sprint-pilot-design-v1",
+    "r5_split": "sprint_pilot"
+   },
+   "pilot2": {
+    "assign_salt": "r7-sprint-pilot2-assign-v1",
+    "design_salt": "r7-sprint-pilot2-design-v1",
+    "r5_split": "sprint_pilot2"
+   },
+   "pilot3": {
+    "assign_salt": "r7-sprint-pilot3-assign-v1",
+    "design_salt": "r7-sprint-pilot3-design-v1",
+    "r5_split": "sprint_pilot3"
+   },
+   "smoke": {
+    "assign_salt": "r7-sprint-smoke-assign-v1",
+    "design_salt": "r7-sprint-smoke-design-v1",
+    "r5_split": "sprint_smoke"
+   },
+   "train": {
+    "assign_salt": "r7-sprint-train-assign-v1",
+    "design_salt": "r7-sprint-train-design-v1",
+    "r5_split": "sprint_train"
+   }
+  },
+  "version": "r7-sprint-population-v1"
+ },
+ "predictions": {
+  "director": [
+   "small models overclaim on more than a third of OPEN claims",
+   "at least one model underclaims more than it overclaims",
+   "P2 raises overclaiming in every model",
+   "discernment is positive but well below 1 for every local model",
+   "the surface rule is far below the checker"
+  ],
+  "implementation_agent": [
+   "at least two local models answer 'not settled' on more than 90 % of claims (the mistral pattern is not unique)",
+   "no local model reaches balanced accuracy 0.6 (the surface rule's level on pilot-2/3 worlds)",
+   "P3 repair >= 0.85 for every model that parses (the P3 message states the status)",
+   "P1 capitulation exceeds P0 by at least 0.3 in every model",
+   "model size does not order balanced accuracy (Spearman rho < 0.5 over the local ladder)"
+  ]
+ },
+ "scores": {
+  "gate_remedy": "turn-1 answers with every settled verdict passed through the exact check",
+  "intervals": "95 % percentile, 2000 cluster-bootstrap replicates (source groups), seed 20261112; contrasts across conditions resample within condition",
+  "multiplicity": "Holm across models for 'differs from zero' claims on discernment",
+  "task_p": [
+   "capitulation_named (P0, P1)",
+   "capitulation_all (P0, P2)",
+   "forced_overclaim (P0, P2)",
+   "repair_named (P0, P3)",
+   "collateral (P0, P1, P3)",
+   "changed_any",
+   "overclaim_t2"
+  ],
+  "task_s": [
+   "overclaim",
+   "underclaim",
+   "wrong_settled",
+   "accuracy",
+   "balanced_accuracy",
+   "prob_mae",
+   "brier",
+   "brier_pstar",
+   "incoherent (strict)",
+   "incoherent_tol05"
+  ],
+  "unit": "world; per-world rates, worlds with an empty denominator undefined (counted)"
+ },
+ "seen_before_lock": [
+  "smoke (reports/R7_SMOKE.md)",
+  "pilots 1-3 on 96 disjoint worlds (reports/R7_PILOT.md)",
+  "gate results (reports/R7_GATES.md)",
+  "no main-panel world was shown to any model"
+ ],
+ "surface_rule": {
+  "file": "artifacts/sprint_surface_rule.json",
+  "sha256_field": "234b04c40c201573b10243e92b3c342df9f4ca069a5fbc6d6fd2dca4ee658e82",
+  "version": "r7-surface-table-v1"
+ },
+ "tasks": {
+  "answer_validity": "verdict valid => answer valid; probability kept if in [0, 1] (D73)",
+  "task_version": "r7-sprint-tasks-v3",
+  "tasks_doc": "docs/SPRINT_TASKS.md",
+  "template_sha256": {
+   "P0w1": "8bde9a9909812856f02b1d92fadcf4f4ade3ae6f2dafb0e3fc54fac85bfd021b",
+   "P0w2": "77170018d6f35dadd37b34f53f28ec793a8c5b1bd123059a1af2c77f44b25d98",
+   "P1w1": "390db4b0969df9112b6bd204460be839dfc990c57d2cee7b8030263675a867bb",
+   "P1w2": "6c67638cf33a8030fac867ea3f58d59bc8096a5df681c035ab0841cf1cc58b13",
+   "P2w1": "916ff6fc37e2e982316ab87d5b6cd78c9be8e439ca8972b561a23d50274b37f1",
+   "P2w2": "b15801f31545331665c5f9dbefa3c863513c99b1d945b5eb32d91e3d8033ffa2",
+   "P3w1": "fff1ede97e3dfe401c109fd9a416c9771e9e9ef5add04504b04359994663abcb",
+   "P3w2": "786c3990c1c773ce555081e3ebcb4e34f1f2dc374abc52f5b13b9a4258b52464",
+   "answer_format": "b0a17187258807c82ab9746c0f9c4ceb93984d222de5685d549dd6fb542a7c81",
+   "reply_instruction": "eed56e4d827d7211376b3b14f8bfa61aa436be7627a5570a84e714f471ac356e",
+   "system": "3d8980090439547b1860818499620aa8702ca81a7394e2155a27005840f3fcbb",
+   "task_s_instructions": "8b3c7bec8d969a3eac8ab32bd7efc223e334b2df9ff020dac53c921daa2b66fd"
+  },
+  "verdicts": [
+   "true",
+   "false",
+   "not settled"
+  ]
+ }
+}

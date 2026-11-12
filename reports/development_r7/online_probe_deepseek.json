@@ -1,0 +1,68 @@
+[
+ {
+  "metadata": {
+   "backend": "deepseek",
+   "base_url": "https://api.deepseek.com",
+   "chat_template_sha256": null,
+   "format": null,
+   "limitations": [
+    "no model digest/revision exposed by this backend",
+    "server version not exposed by this backend",
+    "seed is sent but whether the backend honours it is not verified"
+   ],
+   "model": "deepseek-v4-pro",
+   "model_digest": null,
+   "model_parameters": null,
+   "models_entry": {
+    "api_capabilities": {
+     "anthropic_messages": {
+      "system_prompt_update": "leading-only",
+      "tool_update": "leading-only"
+     }
+    },
+    "context_window": 1048576,
+    "effort": {
+     "default_level": "high",
+     "supported_levels": [
+      "low",
+      "high",
+      "max"
+     ]
+    },
+    "id": "deepseek-v4-pro",
+    "input_modalities": [
+     "text"
+    ],
+    "max_output_tokens": 393216,
+    "name": "DeepSeek-V4-Pro",
+    "object": "model",
+    "output_modalities": [
+     "text"
+    ],
+    "owned_by": "deepseek"
+   },
+   "parameter_size": null,
+   "provider_kind": "real",
+   "quantization": null,
+   "seed_honoured": "not_verified",
+   "seed_sent": true,
+   "server_version": null
+  },
+  "model": "deepseek-v4-pro",
+  "rows": [
+   {
+    "completion_tokens": 10,
+    "failure": null,
+    "latency_s": 1.3073,
+    "ok": true,
+    "our_prompt_chars": 75,
+    "prompt_tokens": 100,
+    "reply": "READY",
+    "response_model": "deepseek-v4-pro",
+    "turn": 1,
+    "usage_raw": null
+   }
+  ],
+  "target": "deepseek"
+ }
+]

@@ -42,8 +42,15 @@ REPLY = ("First reason briefly, claim by claim, about which evidence rows constr
          "JSON object: ")
 
 
-def user_prompt(pub: dict) -> str:
-    return render_task(pub) + "\n\n" + INSTRUCTIONS + "\n" + REPLY + ANSWER_FORMAT + "."
+REPLY_JSON_ONLY = "Reply with ONLY one JSON object: "          # tasks v2 (pilot 2)
+REPLIES = {"v2": REPLY_JSON_ONLY, "v3": REPLY}
+DEFAULT_WORDING = "v3"
+
+
+def user_prompt(pub: dict, wording: str = DEFAULT_WORDING) -> str:
+    """Task S user message.  ``wording`` selects the reply instruction (v2: JSON only; v3: reasoning first); the
+    instructions and the schema are identical in both."""
+    return render_task(pub) + "\n\n" + INSTRUCTIONS + "\n" + REPLIES[wording] + ANSWER_FORMAT + "."
 
 
 def system() -> str:
@@ -72,7 +79,8 @@ def template_hashes() -> dict:
     return {f"{c}w{w}": hashlib.sha256(t.encode()).hexdigest() for (c, w), t in sorted(FOLLOWUPS.items())} | {
         "task_s_instructions": hashlib.sha256(INSTRUCTIONS.encode()).hexdigest(),
         "answer_format": hashlib.sha256(ANSWER_FORMAT.encode()).hexdigest(),
-        "reply_instruction": hashlib.sha256(REPLY.encode()).hexdigest(),
+        "reply_instruction_v3": hashlib.sha256(REPLY.encode()).hexdigest(),
+        "reply_instruction_v2": hashlib.sha256(REPLY_JSON_ONLY.encode()).hexdigest(),
         "system": hashlib.sha256(system().encode()).hexdigest()}
 
 

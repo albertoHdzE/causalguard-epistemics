@@ -32,20 +32,44 @@
      "worlds": 32
     },
     "qwen2.5:7b": {
-     "answered_claims": 256,
+     "answered_claims": 240,
      "worlds": 32
     }
    },
    "models": {
     "mistral-small-3.2-24b-instruct-2506-mlx": {
-     "accuracy": 0.65234375,
-     "balanced_accuracy": 0.3333333333333333,
-     "pass": false
+     "accuracy": 0.74609375,
+     "balanced_accuracy": 0.3281786941580756,
+     "pass": false,
+     "same_worlds_reference": {
+      "accuracy": {
+       "always_not_settled": 0.7578125,
+       "checker": 1.0,
+       "majority_status": 0.7578125
+      },
+      "balanced_accuracy": {
+       "always_not_settled": 0.3333333333333333,
+       "checker": 1.0,
+       "majority_status": 0.3333333333333333
+      }
+     }
     },
     "qwen2.5:7b": {
-     "accuracy": 0.5625,
-     "balanced_accuracy": 0.4446593444127787,
-     "pass": true
+     "accuracy": 0.5958333333333333,
+     "balanced_accuracy": 0.33824619948090473,
+     "pass": false,
+     "same_worlds_reference": {
+      "accuracy": {
+       "always_not_settled": 0.7578125,
+       "checker": 1.0,
+       "majority_status": 0.7578125
+      },
+      "balanced_accuracy": {
+       "always_not_settled": 0.3333333333333333,
+       "checker": 1.0,
+       "majority_status": 0.3333333333333333
+      }
+     }
     }
    },
    "pass": false
@@ -79,7 +103,7 @@
    "overlap_mechanism_pilot_smoke": 0,
    "overlap_task_pilot_smoke": 0,
    "pass": true,
-   "pilot_and_smoke_worlds": 72
+   "pilot_and_smoke_worlds": 104
   }
  }
 }

@@ -74,7 +74,7 @@ TBD.
 |---|---|
 | CausalGuard engines: exact version-space counting, the independent D engine, SAT cross-check (iterations 1–6) | TBD |
 | R5/R6 development evidence used as motivation only (Track A investigation pilot, Track A2 gate-in-the-loop, Track M assumption failures) | |
-| R7 (2026-11-12, the day before the sprint): this benchmark's code, the smoke and pilot runs, the gates, the design lock, the full local main panel and its analysis, the online adapters (no benchmark item sent online) | |
+| R7 (2026-11-12, the day before the sprint): this benchmark's code, the smoke runs and three pilots, the pre-run gates, the online adapters (no benchmark item sent online). The main panel was NOT run in R7 (gates failed) | |
 
 Commit timestamps in the repository date every item. See `PREEXISTING_WORK.md`.
 

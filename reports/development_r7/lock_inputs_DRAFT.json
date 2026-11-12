@@ -1,0 +1,20 @@
+{
+ "status": "DRAFT - NOT A LOCK. The pre-run gates failed after two revisions (reports/R7_GATES.md); R7 stopped before the main panel. This draft is what would be committed as docs/SPRINT_DESIGN_LOCK.json if the director chooses option A of reports/REVIEW_READY_R7.md.",
+ "models": {"order": ["gemma3_4b", "qwen25_7b", "gemma4_12b", "mistral_small_24b", "llama33_70b", "qwen25_72b", "r1_distill_qwen_32b"],
+            "servers": {"ollama": ["qwen25_7b", "qwen25_72b"], "lmstudio": ["gemma3_4b", "gemma4_12b", "mistral_small_24b", "llama33_70b", "r1_distill_qwen_32b"]},
+            "smoke_seconds_per_request_median": {"gemma3_4b": 1.1, "qwen25_7b": 2.8, "gemma4_12b": 6.5, "mistral_small_24b": 8.5, "llama33_70b": 24.8, "qwen25_72b": 30.8, "r1_distill_qwen_32b": 81.0},
+            "half_panel": {"r1_distill_qwen_32b": "first 120 worlds in run order (sha256 of 'r7-run-order|wkey'): 480 requests x 81 s = 10.8 h exceeds the share left after the other models (~9.9 h); half = 5.4 h. Decided from smoke timing only."},
+            "probability_note": "gemma-3-4b gives no probability (status scores only; D73)"},
+ "online_models_planned": {"deepseek": "configs/sprint/online_deepseek_v4_pro.json", "claude": "configs/sprint/online_claude_opus_55.json"},
+ "panel": {"manifest": "artifacts/sprint_main_manifest.json", "worlds": 240, "per_condition": 60, "published_per_condition": 8,
+           "task_wording": "v2 (JSON only, neutral schema) under option A; v3 (reasoning first) is not feasible for the 70B models at 240 worlds (~25 h for qwen2.5:72b)",
+           "sizing_basis": "pilot-1 qwen discernment SE 0.178 at 8/condition -> ~0.08 at 40 > 0.06, so 240 (D76)"},
+ "contrasts": {"primary_1": "per model: overclaim and underclaim rates with intervals, shown as one point per model with the reference rows",
+               "primary_2": "per model: discernment = repair(P3, named) - capitulation(P1, named), with interval; Holm across models for 'differs from 0'",
+               "secondary": ["forced overclaim P2 vs P0", "capitulation_all P2 vs P0", "collateral P1/P3 vs P0", "probability MAE vs p* and Brier vs Brier(p*)", "coherence", "synthetic vs published", "wording 1 vs 2", "model size vs each score", "the exact check as a release gate"]},
+ "exclusions": ["an item whose engines disagree (none on the 240 main worlds)", "claims without a valid verdict leave denominators (counted)", "a crashed run resumes; it is never restarted with new settings", "no rerun of a completed model"],
+ "predictions": {
+   "director": ["small models overclaim on more than a third of OPEN claims", "at least one model underclaims more than it overclaims", "P2 raises overclaiming in every model", "discernment is positive but well below 1 for every local model", "the surface rule is far below the checker"],
+   "implementation_agent": ["at least two local models answer 'not settled' on more than 90 % of claims (the mistral pattern is not unique)", "no local model reaches balanced accuracy 0.6 (the surface rule's level on pilot-2/3 worlds)", "P3 repair >= 0.85 for every model that parses (the P3 message states the status)", "P1 capitulation exceeds P0 by at least 0.3 in every model", "model size does not order balanced accuracy (Spearman rho < 0.5 over the local ladder)"]},
+ "seen_before_lock": ["smoke (reports/R7_SMOKE.md)", "pilots 1-3 on 96 disjoint worlds (reports/R7_PILOT.md)", "gate results (reports/R7_GATES.md)", "no main-panel world was shown to any model"]
+}
