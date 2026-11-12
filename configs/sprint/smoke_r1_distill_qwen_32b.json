@@ -8,7 +8,7 @@
  "workers": 1,
  "item_timeout_s": 7200,
  "world_cap": 4,
- "run_id": "r7-smoke-r1_distill_qwen_32b-v1",
+ "run_id": "r7-smoke-r1_distill_qwen_32b-v2",
  "manifest": "artifacts/sprint_smoke_manifest.json",
  "provider": {
   "kind": "openai_compatible",
