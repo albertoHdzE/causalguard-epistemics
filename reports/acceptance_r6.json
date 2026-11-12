@@ -1,7 +1,7 @@
 {
  "schema": "causalguard-acceptance-r6-v1",
  "date": "2026-11-12",
- "content_commit": "see reports/RELEASE_CHECK_R6.md (v0.6.0-dev; this file is part of the tagged commit)",
+ "content_commit": "ec16507a70174058d8225b4353e30b2f7e7011bd",
  "peeled_tag": "see reports/RELEASE_CHECK_R6.md",
  "design_locks": {
   "G6": {
@@ -28,11 +28,13 @@
  },
  "manifest": {
   "path": "artifacts/manifest_r6.json",
-  "sha256": "see reports/RELEASE_CHECK_R6.md"
+  "sha256": "31d3cd790ec39c0ae07b585d0f032d2b7e9bdecd3955d15d78d00e5aa9b77c4e",
+  "required_files": 2425
  },
  "release_asset": {
   "name": "causalguard-dev-runs-v0.6.0-dev.tar.gz",
-  "sha256": "see reports/RELEASE_CHECK_R6.md"
+  "bytes": 32040553,
+  "sha256": "8f63026d23f7b0b6ec9b2dcdc786927f209dc8ae9c41d6eee078fa614950b3e8"
  },
  "event_order": {
   "r6-g-eval-v1": {
@@ -288,5 +290,11 @@
  "freeze_record": false,
  "paid_inference": false,
  "weight_changes": false,
- "independent_review_complete": false
+ "independent_review_complete": false,
+ "tests": {
+  "passed": 480,
+  "skipped": 5,
+  "skip_reason": "upstream parity needs CAUSALBOOL_ROOT locally; CI upstream-parity job green",
+  "ci_run": 43167162081
+ }
 }
