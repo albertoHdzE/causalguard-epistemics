@@ -27,7 +27,7 @@ Claude Opus, from 2026-11-12 01:15 UTC. Resume: read this file, `delegation/iter
 | WP4 | S inventory, split, calibration, lock | done | `artifacts/r6s_source_manifest.json`, calibration v1 → v2 (SQUAREM, D67), lock `072f051` (D68) |
 | WP5 | S evaluation, report | done | `r6-s-eval-v1` 524/524 from `072f051`; `reports/R6_SCALE.md`; S-D1 (D69) |
 | WP6 | A2 pilot | done | `reports/R6_AI_GATE_LOOP.md` (`f5e4bd8`), 417/512 requests |
-| WP7 | ledger, acceptance, release v0.6.0-dev | in progress | byte identity 21/21 (`scripts/r6_regen_check.sh`), item replay 174/174 (`scripts/r6_replay_check.py`); see `reports/RELEASE_CHECK_R6.md` |
+| WP7 | ledger, acceptance, release v0.6.0-dev | done (tag `v0.6.0-dev` → `766e070`, post-tag check `6caf55a`) | byte identity 21/21 (`scripts/r6_regen_check.sh`), item replay 174/174 (`scripts/r6_replay_check.py`); see `reports/RELEASE_CHECK_R6.md` |
 
 ## Resources (cumulative R6, implementation agent)
 
