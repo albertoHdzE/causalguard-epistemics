@@ -1,0 +1,292 @@
+{
+ "schema": "causalguard-acceptance-r6-v1",
+ "date": "2026-11-12",
+ "content_commit": "see reports/RELEASE_CHECK_R6.md (v0.6.0-dev; this file is part of the tagged commit)",
+ "peeled_tag": "see reports/RELEASE_CHECK_R6.md",
+ "design_locks": {
+  "G6": {
+   "path": "docs/R6_DESIGN_LOCK.json",
+   "sha256": "c37aed7985f9a61ed7a1abca037f0cdc0428bfa64f576d73088574acdaeb8da9",
+   "lock_commit": "246d3cd",
+   "author": "reviewer"
+  },
+  "S": {
+   "path": "docs/R6S_DESIGN_LOCK.json",
+   "sha256": "da21722c218e5030481cc325ebca2966f36d372408db864255838e15d32fa562",
+   "lock_commit": "072f051",
+   "author": "implementation agent"
+  },
+  "A2": {
+   "path": "docs/R6A2_DESIGN.md",
+   "lock_commit": "2dcf172",
+   "author": "implementation agent"
+  }
+ },
+ "protocol": {
+  "path": "docs/R6_PROTOCOL.md",
+  "sha256": "1ba0b05792c7addfceadcdfe7b80609e05b013e4894b6e9b8e36da4336d09598"
+ },
+ "manifest": {
+  "path": "artifacts/manifest_r6.json",
+  "sha256": "see reports/RELEASE_CHECK_R6.md"
+ },
+ "release_asset": {
+  "name": "causalguard-dev-runs-v0.6.0-dev.tar.gz",
+  "sha256": "see reports/RELEASE_CHECK_R6.md"
+ },
+ "event_order": {
+  "r6-g-eval-v1": {
+   "lock": "246d3cd 01:05:01Z",
+   "opened": "2026-11-12T01:05:01Z",
+   "snapshot": "246d3cd"
+  },
+  "r6-g-ext-fresh-v1": {
+   "lock": "246d3cd",
+   "opened": "2026-11-12T01:12:10Z",
+   "snapshot": "246d3cd"
+  },
+  "r6-s-eval-v1": {
+   "lock": "072f051 04:15:41Z",
+   "opened": "2026-11-12T04:15:44Z",
+   "snapshot": "072f051cb69a"
+  },
+  "r6-a2-*": {
+   "design": "2dcf172",
+   "first_request": "2026-11-12T01:52:08Z",
+   "snapshot": "2dcf172"
+  }
+ },
+ "byte_identity": {
+  "analyses_regenerated": 21,
+  "identical": 21,
+  "script": "scripts/r6_regen_check.sh",
+  "item_replay": {
+   "script": "scripts/r6_replay_check.py",
+   "stride": 10,
+   "runs": 9,
+   "compared": 174,
+   "identical": 174,
+   "excluded_fields": "wall-clock timings and predictions_sha256 (a digest over predictions including timings; verified against stored predictions instead)",
+   "output": "reports/development_r6/replay_check.json"
+  }
+ },
+ "cumulative_model_requests": 1498,
+ "r6_model_requests": 417,
+ "r6_model_request_cap": 512,
+ "global_cap": 3072,
+ "offline_cpu_hours_upper": 18.0,
+ "offline_cpu_hours_note": "S runs 1.108+1.077+1.469 h wall x 4 workers = 14.6; inventory, EB-vs-XDC, tests, regeneration, replay < 3.4",
+ "model_server_hours": 0.42,
+ "incomplete_panels": [
+  "S intact panel 13 groups (< 20): sub24 primary (declared fallback)",
+  "S without-groups-seen-at-n8 contrast not computable (every evaluation group seen)",
+  "S exact-XDC gap only n <= 12"
+ ],
+ "tracks": {
+  "X": {
+   "implementation_status": "complete",
+   "evaluation_status": "complete",
+   "scientific_outcome": "supported_in_scope",
+   "claim": "XDC implements its stated prior exactly",
+   "cases": 216,
+   "relabelling_cases_per_base": 60,
+   "max_abs_difference": 2.9e-12,
+   "planted_defect": {
+    "cases_failing": 12,
+    "cases": 24,
+    "max_difference": 0.19
+   },
+   "defects": [],
+   "notes": [
+    "X-N1 probabilities() returns P(node=1); value-0 targets need 1-p (production refuses value 0)",
+    "X-N2 reviewer tests did not exercise h=2 with edits",
+    "X-N3 float error bound"
+   ],
+   "artifacts": [
+    "docs/R6_XDC_DERIVATION.md",
+    "reports/R6_XDC_AUDIT.md",
+    "tests/test_r6_xdc_oracle.py"
+   ]
+  },
+  "G6": {
+   "implementation_status": "complete (reviewer)",
+   "evaluation_status": "complete (analysed, not rerun)",
+   "scientific_outcome": "supported_in_scope",
+   "synthetic": {
+    "planned": 320,
+    "completed": 320,
+    "groups": 280,
+    "endpoint": "B16 Brier(gate)-Brier(xdc[cgh_flat])",
+    "estimate": 0.0149,
+    "ci95": [
+     0.0088,
+     0.0211
+    ],
+    "missingness_bounds": "equal to estimate (none missing)",
+    "scope": "four reuse-by-construction strata +0.0421 [0.0323,0.0524]; other four -0.0123 [-0.0193,-0.0053] (adverse); uniform_H -0.0384",
+    "locked_prediction": "≥ 0.02: size not met"
+   },
+   "external_fresh": {
+    "planned": 449,
+    "completed": 449,
+    "groups": 122,
+    "estimate": 0.0033,
+    "ci95": [
+     0.0012,
+     0.0055
+    ],
+    "sharing_part": [
+     0.0011,
+     [
+      -0.0002,
+      0.0023
+     ]
+    ],
+    "note": "31% constant nodes from clamping; non-constant reuse 2.3"
+   },
+   "artifacts": [
+    "reports/R6_GENERALIZATION.md",
+    "reports/development_r6/g_evaluation.json",
+    "reports/development_r6/g_external_fresh.json",
+    "reports/development_r6/g_evaluation_extras.json",
+    "reports/development_r6/g_external_fresh_extras.json"
+   ]
+  },
+  "S": {
+   "implementation_status": "complete",
+   "evaluation_status": "complete",
+   "scientific_outcome": "supported_in_scope",
+   "planned": 524,
+   "completed": 524,
+   "failed": 0,
+   "primary_panel": "sub24",
+   "primary_worlds": 113,
+   "primary_groups": 28,
+   "endpoint": "B8 Brier(flat[circuit])-Brier(xdc_eb[circuit]|a16|loo)",
+   "effect_direction": "positive favours sharing",
+   "estimate": 0.008665108801560574,
+   "ci95": [
+    0.003707067267011959,
+    0.014787572310077126
+   ],
+   "missingness_bounds": [
+    0.008665108801560574,
+    0.008665108801560574
+   ],
+   "fit_certificates": {
+    "fits": 227280,
+    "certified": 227280,
+    "tolerance_nats": 1e-06
+   },
+   "secondary": {
+    "intact_B8": [
+     -0.0037,
+     [
+      -0.0176,
+      0.0103
+     ]
+    ],
+    "sub12_B8": [
+     0.0011,
+     [
+      -0.0014,
+      0.0037
+     ]
+    ],
+    "sub48_B8_2_groups": [
+     0.0076,
+     [
+      0.0008,
+      0.0144
+     ]
+    ],
+    "growth_with_n": "not_supported",
+    "reuse_dose_response": "none (r=-0.05)",
+    "eb_minus_exact_xdc_sub12": {
+     "B4": "+0.0033 cgh_flat / +0.0043 gate (EB worse)",
+     "B8": "within ±0.0006",
+     "B16": "0.0000"
+    }
+   },
+   "defects": [
+    "S-D1 locked analyser omitted the declared exact-XDC secondary for gate/cgh_flat bases; computed post hoc by scripts/r6_s_supplementary.py"
+   ],
+   "artifacts": [
+    "reports/R6_SCALE.md",
+    "docs/R6S_DESIGN_LOCK.json",
+    "artifacts/r6s_source_manifest.json",
+    "reports/development_r6/s_evaluation.json",
+    "reports/development_r6/s_evaluation_supplementary.json",
+    "reports/development_r6/s_calibration_v2.json",
+    "reports/development_r6/eb_vs_xdc_n8.json"
+   ]
+  },
+  "A2": {
+   "implementation_status": "complete",
+   "evaluation_status": "complete",
+   "scientific_outcome": "inconclusive",
+   "worlds": 32,
+   "models": [
+    "qwen2.5:7b",
+    "mistral-small-3.2-24b-instruct"
+   ],
+   "requests": 417,
+   "cap": 512,
+   "invalid": 0,
+   "smoke_gate": "100% parsable (13/13, 12/12)",
+   "primary": {
+    "endpoint": "resolved@4 loop - control",
+    "qwen": [
+     0.031,
+     [
+      0.0,
+      0.094
+     ]
+    ],
+    "mistral": [
+     0.0,
+     [
+      0.0,
+      0.0
+     ]
+    ]
+   },
+   "secondary": {
+    "unsupported_definite_b4_loop_minus_control": {
+     "qwen": [
+      -0.41,
+      [
+       -0.59,
+       -0.25
+      ]
+     ],
+     "mistral": 0.0
+    },
+    "vs_EIG_loop": {
+     "qwen": [
+      -0.38,
+      [
+       -0.56,
+       -0.22
+      ]
+     ],
+     "mistral": 0.0
+    }
+   },
+   "outcome_note": "overclaiming removed (supported_in_scope for that secondary); investigation not improved",
+   "defects": [],
+   "artifacts": [
+    "docs/R6A2_DESIGN.md",
+    "reports/R6_AI_GATE_LOOP.md",
+    "reports/development_r6/a2_gate_loop.json"
+   ]
+  }
+ },
+ "release_verification": "see reports/RELEASE_CHECK_R6.md",
+ "confirmatory_authorized": false,
+ "confirmatory_run": false,
+ "freeze_record": false,
+ "paid_inference": false,
+ "weight_changes": false,
+ "independent_review_complete": false
+}

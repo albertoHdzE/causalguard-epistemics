@@ -1,0 +1,50 @@
+{
+ "runs": {
+  "r5-a-det-eval-v1": {
+   "compared": 7,
+   "different": [],
+   "identical": 7
+  },
+  "r5-g-eval-v1": {
+   "compared": 32,
+   "different": [],
+   "identical": 32
+  },
+  "r5-g-ext-intact-v1": {
+   "compared": 1,
+   "different": [],
+   "identical": 1
+  },
+  "r5-g-ext-transformed-v1": {
+   "compared": 16,
+   "different": [],
+   "identical": 16
+  },
+  "r5-m-eval-v1": {
+   "compared": 12,
+   "different": [],
+   "identical": 12
+  },
+  "r6-g-cal-v1": {
+   "compared": 7,
+   "different": [],
+   "identical": 7
+  },
+  "r6-g-eval-v1": {
+   "compared": 32,
+   "different": [],
+   "identical": 32
+  },
+  "r6-g-ext-fresh-v1": {
+   "compared": 45,
+   "different": [],
+   "identical": 45
+  },
+  "r6-s-cal-v2": {
+   "compared": 22,
+   "different": [],
+   "identical": 22
+  }
+ },
+ "stride": 10
+}

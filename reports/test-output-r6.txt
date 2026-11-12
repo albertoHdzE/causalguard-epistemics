@@ -1,0 +1,15 @@
+........................................................................ [ 14%]
+........................................................................ [ 29%]
+........................................................................ [ 44%]
+........................................................................ [ 59%]
+........................................................................ [ 74%]
+........................................................................ [ 89%]
+..........................................sssss......                    [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_upstream_parity.py:38: upstream unavailable: set CAUSALBOOL_ROOT to a checkout at 376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43
+SKIPPED [1] tests/test_upstream_parity.py:42: upstream unavailable: set CAUSALBOOL_ROOT to a checkout at 376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43
+SKIPPED [1] tests/test_upstream_parity.py:54: upstream unavailable: set CAUSALBOOL_ROOT to a checkout at 376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43
+SKIPPED [1] tests/test_upstream_parity.py:63: upstream unavailable: set CAUSALBOOL_ROOT to a checkout at 376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43
+SKIPPED [1] tests/test_upstream_parity.py:88: upstream unavailable: set CAUSALBOOL_ROOT to a checkout at 376a11ddf25063d49dc8f6cd98bbb3baf2e1cc43
+480 passed, 5 skipped in 223.01s (0:03:43)
+pytest exit 0

@@ -32,7 +32,7 @@ def world(arg):
                 continue
             ebs = {f"a{a:g}|{'loo' if loo else 'full'}": XDCEB(ev, D.K, base=b, vs=x.vs, a=a, loo=loo)
                    for a in EB_A_GRID for loo in (False, True)}
-            for qid, q in design.queries:
+            for _qid, q in design.queries:
                 y = D.outcome(inst.net, q)
                 row = {"stratum": stratum, "i": i, "B": B, "base": b, "h": q.horizon, "y": y,
                        "xdc": x.probabilities(q)["xdc"]}
