@@ -1,0 +1,91 @@
+{
+ "deepseek-r1-distill-qwen-32b": {
+  "P4": {
+   "screen_reasoning": 0,
+   "screen_reply": 0,
+   "with_reasoning": 0,
+   "with_turn2": 17,
+   "worlds": 18
+  }
+ },
+ "gemma-4-12b-it-mlx": {
+  "P4": {
+   "screen_reasoning": 0,
+   "screen_reply": 7,
+   "with_reasoning": 0,
+   "with_turn2": 18,
+   "worlds": 18
+  },
+  "P5f": {
+   "screen_reasoning": 0,
+   "screen_reply": 30,
+   "with_reasoning": 0,
+   "with_turn2": 30,
+   "worlds": 30
+  }
+ },
+ "google/gemma-3-4b": {
+  "P4": {
+   "screen_reasoning": 0,
+   "screen_reply": 8,
+   "with_reasoning": 0,
+   "with_turn2": 36,
+   "worlds": 36
+  },
+  "P5f": {
+   "screen_reasoning": 0,
+   "screen_reply": 27,
+   "with_reasoning": 0,
+   "with_turn2": 30,
+   "worlds": 30
+  }
+ },
+ "llama-3.3-70b-instruct": {
+  "P4": {
+   "screen_reasoning": 0,
+   "screen_reply": 12,
+   "with_reasoning": 0,
+   "with_turn2": 36,
+   "worlds": 36
+  },
+  "P5f": {
+   "screen_reasoning": 0,
+   "screen_reply": 30,
+   "with_reasoning": 0,
+   "with_turn2": 30,
+   "worlds": 30
+  }
+ },
+ "mistral-small-3.2-24b-instruct-2506-mlx": {
+  "P4": {
+   "screen_reasoning": 0,
+   "screen_reply": 4,
+   "with_reasoning": 0,
+   "with_turn2": 36,
+   "worlds": 36
+  },
+  "P5f": {
+   "screen_reasoning": 0,
+   "screen_reply": 28,
+   "with_reasoning": 0,
+   "with_turn2": 30,
+   "worlds": 30
+  }
+ },
+ "qwen2.5:7b": {
+  "P4": {
+   "screen_reasoning": 0,
+   "screen_reply": 12,
+   "with_reasoning": 0,
+   "with_turn2": 36,
+   "worlds": 36
+  },
+  "P5f": {
+   "screen_reasoning": 0,
+   "screen_reply": 30,
+   "with_reasoning": 0,
+   "with_turn2": 30,
+   "worlds": 30
+  }
+ }
+}

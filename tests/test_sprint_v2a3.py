@@ -242,3 +242,18 @@ def test_merge_by_model_unions_and_refuses_duplicates():
     assert m[0]["run_ids"] == ["v1", "b1"]
     with pytest.raises(SystemExit):
         merge_by_model([run("v1", ["a"], ["a"]), run("b1", ["a"], ["a"])])
+
+
+def test_check_errors_integer_cids_only_in_the_sensitivity():
+    from causalguard.sprint.episode import check_errors_from_raw
+    raw = '{"answers": [], "check_errors": [{"cid": 4, "line": "x"}, {"cid": "c1", "line": "y"}, {"cid": true, "line": "z"}]}'
+    assert check_errors_from_raw(raw) == [{"cid": "c1", "line": "y"}]                     # the locked parser
+    assert check_errors_from_raw(raw, int_cids=True) == [{"cid": "c4", "line": "x"}, {"cid": "c1", "line": "y"}]
+
+
+def test_p5_detection_reports_per_claim_hits():
+    from causalguard.sprint import scoring as S
+    alt = {"c0": {"lines": ["step 1: A reads B=1; row #02 shows A -> 1."], "row": 2, "node": "A", "kind": "x"}}
+    d = S.p5_detection_world("P5f", ["c0"], [{"cid": "c0", "line": "step 1: A reads B=1; row #02 shows A -> 1."}],
+                             alt)
+    assert d["hits"] == {"c0": {"exact": True, "lenient": True}} and d["exact"] == 1.0

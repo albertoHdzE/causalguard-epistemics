@@ -44,10 +44,15 @@ def _turn2(rec: dict) -> tuple[str, str]:
     return t[1].get("raw_output") or "", t[1].get("reasoning") or ""
 
 
-def screen_and_sample(main_runs: list[str], p5_runs: list[str], out: str) -> dict:
+def screen_and_sample(main_runs: list[str], p5_runs: list[str], out: str, add: bool = False) -> dict:
+    """``add``: the sheet exists; append only the (model, condition) cells it does not hold yet (same hash rule;
+    existing rows and codes untouched).  Used for runs that finish after the first draw (r1 P5, online)."""
     from .analysis import load
     res: dict = defaultdict(dict)
     rows = []
+    p = Path(out) / "reasoning_coding.csv"
+    old = list(csv.DictReader(p.open())) if add and p.exists() else []
+    have_cells = {(r["model"], r["condition"]) for r in old}
     for runs, cond in ((main_runs, "P4"), (p5_runs, "P5f")):
         for r in load(runs):
             recs = [x for x in r["records"] if x["episode"]["assignment"]["condition"] == cond]
@@ -57,20 +62,28 @@ def screen_and_sample(main_runs: list[str], p5_runs: list[str], out: str) -> dic
             with_reason = sum(bool(_turn2(x)[1]) for x in have)
             res[r["model"]][cond] = {"worlds": len(recs), "with_turn2": len(have), "screen_reply": hit_reply,
                                      "with_reasoning": with_reason, "screen_reasoning": hit_reason}
+            if (r["model"], cond) in have_cells:
+                continue
             for x in sorted(have, key=lambda x: _key(r["model"], x["wkey"]))[:N_SAMPLE]:
                 rows.append({"model": r["model"], "condition": cond, "wkey": x["wkey"], "run_id": r["run_id"],
                              "hash": _key(r["model"], x["wkey"])[:12], **{c: "" for c in CODES}, "quote": "",
                              "note": ""})
     o = Path(out)
     o.mkdir(parents=True, exist_ok=True)
-    (o / "reasoning_screen.json").write_text(json.dumps(res, indent=1, sort_keys=True) + "\n")
-    p = o / "reasoning_coding.csv"
-    if p.exists():
-        raise SystemExit(f"{p} exists; the sample is drawn once")
+    sp = o / "reasoning_screen.json"
+    prev = json.loads(sp.read_text()) if add and sp.exists() else {}
+    for m, v in res.items():
+        prev.setdefault(m, {}).update(v)
+    sp.write_text(json.dumps(prev, indent=1, sort_keys=True) + "\n")
+    if p.exists() and not add:
+        raise SystemExit(f"{p} exists; the sample is drawn once (use --add for cells not yet drawn)")
+    if not rows:
+        print("no new cells")
+        return dict(res)
     with p.open("w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=list(rows[0]))
         w.writeheader()
-        w.writerows(rows)
+        w.writerows(old + rows)
     print(f"screen: {sum(len(v) for v in res.values())} model x condition cells; sample {len(rows)} rows -> {p}")
     return dict(res)
 
@@ -97,9 +110,10 @@ def main(argv=None) -> int:
     ap.add_argument("--main-run", action="append", default=[])
     ap.add_argument("--p5-run", action="append", default=[])
     ap.add_argument("--out", default="reports/sprint_all")
+    ap.add_argument("--add", action="store_true")
     a = ap.parse_args(argv)
     if a.step == "sample":
-        screen_and_sample(a.main_run, a.p5_run, a.out)
+        screen_and_sample(a.main_run, a.p5_run, a.out, a.add)
     else:
         print(json.dumps(summary(a.out), indent=1))
     return 0

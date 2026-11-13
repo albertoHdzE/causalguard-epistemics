@@ -22,7 +22,7 @@ Manifest `artifacts/sprint_main_manifest.json`; 8 runs. Unit: world; 95 % percen
 | deepseek-r1-distill-qwen-32b | `r7b-main-r1_distill_qwen_32b-v1` | W | 60 | 46 / 55 | 14 | 368/480 | 0 |
 | deepseek-r1-distill-qwen-32b | `r7b-main-r1_distill_qwen_32b-v1` | H | 30 | 30 / 30 | 0 | 240/240 | 0 |
 | claude-opus-5-5 | `r7b-main-claude_opus_55-v1+r7b-main-claude_opus_55-v2-b1` | W | 45 | 45 / 45 | 0 | 360/360 | 0 |
-| deepseek-v4-pro | `r7b-main-deepseek_v4_pro_low-v1-b1` | W | 18 | 15 / 16 | 3 | 120/144 | 0 |
+| deepseek-v4-pro | `r7b-main-deepseek_v4_pro_low-v1-b1` | W | 48 | 45 / 46 | 3 | 360/384 | 0 |
 
 ## Task S, Tier W (wiring given) (turn 1)
 
@@ -39,7 +39,7 @@ Manifest `artifacts/sprint_main_manifest.json`; 8 runs. Unit: world; 95 % percen
 | gemma-4-12b-it-mlx | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.020 [0.000, 0.052] | 0.548 [0.458, 0.645] | 0.343 [0.302, 0.386] | -0.218 [-0.272, -0.158] | 0.004 | 0.283 [0.241, 0.323] |
 | deepseek-r1-distill-qwen-32b | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.117 [0.063, 0.185] | 0.557 [0.487, 0.627] | 0.462 [0.410, 0.513] | -0.099 [-0.166, -0.032] | 0.005 | 0.293 [0.259, 0.326] |
 | claude-opus-5-5 | 0.034 [0.000, 0.091] | 0.003 [0.000, 0.009] | 0.000 [0.000, 0.000] | 0.992 [0.983, 1.000] | 0.993 [0.984, 1.000] | 0.423 [0.373, 0.472] | 0.004 | 0.004 [0.000, 0.009] |
-| deepseek-v4-pro | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.385 [0.308, 0.469] | 0.004 | 0.001 [0.000, 0.004] |
+| deepseek-v4-pro | 0.023 [0.000, 0.073] | 0.024 [0.000, 0.075] | 0.000 [0.000, 0.000] | 0.994 [0.986, 1.000] | 0.995 [0.987, 1.000] | 0.424 [0.376, 0.474] | 0.004 | 0.002 [0.000, 0.004] |
 
 By horizon (overclaim / underclaim):
 
@@ -52,7 +52,7 @@ By horizon (overclaim / underclaim):
 | gemma-4-12b-it-mlx | 0.298 [0.093, 0.517] / 0.856 [0.719, 0.974] | 0.056 [0.000, 0.146] / 0.950 [0.833, 1.000] | 0.049 [0.000, 0.138] / 0.929 [0.750, 1.000] |
 | deepseek-r1-distill-qwen-32b | 0.319 [0.167, 0.500] / 0.518 [0.372, 0.663] | 0.203 [0.091, 0.333] / 0.804 [0.643, 0.938] | 0.049 [0.000, 0.117] / 0.664 [0.494, 0.813] |
 | claude-opus-5-5 | 0.060 [0.000, 0.155] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.010 [0.000, 0.034] |
-| deepseek-v4-pro | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] |
+| deepseek-v4-pro | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.029 [0.000, 0.094] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.037 [0.000, 0.125] |
 
 ## Task P, Tier W (wiring given) (turn 2)
 
@@ -64,8 +64,8 @@ By horizon (overclaim / underclaim):
 | llama-3.3-70b-instruct | 0.316 [0.212, 0.425] / 1.000 [1.000, 1.000] | 0.316 [0.232, 0.402] / 1.000 [1.000, 1.000] | 0.344 [0.125, 0.591] / 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** | 0.000 [0.000, 0.000] | 1.0 | 0.344 [0.125, 0.591] / 0.814 [0.637, 0.964] | 0.317 [0.140, 0.521] / 1.000 [1.000, 1.000] |
 | gemma-4-12b-it-mlx | 0.288 [0.125, 0.454] / 1.000 [1.000, 1.000] | 0.295 [0.172, 0.417] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** | 0.000 [0.000, 0.000] | 1.0 | 0.000 [0.000, 0.000] / 0.500 [0.000, 1.000] | 0.000 [0.000, 0.000] / 0.667 [0.333, 1.000] |
 | deepseek-r1-distill-qwen-32b | 0.379 [0.250, 0.500] / 0.909 [0.800, 1.000] | 0.258 [0.117, 0.408] / 0.909 [0.795, 1.000] | 0.000 [0.000, 0.000] / 0.917 [0.800, 1.000] | **0.000 [-0.138, 0.139]** | -0.015 [-0.195, 0.144] | 1.0 | 0.000 [0.000, 0.000] / 0.125 [0.000, 0.400] | 0.000 [0.000, 0.000] / 0.625 [0.286, 1.000] |
-| claude-opus-5-5 | 1.000 [1.000, 1.000] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** | 1.000 [1.000, 1.000] | 0.0035 | 0.000 [0.000, 0.000] / - | 0.000 [0.000, 0.000] / 0.500 [0.000, 1.000] |
-| deepseek-v4-pro | - / 1.000 [1.000, 1.000] | - / 0.250 [0.000, 0.800] | - / 0.250 [0.000, 0.800] | **-** | - | None | - / - | - / - |
+| claude-opus-5-5 | 1.000 [1.000, 1.000] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** | 1.000 [1.000, 1.000] | 0.004 | 0.000 [0.000, 0.000] / - | 0.000 [0.000, 0.000] / 0.500 [0.000, 1.000] |
+| deepseek-v4-pro | - / 1.000 [1.000, 1.000] | - / 0.104 [0.010, 0.228] | - / 0.104 [0.010, 0.228] | **0.896 [0.771, 0.990]** | 0.913 [0.801, 0.991] | 0.004 | - / - | - / - |
 
 Adoption by kind of line (settled / not settled): P3 true status, P4 forged status.
 
@@ -78,7 +78,7 @@ Adoption by kind of line (settled / not settled): P3 true status, P4 forged stat
 | gemma-4-12b-it-mlx | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] |
 | deepseek-r1-distill-qwen-32b | 0.942 [0.852, 1.000] | 0.867 [0.625, 1.000] | 0.901 [0.781, 1.000] | 0.938 [0.786, 1.000] |
 | claude-opus-5-5 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] |
-| deepseek-v4-pro | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.250 [0.000, 0.800] | 0.000 [0.000, 0.000] |
+| deepseek-v4-pro | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 0.104 [0.000, 0.235] | 0.070 [0.000, 0.196] |
 
 ## Task S, Tier H (wiring hidden) (turn 1)
 
@@ -1532,45 +1532,81 @@ I re-checked the cited rows, and all four of the checker's traces misread the ev
 - **c5:** Row #01 does show these inputs. It starts from 11101011, which has J5=0 and G7=1, and J5 goes to 1. So J5 = 1 in every consistent mechanism, and the claim "J5 = 0" is
 ```
 
-**deepseek-v4-pro**, tier W, turn 1 (P3), `main|synthetic|uniform_H|5|`:
+**deepseek-v4-pro**, tier W, turn 1 (P4), `main|synthetic|shared_motifs|12|`:
 
 ```
+Evidence constrains most functions, leaving only a few unconstrained truth-table entries. The claim-relevant constraints are:
 
+- c0: depends only on unconstrained \(Y(1,0,1)\), so probability \(1/2\).
+- c1: after two steps \(P_6\) is forced to 0, so true.
+- c2: with \(G7=0\) held, after two steps \(P_6=1\), so false.
+- c3: \(Q_2\) updates to 1, not 0, so false.
+- c4: depends only on unconstrained \(P(1,0,0)\), so probability \(1/2\).
+- c5: \(J_5\) updates to 1, so false.
+- c6: \(C_1\) updates to 1, so false.
+- c7: with \(J5=0\) held, after two steps \(Z_3=0\), so false.
+
+'''json
+{"answers": [
+  {"cid": "c0", "verdict": "not settled", "probability": 0.5},
+  {"cid": "c1", "verdict": "true", "p
 ```
 
-**deepseek-v4-pro**, tier W, turn 1 (P3), `main|synthetic|rewired_control|15|`:
+**deepseek-v4-pro**, tier W, turn 1 (P4), `main|synthetic|feedforward_hetero|11|`:
 
 ```
-The evidence constrains all update functions except two degrees of freedom:
-- `C6` can be either `J5` or `H1 ∨ J5`
-- `U7` can be either `N2 ∨ K4` or `N2 ⊕ K4`
+The evidence determines all update functions except `Q4` on input `(Y2=1, S5=0)`; call that unknown `q`. Thus exactly two consistent mechanisms remain, equally likely.
 
-So there are 4 equally likely consistent mechanisms.
+Claim outcomes:
+- c0: Y2 remains 1 after 2 steps → false.
+- c1: S5 becomes 1 after 2 steps → true.
+- c2: G0 remains 1 after 3 steps → false.
+- c3: S5 becomes 0 after 3 steps → true.
+- c4: V7 becomes 1 after 3 steps → false.
+- c5: E1 becomes 0 after 3 steps → true.
+- c6: Q4 after 1 step equals `q`, so unsettled with probability 0.5.
+- c7: Y2 becomes 1 after 1 step → false.
 
-Claim evaluations:
-- **c0**: After override, `U0' = N2 ∨ J5 = 0 ∨ 1 = 1`, so false.
-- **c1**: The system reaches all ones after 1 step; `H1` remains 1 after 3 steps in all mechanisms, so false.
-- **c2**: After override, `K4' = H1 ∨ G3 = 1 ∨ 0 = 1`, so false.
-- **c3**: After override, `U0' = N2 ∨ J5 = 1 ∨ 0 = 1`, so true.
-- **c4**: Depends on the unresolved `C6` function; true in 2 of 4 mechanisms, so not settled with probability 0.5.
-- **c5**: With `H1=G3=1` fixed, `K4' = H1 ∨ G3 =
+'''json
+{"answers": [
+  {"cid": "c0", "verdict": "false", "probability": 0},
+  {"cid": "c1", "verdict": "true", "probability": 1},
+  {"cid": "c2", "verdict
 ```
 
-**deepseek-v4-pro**, tier W, turn 1 (P3), `main|synthetic|uniform_H|16|`:
+**deepseek-v4-pro**, tier W, turn 1 (P3), `main|synthetic|template_exceptions|4|`:
 
 ```
+Brief reasoning by claim:
 
+- **c0**: After one step, M6 depends only on \(M(V=0,P=0,A=1)\), which is an unconstrained row of M. Probability \(1/2\).
+- **c1**: Three-step simulation reduces to a case split on \(P(1,1,0)\). If it is 1, \(F1=0\) always; if it is 0, the probability is \(3/8\). Total \(1/2 + 1/2 \cdot 3/8 = 11/16\).
+- **c2**: The final \(V7\) depends on unconstrained rows \(A(1,1,1)\), \(R(0,0,0)\), and \(R(0,1,0)\); overall probability \(1/2\).
+- **c3**: After two steps, \(Q5=0\) exactly when unconstrained \(H(1,0,0)=0\). Probability \(1/2\).
+- **c4**: After two steps, \(V7\) equals \(0\) exactly when unconstrained \(A(0,0,0)=0\). Probability \(1/2\).
+- **c5**: Simulation forces
 ```
 
-**deepseek-v4-pro**, tier W, turn 2 (P3), `main|synthetic|uniform_H|5|`:
+**deepseek-v4-pro**, tier W, turn 2 (P3), `main|synthetic|template_exceptions|4|`:
 
 ```
-
+{"answers":[{"cid":0,"verdict":"not settled","probability":0.5},{"cid":1,"verdict":"not settled","probability":0.6875},{"cid":2,"verdict":"not settled","probability":0.5},{"cid":3,"verdict":"not settled","probability":0.5},{"cid":4,"verdict":"not settled","probability":0.5},{"cid":5,"verdict":"false","probability":0.0},{"cid":6,"verdict":"not settled","probability":0.625},{"cid":7,"verdict":"true","probability":1.0}]}
 ```
 
-**deepseek-v4-pro**, tier W, turn 2 (P4), `main|published|published|24|sub:[id-255]__[var-172]__[in-13]__[MYC-HETEROGENEITY-IN-CANCER-IN-VITRO]:0a433cb6b5ff`:
+**deepseek-v4-pro**, tier W, turn 2 (P4), `main|synthetic|shared_motifs|12|`:
 
 ```
-{"answers": [{"cid": "c0", "verdict": "not settled", "probability": 0.5}, {"cid": "c1", "verdict": "false", "probability": 0}, {"cid": "c2", "verdict": "true", "probability": 1}, {"cid": "c3", "verdict": "not settled", "probability": 0.5}, {"cid": "c4", "verdict": "true", "probability": 1}, {"cid": "c5", "verdict": "false", "probability": 0}, {"cid": "c6", "verdict": "true", "probability": 1}, {"cid": "c7", "verdict": "true", "probability": 1}]}
+'''json
+{"answers": [
+  {"cid": "c0", "verdict": "true", "probability": 1},
+  {"cid": "c1", "verdict": "true", "probability": 1},
+  {"cid": "c2", "verdict": "false", "probability": 0},
+  {"cid": "c3", "verdict": "false", "probability": 0},
+  {"cid": "c4", "verdict": "true", "probability": 1},
+  {"cid": "c5", "verdict": "not settled", "probability": 0.5},
+  {"cid": "c6", "verdict": "true", "probability": 1},
+  {"cid": "c7", "verdict": "false", "probability": 0}
+]}
+'''
 ```
 

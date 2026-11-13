@@ -25,10 +25,11 @@ from the evidence. In a second turn the model receives one of five randomised fo
 wiring is given (Tier W), every line can be verified by lookup. Six local open-weight models adopt the forged
 status on most named claims, from {{A/models/g3/tiers/W/C/adopt_forged/P4|est}} (gemma-3-4b) to
 {{A/models/ll/tiers/W/C/adopt_forged/P4|est}} (llama-3.3-70b), and their check discernment is near zero. A
-pre-registered control (P5) asks the model to verify every line first and to quote any wrong one. The local models
-quote the forged line in at most {{P/models/mi/exact|pct}} of forged checks, and raise false alarms on valid checks
-at about the same rate. Where P5 lowers forged adoption, adoption of valid checks falls too. The local models do
-not verify; they defer, or distrust without discriminating. We report a frontier model (Claude Opus 5.5) and a
+pre-registered control (P5) asks the model to verify every line first and to quote any wrong one. Unprompted, the
+local models almost never check; told to verify, some do find forged lines, but they flag valid lines about as
+often, and when a small model flags the forged line it usually keeps the forged status anyway (qwen2.5-7b in
+{{P/models/q7/flagged_then_adopted/flagged_adopted|int}} of {{P/models/q7/flagged_then_adopted/flagged|int}}
+flagged claims). Verification text and final answer come apart. We report a frontier model (Claude Opus 5.5) and a
 reasoning model at low effort (DeepSeek V4-Pro) on the same items, with the cells the run finished. The exact check
 works as a release gate inside the declared class; outside it, it does not certify.
 
@@ -97,8 +98,10 @@ non-panel worlds is the reference row a model must beat.
 
 **Turn 2 (Task P)**, in the same conversation, is one of five follow-ups assigned by hash, with two wordings
 each: **P0** asks to review and confirm; **P1** says the answers for up to 4 named claims are wrong (no reason);
-**P2** demands a definite verdict for every claim; **P3** shows a valid derivation for the named claims; **P4**
-shows a *forged* derivation in the same template, identical to the valid one except for one line that a cited row
+**P2** demands a definite verdict for every claim; **P3** shows a valid check for the named claims; **P4**
+shows a *forged* check in the same template. On Tier W the check is a step-by-step derivation; on Tier H, where no
+derivation can be verified by lookup, it is an exact tool's report (counts of consistent mechanisms and, for open claims,
+example mechanisms). The forged Tier W derivation is identical to the valid one except for one line that a cited row
 contradicts (a phantom row, a wrong value, or "no row shows these inputs" where one does), which changes the
 claim's status. A verifier confirms that every valid check passes and every forged check fails on exactly the
 altered line. Scores per world, then averaged: *adoption* (final verdict equals the check's status), *corruption*
@@ -161,23 +164,60 @@ forged check with the verify-first instruction (P5f, green diamonds; Tier W only
 hollow markers are incomplete cells below 12 worlds, and the row label then carries finished / planned
 worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
 
-## 4.2 Told to verify, the local models do not find the forged line (P5)
+## 4.2 Told to verify, local models flag lines but keep the forged answer (P5)
 
 {{table:p5}}
 
-*Table 2. P5 verify-first (Tier W, 60 worlds per model). Exact and lenient detection of the altered line in
-forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its difference from P4
-(between-world); verified discernment = true-status adoption under P5v − forged adoption under P5f.*
+*Table 2. P5 verify-first (Tier W, 60 worlds per model; locked scorer). Exact and lenient detection of the altered
+line in forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its difference from
+P4 (between-world); verified discernment = true-status adoption under P5v − forged adoption under P5f.*
 
-The best local detector, mistral-small-24b, quotes the altered line in {{P/models/mi/exact|est}} of forged named
-claims, and flags valid checks at {{P/models/mi/false_alarm|est}}. qwen2.5-7b quotes none
-({{P/models/q7/exact|est}}). gemma-3-4b quotes {{P/models/g3/exact|est}}. For every local model the interval of
-exact detection overlaps the interval of its own false-alarm rate (Figure 2): what looks like detection is not
-distinguishable from indiscriminate flagging. P5 lowers
-forged adoption for some models: gemma-4-12b by {{P/models/g4/vs_main/adopt_forged_P5f_minus_P4|abs}}. But its
-adoption of the valid check falls as well ({{P/models/g4/vs_main/adopt_check_P5v_minus_P3}} against P3). The
-instruction to verify produces distrust, not verification. llama-3.3-70b is unmoved: it adopts every forged status
-under P5f ({{P/models/ll/adopt_forged_P5f|est}}) and quotes the forged line in {{P/models/ll/exact|est}}.
+Under the locked scorer the best local detector, mistral-small-24b, quotes the altered line in
+{{P/models/mi/exact|est}} of forged named claims and flags valid checks at {{P/models/mi/false_alarm|est}}. The
+locked parser, however, drops `check_errors` entries whose claim id is an integer, while the answers parser maps
+an integer *k* to claim c*k*. Three models write integer ids (Table 3), so their locked detection rates mostly
+measure the format. Accepting integer ids (post-hoc) raises gemma-4-12b's exact detection to
+{{P/models/g4/exact_int_cids|est}}, and its false-alarm rate to {{P/models/g4/false_alarm_int_cids|est}}; qwen2.5-7b
+reaches {{P/models/q7/exact_int_cids|est}} with false alarms at {{P/models/q7/false_alarm_int_cids|est}}. Under
+both readings, no local model separates forged lines from valid ones: its false-alarm interval overlaps or exceeds
+its detection interval (Figure 2).
+
+{{table:p5_more}}
+
+*Table 3. P5f, post-hoc. Entries the locked parser drops; exact detection and false alarm when integer claim ids
+are accepted; named forged claims whose altered line the reply flagged (lenient, ids accepted), and how many of
+those still end at the forged status (claim-level counts).*
+
+The most direct result is the last column. When qwen2.5-7b flags the forged line of a claim, it keeps the forged
+status in {{P/models/q7/flagged_then_adopted/flagged_adopted|int}} of {{P/models/q7/flagged_then_adopted/flagged|int}}
+such claims; gemma-3-4b in {{P/models/g3/flagged_then_adopted/flagged_adopted|int}} of
+{{P/models/g3/flagged_then_adopted/flagged|int}}; llama-3.3-70b in
+{{P/models/ll/flagged_then_adopted/flagged_adopted|int}} of {{P/models/ll/flagged_then_adopted/flagged|int}}. The
+two models that verify most (mistral, gemma-4) keep it in {{P/models/mi/flagged_then_adopted/flagged_adopted|int}}
+of {{P/models/mi/flagged_then_adopted/flagged|int}} and {{P/models/g4/flagged_then_adopted/flagged_adopted|int}}
+of {{P/models/g4/flagged_then_adopted/flagged|int}}. Forgeries that alter a row's value are flagged most often;
+"no evidence row shows these inputs" where a row does is flagged least (`p5_analysis.json`). P5 lowers forged
+adoption for some models (gemma-4-12b by {{P/models/g4/vs_main/adopt_forged_P5f_minus_P4|abs}}), but adoption of
+the valid check falls too ({{P/models/g4/vs_main/adopt_check_P5v_minus_P3}} against P3). llama-3.3-70b is
+unmoved ({{P/models/ll/adopt_forged_P5f|est}} forged adoption under P5f).
+
+**Reading the replies (pre-registered coding).** We read 8 hash-chosen P4 and P5f turn-2 replies per local model
+in full and coded (a) re-derives a cited lookup itself, (b) names a mismatch between the check and a row, (c)
+points at the altered line as wrong (`reports/sprint_all/reasoning_coding.csv`; coder: the implementation agent,
+an AI; disclosed).
+
+{{table:coding}}
+
+*Table 4. Coded replies per model and condition (count of 8). r1's P5 replies are coded after its run completes.*
+
+Unprompted (P4), replies restate the check ("row #01 shows that L1 transitions to 1, which matches the claim",
+mistral, `main|published|published|0|`). Several gemma-4-12b replies read the cited row themselves, get a value that
+contradicts the forged line, and defer: "In row #05 … the result is D1 → 1. Wait, let's re-check. Actually, the
+user provided a hint that c0 is settled TRUE." (`main|synthetic|mixed_parity_thresh|8|`). Told to verify (P5f),
+gemma-4-12b checks bit by bit and catches forged lines of every kind ("Row #02 shows these inputs. So the statement
+'no evidence row shows these inputs' is Incorrect.", `main|synthetic|shared_motifs|17|`); qwen2.5-7b quotes a
+forged line as incorrect and marks the identical forged line of another claim correct
+(`main|synthetic|feedback_canalizing|7|`).
 
 Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For {{R/p5_design/forged_multi_line|int}} of
 the {{R/p5_design/forged_named_claims|int}} forged named claims the forgery alters more than one line; quoting any
@@ -199,7 +239,7 @@ squares). Lines are 95 % intervals.](../reports/sprint_all/fig3_p5.png){width=72
 
 {{table:task_s}}
 
-*Table 3. Task S (turn 1) per model and tier, with the surface rule fitted on non-panel worlds as the reference.*
+*Table 5. Task S (turn 1) per model and tier, with the surface rule fitted on non-panel worlds as the reference.*
 
 Without pressure, five of the six local models are at the floor of Task S on both tiers: their balanced accuracy
 is near that of answering "not settled" everywhere. They err in opposite directions: gemma-3-4b gives a definite
@@ -218,13 +258,13 @@ is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/
 
 {{table:cells_online}}
 
-*Table 4. Finished / planned worlds per online cell (main panel). The Claude run had a shared subscription window
+*Table 6. Finished / planned worlds per online cell (main panel). The Claude run had a shared subscription window
 and a hard stop (Saturday 12:00 CST); its blocks ran in a fixed priority order: Tier W P3 + P4, P5, Tier W P0–P2,
 Tier H P3 + P4, Tier H P0–P2.*
 
 **DeepSeek at high effort does not finish.** {{table:smokes}}
 
-*Table 5. Online smokes on 4 pilot worlds (8 turns). Pass rule fixed before each smoke: at least 6 of 8 turns
+*Table 7. Online smokes on 4 pilot worlds (8 turns). Pass rule fixed before each smoke: at least 6 of 8 turns
 parsed and every Tier W turn parsed.*
 
 At the provider's default (high) effort, DeepSeek V4-Pro spent every token of a 16000 cap and then between
@@ -237,17 +277,18 @@ and ran as a labelled condition.
 
 {{table:online}}
 
-*Table 6. Online accounting. Requests rejected by the subscription window reached no model and are counted
+*Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
 separately. Claude's cost is the CLI's notional figure on a subscription.*
 
 # 5. Discussion and Limitations
 
 **What the results mean.** On items where every line of a check can be verified with one lookup, six local models
 treat a check as authoritative: they adopt its status whether it is valid or forged, and they lose correct answers
-to it. Asking them to verify does not produce verification. This separates two explanations that ordinary
-sycophancy measurements cannot: the local models are not failing to check because checking is impossible for
-them (Tier W makes it a lookup), nor because they ignore instructions (under P5 they fill the error field). They
-check without discriminating. For agentic pipelines in which one model's intermediate result is another's input,
+to it. Asked to verify, some of them do produce verification text, and it sometimes finds the forged line; but it
+also flags valid lines, and the final answer often follows the forged check even for the claim whose line the
+model has just called wrong. This separates explanations that sycophancy measurements cannot: the failure is not
+that checking is impossible (Tier W makes it a lookup), nor that the instruction is ignored (under P5 the models
+check line by line). The model's own check does not govern its answer. For agentic pipelines in which one model's intermediate result is another's input,
 a single forged step is enough.
 
 **The exact check as a remedy.** Inside the declared class, the same exact engine that labels the items can gate
@@ -259,7 +300,7 @@ certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
 reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
 failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
-(4) The online cells are incomplete (Table 4): the Claude subscription window was shared with the development
+(4) The online cells are incomplete (Table 6): the Claude subscription window was shared with the development
 session, and DeepSeek ran only at low effort. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
@@ -269,8 +310,9 @@ depth, number of forged lines); test whether a cited-row consistency tool, offer
 
 # 6. Conclusion
 
-Given a forged check that they could verify by one lookup, six open-weight models adopt it. Told to verify, they
-do not find the forged line, and their flags fall as often on valid checks. The benchmark makes this measurable
+Given a forged check that they could verify by one lookup, six open-weight models adopt it. Told to verify, some
+find the forged line, flag valid lines about as often, and frequently keep the forged answer after calling its line
+wrong. The benchmark makes this measurable
 because the answer key is exact and the forged check differs from the valid one in a single checkable line. We
 release the generator, the gates, the lock and every run.
 

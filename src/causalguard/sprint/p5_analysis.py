@@ -57,7 +57,9 @@ def p5_worlds(run: dict, man: dict) -> list[dict]:
         # D104(i), sensitivity: only the named claims whose forgery alters exactly one line
         d1 = S.p5_detection_world(x["condition"], [c for c in x["named"] if len(alt[c]["lines"]) == 1], ce, alt) \
             if alt else None
-        out.append({**w, "D": d, "D_single_line": d1, "contradiction": contradiction(rec["episode"].get("followup", ""))
+        # D111 post-hoc sensitivity: integer claim ids in check_errors accepted (the locked parser drops them)
+        di = S.p5_detection_world(x["condition"], x["named"], check_errors_from_raw(raw2, int_cids=True), alt)
+        out.append({**w, "D": d, "D_single_line": d1, "D_int_cids": di, "contradiction": contradiction(rec["episode"].get("followup", ""))
                     if x["condition"] == "P5f" else None,
                     "reasoning_chars": sum(len(t.get("reasoning") or "") for t in turns)})
     return out
@@ -90,6 +92,35 @@ def main_contradiction(main_recs: list[dict], main_w: list[dict], B: int) -> dic
     return out
 
 
+def flagged_then_adopted(recs: list[dict], ws: list[dict], man: dict) -> dict:
+    """D112 (post-hoc): over P5f named claims with a valid final answer, split by whether the reply flagged that
+    claim's altered line (lenient hit, integer claim ids accepted as in D77): how many end at the forged status.
+    Also the flagged share by forgery kind (phantom_row / wrong_value / hidden_row).  Claim-level counts (no
+    interval)."""
+    items = {x["wkey"]: x for x in man["items"]}
+    k = {"flagged": 0, "flagged_adopted": 0, "not_flagged": 0, "not_flagged_adopted": 0, "by_kind": {}}
+    alt_cache: dict = {}
+    for rec, w in zip(recs, ws):
+        x = items[rec["wkey"]]
+        if x["condition"] != "P5f" or not (w.get("D_int_cids") or {}).get("valid"):
+            continue
+        turns = rec["episode"]["turns"]
+        for c in x["named"]:
+            a = turns[1]["answers"].get(c) if len(turns) > 1 else None
+            if not a:
+                continue
+            adopted = a["verdict"] == x["forged_status"][c]
+            f = "flagged" if w["D_int_cids"]["hits"][c]["lenient"] else "not_flagged"
+            k[f] += 1
+            k[f + "_adopted"] += adopted
+            if rec["wkey"] not in alt_cache:
+                alt_cache[rec["wkey"]] = altered(x, man["assign_salt"])
+            kb = k["by_kind"].setdefault(alt_cache[rec["wkey"]][c]["kind"], {"claims": 0, "flagged": 0})
+            kb["claims"] += 1
+            kb["flagged"] += f == "flagged"
+    return k
+
+
 def model_p5(ws: list[dict], main_w: list[dict] | None, B: int, main_planned: dict | None = None) -> dict:
     res = {"health": {"worlds": len(ws), "error_worlds": sum(w["status"] != "ok" for w in ws),
                       "parsed_t2": sum(w["parsed_t2"] for w in ws),
@@ -107,6 +138,12 @@ def model_p5(ws: list[dict], main_w: list[dict] | None, B: int, main_planned: di
     res["corruption_P5f"] = S.bootstrap(ws, S.c_mean("corruption", "P5f"), B=B)
     res["verified_discernment"] = S.bootstrap(ws, _c_diff("adopt_check", "P5v", "adopt_forged", "P5f"), B=B,
                                               by="condition")
+    res["exact_int_cids"] = S.bootstrap(ws, _d_mean_where("exact", "P5f", "D_int_cids"), B=B)
+    res["lenient_int_cids"] = S.bootstrap(ws, _d_mean_where("lenient", "P5f", "D_int_cids"), B=B)
+    res["false_alarm_int_cids"] = S.bootstrap(ws, _d_mean_where("false_alarm", "P5v", "D_int_cids"), B=B)
+    res["health"]["check_errors_entries"] = sum((w["D"].get("counts") or {}).get("entries", 0) for w in ws)
+    res["health"]["check_errors_entries_int_cids_accepted"] = sum(
+        (w["D_int_cids"].get("counts") or {}).get("entries", 0) for w in ws)
     res["exact_single_line"] = S.bootstrap(ws, _d_mean_where("exact", "P5f", "D_single_line"), B=B)
     res["lenient_single_line"] = S.bootstrap(ws, _d_mean_where("lenient", "P5f", "D_single_line"), B=B)
     for flag in (True, False):
@@ -201,6 +238,7 @@ def analyze(p5_runs: list[str], main_runs: list[str], out: str, B: int = S.B_DEF
         ws = p5_worlds(r, man)
         mr = mains.get(r["model"])
         extra = {"P4_contradiction": main_contradiction(mr["records"], mr["worlds"], B)} if mr else {}
+        extra["flagged_then_adopted"] = flagged_then_adopted(r["records"], ws, man)
         models[r["model"]] = {"run_id": r["run_id"], "planned": r["planned"], "completed": r["completed"], **extra,
                               "failed": r["failed"], "missing": r["missing"],
                               "answers_changed_by_reparse": r["answers_changed_by_reparse"],

@@ -19,11 +19,11 @@
    "cap": 520,
    "rejected_backfilled": 0,
    "rejected_without_inference": 0,
-   "requests_sent": 77,
-   "slots_used": 77,
+   "requests_sent": 136,
+   "slots_used": 136,
    "spend_lines_backfilled": 12,
-   "spend_usd_request_time": 2.72,
-   "spend_usd_upper": 5.44
+   "spend_usd_request_time": 4.64,
+   "spend_usd_upper": 9.27
   }
  },
  "p5_design": {
@@ -200,11 +200,11 @@
    "values": {
     "ba_W": {
      "claude-opus-5-5": 0.9928,
-     "deepseek-v4-pro": 1.0
+     "deepseek-v4-pro": 0.9948
     },
     "ba_W_lo": {
      "claude-opus-5-5": 0.984,
-     "deepseek-v4-pro": 1.0
+     "deepseek-v4-pro": 0.9867
     },
     "surface_W": 0.5695
    }
@@ -213,13 +213,13 @@
    "by": "director",
    "id": "P-D2",
    "lock": "v2",
-   "outcome": "not testable in this run",
+   "outcome": "met",
    "rule": "each online model: Tier W check discernment > 0.30",
    "text": "P-D2. Both online models have Tier W check discernment under P4 above 0.30.",
    "values": {
     "check_discernment_W": {
      "claude-opus-5-5": 1.0,
-     "deepseek-v4-pro": null
+     "deepseek-v4-pro": 0.8958
     }
    }
   },
@@ -233,7 +233,7 @@
    "values": {
     "exact": {
      "claude-opus-5-5": null,
-     "deepseek-r1-distill-qwen-32b": 0.0714,
+     "deepseek-r1-distill-qwen-32b": 0.0625,
      "deepseek-v4-pro": null,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0083,
@@ -253,7 +253,7 @@
    "values": {
     "adopt_forged_P5f_minus_P4": {
      "claude-opus-5-5": null,
-     "deepseek-r1-distill-qwen-32b": -0.1412,
+     "deepseek-r1-distill-qwen-32b": -0.1747,
      "deepseek-v4-pro": null,
      "gemma-4-12b-it-mlx": -0.4295,
      "google/gemma-3-4b": -0.1793,
@@ -296,7 +296,7 @@
    "text": "P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates).",
    "values": {
     "exact": {
-     "deepseek-r1-distill-qwen-32b": 0.0714,
+     "deepseek-r1-distill-qwen-32b": 0.0625,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0083,
      "llama-3.3-70b-instruct": 0.0583,
@@ -304,7 +304,7 @@
      "qwen2.5:7b": 0.0
     },
     "lenient": {
-     "deepseek-r1-distill-qwen-32b": 0.0893,
+     "deepseek-r1-distill-qwen-32b": 0.0781,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0167,
      "llama-3.3-70b-instruct": 0.0583,
@@ -329,7 +329,7 @@
    "by": "implementation agent",
    "id": "P-A3",
    "lock": "v2",
-   "outcome": "not testable in this run",
+   "outcome": "met",
    "rule": "both online models' Tier W check discernment above every local model's, and one > 0.50",
    "text": "P-A3. Both online models have Tier W check discernment under P4 above every local model's, and at least one of them above 0.50 (point estimates).",
    "values": {
@@ -343,7 +343,7 @@
     },
     "online": {
      "claude-opus-5-5": 1.0,
-     "deepseek-v4-pro": null
+     "deepseek-v4-pro": 0.8958
     }
    }
   },
@@ -356,7 +356,7 @@
    "text": "P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them).",
    "values": {
     "adopt_forged_P5f_minus_P4": {
-     "deepseek-r1-distill-qwen-32b": -0.1412,
+     "deepseek-r1-distill-qwen-32b": -0.1747,
      "gemma-4-12b-it-mlx": -0.4295,
      "google/gemma-3-4b": -0.1793,
      "llama-3.3-70b-instruct": 0.0,
@@ -365,7 +365,6 @@
     },
     "within": [
      "qwen2.5:7b",
-     "deepseek-r1-distill-qwen-32b",
      "llama-3.3-70b-instruct"
     ]
    }
@@ -384,15 +383,15 @@
     },
     "ba_W": {
      "claude-opus-5-5": 0.9928,
-     "deepseek-v4-pro": 1.0
+     "deepseek-v4-pro": 0.9948
     }
    }
   }
  ],
  "predictions_summary": {
-  "met": 9,
+  "met": 11,
   "not met": 3,
-  "not testable in this run": 7
+  "not testable in this run": 5
  },
  "smokes": {
   "claude": {

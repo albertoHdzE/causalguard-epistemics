@@ -140,7 +140,8 @@ def table_p5(D) -> str:
         v = P["models"][m]
         bf, bv = v["cells"]["P5f"]["below_min"], v["cells"]["P5v"]["below_min"]
         c = v.get("vs_main") or {}
-        L.append(f"| {NAME.get(m, m)} | {v['cells']['P5v']['finished']}/{v['cells']['P5v']['planned']}; {v['cells']['P5f']['finished']}/{v['cells']['P5f']['planned']} | "
+        cv, cf = v["cells"]["P5v"], v["cells"]["P5f"]
+        L.append(f"| {NAME.get(m, m)} | {cv['finished']}/{cv['planned']}; {cf['finished']}/{cf['planned']} | "
                  f"{_v(v['exact'], bf)} | {_v(v['lenient'], bf)} | {_v(v['false_alarm'], bv)} | "
                  f"{_v(v['adopt_forged_P5f'], bf)} | {fmt(c.get('adopt_forged_P5f_minus_P4'), None)} | "
                  f"{fmt(v['verified_discernment'], None) if not (bf or bv) else '–'} |")
@@ -220,7 +221,37 @@ def table_smokes(D) -> str:
     return "\n".join(L)
 
 
-TABLES = {"task_p": table_task_p, "p5": table_p5, "task_s": table_task_s, "predictions": table_predictions,
+def table_p5_more(D) -> str:
+    P = D["P"]
+    L = ["| model | check_errors entries dropped by the locked parser (integer ids) | exact detection, ids accepted | "
+         "false alarm, ids accepted | flagged the altered line | of those, forged status kept |",
+         "|---|---|---|---|---|---|"]
+    for m in _models(P["models"]):
+        v = P["models"][m]
+        h = v["health"]
+        f = v["flagged_then_adopted"]
+        dropped = h["check_errors_entries_int_cids_accepted"] - h["check_errors_entries"]
+        L.append(f"| {NAME.get(m, m)} | {dropped} of {h['check_errors_entries_int_cids_accepted']} | "
+                 f"{fmt(v['exact_int_cids'], None)} | {fmt(v['false_alarm_int_cids'], None)} | {f['flagged']} | "
+                 f"{f['flagged_adopted']} |")
+    return "\n".join(L)
+
+
+def table_coding(D) -> str:
+    C = D.get("C") or {}
+    L = ["| model | P4: (a) own lookup | P4: (b) names a mismatch | P4: (c) names the altered line | "
+         "P5f: (a) | P5f: (b) | P5f: (c) |", "|---|---|---|---|---|---|---|"]
+    ms = _models({k.split("|")[0] for k in C})
+    for m in ms:
+        def cell(cond, code):
+            v = C.get(f"{m}|{cond}")
+            return f"{v[code]}/{v['n']}" if v else "–"
+        L.append(f"| {NAME.get(m, m)} | " + " | ".join(cell(cd, c) for cd in ("P4", "P5f") for c in (
+            "a_rederives_lookup", "b_names_mismatch", "c_names_altered_line")) + " |")
+    return "\n".join(L)
+
+
+TABLES = {"p5_more": table_p5_more, "coding": table_coding, "task_p": table_task_p, "p5": table_p5, "task_s": table_task_s, "predictions": table_predictions,
           "online": table_online, "cells_online": table_cells_online, "smokes": table_smokes}
 
 PH = re.compile(r"\{\{\s*([^}|]+?)\s*(?:\|\s*([a-z0-9]+)\s*)?\}\}")
@@ -239,7 +270,7 @@ def check_prose(src: str) -> list[str]:
     s = s.split("\n# References", 1)[0] + ("\n# Appendix A" + s.split("\n# Appendix A", 1)[1]
                                           if "\n# Appendix A" in s else "")   # the reference list
     s = re.sub(r"et al\.\s+\d{4}|\(\d{4}\)|arXiv:\d{4}\.\d{4,5}|Opus \d\.\d|§\d(\.\d)*|\{width=\d+%\}"
-               r"|\(\d\)", " ", s)                                     # citations, versions, refs, widths, items
+               r"|\(\d\)|#\d+|\b(?:Table|Figure) \d+", " ", s)                                     # citations, versions, refs, widths, items
     bad = []
     for m in re.finditer(r"(?<![\w.\-/])[−-]?\d+(?:[.:,]\d+)*(?![\w\-/])", s):
         tok = m.group(0).lstrip("−-").replace(",", "")
@@ -274,6 +305,8 @@ def main(argv=None) -> int:
     d = Path(a.data)
     D = {"A": json.loads((d / "analysis.json").read_text()), "P": json.loads((d / "p5_analysis.json").read_text()),
          "R": json.loads((d / "report_data.json").read_text())}
+    if (d / "reasoning_coding_summary.json").exists():
+        D["C"] = json.loads((d / "reasoning_coding_summary.json").read_text())
     src = Path(a.src).read_text()
     bad = check_prose(src)
     out, errs = fill(src, D)

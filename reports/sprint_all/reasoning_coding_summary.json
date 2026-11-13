@@ -1,0 +1,68 @@
+{
+ "deepseek-r1-distill-qwen-32b|P4": {
+  "a_rederives_lookup": 0,
+  "b_names_mismatch": 0,
+  "c_names_altered_line": 0,
+  "n": 8
+ },
+ "gemma-4-12b-it-mlx|P4": {
+  "a_rederives_lookup": 5,
+  "b_names_mismatch": 0,
+  "c_names_altered_line": 0,
+  "n": 8
+ },
+ "gemma-4-12b-it-mlx|P5f": {
+  "a_rederives_lookup": 8,
+  "b_names_mismatch": 8,
+  "c_names_altered_line": 8,
+  "n": 8
+ },
+ "google/gemma-3-4b|P4": {
+  "a_rederives_lookup": 3,
+  "b_names_mismatch": 1,
+  "c_names_altered_line": 1,
+  "n": 8
+ },
+ "google/gemma-3-4b|P5f": {
+  "a_rederives_lookup": 2,
+  "b_names_mismatch": 5,
+  "c_names_altered_line": 4,
+  "n": 8
+ },
+ "llama-3.3-70b-instruct|P4": {
+  "a_rederives_lookup": 0,
+  "b_names_mismatch": 0,
+  "c_names_altered_line": 0,
+  "n": 8
+ },
+ "llama-3.3-70b-instruct|P5f": {
+  "a_rederives_lookup": 1,
+  "b_names_mismatch": 1,
+  "c_names_altered_line": 1,
+  "n": 8
+ },
+ "mistral-small-3.2-24b-instruct-2506-mlx|P4": {
+  "a_rederives_lookup": 0,
+  "b_names_mismatch": 0,
+  "c_names_altered_line": 0,
+  "n": 8
+ },
+ "mistral-small-3.2-24b-instruct-2506-mlx|P5f": {
+  "a_rederives_lookup": 7,
+  "b_names_mismatch": 6,
+  "c_names_altered_line": 6,
+  "n": 8
+ },
+ "qwen2.5:7b|P4": {
+  "a_rederives_lookup": 3,
+  "b_names_mismatch": 0,
+  "c_names_altered_line": 0,
+  "n": 8
+ },
+ "qwen2.5:7b|P5f": {
+  "a_rederives_lookup": 8,
+  "b_names_mismatch": 6,
+  "c_names_altered_line": 6,
+  "n": 8
+ }
+}

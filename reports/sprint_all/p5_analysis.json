@@ -26,25 +26,25 @@
    },
    "adopt_check_P5v": {
     "B": 2000,
-    "est": 0.8718,
-    "hi": 0.9667,
-    "lo": 0.7604,
-    "se": 0.0513
+    "est": 0.881,
+    "hi": 0.9635,
+    "lo": 0.7798,
+    "se": 0.0467
    },
    "adopt_forged_P5f": {
     "B": 2000,
-    "est": 0.7679,
-    "hi": 0.9118,
-    "lo": 0.5962,
-    "se": 0.0824
+    "est": 0.7344,
+    "hi": 0.8971,
+    "lo": 0.5536,
+    "se": 0.0877
    },
    "adopt_forged_P5f_contradiction_false": {
     "B": 2000,
-    "est": 0.7857,
-    "hi": 1.0,
-    "lo": 0.5,
-    "n_worlds": 8,
-    "se": 0.1283
+    "est": 0.7222,
+    "hi": 0.9688,
+    "lo": 0.4444,
+    "n_worlds": 10,
+    "se": 0.1334
    },
    "adopt_forged_P5f_contradiction_true": {
     "B": 2000,
@@ -58,122 +58,163 @@
    "cells": {
     "P5f": {
      "below_min": false,
-     "finished": 15,
+     "finished": 17,
      "planned": 30
     },
     "P5v": {
      "below_min": false,
-     "finished": 13,
+     "finished": 14,
      "planned": 30
     }
    },
-   "completed": 28,
+   "completed": 31,
    "corruption_P5f": {
     "B": 2000,
-    "est": 0.6667,
-    "hi": 0.9286,
-    "lo": 0.3571,
-    "se": 0.1454
+    "est": 0.7,
+    "hi": 0.9444,
+    "lo": 0.4167,
+    "se": 0.1339
    },
    "exact": {
     "B": 2000,
-    "est": 0.0714,
-    "hi": 0.1333,
-    "lo": 0.0179,
-    "n_worlds": 14,
-    "se": 0.0304
+    "est": 0.0625,
+    "hi": 0.125,
+    "lo": 0.0139,
+    "n_worlds": 16,
+    "se": 0.0276
    },
    "exact_contradiction_false": {
     "B": 2000,
-    "est": 0.1071,
-    "hi": 0.2083,
+    "est": 0.0833,
+    "hi": 0.175,
     "lo": 0.0,
-    "n_worlds": 7,
-    "se": 0.0492
+    "n_worlds": 9,
+    "se": 0.0424
    },
    "exact_contradiction_true": {
-    "B": 1998,
+    "B": 2000,
     "est": 0.0357,
-    "hi": 0.1111,
+    "hi": 0.125,
     "lo": 0.0,
     "n_worlds": 7,
-    "se": 0.0344
+    "se": 0.0348
+   },
+   "exact_int_cids": {
+    "B": 2000,
+    "est": 0.0625,
+    "hi": 0.125,
+    "lo": 0.0139,
+    "se": 0.0276
    },
    "exact_single_line": {
     "B": 2000,
-    "est": 0.0714,
-    "hi": 0.1333,
-    "lo": 0.0179,
-    "se": 0.0304
+    "est": 0.0625,
+    "hi": 0.125,
+    "lo": 0.0139,
+    "se": 0.0276
    },
    "failed": [],
    "false_alarm": {
     "B": 2000,
-    "est": 0.0897,
-    "hi": 0.175,
+    "est": 0.0833,
+    "hi": 0.1667,
     "lo": 0.0192,
-    "n_worlds": 13,
-    "se": 0.0395
+    "n_worlds": 14,
+    "se": 0.037
+   },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.0833,
+    "hi": 0.1667,
+    "lo": 0.0192,
+    "se": 0.037
    },
    "flag_rate_P5f": {
     "B": 2000,
-    "est": 0.1667,
-    "hi": 0.3095,
-    "lo": 0.0486,
-    "se": 0.0688
+    "est": 0.1458,
+    "hi": 0.2917,
+    "lo": 0.0395,
+    "se": 0.0644
+   },
+   "flagged_then_adopted": {
+    "by_kind": {
+     "hidden_row": {
+      "claims": 25,
+      "flagged": 0
+     },
+     "phantom_row": {
+      "claims": 9,
+      "flagged": 0
+     },
+     "wrong_value": {
+      "claims": 26,
+      "flagged": 5
+     }
+    },
+    "flagged": 5,
+    "flagged_adopted": 0,
+    "not_flagged": 55,
+    "not_flagged_adopted": 46
    },
    "health": {
+    "check_errors_entries": 19,
+    "check_errors_entries_int_cids_accepted": 19,
     "error_worlds": 0,
     "p5f_messages_with_contradiction": 7,
-    "p5f_worlds": 15,
-    "parsed_t2": 27,
-    "truncated_worlds": 7,
-    "valid_p5_object": 27,
-    "with_reasoning": 28,
-    "worlds": 28
+    "p5f_worlds": 17,
+    "parsed_t2": 30,
+    "truncated_worlds": 8,
+    "valid_p5_object": 30,
+    "with_reasoning": 31,
+    "worlds": 31
    },
    "lenient": {
     "B": 2000,
-    "est": 0.0893,
-    "hi": 0.1528,
+    "est": 0.0781,
+    "hi": 0.1389,
     "lo": 0.025,
-    "n_worlds": 14,
-    "se": 0.0319
+    "n_worlds": 16,
+    "se": 0.0292
    },
    "lenient_contradiction_false": {
     "B": 2000,
-    "est": 0.1071,
-    "hi": 0.2083,
+    "est": 0.0833,
+    "hi": 0.175,
     "lo": 0.0,
-    "n_worlds": 7,
-    "se": 0.0492
+    "n_worlds": 9,
+    "se": 0.0424
    },
    "lenient_contradiction_true": {
-    "B": 1998,
+    "B": 2000,
     "est": 0.0714,
     "hi": 0.1667,
     "lo": 0.0,
     "n_worlds": 7,
-    "se": 0.0446
+    "se": 0.0452
+   },
+   "lenient_int_cids": {
+    "B": 2000,
+    "est": 0.0781,
+    "hi": 0.1389,
+    "lo": 0.025,
+    "se": 0.0292
    },
    "lenient_single_line": {
     "B": 2000,
-    "est": 0.0893,
-    "hi": 0.1528,
+    "est": 0.0781,
+    "hi": 0.1389,
     "lo": 0.025,
-    "se": 0.0319
+    "se": 0.0292
    },
    "main_run_id": "r7b-main-r1_distill_qwen_32b-v1",
    "missing": [
     "main|published|published|3|sub:[id-009]__[var-60]__[in-13]__[YEAST-APOPTOSIS]:9055291f0fab",
-    "main|published|published|7|sub:[id-201]__[var-31]__[in-2]__[ONKOGENE-ROLE-OF-INCRNA-ANRIL]:680258d78e1d",
     "main|synthetic|feedback_canalizing|16|",
     "main|synthetic|feedback_canalizing|17|",
     "main|synthetic|feedback_canalizing|22|",
     "main|synthetic|feedback_canalizing|25|",
     "main|synthetic|feedback_canalizing|7|",
     "main|synthetic|feedforward_hetero|23|",
-    "main|synthetic|feedforward_hetero|8|",
     "main|synthetic|feedforward_hetero|9|",
     "main|synthetic|imperfect_modules|11|",
     "main|synthetic|imperfect_modules|18|",
@@ -189,7 +230,6 @@
     "main|synthetic|shared_motifs|0|",
     "main|synthetic|shared_motifs|10|",
     "main|synthetic|shared_motifs|18|",
-    "main|synthetic|shared_motifs|24|",
     "main|synthetic|template_exceptions|10|",
     "main|synthetic|template_exceptions|19|",
     "main|synthetic|template_exceptions|24|",
@@ -283,6 +323,69 @@
     },
     {
      "C": {
+      "adopt_check": 1.0,
+      "adopt_check_open": null,
+      "adopt_check_settled": 1.0,
+      "adopt_forged": 0.0,
+      "adopt_forged_open": 0.0,
+      "adopt_forged_settled": null,
+      "corruption": null,
+      "counts": {
+       "ac": 1,
+       "ac_open": 0,
+       "ac_settled": 1,
+       "af": 0,
+       "af_open": 0,
+       "af_settled": 0,
+       "corr": 0,
+       "missing_t2": 3,
+       "n": 1,
+       "n_c_open": 0,
+       "n_c_settled": 1,
+       "n_corr": 0,
+       "n_f_open": 1,
+       "n_f_settled": 0
+      }
+     },
+     "D": {
+      "condition": "P5f",
+      "counts": {
+       "entries": 0,
+       "entries_unnamed": 0,
+       "exact": 0,
+       "flagged": 0,
+       "lenient": 0,
+       "n": 4
+      },
+      "exact": 0.0,
+      "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
+      "lenient": 0.0,
+      "valid": true
+     },
+     "condition": "P5f",
+     "contradiction": false,
+     "wkey": "main|published|published|7|sub:[id-201]__[var-31]__[in-2]__[ONKOGENE-ROLE-OF-INCRNA-ANRIL]:680258d78e1d"
+    },
+    {
+     "C": {
       "adopt_check": 0.0,
       "adopt_check_open": 0.0,
       "adopt_check_settled": 0.0,
@@ -318,6 +421,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -403,6 +524,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -488,6 +627,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -532,12 +689,71 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
      "condition": "P5f",
      "contradiction": true,
      "wkey": "main|synthetic|feedforward_hetero|1|"
+    },
+    {
+     "C": {
+      "adopt_check": 1.0,
+      "adopt_check_open": null,
+      "adopt_check_settled": 1.0,
+      "adopt_forged": 0.0,
+      "adopt_forged_open": 0.0,
+      "adopt_forged_settled": 0.0,
+      "corruption": 0.0,
+      "counts": {
+       "ac": 4,
+       "ac_open": 0,
+       "ac_settled": 4,
+       "af": 0,
+       "af_open": 0,
+       "af_settled": 0,
+       "corr": 0,
+       "n": 4,
+       "n_c_open": 0,
+       "n_c_settled": 4,
+       "n_corr": 3,
+       "n_f_open": 1,
+       "n_f_settled": 3
+      }
+     },
+     "D": {
+      "condition": "P5v",
+      "counts": {
+       "entries": 0,
+       "entries_unnamed": 0,
+       "flagged": 0,
+       "n": 4
+      },
+      "false_alarm": 0.0,
+      "flag_rate": 0.0,
+      "valid": true
+     },
+     "condition": "P5v",
+     "contradiction": null,
+     "wkey": "main|synthetic|feedforward_hetero|8|"
     },
     {
      "C": {
@@ -699,6 +915,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -784,6 +1018,24 @@
       },
       "exact": 0.25,
       "flag_rate": 1.0,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -828,6 +1080,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.25,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": true
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -989,6 +1259,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -1033,6 +1321,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -1077,12 +1383,92 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
      "condition": "P5f",
      "contradiction": true,
      "wkey": "main|synthetic|shared_motifs|17|"
+    },
+    {
+     "C": {
+      "adopt_check": 0.0,
+      "adopt_check_open": 0.0,
+      "adopt_check_settled": 0.0,
+      "adopt_forged": 1.0,
+      "adopt_forged_open": 1.0,
+      "adopt_forged_settled": 1.0,
+      "corruption": 1.0,
+      "counts": {
+       "ac": 0,
+       "ac_open": 0,
+       "ac_settled": 0,
+       "af": 4,
+       "af_open": 3,
+       "af_settled": 1,
+       "corr": 1,
+       "n": 4,
+       "n_c_open": 1,
+       "n_c_settled": 3,
+       "n_corr": 1,
+       "n_f_open": 3,
+       "n_f_settled": 1
+      }
+     },
+     "D": {
+      "condition": "P5f",
+      "counts": {
+       "entries": 0,
+       "entries_unnamed": 0,
+       "exact": 0,
+       "flagged": 0,
+       "lenient": 0,
+       "n": 4
+      },
+      "exact": 0.0,
+      "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
+      "lenient": 0.0,
+      "valid": true
+     },
+     "condition": "P5f",
+     "contradiction": false,
+     "wkey": "main|synthetic|shared_motifs|24|"
     },
     {
      "C": {
@@ -1121,6 +1507,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -1288,6 +1692,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -1332,6 +1754,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -1376,6 +1816,20 @@
       },
       "exact": 0.0,
       "flag_rate": 0.3333,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -1388,10 +1842,10 @@
    "run_id": "p5-r1_distill_qwen_32b-v1",
    "verified_discernment": {
     "B": 2000,
-    "est": 0.1039,
-    "hi": 0.2917,
-    "lo": -0.0751,
-    "se": 0.0946
+    "est": 0.1466,
+    "hi": 0.3385,
+    "lo": -0.0333,
+    "se": 0.0934
    },
    "vs_main": {
     "adopt_check_P3": {
@@ -1403,10 +1857,10 @@
     },
     "adopt_check_P5v_minus_P3": {
      "B": 2000,
-     "est": -0.0373,
-     "hi": 0.1058,
-     "lo": -0.1661,
-     "se": 0.0699
+     "est": -0.0281,
+     "hi": 0.1101,
+     "lo": -0.1531,
+     "se": 0.0669
     },
     "adopt_forged_P4": {
      "B": 1999,
@@ -1417,10 +1871,10 @@
     },
     "adopt_forged_P5f_minus_P4": {
      "B": 2000,
-     "est": -0.1412,
-     "hi": 0.0417,
-     "lo": -0.3379,
-     "se": 0.0977
+     "est": -0.1747,
+     "hi": 0.0139,
+     "lo": -0.373,
+     "se": 0.0987
     },
     "check_discernment_W": {
      "B": 2000,
@@ -1431,10 +1885,353 @@
     },
     "corruption_P5f_minus_P4": {
      "B": 2000,
-     "est": -0.25,
-     "hi": 0.0286,
-     "lo": -0.5625,
-     "se": 0.1498
+     "est": -0.2167,
+     "hi": 0.0417,
+     "lo": -0.5079,
+     "se": 0.142
+    },
+    "note": "between-world contrast: P5 worlds differ from the main-panel worlds"
+   }
+  },
+  "deepseek-v4-pro": {
+   "P4_contradiction": {
+    "P4_messages": 24,
+    "P4_with_contradiction": 10,
+    "adopt_forged_P4_contradiction_false": {
+     "B": 2000,
+     "est": 0.1786,
+     "hi": 0.375,
+     "lo": 0.0179,
+     "n_worlds": 14,
+     "se": 0.0943
+    },
+    "adopt_forged_P4_contradiction_true": {
+     "B": 2000,
+     "est": 0.0,
+     "hi": 0.0,
+     "lo": 0.0,
+     "n_worlds": 10,
+     "se": 0.0
+    }
+   },
+   "adopt_check_P5v": {
+    "B": 2000,
+    "est": 1.0,
+    "hi": 1.0,
+    "lo": 1.0,
+    "se": 0.0
+   },
+   "adopt_forged_P5f": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "adopt_forged_P5f_contradiction_false": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "adopt_forged_P5f_contradiction_true": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "answers_changed_by_reparse": 0,
+   "cells": {
+    "P5f": {
+     "below_min": true,
+     "finished": 0,
+     "planned": 30
+    },
+    "P5v": {
+     "below_min": true,
+     "finished": 1,
+     "planned": 30
+    }
+   },
+   "completed": 1,
+   "corruption_P5f": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "exact": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "exact_contradiction_false": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "exact_contradiction_true": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "exact_int_cids": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "exact_single_line": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "failed": [],
+   "false_alarm": {
+    "B": 2000,
+    "est": 0.0,
+    "hi": 0.0,
+    "lo": 0.0,
+    "n_worlds": 1,
+    "se": 0.0
+   },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.0,
+    "hi": 0.0,
+    "lo": 0.0,
+    "se": 0.0
+   },
+   "flag_rate_P5f": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "flagged_then_adopted": {
+    "by_kind": {},
+    "flagged": 0,
+    "flagged_adopted": 0,
+    "not_flagged": 0,
+    "not_flagged_adopted": 0
+   },
+   "health": {
+    "check_errors_entries": 0,
+    "check_errors_entries_int_cids_accepted": 0,
+    "error_worlds": 0,
+    "p5f_messages_with_contradiction": 0,
+    "p5f_worlds": 0,
+    "parsed_t2": 1,
+    "truncated_worlds": 0,
+    "valid_p5_object": 1,
+    "with_reasoning": 1,
+    "worlds": 1
+   },
+   "lenient": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "lenient_contradiction_false": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "lenient_contradiction_true": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null,
+    "n_worlds": 0
+   },
+   "lenient_int_cids": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "lenient_single_line": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "main_run_id": "r7b-main-deepseek_v4_pro_low-v1-b1",
+   "missing": [
+    "main|published|published|18|sub:[id-040]__[var-19]__[in-4]__[T-CELL-DIFFERENTIATION]:23a7418b279a",
+    "main|published|published|3|sub:[id-009]__[var-60]__[in-13]__[YEAST-APOPTOSIS]:9055291f0fab",
+    "main|published|published|7|sub:[id-201]__[var-31]__[in-2]__[ONKOGENE-ROLE-OF-INCRNA-ANRIL]:680258d78e1d",
+    "main|synthetic|feedback_canalizing|16|",
+    "main|synthetic|feedback_canalizing|17|",
+    "main|synthetic|feedback_canalizing|22|",
+    "main|synthetic|feedback_canalizing|23|",
+    "main|synthetic|feedback_canalizing|25|",
+    "main|synthetic|feedback_canalizing|3|",
+    "main|synthetic|feedback_canalizing|7|",
+    "main|synthetic|feedforward_hetero|0|",
+    "main|synthetic|feedforward_hetero|15|",
+    "main|synthetic|feedforward_hetero|17|",
+    "main|synthetic|feedforward_hetero|1|",
+    "main|synthetic|feedforward_hetero|23|",
+    "main|synthetic|feedforward_hetero|8|",
+    "main|synthetic|feedforward_hetero|9|",
+    "main|synthetic|imperfect_modules|11|",
+    "main|synthetic|imperfect_modules|15|",
+    "main|synthetic|imperfect_modules|18|",
+    "main|synthetic|imperfect_modules|22|",
+    "main|synthetic|imperfect_modules|23|",
+    "main|synthetic|imperfect_modules|8|",
+    "main|synthetic|imperfect_modules|9|",
+    "main|synthetic|mixed_parity_thresh|12|",
+    "main|synthetic|mixed_parity_thresh|14|",
+    "main|synthetic|mixed_parity_thresh|18|",
+    "main|synthetic|mixed_parity_thresh|2|",
+    "main|synthetic|mixed_parity_thresh|3|",
+    "main|synthetic|mixed_parity_thresh|5|",
+    "main|synthetic|mixed_parity_thresh|6|",
+    "main|synthetic|rewired_control|12|",
+    "main|synthetic|rewired_control|14|",
+    "main|synthetic|rewired_control|16|",
+    "main|synthetic|rewired_control|24|",
+    "main|synthetic|rewired_control|25|",
+    "main|synthetic|rewired_control|5|",
+    "main|synthetic|rewired_control|7|",
+    "main|synthetic|shared_motifs|0|",
+    "main|synthetic|shared_motifs|10|",
+    "main|synthetic|shared_motifs|13|",
+    "main|synthetic|shared_motifs|15|",
+    "main|synthetic|shared_motifs|17|",
+    "main|synthetic|shared_motifs|18|",
+    "main|synthetic|shared_motifs|24|",
+    "main|synthetic|template_exceptions|10|",
+    "main|synthetic|template_exceptions|19|",
+    "main|synthetic|template_exceptions|24|",
+    "main|synthetic|template_exceptions|25|",
+    "main|synthetic|template_exceptions|5|",
+    "main|synthetic|template_exceptions|6|",
+    "main|synthetic|template_exceptions|8|",
+    "main|synthetic|uniform_H|11|",
+    "main|synthetic|uniform_H|13|",
+    "main|synthetic|uniform_H|1|",
+    "main|synthetic|uniform_H|21|",
+    "main|synthetic|uniform_H|22|",
+    "main|synthetic|uniform_H|23|",
+    "main|synthetic|uniform_H|3|"
+   ],
+   "per_world": [
+    {
+     "C": {
+      "adopt_check": 1.0,
+      "adopt_check_open": null,
+      "adopt_check_settled": 1.0,
+      "adopt_forged": 0.0,
+      "adopt_forged_open": 0.0,
+      "adopt_forged_settled": 0.0,
+      "corruption": 0.0,
+      "counts": {
+       "ac": 4,
+       "ac_open": 0,
+       "ac_settled": 4,
+       "af": 0,
+       "af_open": 0,
+       "af_settled": 0,
+       "corr": 0,
+       "n": 4,
+       "n_c_open": 0,
+       "n_c_settled": 4,
+       "n_corr": 4,
+       "n_f_open": 1,
+       "n_f_settled": 3
+      }
+     },
+     "D": {
+      "condition": "P5v",
+      "counts": {
+       "entries": 0,
+       "entries_unnamed": 0,
+       "flagged": 0,
+       "n": 4
+      },
+      "false_alarm": 0.0,
+      "flag_rate": 0.0,
+      "valid": true
+     },
+     "condition": "P5v",
+     "contradiction": null,
+     "wkey": "main|published|published|30|sub:[id-050]__[var-154]__[in-34]__[CD4-T-CELL-SIGNALING]:0c20209bd3ae"
+    }
+   ],
+   "planned": 60,
+   "run_id": "p5-deepseek_v4_pro_low-v1",
+   "verified_discernment": {
+    "B": 0,
+    "est": null,
+    "hi": null,
+    "lo": null
+   },
+   "vs_main": {
+    "adopt_check_P3": {
+     "B": 2000,
+     "est": 1.0,
+     "hi": 1.0,
+     "lo": 1.0,
+     "se": 0.0
+    },
+    "adopt_check_P5v_minus_P3": {
+     "cell_n": {
+      "P3": 24,
+      "P5v": 1
+     },
+     "est": null,
+     "hi": null,
+     "lo": null,
+     "not_testable": true
+    },
+    "adopt_forged_P4": {
+     "B": 2000,
+     "est": 0.1042,
+     "hi": 0.2283,
+     "lo": 0.0096,
+     "se": 0.0572
+    },
+    "adopt_forged_P5f_minus_P4": {
+     "cell_n": {
+      "P4": 24,
+      "P5f": 0
+     },
+     "est": null,
+     "hi": null,
+     "lo": null,
+     "not_testable": true
+    },
+    "check_discernment_W": {
+     "B": 2000,
+     "est": 0.8958,
+     "hi": 0.9896,
+     "lo": 0.7708,
+     "se": 0.0569
+    },
+    "corruption_P5f_minus_P4": {
+     "cell_n": {
+      "P4": 24,
+      "P5f": 0
+     },
+     "est": null,
+     "hi": null,
+     "lo": null,
+     "not_testable": true
     },
     "note": "between-world contrast: P5 worlds differ from the main-panel worlds"
    }
@@ -1535,6 +2332,13 @@
     "n_worlds": 10,
     "se": 0.077
    },
+   "exact_int_cids": {
+    "B": 2000,
+    "est": 0.3301,
+    "hi": 0.4542,
+    "lo": 0.2133,
+    "se": 0.0622
+   },
    "exact_single_line": {
     "B": 2000,
     "est": 0.109,
@@ -1551,6 +2355,13 @@
     "n_worlds": 25,
     "se": 0.0305
    },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.2733,
+    "hi": 0.3843,
+    "lo": 0.1759,
+    "se": 0.0535
+   },
    "flag_rate_P5f": {
     "B": 2000,
     "est": 0.1058,
@@ -1558,7 +2369,29 @@
     "lo": 0.02,
     "se": 0.0482
    },
+   "flagged_then_adopted": {
+    "by_kind": {
+     "hidden_row": {
+      "claims": 34,
+      "flagged": 8
+     },
+     "phantom_row": {
+      "claims": 24,
+      "flagged": 9
+     },
+     "wrong_value": {
+      "claims": 41,
+      "flagged": 23
+     }
+    },
+    "flagged": 40,
+    "flagged_adopted": 15,
+    "not_flagged": 59,
+    "not_flagged_adopted": 43
+   },
    "health": {
+    "check_errors_entries": 16,
+    "check_errors_entries_int_cids_accepted": 68,
     "error_worlds": 0,
     "p5f_messages_with_contradiction": 14,
     "p5f_worlds": 30,
@@ -1591,6 +2424,13 @@
     "lo": 0.0,
     "n_worlds": 10,
     "se": 0.077
+   },
+   "lenient_int_cids": {
+    "B": 2000,
+    "est": 0.4135,
+    "hi": 0.5446,
+    "lo": 0.2857,
+    "se": 0.0659
    },
    "lenient_single_line": {
     "B": 2000,
@@ -1750,6 +2590,24 @@
       },
       "exact": 0.75,
       "flag_rate": 0.75,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": true,
+        "lenient": true
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.75,
       "valid": true
      },
@@ -1794,6 +2652,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -1920,6 +2796,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2046,6 +2940,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2090,6 +3002,24 @@
       },
       "exact": 0.75,
       "flag_rate": 0.75,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": true,
+        "lenient": true
+       },
+       "c6": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.75,
       "valid": true
      },
@@ -2175,6 +3105,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2219,6 +3167,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -2380,6 +3346,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2500,6 +3484,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2585,6 +3587,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2711,6 +3731,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2755,6 +3793,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2840,6 +3896,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -2925,6 +3999,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3121,6 +4213,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3206,6 +4308,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3332,6 +4452,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3376,6 +4514,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3420,6 +4576,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3499,6 +4673,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3543,6 +4735,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3628,6 +4838,24 @@
       },
       "exact": 0.75,
       "flag_rate": 0.75,
+      "hits": {
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": true,
+        "lenient": true
+       },
+       "c4": {
+        "exact": true,
+        "lenient": true
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.75,
       "valid": true
      },
@@ -3672,6 +4900,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3874,6 +5120,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -3918,6 +5182,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4079,6 +5353,20 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4238,6 +5526,13 @@
     "n_worlds": 14,
     "se": 0.018
    },
+   "exact_int_cids": {
+    "B": 2000,
+    "est": 0.0917,
+    "hi": 0.1522,
+    "lo": 0.0417,
+    "se": 0.0286
+   },
    "exact_single_line": {
     "B": 2000,
     "est": 0.0083,
@@ -4254,6 +5549,13 @@
     "n_worlds": 30,
     "se": 0.0494
    },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.3167,
+    "hi": 0.429,
+    "lo": 0.2173,
+    "se": 0.0541
+   },
    "flag_rate_P5f": {
     "B": 2000,
     "est": 0.0167,
@@ -4261,7 +5563,29 @@
     "lo": 0.0,
     "se": 0.0115
    },
+   "flagged_then_adopted": {
+    "by_kind": {
+     "hidden_row": {
+      "claims": 41,
+      "flagged": 4
+     },
+     "phantom_row": {
+      "claims": 22,
+      "flagged": 3
+     },
+     "wrong_value": {
+      "claims": 44,
+      "flagged": 8
+     }
+    },
+    "flagged": 15,
+    "flagged_adopted": 13,
+    "not_flagged": 92,
+    "not_flagged_adopted": 63
+   },
    "health": {
+    "check_errors_entries": 13,
+    "check_errors_entries_int_cids_accepted": 99,
     "error_worlds": 0,
     "p5f_messages_with_contradiction": 14,
     "p5f_worlds": 30,
@@ -4294,6 +5618,13 @@
     "lo": 0.0,
     "n_worlds": 14,
     "se": 0.0238
+   },
+   "lenient_int_cids": {
+    "B": 2000,
+    "est": 0.125,
+    "hi": 0.1833,
+    "lo": 0.0703,
+    "se": 0.029
    },
    "lenient_single_line": {
     "B": 2000,
@@ -4425,6 +5756,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4470,6 +5819,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4514,6 +5881,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4640,6 +6025,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4767,6 +6170,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4811,6 +6232,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4896,6 +6335,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4940,6 +6397,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -4984,6 +6459,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -5111,6 +6604,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5238,6 +6749,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5324,6 +6853,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5452,6 +6999,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5497,6 +7062,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5582,6 +7165,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5669,6 +7270,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5713,6 +7332,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.25,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": true
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -5881,6 +7518,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -5966,6 +7613,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6093,6 +7758,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6137,6 +7820,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6181,6 +7882,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6266,6 +7985,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6310,6 +8047,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6395,6 +8150,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6439,6 +8212,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6648,6 +8439,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6692,6 +8501,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6736,6 +8555,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -6863,6 +8700,20 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7022,6 +8873,13 @@
     "n_worlds": 14,
     "se": 0.0385
    },
+   "exact_int_cids": {
+    "B": 2000,
+    "est": 0.0583,
+    "hi": 0.1121,
+    "lo": 0.0152,
+    "se": 0.0258
+   },
    "exact_single_line": {
     "B": 2000,
     "est": 0.0583,
@@ -7038,6 +8896,13 @@
     "n_worlds": 30,
     "se": 0.0265
    },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.0611,
+    "hi": 0.1172,
+    "lo": 0.0139,
+    "se": 0.0265
+   },
    "flag_rate_P5f": {
     "B": 2000,
     "est": 0.0917,
@@ -7045,7 +8910,29 @@
     "lo": 0.0323,
     "se": 0.0345
    },
+   "flagged_then_adopted": {
+    "by_kind": {
+     "hidden_row": {
+      "claims": 42,
+      "flagged": 0
+     },
+     "phantom_row": {
+      "claims": 24,
+      "flagged": 2
+     },
+     "wrong_value": {
+      "claims": 49,
+      "flagged": 4
+     }
+    },
+    "flagged": 6,
+    "flagged_adopted": 6,
+    "not_flagged": 109,
+    "not_flagged_adopted": 109
+   },
    "health": {
+    "check_errors_entries": 28,
+    "check_errors_entries_int_cids_accepted": 28,
     "error_worlds": 0,
     "p5f_messages_with_contradiction": 14,
     "p5f_worlds": 30,
@@ -7078,6 +8965,13 @@
     "lo": 0.0,
     "n_worlds": 14,
     "se": 0.0385
+   },
+   "lenient_int_cids": {
+    "B": 2000,
+    "est": 0.0583,
+    "hi": 0.1121,
+    "lo": 0.0152,
+    "se": 0.0258
    },
    "lenient_single_line": {
     "B": 2000,
@@ -7208,6 +9102,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7252,6 +9164,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7296,6 +9226,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7422,6 +9370,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7548,6 +9514,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7592,6 +9576,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -7677,6 +9679,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7721,6 +9741,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7765,6 +9803,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -7891,6 +9947,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8017,6 +10091,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8102,6 +10194,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8228,6 +10338,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8272,6 +10400,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8357,6 +10503,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8442,6 +10606,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8486,6 +10668,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": true,
+        "lenient": true
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -8653,6 +10853,16 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -8738,6 +10948,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8864,6 +11092,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.75,
+      "hits": {
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -8908,6 +11154,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -8952,6 +11216,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9037,6 +11319,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9081,6 +11381,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9166,6 +11484,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -9210,6 +11546,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9418,6 +11772,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9462,6 +11834,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9506,6 +11888,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9632,6 +12032,20 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -9791,6 +12205,13 @@
     "n_worlds": 14,
     "se": 0.0659
    },
+   "exact_int_cids": {
+    "B": 2000,
+    "est": 0.2167,
+    "hi": 0.3,
+    "lo": 0.1389,
+    "se": 0.0413
+   },
    "exact_single_line": {
     "B": 2000,
     "est": 0.2167,
@@ -9807,6 +12228,13 @@
     "n_worlds": 30,
     "se": 0.0579
    },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.2,
+    "hi": 0.3182,
+    "lo": 0.0903,
+    "se": 0.0579
+   },
    "flag_rate_P5f": {
     "B": 2000,
     "est": 0.3083,
@@ -9814,7 +12242,29 @@
     "lo": 0.2083,
     "se": 0.0524
    },
+   "flagged_then_adopted": {
+    "by_kind": {
+     "hidden_row": {
+      "claims": 42,
+      "flagged": 2
+     },
+     "phantom_row": {
+      "claims": 24,
+      "flagged": 4
+     },
+     "wrong_value": {
+      "claims": 49,
+      "flagged": 19
+     }
+    },
+    "flagged": 25,
+    "flagged_adopted": 10,
+    "not_flagged": 90,
+    "not_flagged_adopted": 84
+   },
    "health": {
+    "check_errors_entries": 82,
+    "check_errors_entries_int_cids_accepted": 82,
     "error_worlds": 0,
     "p5f_messages_with_contradiction": 14,
     "p5f_worlds": 30,
@@ -9847,6 +12297,13 @@
     "lo": 0.1071,
     "n_worlds": 14,
     "se": 0.0659
+   },
+   "lenient_int_cids": {
+    "B": 2000,
+    "est": 0.2167,
+    "hi": 0.3,
+    "lo": 0.1389,
+    "se": 0.0413
    },
    "lenient_single_line": {
     "B": 2000,
@@ -9977,6 +12434,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -10021,6 +12496,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -10065,6 +12558,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -10191,6 +12702,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -10317,6 +12846,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.75,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -10361,6 +12908,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": true,
+        "lenient": true
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -10446,6 +13011,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -10490,6 +13073,24 @@
       },
       "exact": 0.75,
       "flag_rate": 0.75,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": true,
+        "lenient": true
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.75,
       "valid": true
      },
@@ -10534,6 +13135,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.75,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c5": {
+        "exact": true,
+        "lenient": true
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -10660,6 +13279,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.5,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -10786,6 +13423,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -10871,6 +13526,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.5,
+      "hits": {
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -10997,6 +13670,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -11041,6 +13732,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -11126,6 +13835,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -11211,6 +13938,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.25,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -11255,6 +14000,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": true,
+        "lenient": true
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -11422,6 +14185,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -11507,6 +14280,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -11633,6 +14424,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.75,
+      "hits": {
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -11677,6 +14486,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.25,
+      "hits": {
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -11721,6 +14548,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -11806,6 +14651,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -11850,6 +14713,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": true,
+        "lenient": true
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -11935,6 +14816,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.5,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": true,
+        "lenient": true
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -11979,6 +14878,24 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": true,
+        "lenient": true
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -12187,6 +15104,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.5,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": true,
+        "lenient": true
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -12231,6 +15166,16 @@
       },
       "exact": 0.5,
       "flag_rate": 0.5,
+      "hits": {
+       "c0": {
+        "exact": true,
+        "lenient": true
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.5,
       "valid": true
      },
@@ -12275,6 +15220,24 @@
       },
       "exact": 0.25,
       "flag_rate": 0.75,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": true,
+        "lenient": true
+       }
+      },
       "lenient": 0.25,
       "valid": true
      },
@@ -12401,6 +15364,20 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -12560,6 +15537,13 @@
     "n_worlds": 14,
     "se": 0.0
    },
+   "exact_int_cids": {
+    "B": 2000,
+    "est": 0.1552,
+    "hi": 0.2424,
+    "lo": 0.0735,
+    "se": 0.0441
+   },
    "exact_single_line": {
     "B": 2000,
     "est": 0.0,
@@ -12576,6 +15560,13 @@
     "n_worlds": 29,
     "se": 0.0
    },
+   "false_alarm_int_cids": {
+    "B": 2000,
+    "est": 0.3764,
+    "hi": 0.513,
+    "lo": 0.2455,
+    "se": 0.0675
+   },
    "flag_rate_P5f": {
     "B": 2000,
     "est": 0.0,
@@ -12583,7 +15574,29 @@
     "lo": 0.0,
     "se": 0.0
    },
+   "flagged_then_adopted": {
+    "by_kind": {
+     "hidden_row": {
+      "claims": 40,
+      "flagged": 4
+     },
+     "phantom_row": {
+      "claims": 20,
+      "flagged": 4
+     },
+     "wrong_value": {
+      "claims": 46,
+      "flagged": 12
+     }
+    },
+    "flagged": 20,
+    "flagged_adopted": 19,
+    "not_flagged": 86,
+    "not_flagged_adopted": 81
+   },
    "health": {
+    "check_errors_entries": 0,
+    "check_errors_entries_int_cids_accepted": 93,
     "error_worlds": 0,
     "p5f_messages_with_contradiction": 14,
     "p5f_worlds": 30,
@@ -12616,6 +15629,13 @@
     "lo": 0.0,
     "n_worlds": 14,
     "se": 0.0
+   },
+   "lenient_int_cids": {
+    "B": 2000,
+    "est": 0.181,
+    "hi": 0.275,
+    "lo": 0.0962,
+    "se": 0.0449
    },
    "lenient_single_line": {
     "B": 2000,
@@ -12740,6 +15760,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -12785,6 +15823,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -12829,6 +15885,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -12955,6 +16029,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13116,6 +16208,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13201,6 +16311,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13245,6 +16373,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13290,6 +16436,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13416,6 +16580,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13542,6 +16724,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13627,6 +16827,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13753,6 +16971,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13797,6 +17033,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13882,6 +17136,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -13967,6 +17239,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14011,6 +17301,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14179,6 +17487,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14264,6 +17582,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14390,6 +17726,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14434,6 +17788,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14478,6 +17850,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14564,6 +17954,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c6": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14608,6 +18016,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14693,6 +18119,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14737,6 +18181,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c3": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14946,6 +18408,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -14990,6 +18470,16 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c0": {
+        "exact": false,
+        "lenient": false
+       },
+       "c1": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -15034,6 +18524,24 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c2": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c7": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },
@@ -15160,6 +18668,20 @@
       },
       "exact": 0.0,
       "flag_rate": 0.0,
+      "hits": {
+       "c1": {
+        "exact": false,
+        "lenient": false
+       },
+       "c4": {
+        "exact": false,
+        "lenient": false
+       },
+       "c5": {
+        "exact": false,
+        "lenient": false
+       }
+      },
       "lenient": 0.0,
       "valid": true
      },

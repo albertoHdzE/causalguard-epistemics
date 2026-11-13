@@ -226,6 +226,7 @@ def p5_detection_world(condition: str, named: list[str], errors: list[dict] | No
     for e in errors:
         by[e["cid"]].append(e["line"])
     k = defaultdict(int)
+    hits: dict = {}
     k["n"] = len(named)
     k["entries"] = len(errors)
     k["entries_unnamed"] = sum(1 for e in errors if e["cid"] not in named_set)
@@ -238,7 +239,10 @@ def p5_detection_world(condition: str, named: list[str], errors: list[dict] | No
             le = ex or any(_lenient(q, altered[cid]) for q in qs)
             k["exact"] += ex
             k["lenient"] += le
+            hits[cid] = {"exact": ex, "lenient": le}
     out = {"condition": condition, "valid": True, "counts": dict(k), "flag_rate": _rate(k["flagged"], k["n"])}
+    if condition == "P5f":
+        out["hits"] = hits                 # per named claim (record only; used by the D112 post-hoc descriptor)
     if condition == "P5f":
         out.update(exact=_rate(k["exact"], k["n"]), lenient=_rate(k["lenient"], k["n"]))
     else:

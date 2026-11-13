@@ -39,7 +39,7 @@ def answers_from_raw(raw: str | None, cids: list[str]) -> tuple[bool, dict]:
     return obj is not None, parse_status_answers((obj or {}).get("answers"), cids)
 
 
-def check_errors_from_raw(raw: str | None) -> list[dict] | None:
+def check_errors_from_raw(raw: str | None, int_cids: bool = False) -> list[dict] | None:
     """SPRINT (P5): the ``check_errors`` entries of the final JSON object of a reply (the same object the answers
     come from).  None when the reply has no final object; [] when the object has no usable list.  Entries keep only
     string ``cid`` and ``line`` values; anything else is dropped (counted by the scorer as no quote)."""
@@ -49,6 +49,9 @@ def check_errors_from_raw(raw: str | None) -> list[dict] | None:
     ce = obj.get("check_errors")
     if not isinstance(ce, list):
         return []
+    if int_cids:     # post-hoc sensitivity (D111): an integer k names claim ck, as in the answers parser (D77)
+        ce = [{**e, "cid": f"c{e['cid']}"} if isinstance(e, dict) and isinstance(e.get("cid"), int)
+              and not isinstance(e.get("cid"), bool) else e for e in ce]
     return [{"cid": e["cid"].strip(), "line": e["line"]} for e in ce
             if isinstance(e, dict) and isinstance(e.get("cid"), str) and isinstance(e.get("line"), str)]
 
