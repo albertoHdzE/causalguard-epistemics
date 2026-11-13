@@ -35,3 +35,20 @@ the director's review. The director changes two of his own limits for the redesi
 | Online requests today | at most 5 connectivity probes per provider | unchanged; 3 used | no benchmark-like item goes online today |
 
 The online run during the sprint will begin with two smoke worlds per tier per model, after the director's review.
+
+## Addendum 2, 2026-11-13 (director, sprint day 1, after the R7b review)
+
+Alberto's authorisation of 2026-11-12 (the two online models on the locked panel, after the director's review) is
+now exercised. The director fixes the limits for the sprint:
+
+| Item | Limit |
+|---|---|
+| Online requests | 520 per online model (360 main + 120 P5 + 40 D85 retries), after an 8-request smoke each |
+| DeepSeek spend | $30 ceiling; stop and report at $25 (recorded per request) |
+| Claude Opus 5.5 | subscription; `totalCostUSD` recorded per session; a usage-window stop fails items, resumed under the identical plan |
+| Local requests | 6,000 in total (2,509 used) |
+| Model-server hours | 30 more for the sprint |
+| Connectivity probes | the 2 remaining, one per provider, only to confirm the reasoning field (non-benchmark prompt) |
+
+Unchanged: no other paid service, no weight change, locks before evaluation, pre-existing work labelled, the key and
+account e-mail in no file, `doc/Gemini-Talk.txt` private.
