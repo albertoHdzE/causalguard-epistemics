@@ -28,7 +28,8 @@ class _Resp:
         return False
 
 
-def test_deepseek_key_sent_only_to_deepseek_and_never_recorded(monkeypatch):
+def test_deepseek_key_sent_only_to_deepseek_and_never_recorded(monkeypatch, tmp_path):
+    monkeypatch.setenv("CAUSALGUARD_RUNS", str(tmp_path))   # the spend record of this fake call stays out of runs/
     monkeypatch.setenv("DEEPSEEK_API_KEY", KEY)
     seen = []
 

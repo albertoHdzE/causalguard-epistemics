@@ -12,6 +12,23 @@
      "id": "v2-a1",
      "reason": "The Claude reasoning probe (reports/sprint_online/reasoning_probe_claude.json) showed that --settings {\"showThinkingSummaries\": true} is not applied under -p: the recorded request still carried thinking {type: adaptive, display: omitted}. The CLI's own (hidden) flag --thinking-display accepts summarized|omitted|highlights (validated offline). Record-only display change; no prompt, template, assignment or score changes.",
      "written_at": "2026-11-13T15:16:49+00:00"
+    },
+    {
+     "before": "after the online smokes (pilot-4 worlds only), before any online main-panel request and any P5 online request",
+     "change": "DeepSeek max_tokens 16000 -> 32000 (reasoning effort unchanged, high); the spend stop uses the list price at request time (off-peak = half; peak 01-04 and 06-10 UTC Mon-Fri), the peak-price upper bound is still recorded; online ledger caps smoke 16 (two smokes), main 416, P5 528 (retries 32); a test no longer writes its fake spend line into runs/ (3 such lines, $0.0001 in total, remain in the spend ledger and count toward the stop).",
+     "files": {
+      "configs/sprint/p5_online_deepseek_v4_pro.json": "a7b4055607f3cfcb4ea7d1915c09ed9e5e5e78309660a7be0f4e3ae03c39c299",
+      "configs/sprint/r7b_online_main_deepseek_v4_pro.json": "f262a73818e50a546499d9059bd105668dd67e9b11000380b3a303962b54f0b6",
+      "configs/sprint/r7b_online_smoke_deepseek_v4_pro.json": "3035507460ccbc4c8850121937c2ec344930d4cb3e15e6b6f49456344649ba3d",
+      "src/causalguard/llm/providers.py": "43e6d6008da24767519d7aebb7fc68810a4a6723a29dc42dfe9a8169ae1c1d25",
+      "tests/test_r7_online_adapters.py": "dd9d6418ed36a8e6b50881e6c7fd0e4197d6e955ee132954ca7b23c5e4cf6608",
+      "tests/test_sprint_v2.py": "8b1ceae3578c599aae9b4aa19629f5d340afef459bef4e124c0ce960ed96fcc3"
+     },
+     "id": "v2-a2",
+     "reason": "DeepSeek smoke v1 (runs/r7b-smoke-deepseek_v4_pro-v1): 8/8 turns stopped at the 16000-token cap inside reasoning (16000 reasoning tokens each, finish_reason length), 0 parsed answers; the smoke fails parsing. This is the one harness repair the assignment allows.",
+     "smoke_v2_pass_rule": "at least 6 of 8 turns with a parsed answer and every Tier W turn parsed; otherwise DeepSeek stops and is reported",
+     "worst_case_main_usd_offpeak": 23.43,
+     "written_at": "2026-11-13T15:27:07+00:00"
     }
    ],
    "changed_files": [

@@ -135,12 +135,20 @@ def test_false_alarm_and_missing():
 
 def test_deepseek_cost_peak_upper_bound(tmp_path):
     from causalguard.llm import providers as PR
-    c = PR.deepseek_cost({"prompt_tokens": 3000, "prompt_cache_hit_tokens": 1000, "prompt_cache_miss_tokens": 2000,
-                          "completion_tokens": 10000})
-    assert c["usd_upper"] == pytest.approx((1000 * 0.044 + 2000 * 1.32 + 10000 * 3.96) / 1e6)
+    u = {"prompt_tokens": 3000, "prompt_cache_hit_tokens": 1000, "prompt_cache_miss_tokens": 2000,
+         "completion_tokens": 10000}
+    full = (1000 * 0.044 + 2000 * 1.32 + 10000 * 3.96) / 1e6
+    import datetime
+    peak = datetime.datetime(2026, 11, 13, 7, 0, tzinfo=datetime.timezone.utc).timestamp()     # Friday 07:00Z
+    off = datetime.datetime(2026, 11, 13, 15, 0, tzinfo=datetime.timezone.utc).timestamp()
+    sat = datetime.datetime(2026, 11, 14, 7, 0, tzinfo=datetime.timezone.utc).timestamp()
+    assert PR.deepseek_cost(u, peak)["usd"] == pytest.approx(full)
+    assert PR.deepseek_cost(u, off)["usd"] == pytest.approx(full / 2) and PR.deepseek_cost(u, off)["usd_upper"] == \
+        pytest.approx(full)
+    assert PR.deepseek_cost(u, sat)["peak"] is False
     led = str(tmp_path / "spend.jsonl")
     PR.spend_record(led, {"usd_upper": 24.5})
-    PR.spend_record(led, {"usd_upper": 0.6})
+    PR.spend_record(led, {"usd": 0.6, "usd_upper": 1.2})
     assert PR.spend_total(led) == pytest.approx(25.1)
 
 

@@ -16,7 +16,7 @@
   "base_url": "https://api.deepseek.com",
   "model": "deepseek-v4-pro",
   "allow_remote": true,
-  "max_tokens": 16000,
+  "max_tokens": 32000,
   "timeout_s": 900,
   "max_transport_retries": 1,
   "seed": 0,
@@ -32,6 +32,6 @@
    "spend_ledger": "RUNS/sprint-online-calls/deepseek_spend.jsonl"
   }
  },
- "note": "SPRINT P5 verify-first (lock v2): 60 Tier W worlds, 120 requests; cap 528 on the shared ledger = 8 smoke + 360 main + 120 P5 + 40 retries.",
+ "note": "SPRINT P5 verify-first (lock v2, amendment v2-a2): 60 Tier W worlds, 120 requests; cap 528 on the shared ledger = 16 smoke + 360 main + 120 P5 + 32 retries (520 + 8 per the authorisation).",
  "task_wording": "v3"
 }

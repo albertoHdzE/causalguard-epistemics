@@ -341,14 +341,27 @@ DEEPSEEK_PRICE_PEAK = {"input_cache_hit": 0.044, "input_cache_miss": 1.32, "outp
 DEEPSEEK_SPEND_STOP = 25.0
 
 
-def deepseek_cost(usage: dict) -> dict:
+def deepseek_peak(ts: float) -> bool:
+    """DeepSeek's peak window: 01:00-04:00 and 06:00-10:00 UTC, Monday to Friday (Chinese public holidays are
+    off-peak; none falls in the sprint window)."""
+    import datetime
+    d = datetime.datetime.fromtimestamp(ts, datetime.timezone.utc)
+    return d.weekday() < 5 and (1 <= d.hour < 4 or 6 <= d.hour < 10)
+
+
+def deepseek_cost(usage: dict, ts: float | None = None) -> dict:
+    """Per-request cost: ``usd`` at the list price of the request time (peak or off-peak = half; amendment v2-a2,
+    the spend stop uses it) and ``usd_upper`` at the peak price."""
+    ts = time.time() if ts is None else ts
     hit = int(usage.get("prompt_cache_hit_tokens") or 0)
     miss = usage.get("prompt_cache_miss_tokens")
     miss = int(miss) if miss is not None else int(usage.get("prompt_tokens") or 0) - hit
     out = int(usage.get("completion_tokens") or 0)
     p = DEEPSEEK_PRICE_PEAK
     usd = (hit * p["input_cache_hit"] + miss * p["input_cache_miss"] + out * p["output"]) / 1e6
-    return {"usd_upper": round(usd, 6), "basis": "peak list price", "cache_hit_tokens": hit,
+    peak = deepseek_peak(ts)
+    return {"usd": round(usd if peak else usd / 2, 6), "usd_upper": round(usd, 6), "peak": peak,
+            "basis": "list price at request time (usd) and at peak (usd_upper)", "cache_hit_tokens": hit,
             "cache_miss_tokens": miss, "output_tokens": out}
 
 
@@ -363,7 +376,12 @@ def spend_total(ledger: str | None) -> float:
     ledger = _runs_path(ledger)
     if not ledger or not Path(ledger).exists():
         return 0.0
-    return sum(json.loads(x)["usd_upper"] for x in Path(ledger).read_text().splitlines() if x.strip())
+    tot = 0.0
+    for x in Path(ledger).read_text().splitlines():
+        if x.strip():
+            d = json.loads(x)
+            tot += d["usd"] if "usd" in d else d["usd_upper"]      # lines before v2-a2 carry the peak price only
+    return tot
 
 
 def spend_record(ledger: str | None, cost: dict) -> None:
@@ -373,7 +391,8 @@ def spend_record(ledger: str | None, cost: dict) -> None:
     Path(ledger).parent.mkdir(parents=True, exist_ok=True)
     with open(ledger, "a") as fh:
         fcntl.flock(fh, fcntl.LOCK_EX)
-        fh.write(json.dumps({"usd_upper": cost["usd_upper"], "t": time.time()}) + "\n")
+        fh.write(json.dumps({k: cost[k] for k in ("usd", "usd_upper", "peak") if k in cost} | {"t": time.time()})
+                 + "\n")
         fcntl.flock(fh, fcntl.LOCK_UN)
 
 
