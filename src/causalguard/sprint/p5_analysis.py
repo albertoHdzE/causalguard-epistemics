@@ -52,14 +52,45 @@ def p5_worlds(run: dict, man: dict) -> list[dict]:
         turns = rec["episode"].get("turns", [])
         raw2 = turns[1].get("raw_output") if len(turns) > 1 and turns[1].get("ok") else None
         alt = altered(x, man["assign_salt"]) if x["condition"] == "P5f" else None
-        d = S.p5_detection_world(x["condition"], x["named"], check_errors_from_raw(raw2), alt)
-        out.append({**w, "D": d, "contradiction": contradiction(rec["episode"].get("followup", ""))
+        ce = check_errors_from_raw(raw2)
+        d = S.p5_detection_world(x["condition"], x["named"], ce, alt)
+        # D104(i), sensitivity: only the named claims whose forgery alters exactly one line
+        d1 = S.p5_detection_world(x["condition"], [c for c in x["named"] if len(alt[c]["lines"]) == 1], ce, alt) \
+            if alt else None
+        out.append({**w, "D": d, "D_single_line": d1, "contradiction": contradiction(rec["episode"].get("followup", ""))
                     if x["condition"] == "P5f" else None,
                     "reasoning_chars": sum(len(t.get("reasoning") or "") for t in turns)})
     return out
 
 
-def model_p5(ws: list[dict], main_w: list[dict] | None, B: int) -> dict:
+def _d_mean_where(field: str, cond: str, key: str = "D", flag: bool | None = None):
+    """Mean of a detection field over valid P5 worlds of ``cond``; ``key`` selects the full or the single-line
+    scoring; ``flag`` restricts to worlds whose forged message does (True) / does not (False) contain a visible
+    contradiction (D104(ii), post-hoc)."""
+    return lambda ws: S.mean_of([w for w in ws if w["condition"] == cond and w.get(key) and w[key]["valid"]
+                                 and (flag is None or bool(w.get("contradiction")) == flag)],
+                                lambda w: w[key].get(field))[0]
+
+
+def _n_where(ws, cond, flag):
+    return sum(1 for w in ws if w["condition"] == cond and w.get("D") and w["D"]["valid"]
+               and bool(w.get("contradiction")) == flag)
+
+
+def main_contradiction(main_recs: list[dict], main_w: list[dict], B: int) -> dict:
+    """D104(ii) for the locked P4 (lock v1), post-hoc: Tier W P4 forged adoption split by whether the forged
+    message contains a visible contradiction."""
+    flags = {x["wkey"]: contradiction(x["episode"].get("followup", "")) for x in main_recs}
+    ws = [{**w, "contradiction": flags.get(w["wkey"])} for w in main_w if w["tier"] == "W" and w["condition"] == "P4"]
+    out = {"P4_messages": len(ws), "P4_with_contradiction": sum(bool(w["contradiction"]) for w in ws)}
+    for flag in (True, False):
+        sub = [w for w in ws if bool(w["contradiction"]) == flag]
+        out[f"adopt_forged_P4_contradiction_{str(flag).lower()}"] = S.bootstrap(
+            sub, S.c_mean("adopt_forged", "P4"), B=B) | {"n_worlds": len(sub)}
+    return out
+
+
+def model_p5(ws: list[dict], main_w: list[dict] | None, B: int, main_planned: dict | None = None) -> dict:
     res = {"health": {"worlds": len(ws), "error_worlds": sum(w["status"] != "ok" for w in ws),
                       "parsed_t2": sum(w["parsed_t2"] for w in ws),
                       "valid_p5_object": sum(bool(w["D"]["valid"]) for w in ws),
@@ -76,9 +107,20 @@ def model_p5(ws: list[dict], main_w: list[dict] | None, B: int) -> dict:
     res["corruption_P5f"] = S.bootstrap(ws, S.c_mean("corruption", "P5f"), B=B)
     res["verified_discernment"] = S.bootstrap(ws, _c_diff("adopt_check", "P5v", "adopt_forged", "P5f"), B=B,
                                               by="condition")
+    res["exact_single_line"] = S.bootstrap(ws, _d_mean_where("exact", "P5f", "D_single_line"), B=B)
+    res["lenient_single_line"] = S.bootstrap(ws, _d_mean_where("lenient", "P5f", "D_single_line"), B=B)
+    for flag in (True, False):
+        k = f"contradiction_{str(flag).lower()}"
+        res[f"exact_{k}"] = S.bootstrap(ws, _d_mean_where("exact", "P5f", flag=flag), B=B) | {
+            "n_worlds": _n_where(ws, "P5f", flag)}
+        res[f"lenient_{k}"] = S.bootstrap(ws, _d_mean_where("lenient", "P5f", flag=flag), B=B) | {
+            "n_worlds": _n_where(ws, "P5f", flag)}
+        sub = [w for w in ws if w["condition"] == "P5f" and bool(w.get("contradiction")) == flag]
+        res[f"adopt_forged_P5f_{k}"] = S.bootstrap(sub, S.c_mean("adopt_forged", "P5f"), B=B) | {"n_worlds": len(sub)}
     for f in ("exact", "lenient", "false_alarm"):
         res[f]["n_worlds"] = sum(1 for w in ws if w.get("D") and w["D"]["valid"] and
                                  w["condition"] == ("P5v" if f == "false_alarm" else "P5f"))
+    main_planned = main_planned or {}
     if main_w:
         mw = [w for w in main_w if w["tier"] == "W"]
         both = ws + mw
@@ -93,6 +135,15 @@ def model_p5(ws: list[dict], main_w: list[dict] | None, B: int) -> dict:
             "adopt_check_P3": S.bootstrap(mw, S.c_mean("adopt_check", "P3"), B=B),
             "check_discernment_W": S.bootstrap(mw, S.check_discernment, B=B, by="condition"),
             "note": "between-world contrast: P5 worlds differ from the main-panel worlds"}
+        from .analysis import gate_contrasts
+        gate_contrasts(res["vs_main"], both, {"adopt_forged_P5f_minus_P4": ("P5f", "P4"),
+                                              "corruption_P5f_minus_P4": ("P5f", "P4"),
+                                              "adopt_check_P5v_minus_P3": ("P5v", "P3"),
+                                              "check_discernment_W": ("P3", "P4")},
+                       {"P5f": 30, "P5v": 30, **main_planned})
+    from .analysis import MIN_CELL, cell_n
+    res["cells"] = {c: {"finished": cell_n(ws, c), "planned": 30, "below_min": cell_n(ws, c) < MIN_CELL}
+                    for c in ("P5v", "P5f")}
     return res
 
 
@@ -132,6 +183,13 @@ def render(res: dict) -> str:
     return "\n".join(L) + "\n"
 
 
+def _planned_w(run: dict) -> dict:
+    """Planned Tier W worlds per condition of a (merged) main run."""
+    from collections import Counter
+    items = {x["wkey"]: x for x in json.loads((REPO / run["manifest"]).read_text())["items"]}
+    return dict(Counter(items[i]["condition"] for i in run["planned_ids"] if items[i].get("tier") == "W"))
+
+
 def analyze(p5_runs: list[str], main_runs: list[str], out: str, B: int = S.B_DEFAULT) -> dict:
     man = json.loads((REPO / MANIFEST).read_text())
     import hashlib
@@ -142,11 +200,12 @@ def analyze(p5_runs: list[str], main_runs: list[str], out: str, B: int = S.B_DEF
             raise SystemExit(f"{r['run_id']} is not a P5 run")
         ws = p5_worlds(r, man)
         mr = mains.get(r["model"])
-        models[r["model"]] = {"run_id": r["run_id"], "planned": r["planned"], "completed": r["completed"],
+        extra = {"P4_contradiction": main_contradiction(mr["records"], mr["worlds"], B)} if mr else {}
+        models[r["model"]] = {"run_id": r["run_id"], "planned": r["planned"], "completed": r["completed"], **extra,
                               "failed": r["failed"], "missing": r["missing"],
                               "answers_changed_by_reparse": r["answers_changed_by_reparse"],
                               "main_run_id": mr["run_id"] if mr else None,
-                              **model_p5(ws, mr["worlds"] if mr else None, B),
+                              **model_p5(ws, mr["worlds"] if mr else None, B, _planned_w(mr) if mr else None),
                               "per_world": [{"wkey": w["wkey"], "condition": w["condition"], "D": w["D"],
                                              "C": w.get("C"), "contradiction": w["contradiction"]} for w in ws]}
     res = _r({"manifest": MANIFEST, "manifest_sha256": hashlib.sha256((REPO / MANIFEST).read_bytes()).hexdigest(),

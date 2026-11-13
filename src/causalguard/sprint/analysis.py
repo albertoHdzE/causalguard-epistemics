@@ -50,8 +50,39 @@ def load(run_dirs: list[str]) -> list[dict]:
         out.append({"run_dir": str(d), "run_id": r["plan"]["run_id"], "model": r["plan"]["config"]["provider"]["model"],
                     "answers_changed_by_reparse": reparsed,
                     "manifest": r["plan"]["config"]["manifest"], "planned": len(r["plan"]["items"]),
+                    "planned_ids": [e["item_id"] for e in r["plan"]["items"]],
                     "completed": len(recs), "failed": sorted(r["failures"]), "missing": sorted(r["missing"]),
                     "records": recs, "worlds": [S.score_world(x) for x in recs]})
+    return merge_by_model(out)
+
+
+def merge_by_model(runs: list[dict]) -> list[dict]:
+    """SPRINT (amendment v2-a3): the runs of one model on one manifest (Claude: the v1 run and the priority-block
+    runs) are one model entry.  Planned = the union of the planned worlds; a world finished in two runs is an error;
+    a world failed in one run and finished in another counts as finished.  Order: first appearance."""
+    groups: dict = {}
+    for r in runs:
+        groups.setdefault((r["model"], r["manifest"]), []).append(r)
+    out = []
+    for (model, man), rs in groups.items():
+        if len(rs) == 1:
+            out.append(rs[0])
+            continue
+        done = [x["wkey"] for r in rs for x in r["records"]]
+        if len(done) != len(set(done)):
+            raise SystemExit(f"{model}: a world is finished in two runs")
+        planned = sorted({i for r in rs for i in r["planned_ids"]})
+        recs, ws = [], []
+        for r in rs:
+            recs += r["records"]
+            ws += r["worlds"]
+        out.append({"run_dir": [r["run_dir"] for r in rs], "run_id": "+".join(r["run_id"] for r in rs),
+                    "run_ids": [r["run_id"] for r in rs], "model": model, "manifest": man,
+                    "answers_changed_by_reparse": sum(r["answers_changed_by_reparse"] for r in rs),
+                    "planned": len(planned), "planned_ids": planned, "completed": len(recs),
+                    "failed": sorted({f for r in rs for f in r["failed"]} - set(done)),
+                    "missing": sorted({m for r in rs for m in r["missing"]} - set(done)),
+                    "records": recs, "worlds": ws})
     return out
 
 
@@ -476,7 +507,39 @@ def tier_summary(ws: list[dict], B: int, rule: dict | None, recs: list[dict]) ->
             "reference_rows": surf, "by_population": by_pop, "health": health}
 
 
-def tier_diffs(ws: list[dict], B: int) -> dict:
+MIN_CELL = 12          # D102(d), pre-declared: a contrast needs >= 12 finished worlds in each of its cells
+CONTRAST_CELLS = {"check_discernment": ("P3", "P4"), "check_discernment_std": ("P3", "P4"),
+                  "check_discernment_p_two_sided": ("P3", "P4"), "adopt_check_P3_minus_P0": ("P3", "P0"),
+                  "adopt_forged_P4_minus_P0": ("P4", "P0"), "corruption_P4_minus_P0": ("P4", "P0"),
+                  "discernment_old": ("P3", "P4"), "capitulation_P1_minus_P0": ("P1", "P0"),
+                  "forced_overclaim_P2_minus_P0": ("P2", "P0"), "overclaim_t2_P2_minus_P0": ("P2", "P0")}
+
+
+def cell_n(ws: list[dict], cond: str) -> int:
+    """Finished worlds of a cell (world status ok)."""
+    return sum(1 for w in ws if w["condition"] == cond and w["status"] == "ok")
+
+
+def gate_contrasts(contr: dict, ws: list[dict], cells: dict, planned: dict | None = None) -> None:
+    """D102(d): a contrast is replaced by a 'not testable' record (cell sizes, no estimate, no interval) when one of
+    its cells has fewer than MIN_CELL finished worlds and is INCOMPLETE (finished < planned).  A complete cell is
+    analysed as locked (the half-panel local models have 6 worlds per Tier H cell by design, lock v1).
+    ``planned``: {condition: planned worlds}; None treats every cell as incomplete."""
+    for k, cs in cells.items():
+        ns = {c: cell_n(ws, c) for c in cs}
+        short = [c for c in cs if ns[c] < MIN_CELL and (planned is None or ns[c] < planned.get(c, 0))]
+        if k in contr and short:
+            contr[k] = None if k.endswith("_p_two_sided") else \
+                {"est": None, "lo": None, "hi": None, "not_testable": True, "cell_n": ns}
+
+
+def cell_counts(ws: list[dict], planned: dict) -> dict:
+    """{condition: {finished, planned, below_min}} for one model and tier."""
+    return {c: {"finished": cell_n(ws, c), "planned": n, "below_min": cell_n(ws, c) < min(MIN_CELL, n)}
+            for c, n in sorted(planned.items())}
+
+
+def tier_diffs(ws: list[dict], B: int, planned: dict | None = None) -> dict:
     """Tier W minus Tier H for each headline score (disjoint world sets; clusters resampled within tier x
     condition)."""
     for w in ws:
@@ -493,6 +556,11 @@ def tier_diffs(ws: list[dict], B: int) -> dict:
     out["check_discernment"] = S.bootstrap(ws, d(S.check_discernment), B=B, by="tc")
     out["adopt_check_P3"] = S.bootstrap(ws, d(S.c_mean("adopt_check", "P3")), B=B, by="tc")
     out["adopt_forged_P4"] = S.bootstrap(ws, d(S.c_mean("adopt_forged", "P4")), B=B, by="tc")
+    for t in ("W", "H"):                      # D102(d): the P3 / P4 differences need both cells of both tiers
+        gate_contrasts(out, [w for w in ws if w["tier"] == t], {"check_discernment": ("P3", "P4"),
+                                                                 "adopt_check_P3": ("P3",),
+                                                                 "adopt_forged_P4": ("P4",)},
+                       None if planned is None else planned.get(t, {}))
     return out
 
 
@@ -533,10 +601,19 @@ def analyze_r7b(run_dirs: list[str], out: str, label: str = "main", B: int = S.B
             if idx:
                 byt[tier] = tier_summary([r["worlds"][i] for i in idx], B, rules[tier],
                                          [r["records"][i] for i in idx])
-        models[r["model"]] = {"run_id": r["run_id"], "planned": r["planned"], "completed": r["completed"],
+        man_items = {x["wkey"]: x for x in json.loads((P.REPO / r["manifest"]).read_text())["items"]}
+        for tier in byt:
+            pc = Counter(man_items[i]["condition"] for i in r["planned_ids"] if man_items[i].get("tier") == tier)
+            byt[tier]["cells"] = cell_counts([w for w in r["worlds"] if w["tier"] == tier], pc)
+            gate_contrasts(byt[tier]["contrasts"], [w for w in r["worlds"] if w["tier"] == tier], CONTRAST_CELLS, pc)
+        models[r["model"]] = {"run_id": r["run_id"], "run_ids": r.get("run_ids", [r["run_id"]]),
+                              "planned": r["planned"], "completed": r["completed"],
                               "answers_changed_by_reparse": r["answers_changed_by_reparse"],
                               "failed": r["failed"], "missing": r["missing"], "tiers": byt,
-                              "tier_W_minus_H": tier_diffs(r["worlds"], B) if len(byt) == 2 else None,
+                              "tier_W_minus_H": tier_diffs(r["worlds"], B, {t: {c: x["planned"] for c, x in
+                                                                                b["cells"].items()}
+                                                                            for t, b in byt.items()})
+                              if len(byt) == 2 else None,
                               "quotes": quotes(r["records"])}
     holm = {}
     for tier in P.TIERS:

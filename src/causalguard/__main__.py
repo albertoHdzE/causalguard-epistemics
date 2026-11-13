@@ -240,7 +240,7 @@ def build_plan(cfg: dict, run_id: str) -> dict:
 
 SPRINT_COMMANDS = {"sprint-build": "build", "sprint-analyze": "analysis", "sprint-gates": "gates",
                    "sprint-online": "online", "sprint-p5": "p5",
-                   "sprint-coding": "coding"}
+                   "sprint-coding": "coding", "sprint-report-data": "report_data"}
 
 
 def main(argv=None):

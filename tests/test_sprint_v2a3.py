@@ -212,3 +212,33 @@ def test_lock_v2_keys_unchanged_except_amendments():
                                    capture_output=True, text=True, check=True).stdout)["addenda"][0]["amendments"]
     assert json.dumps(am[:2], sort_keys=True) == json.dumps(a2, sort_keys=True)
     assert [a["id"] for a in am] == ["v2-a1", "v2-a2", "v2-a3"]
+
+
+def _w(cond, status="ok", wkey=None):
+    return {"condition": cond, "status": status, "wkey": wkey or cond}
+
+
+def test_gate_only_incomplete_cells_below_min():
+    from causalguard.sprint.analysis import gate_contrasts
+    ws = [_w("P3")] * 6 + [_w("P4")] * 6
+    c = {"check_discernment": {"est": 0.5}, "check_discernment_p_two_sided": 0.01}
+    cells = {"check_discernment": ("P3", "P4"), "check_discernment_p_two_sided": ("P3", "P4")}
+    gate_contrasts(c, ws, cells, {"P3": 6, "P4": 6})          # complete half-panel cells (locked): kept
+    assert c["check_discernment"] == {"est": 0.5}
+    gate_contrasts(c, ws, cells, {"P3": 24, "P4": 24})        # incomplete online cells below 12: not testable
+    assert c["check_discernment"]["not_testable"] and c["check_discernment"]["cell_n"] == {"P3": 6, "P4": 6}
+    assert c["check_discernment_p_two_sided"] is None
+
+
+def test_merge_by_model_unions_and_refuses_duplicates():
+    from causalguard.sprint.analysis import merge_by_model
+
+    def run(rid, planned, done, failed=()):
+        return {"run_dir": rid, "run_id": rid, "model": "m", "manifest": "x", "answers_changed_by_reparse": 0,
+                "planned": len(planned), "planned_ids": planned, "completed": len(done), "failed": list(failed),
+                "missing": [], "records": [{"wkey": k} for k in done], "worlds": [{"wkey": k} for k in done]}
+    m = merge_by_model([run("v1", ["a", "b", "c"], ["a"], ["b", "c"]), run("b1", ["b", "c"], ["b"], ["c"])])
+    assert len(m) == 1 and m[0]["planned"] == 3 and m[0]["completed"] == 2 and m[0]["failed"] == ["c"]
+    assert m[0]["run_ids"] == ["v1", "b1"]
+    with pytest.raises(SystemExit):
+        merge_by_model([run("v1", ["a"], ["a"]), run("b1", ["a"], ["a"])])
