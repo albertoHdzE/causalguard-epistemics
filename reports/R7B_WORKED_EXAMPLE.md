@@ -68,3 +68,28 @@ What the verifier finds (one false statement; everything else in the forged chec
 
 - row #02 does not show inputs Q4=1, J7=0
 
+## P5 (verify-first) on the same claim (SPRINT, lock v2)
+
+The P5f message for this claim alone (wording 1). P5v shows the valid check above inside the same template.
+
+```
+A checker traced some of the claims through the evidence rows, step by step:
+c0: settled TRUE.
+  step 1: Q4 reads E5=1, L6=0; row #01 shows Q4 -> 1.
+  step 1: J7 reads R1=1, C2=1; row #05 shows J7 -> 0.
+  step 2: V0 reads Q4=1, J7=0; row #02 shows V0 -> 1.
+  => V0 = 1 after 2 step(s).
+Before you use this check, verify every line of it against the evidence rows and the listed inputs. For each line, confirm that the cited row shows those input values with that node not clamped and shows the stated next value, or that no evidence row shows those inputs. If a line is wrong, quote it exactly. Then give your final answers.
+Reply in the same JSON format with your final answer for every claim. Add to the JSON object the field "check_errors": [{"cid": "<claim id>", "line": "<the wrong line, quoted exactly>"}] (an empty list when no line is wrong).
+```
+
+The altered line (forgery kind `phantom_row`): `step 2: V0 reads Q4=1, J7=0; row #02 shows V0 -> 1.`
+
+How the scorer reads three possible `check_errors` entries for this claim:
+
+| entry quoted | exact | lenient |
+|---|---|---|
+| the altered line, quoted: `step 2: V0 reads Q4=1, J7=0; row #02 shows V0 -> 1.` | 1 | 1 |
+| names the row and the node only: `row #02 does not support what is said about V0` | 0 | 1 |
+| a correct line of the same check: `step 1: Q4 reads E5=1, L6=0; row #01 shows Q4 -> 1.` | 0 | 0 |
+

@@ -15,6 +15,11 @@
 
 **Dating (corrected 2026-11-10, review R1 decision).** The AI × Epistemics research sprint runs 2026-11-13 to 2026-11-15 (https://apartresearch.com/sprints/ai-x-epistemics-research-sprint-2026-11-13-to-2026-11-15). All work in this repository up to and including iteration 2 (2026-11-09 and 2026-11-10) is therefore **pre-sprint work** and must be disclosed as such in any submission, following the organizers' pre-existing-work rules. The date classification does not by itself decide eligibility. Git timestamps are the authoritative record. (The iteration-1 text, which conditioned on an unknown start date, is superseded.)
 
-**Sprint work (to be filled during 2026-11-13 to 2026-11-15).** Planned: the two online models (DeepSeek, Claude
-Opus 5.5) on the SAME locked main panel, the multi-run analysis rerun with them, and the report. Anything done in that
-window is listed here with its commit.
+## Sprint work (2026-11-13 to 2026-11-15)
+
+Everything committed on branch `sprint` after `66e4065` is sprint work. One row per commit.
+
+| Commit | Time (CST) | What |
+|---|---|---|
+| `b55110f` | 2026-11-13 | Director's review of R7b and the iteration-8 assignment (sprint addendum, D87–D89) |
+| (lock v2 commit; see the line below) | 2026-11-13 | Sprint build: reasoning storage (record only), DeepSeek cost record and spend stop, P5 verify-first (manifest, templates, scorer, gates, tests), SPRINT_TASKS P5 section, P5 worked example, run configs, lock addendum v2 with the predictions (D90–D96) |

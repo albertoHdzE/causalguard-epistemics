@@ -126,8 +126,76 @@ def tasks_doc(out: str = "docs/SPRINT_TASKS.md") -> None:
                      for c in x["named"]}
             L += ["What the verifier finds in the P4 example (the false statement per claim):", ""]
             L += [f"- {c} ({x['forgery_kind'][c]}): {'; '.join(v)}" for c, v in probs.items()] + [""]
+    L += p5_tasks_section()
     (P.REPO / out).write_text("\n".join(L) + "\n")
     print(f"wrote {out}")
+
+
+def _p5_example_items() -> tuple:
+    """One P5v and one P5f example from the P5 manifest by sha256('r7b-p5-doc', wkey) (worlds with 4 named)."""
+    import hashlib as _hl
+    m = json.loads((ART / "sprint_p5_manifest.json").read_text())
+    pick = {}
+    for cond in ("P5v", "P5f"):
+        pick[cond] = min((x for x in m["items"] if x["condition"] == cond and len(x["named"]) == 4),
+                         key=lambda x: _hl.sha256(f"r7b-p5-doc|{x['wkey']}".encode()).hexdigest())
+    return m, pick
+
+
+def _p5_worked(pub: dict, cid: str, salt: str, f: dict) -> list[str]:
+    """SPRINT (lock v2): the same claim under P5f (wording 1, this claim named alone) and how the P5 scorer reads
+    three possible replies."""
+    from . import scoring as S
+    from . import tasks as T
+    from . import tierw as TW
+    a = TW.altered_lines(pub, cid, salt)
+    msg = T.followup(pub, "P5f", 1, [cid], salt)
+    where = f"row #{a['row']:02d}" if a["row"] is not None else "no evidence row"
+    replies = [("the altered line, quoted", a["lines"][0].strip()),
+               ("names the row and the node only", f"{where} does not support what is said about {a['node']}"),
+               ("a correct line of the same check", next(ln.strip() for ln in f["lines"][1:]
+                                                       if ln not in a["lines"] and "reads" in ln))]
+    L = ["## P5 (verify-first) on the same claim (SPRINT, lock v2)", "",
+         "The P5f message for this claim alone (wording 1). P5v shows the valid check above inside the same "
+         "template.", "", "```", msg, "```", "",
+         f"The altered line (forgery kind `{a['kind']}`): `{a['lines'][0].strip()}`", "",
+         "How the scorer reads three possible `check_errors` entries for this claim:", "",
+         "| entry quoted | exact | lenient |", "|---|---|---|"]
+    for name, q in replies:
+        r = S.p5_detection_world("P5f", [cid], [{"cid": cid, "line": q}], {cid: a})
+        L.append(f"| {name}: `{q}` | {r['exact']:.0f} | {r['lenient']:.0f} |")
+    return L + [""]
+
+
+def p5_tasks_section() -> list[str]:
+    """SPRINT (lock v2): the P5 templates and one P5v and one P5f message.  NOTE: these two P5 worlds are shown in
+    this document, which no model reads; they remain in the P5 panel (disclosed)."""
+    from . import tasks as T
+    from . import tierw as TW
+    m, pick = _p5_example_items()
+    h = T.p5_template_hashes()
+    L = ["## P5 verify-first (SPRINT, lock addendum v2; Tier W only)", "",
+         "The P3/P4 Tier W template of the same wording with one verification block inserted before the reply "
+         "instruction and the reply schema extended by `check_errors`; identical in P5v (valid check) and P5f (forged "
+         f"check). Turn 1 is the Tier W Task S message (same suffix sha256 `{T.turn1_suffix_sha256()[:16]}`).", "",
+         f"Verification block (sha256 `{h['p5_verify_block'][:16]}`):", "", "> " + T.P5_VERIFY, "",
+         f"Schema sentence (sha256 `{h['p5_schema'][:16]}`):", "", "> " + T.P5_SCHEMA, "",
+         "| condition | wording | sha256 |", "|---|---|---|"]
+    L += [f"| {c} | {w} | `{h[f'W{c}w{w}'][:16]}` |" for (c, w) in sorted(T.FOLLOWUPS_P5)]
+    L += [""]
+    for cond in ("P5v", "P5f"):
+        x = pick[cond]
+        _, pub = P.tier_public(P.WorldKey.from_json(x), "W", x["design_salt"])
+        L += [f"### {cond} example (P5 world `{x['wkey']}`, wording {x['wording']}; named "
+              f"{', '.join(x['named'])})", "", "```", T.followup(pub, cond, x["wording"], x["named"], m["assign_salt"]),
+              "```", ""]
+        if cond == "P5f":
+            L += ["The altered line of each named claim (what an exact detection quotes):", ""]
+            for c in x["named"]:
+                a = TW.altered_lines(pub, c, m["assign_salt"])
+                L += [f"- {c} ({a['kind']}): `{a['lines'][0].strip()}`"]
+            L += [""]
+    return L
 
 
 def manifests_r7b(splits=("pilot4", "main")) -> dict:
@@ -164,7 +232,7 @@ def engines_r7b(manifest: str, sat: bool = True) -> dict:
         k = P.WorldKey.from_json(x)
         res["worlds"] += 1
         try:
-            ev, pub = P.tier_public(k, x["tier"])
+            ev, pub = P.tier_public(k, x["tier"], x.get("design_salt"))
             ref = P.tier_reference(ev, pub, x["tier"], crosscheck_sat=sat)
             res["worlds_agree"] += 1
             res["claims"] += len(ref)
@@ -290,6 +358,7 @@ def worked_example_doc(out: str = "reports/R7B_WORKED_EXAMPLE.md") -> None:
          f"## The forged check (what P4 shows; forgery kind `{f['kind']}`)", "", "```", *f["lines"], "```", "",
          "What the verifier finds (one false statement; everything else in the forged check is consistent):", "",
          *[f"- {b}" for b in bad], ""]
+    L += _p5_worked(pub, c["cid"], salt, f)
     (P.REPO / out).write_text("\n".join(L) + "\n")
     print(f"wrote {out}: {x['wkey']} {c['cid']}")
 

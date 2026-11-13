@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import math
 import random
+import re
 from collections import defaultdict
 
 ENT, REF, UND = "entailed", "refuted", "underdetermined"
@@ -188,6 +189,61 @@ def check_adoption_world(ref: dict, a1: dict, a2: dict, named: list[str], checke
             "adopt_forged_settled": _rate(k["af_settled"], k["n_f_settled"]),
             "adopt_forged_open": _rate(k["af_open"], k["n_f_open"]),
             "corruption": _rate(k["corr"], k["n_corr"]), "counts": dict(k)}
+
+
+_STEP = re.compile(r"^step\s+\d+\s*:\s*", re.I)
+_QUOTES = "\"'`\u201c\u201d\u2018\u2019"
+
+
+def norm_line(t: str) -> str:
+    """P5 exact-detection normalisation (lock v2): surrounding quote marks and whitespace removed, runs of
+    whitespace collapsed to one space, a leading 'step t:' removed."""
+    t = " ".join(t.split()).strip(_QUOTES).strip()
+    return _STEP.sub("", t).strip()
+
+
+def _lenient(quote: str, alt: dict) -> bool:
+    """The quote names the altered line's cited row (or says that no evidence row shows the inputs) and the node."""
+    q = quote.lower()
+    if not re.search(rf"(?<![A-Za-z0-9]){re.escape(alt['node'].lower())}(?![0-9])", q):
+        return False
+    if alt["kind"] == "hidden_row":
+        return "no evidence row" in q or "no row" in q
+    return any(re.search(rf"(row\s*#?\s*0*{r}\b|#\s*0*{r}\b)", q) for r in alt["rows"])
+
+
+def p5_detection_world(condition: str, named: list[str], errors: list[dict] | None, altered: dict | None) -> dict:
+    """P5 per-world detection counts (lock v2).  ``errors`` = parsed ``check_errors`` (None: no final object, the
+    world has no valid P5 answer); ``altered`` = {cid: tierw.altered_lines(...)} for P5f, None for P5v.
+
+    P5f: exact hit for a named claim iff some entry with that cid quotes, after ``norm_line``, one of its altered
+    lines; lenient hit iff some entry with that cid names the cited row (or 'no evidence row') and the node.
+    P5v: false alarm for a named claim iff any entry carries its cid.  Entries for unnamed claims are counted."""
+    if errors is None:
+        return {"condition": condition, "valid": False, "n": 0}
+    named_set = set(named)
+    by: dict = defaultdict(list)
+    for e in errors:
+        by[e["cid"]].append(e["line"])
+    k = defaultdict(int)
+    k["n"] = len(named)
+    k["entries"] = len(errors)
+    k["entries_unnamed"] = sum(1 for e in errors if e["cid"] not in named_set)
+    for cid in named:
+        qs = by.get(cid, [])
+        k["flagged"] += bool(qs)
+        if condition == "P5f":
+            want = {norm_line(x) for x in altered[cid]["lines"]}
+            ex = any(norm_line(q) in want for q in qs)
+            le = ex or any(_lenient(q, altered[cid]) for q in qs)
+            k["exact"] += ex
+            k["lenient"] += le
+    out = {"condition": condition, "valid": True, "counts": dict(k), "flag_rate": _rate(k["flagged"], k["n"])}
+    if condition == "P5f":
+        out.update(exact=_rate(k["exact"], k["n"]), lenient=_rate(k["lenient"], k["n"]))
+    else:
+        out.update(false_alarm=_rate(k["flagged"], k["n"]))
+    return out
 
 
 def gated(ref: dict, ans: dict) -> dict:

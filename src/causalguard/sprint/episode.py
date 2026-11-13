@@ -39,6 +39,20 @@ def answers_from_raw(raw: str | None, cids: list[str]) -> tuple[bool, dict]:
     return obj is not None, parse_status_answers((obj or {}).get("answers"), cids)
 
 
+def check_errors_from_raw(raw: str | None) -> list[dict] | None:
+    """SPRINT (P5): the ``check_errors`` entries of the final JSON object of a reply (the same object the answers
+    come from).  None when the reply has no final object; [] when the object has no usable list.  Entries keep only
+    string ``cid`` and ``line`` values; anything else is dropped (counted by the scorer as no quote)."""
+    obj = parse_final_json(strip_reasoning(raw)) if raw else None
+    if obj is None:
+        return None
+    ce = obj.get("check_errors")
+    if not isinstance(ce, list):
+        return []
+    return [{"cid": e["cid"].strip(), "line": e["line"]} for e in ce
+            if isinstance(e, dict) and isinstance(e.get("cid"), str) and isinstance(e.get("line"), str)]
+
+
 def reparse(rec: dict) -> tuple[dict, int]:
     """A copy of a run record with every turn's answers re-derived from its raw output; returns (record, number of
     claim answers that differ from the recorded ones)."""
@@ -59,6 +73,9 @@ def _turn(provider, msgs, budget, seed, wid, label) -> tuple[dict, dict, str | N
     res = provider.chat(msgs, 0.0, derive_seed(seed, wid, label), budget.before_attempt)
     rec = {k: res[k] for k in ("ok", "raw_output", "failure", "request_hash")}
     rec["attempts"] = res["attempts"]
+    # SPRINT (lock v2, D88): the provider's separate reasoning text, stored as returned; never read by a scorer
+    # (answers come from ``raw_output`` only; test_reasoning_field_never_scored)
+    rec["reasoning"] = res.get("reasoning")
     visible = strip_reasoning(res["raw_output"]) if res["ok"] else None
     obj = parse_final_json(visible)
     last = res["attempts"][-1] if res["attempts"] else {}
@@ -93,6 +110,8 @@ def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None,
         raise ProviderFailure(f"turn 2: {str(rec2['failure'])[:300]}")
     out["turns"].append({**rec2, "answers": parse_status_answers(obj2.get("answers"), cids),
                          "followup_sha256": hashlib.sha256(fu.encode()).hexdigest()})
+    if assignment["condition"] in T.P5_CONDS:
+        out["turns"][-1]["check_errors"] = check_errors_from_raw(rec2["raw_output"] if rec2["ok"] else None)
     out["followup"] = fu
     return out
 
@@ -103,7 +122,7 @@ def sprint_world(p: dict) -> dict:
     from ..llm.providers import make_provider
     k = P.WorldKey.from_json(p["world"])
     tier = p.get("tier", "H")                       # R7b (D79): 'W' wiring given, 'H' wiring hidden
-    ev, pub = P.tier_public(k, tier)
+    ev, pub = P.tier_public(k, tier, p.get("design_salt"))     # design_salt: P5 worlds (lock v2)
     if p.get("public_sha256") and hashlib.sha256(json.dumps(pub, sort_keys=True).encode()).hexdigest() != \
             p["public_sha256"]:
         raise AssertionError("public task differs from the manifest")
@@ -112,7 +131,7 @@ def sprint_world(p: dict) -> dict:
                         world_id=pub["task_id"], phase=p.get("phase", PHASE), phase_cap=p.get("phase_cap"))
     t0 = time.perf_counter()
     assignment = {x: p[x] for x in ("condition", "wording", "named")}
-    for x in ("tier", "salt", "checker_status", "forged_status", "forgery_kind"):
+    for x in ("tier", "salt", "checker_status", "forged_status", "forgery_kind", "design_salt"):
         if x in p:
             assignment[x] = p[x]
     try:

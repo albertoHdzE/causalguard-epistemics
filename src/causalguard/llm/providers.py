@@ -25,6 +25,7 @@ Rules
 from __future__ import annotations
 
 import copy
+import fcntl
 import hashlib
 import json
 import socket
@@ -33,6 +34,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Callable
 
 from ..schema import canonical_json
@@ -113,6 +115,7 @@ class BaseProvider:
         rh = request_hash(self.cfg.model, msgs, temperature, self.cfg.max_tokens, seed)
         attempts = []
         content = None
+        reasoning = None
         ok = False
         failure = None
         max_attempts = 1 + max(0, int(self.cfg.max_transport_retries))
@@ -131,6 +134,10 @@ class BaseProvider:
                            finish_reason=r.get("finish_reason"), response_model=r.get("response_model"))
                 if "isolation" in r:                   # R7 claude_cli: per-request wire audit
                     rec["isolation"] = r["isolation"]
+                for f in ("cost", "reasoning_tokens"):  # SPRINT (lock v2): per-request cost record
+                    if r.get(f) is not None:
+                        rec[f] = r[f]
+                reasoning = r.get("reasoning")         # SPRINT (lock v2): record only; never scored
                 content = r["content"]
                 ok = True
             except TransportError as e:
@@ -145,7 +152,7 @@ class BaseProvider:
                 break
         return {"provider_kind": self.kind, "model": self.cfg.model, "messages": msgs, "temperature": temperature,
                 "max_tokens": self.cfg.max_tokens, "seed": seed, "request_hash": rh, "ok": ok, "raw_output": content,
-                "failure": None if ok else failure, "attempts": attempts}
+                "reasoning": reasoning if ok else None, "failure": None if ok else failure, "attempts": attempts}
 
 
 class OpenAICompatibleProvider(BaseProvider):
@@ -193,6 +200,10 @@ class OpenAICompatibleProvider(BaseProvider):
             raise FatalProviderError(f"non-JSON envelope: {raw[:200]!r}") from None
 
     def _send(self, messages: list[dict], temperature: float, seed: int | None) -> dict:
+        if self.cfg.backend == "deepseek":                 # SPRINT (D89): spend stop before any further request
+            stop = float(self.cfg.extra.get("spend_stop_usd", DEEPSEEK_SPEND_STOP))
+            if spend_total(self.cfg.extra.get("spend_ledger")) >= stop:
+                raise CapExceeded("spend_stop", f"DeepSeek recorded spend >= ${stop}")
         if self.cfg.backend == "ollama" and self.cfg.extra.get("ollama_native_options"):
             return self._send_ollama_native(messages, temperature, seed)
         body = {"model": self.cfg.model, "messages": messages, "temperature": temperature,
@@ -211,9 +222,17 @@ class OpenAICompatibleProvider(BaseProvider):
         out = {"content": content if content is not None else "", "finish_reason": choice.get("finish_reason"),
                "prompt_tokens": usage.get("prompt_tokens"), "completion_tokens": usage.get("completion_tokens"),
                "response_model": r.get("model")}
-        rc = (choice.get("message") or {}).get("reasoning_content")
+        msg = choice.get("message") or {}
+        rc = msg.get("reasoning_content")
+        if rc is None:
+            rc = msg.get("reasoning")                      # LM Studio's separate reasoning field
         if rc is not None:                                 # R7: hidden reasoning is not part of the answer
             out["reasoning_chars"] = len(rc)
+            out["reasoning"] = rc                          # SPRINT (lock v2): stored, never scored
+        if self.cfg.backend == "deepseek":
+            out["cost"] = deepseek_cost(usage)
+            out["reasoning_tokens"] = (usage.get("completion_tokens_details") or {}).get("reasoning_tokens")
+            spend_record(self.cfg.extra.get("spend_ledger"), out["cost"])
         return out
 
     def _send_ollama_native(self, messages: list[dict], temperature: float, seed: int | None) -> dict:
@@ -231,9 +250,12 @@ class OpenAICompatibleProvider(BaseProvider):
         except (KeyError, TypeError, AttributeError):
             raise FatalProviderError(f"malformed envelope: {str(r)[:200]}") from None
         fr = r.get("done_reason")
-        return {"content": content if content is not None else "", "finish_reason": "length" if fr == "length" else fr,
-                "prompt_tokens": r.get("prompt_eval_count"), "completion_tokens": r.get("eval_count"),
-                "response_model": r.get("model")}
+        out = {"content": content if content is not None else "", "finish_reason": "length" if fr == "length" else fr,
+               "prompt_tokens": r.get("prompt_eval_count"), "completion_tokens": r.get("eval_count"),
+               "response_model": r.get("model")}
+        if r["message"].get("thinking") is not None:       # SPRINT (lock v2): stored, never scored
+            out["reasoning"] = r["message"]["thinking"]
+        return out
 
     def _try(self, fn):
         try:
@@ -313,6 +335,48 @@ def _read_key(name: str, env_file: str | None) -> str:
     return v
 
 
+# SPRINT (lock v2, D89): DeepSeek V4-Pro list prices, USD per 1M tokens, PEAK rates (checked 2026-11-13 on
+# api-docs.deepseek.com/quick_start/pricing; off-peak is half).  Spend is recorded at peak rates, an upper bound.
+DEEPSEEK_PRICE_PEAK = {"input_cache_hit": 0.044, "input_cache_miss": 1.32, "output": 3.96}
+DEEPSEEK_SPEND_STOP = 25.0
+
+
+def deepseek_cost(usage: dict) -> dict:
+    hit = int(usage.get("prompt_cache_hit_tokens") or 0)
+    miss = usage.get("prompt_cache_miss_tokens")
+    miss = int(miss) if miss is not None else int(usage.get("prompt_tokens") or 0) - hit
+    out = int(usage.get("completion_tokens") or 0)
+    p = DEEPSEEK_PRICE_PEAK
+    usd = (hit * p["input_cache_hit"] + miss * p["input_cache_miss"] + out * p["output"]) / 1e6
+    return {"usd_upper": round(usd, 6), "basis": "peak list price", "cache_hit_tokens": hit,
+            "cache_miss_tokens": miss, "output_tokens": out}
+
+
+def _runs_path(p: str | None) -> str | None:
+    import os
+    if p and p.startswith("RUNS/"):
+        return str(Path(os.environ.get("CAUSALGUARD_RUNS", "runs")) / p[len("RUNS/"):])
+    return p
+
+
+def spend_total(ledger: str | None) -> float:
+    ledger = _runs_path(ledger)
+    if not ledger or not Path(ledger).exists():
+        return 0.0
+    return sum(json.loads(x)["usd_upper"] for x in Path(ledger).read_text().splitlines() if x.strip())
+
+
+def spend_record(ledger: str | None, cost: dict) -> None:
+    ledger = _runs_path(ledger)
+    if not ledger:
+        return
+    Path(ledger).parent.mkdir(parents=True, exist_ok=True)
+    with open(ledger, "a") as fh:
+        fcntl.flock(fh, fcntl.LOCK_EX)
+        fh.write(json.dumps({"usd_upper": cost["usd_upper"], "t": time.time()}) + "\n")
+        fcntl.flock(fh, fcntl.LOCK_UN)
+
+
 class ClaudeCLIProvider(BaseProvider):
     """R7 sprint: Claude (Opus 5.5) through the Claude Code command line, non-interactive, isolated.
 
@@ -346,6 +410,8 @@ class ClaudeCLIProvider(BaseProvider):
              "--strict-mcp-config", "--setting-sources", "", "--disable-slash-commands", "--output-format", "json"]
         if self.cfg.extra.get("effort"):
             a += ["--effort", self.cfg.extra["effort"]]
+        if self.cfg.extra.get("thinking_summaries"):     # SPRINT (lock v2): ask for the thinking summary text
+            a += ["--settings", json.dumps({"showThinkingSummaries": True})]
         return a + (["--resume", session] if resume else ["--session-id", session])
 
     def _send(self, messages, temperature, seed):
@@ -390,7 +456,13 @@ class ClaudeCLIProvider(BaseProvider):
             raise FatalProviderError(f"claude_cli isolation audit failed: {iso['problems']}")
         tin = sum(int(u.get(k) or 0) for k in ("input_tokens", "cache_creation_input_tokens",
                                                 "cache_read_input_tokens"))
-        return {"content": text, "finish_reason": r.get("stop_reason") or r.get("subtype"), "prompt_tokens": tin,
+        th = self.thinking_text(workdir, session)
+        mu = r.get("modelUsage") or {}
+        return {"reasoning": th["text"], "cost": {"total_cost_usd": r.get("total_cost_usd"), "basis": "claude -p "
+                "total_cost_usd (subscription; notional)", "thinking_blocks": th["blocks"],
+                "thinking_blocks_with_text": th["with_text"], "reasoning_available": th["with_text"] > 0},
+                "reasoning_tokens": sum(int(v.get("thinkingTokens") or 0) for v in mu.values()) or None,
+                "content": text, "finish_reason": r.get("stop_reason") or r.get("subtype"), "prompt_tokens": tin,
                 "completion_tokens": u.get("output_tokens"), "response_model": ",".join(sorted(
                     (r.get("modelUsage") or {}).keys())) or self.cfg.model, "isolation": iso}
 
@@ -403,6 +475,27 @@ class ClaudeCLIProvider(BaseProvider):
         from pathlib import Path as _P
         d = _re.sub(r"[^A-Za-z0-9]", "-", os.path.realpath(workdir))
         return _P.home() / ".claude" / "projects" / d / f"{session}.jsonl"
+
+    def thinking_text(self, workdir: str, session: str) -> dict:
+        """SPRINT (lock v2): the thinking blocks of the LAST assistant reply in the CLI transcript (the blocks after
+        the last api-request record).  Text is whatever the route returns (a summary when thinking summaries are
+        requested; empty when the display is omitted).  Record only; never scored."""
+        try:
+            lines = [json.loads(x) for x in self.transcript(workdir, session).read_text().splitlines() if x.strip()]
+        except (OSError, json.JSONDecodeError):
+            return {"text": None, "blocks": 0, "with_text": 0}
+        reqs = [i for i, x in enumerate(lines) if x.get("type") == "api-request"]
+        tail = lines[reqs[-1] + 1:] if reqs else lines
+        parts, blocks = [], 0
+        for x in tail:
+            if x.get("type") != "assistant" or not isinstance(x.get("message"), dict):
+                continue
+            for b in x["message"].get("content") or []:
+                if isinstance(b, dict) and b.get("type") in ("thinking", "redacted_thinking"):
+                    blocks += 1
+                    if b.get("thinking"):
+                        parts.append(b["thinking"])
+        return {"text": "\n\n".join(parts) if parts else None, "blocks": blocks, "with_text": len(parts)}
 
     def audit_wire(self, workdir: str, session: str, system: str, prompt: str) -> dict:
         """Read the CLI's own record of the LAST API request of this session and classify every text block:

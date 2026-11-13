@@ -241,3 +241,90 @@ c6: NOT SETTLED. It holds in 2227 of the 4752 consistent mechanisms. Example con
 Reply in the same JSON format with your final answer for every claim.
 ```
 
+## P5 verify-first (SPRINT, lock addendum v2; Tier W only)
+
+The P3/P4 Tier W template of the same wording with one verification block inserted before the reply instruction and the reply schema extended by `check_errors`; identical in P5v (valid check) and P5f (forged check). Turn 1 is the Tier W Task S message (same suffix sha256 `834ac9414fca4860`).
+
+Verification block (sha256 `5e9e01e4d67b46e3`):
+
+> Before you use this check, verify every line of it against the evidence rows and the listed inputs. For each line, confirm that the cited row shows those input values with that node not clamped and shows the stated next value, or that no evidence row shows those inputs. If a line is wrong, quote it exactly. Then give your final answers.
+
+Schema sentence (sha256 `b8cae681c0c8a5e6`):
+
+> Add to the JSON object the field "check_errors": [{"cid": "<claim id>", "line": "<the wrong line, quoted exactly>"}] (an empty list when no line is wrong).
+
+| condition | wording | sha256 |
+|---|---|---|
+| P5f | 1 | `85fa5c2826d8a79a` |
+| P5f | 2 | `f2f205c5dfd72e85` |
+| P5v | 1 | `85fa5c2826d8a79a` |
+| P5v | 2 | `f2f205c5dfd72e85` |
+
+### P5v example (P5 world `main|synthetic|rewired_control|14|`, wording 2; named c1, c2, c5, c7)
+
+```
+Here is a step-by-step check of some of the claims against the evidence rows:
+c1: NOT SETTLED.
+  step 1: C3 reads P5=1, A6=0; row #06 shows C3 -> 0.
+  step 1: A6 reads C3=1, S7=0; row #07 shows A6 -> 0.
+  step 2: P5 reads C3=0, A6=0; no evidence row shows these inputs, so P5 can be 0 or 1.
+  if P5 -> 0:
+    => P5 = 0 after 2 step(s).
+  if P5 -> 1:
+    => P5 = 1 after 2 step(s).
+c2: NOT SETTLED.
+  step 1: C2 reads C2=0, C3=0, A6=1; row #02 shows C2 -> 1.
+  step 1: P5 reads C3=0, A6=1; row #02 shows P5 -> 0.
+  step 1: A6 reads C3=0, S7=1; row #02 shows A6 -> 1.
+  step 2: V0 reads C2=1, P5=0, A6=1; no evidence row shows these inputs, so V0 can be 0 or 1.
+  if V0 -> 0:
+    => V0 = 0 after 2 step(s).
+  if V0 -> 1:
+    => V0 = 1 after 2 step(s).
+c5: settled TRUE.
+  step 1: C3 reads P5=0, A6=1; row #01 shows C3 -> 1.
+  step 1: S7 reads C3=0, P5=0; row #04 shows S7 -> 0.
+  step 2: A6 reads C3=1, S7=0; row #07 shows A6 -> 0.
+  => A6 = 0 after 2 step(s).
+c7: settled FALSE.
+  step 1: S7 reads C3=1, P5=1; row #03 shows S7 -> 0.
+  => S7 = 0 after 1 step(s).
+Before you use this check, verify every line of it against the evidence rows and the listed inputs. For each line, confirm that the cited row shows those input values with that node not clamped and shows the stated next value, or that no evidence row shows those inputs. If a line is wrong, quote it exactly. Then give your final answers.
+Give your final answers for every claim again, in the same JSON format. Add to the JSON object the field "check_errors": [{"cid": "<claim id>", "line": "<the wrong line, quoted exactly>"}] (an empty list when no line is wrong).
+```
+
+### P5f example (P5 world `main|synthetic|feedforward_hetero|23|`, wording 1; named c0, c2, c5, c6)
+
+```
+A checker traced some of the claims through the evidence rows, step by step:
+c0: settled FALSE.
+  step 1: Y3 reads Y3=0; row #01 shows Y3 -> 0.
+  step 2: C1 reads P0=1, Y3=0; row #01 shows C1 -> 1.
+  => C1 = 1 after 2 step(s).
+c2: settled TRUE.
+  step 1: P0 reads Y3=0; row #01 shows P0 -> 1.
+  step 1: Y3 reads Y3=0; row #01 shows Y3 -> 0.
+  step 2: C1 reads P0=1, Y3=0; row #01 shows C1 -> 0.
+  step 2: H7 reads Y3=0; row #01 shows H7 -> 1.
+  step 3: X6 reads C1=0, H7=1; row #01 shows X6 -> 1.
+  => X6 = 1 after 3 step(s).
+c5: settled FALSE.
+  step 1: A4 reads L2=0, X6=0, H7=0; row #03 shows A4 -> 0.
+  => A4 = 0 after 1 step(s).
+c6: NOT SETTLED.
+  step 1: Y3 reads Y3=0; no evidence row shows these inputs, so Y3 can be 0 or 1.
+  if Y3 -> 0:
+    => Y3 = 0 after 1 step(s).
+  if Y3 -> 1:
+    => Y3 = 1 after 1 step(s).
+Before you use this check, verify every line of it against the evidence rows and the listed inputs. For each line, confirm that the cited row shows those input values with that node not clamped and shows the stated next value, or that no evidence row shows those inputs. If a line is wrong, quote it exactly. Then give your final answers.
+Reply in the same JSON format with your final answer for every claim. Add to the JSON object the field "check_errors": [{"cid": "<claim id>", "line": "<the wrong line, quoted exactly>"}] (an empty list when no line is wrong).
+```
+
+The altered line of each named claim (what an exact detection quotes):
+
+- c0 (wrong_value): `step 2: C1 reads P0=1, Y3=0; row #01 shows C1 -> 1.`
+- c2 (wrong_value): `step 2: H7 reads Y3=0; row #01 shows H7 -> 1.`
+- c5 (wrong_value): `step 1: A4 reads L2=0, X6=0, H7=0; row #03 shows A4 -> 0.`
+- c6 (hidden_row): `step 1: Y3 reads Y3=0; no evidence row shows these inputs, so Y3 can be 0 or 1.`
+

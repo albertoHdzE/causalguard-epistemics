@@ -1,0 +1,37 @@
+{
+ "study": "SPRINT",
+ "mode": "development",
+ "global_cap": 528,
+ "phase": "SPRINT",
+ "phase_cap": 528,
+ "call_ledger": "RUNS/sprint-online-calls/deepseek_v4_pro.jsonl",
+ "workers": 8,
+ "item_timeout_s": 7200,
+ "world_cap": 4,
+ "run_id": "p5-deepseek_v4_pro-v1",
+ "manifest": "artifacts/sprint_p5_manifest.json",
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "deepseek",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-v4-pro",
+  "allow_remote": true,
+  "max_tokens": 16000,
+  "timeout_s": 900,
+  "max_transport_retries": 1,
+  "seed": 0,
+  "extra": {
+   "api_key_env": "DEEPSEEK_API_KEY",
+   "env_file": "/Users/alberto/Documents/projects/AI-security/.env",
+   "body": {
+    "thinking": {
+     "type": "enabled"
+    },
+    "reasoning_effort": "high"
+   },
+   "spend_ledger": "RUNS/sprint-online-calls/deepseek_spend.jsonl"
+  }
+ },
+ "note": "SPRINT P5 verify-first (lock v2): 60 Tier W worlds, 120 requests; cap 528 on the shared ledger = 8 smoke + 360 main + 120 P5 + 40 retries.",
+ "task_wording": "v3"
+}

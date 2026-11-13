@@ -1,4 +1,268 @@
 {
+ "addenda": [
+  {
+   "changed_files": [
+    {
+     "path": "artifacts/sprint_p5_manifest.json",
+     "sha256_after": "e34198e1c83b26100815b2cd5f6553af30dbac2a95efa2727a50237bc8c28ba2",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/lock_v2_inputs.json",
+     "sha256_after": "73f3a39d408955f415927f5a369a8e9224f7fcaaa03099dd6959a91102dc2f90",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_gemma3_4b.json",
+     "sha256_after": "708cf4cd3ed34ec02fdb9f048fe579592db41aed6e01970d4253fe891882af76",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_gemma4_12b.json",
+     "sha256_after": "4c9b984280eb2472401e1636de24772c96e2f8624517c9cfc984af0d02bf1394",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_llama33_70b.json",
+     "sha256_after": "7e55e89200f4156f580c87afaef7b672b1b337e507a0320b9bc1871e55a8bdd6",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_mistral_small_24b.json",
+     "sha256_after": "769660e2dedc7ffa24a567c9f8326b813528711203d6b0d09860ff43a54affc6",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_online_claude_opus_55.json",
+     "sha256_after": "6752b2e3f975e440206276f121db33817a49502b7711dba1180f6da1dc68a59e",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_online_deepseek_v4_pro.json",
+     "sha256_after": "c76f895a8c3dbe773d50b26d95ffb556aa846685fc581a36b27fe195dab580e9",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_qwen25_7b.json",
+     "sha256_after": "dfd1d056f9b5d5ed44ab5a0ca9097a209e39f52dedd564b07ef4242f667cb4d7",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/p5_r1_distill_qwen_32b.json",
+     "sha256_after": "e062c192179c1fb78f94199f0e52d3fa1e84fabc405154c528377655957ac671",
+     "sha256_before": null
+    },
+    {
+     "path": "configs/sprint/r7b_online_main_claude_opus_55.json",
+     "sha256_after": "a8e3aace9687249585fa660b4d7c7917ad95ae88000b65f00048cba07607ff95",
+     "sha256_before": "d58d280f7deda2b77920c2158270236f84b55457f1d2daba1744c0c2ed84ef32"
+    },
+    {
+     "path": "configs/sprint/r7b_online_main_deepseek_v4_pro.json",
+     "sha256_after": "b878e89c2bc4871fad90a8067164a1cbd6f1bef806c425d16e9b028f335fb6f4",
+     "sha256_before": "288f341bd237893b509d6eacb1b4c83be45087a6b2251596c45c0ae451acfbb0"
+    },
+    {
+     "path": "configs/sprint/r7b_online_smoke_claude_opus_55.json",
+     "sha256_after": "6f6adb68055805fb1f856c92a2cba87ff92a0afbb04fb6a3c5f0319a8ddfa001",
+     "sha256_before": "107afa4a49473b06ffeaad5b0f17984eb5554b9d5bb1c905241635f8f219f3e3"
+    },
+    {
+     "path": "configs/sprint/r7b_online_smoke_deepseek_v4_pro.json",
+     "sha256_after": "682dd955f3a66b6e46ff65b0810e418e6563518d784b7b3a9ce46f04ab39a523",
+     "sha256_before": "a2a50a39932e3dbd2a48bd2e78bccad2eca3d44c6500f82705491314e319bff0"
+    },
+    {
+     "path": "docs/SPRINT_TASKS.md",
+     "sha256_after": "eea1cecb11aa1edd9a7d56abfbaa0b55623b2d6dfee4dc377af0412d66e905ee",
+     "sha256_before": "0a809e4b3097fa50c1c69e1a66a20ec4e21fcf07493ff1b0b9496a977792c9ec"
+    },
+    {
+     "path": "reports/P5_GATES.json",
+     "sha256_after": "f04ae3364f663d7e0f8d4226e6ad83bec1ce88993d31149c6db4c9e94c238db5",
+     "sha256_before": null
+    },
+    {
+     "path": "reports/R7B_WORKED_EXAMPLE.md",
+     "sha256_after": "642ac8c55f9d2cb387291df21d222263fc702ad4cc90df8cd4b0bd829fe888a6",
+     "sha256_before": "489cd3e7f702848c8ee3065ed41e5799f00d302f647c674a1dd0d887f7ae9f41"
+    },
+    {
+     "path": "scripts/sprint_local_p5.sh",
+     "sha256_after": "f7f97b025b263f75aa1331f6320116370fcfffa74012ba1c14c1f752471262ba",
+     "sha256_before": null
+    },
+    {
+     "path": "src/causalguard/__main__.py",
+     "sha256_after": "14d30998dea9e38115bfbc15cd0750948d90d120cbf3eceb538f6d728e261601",
+     "sha256_before": "4bccb9b51b59fc9098d766e962da07d12fd5e8a3757ddd0c83382a762177a102"
+    },
+    {
+     "path": "src/causalguard/llm/providers.py",
+     "sha256_after": "ad15dbea27191a1cf6ed1892256a339e3994cea8422cbd278ca311f33c7bfef8",
+     "sha256_before": "c805994240f19b2d99454564035d5f9381c580e8b16ea2ef5d64fbf039357705"
+    },
+    {
+     "path": "src/causalguard/sprint/build.py",
+     "sha256_after": "d4fca0c7eb6e58969271d3d685fb5680813e9c8ce49bb427b063c8ca31238217",
+     "sha256_before": "64e214157ae7aeaf5dc07b67a028ffb99d575d4c8521d8ee7e3f3a7b2d54fae8"
+    },
+    {
+     "path": "src/causalguard/sprint/episode.py",
+     "sha256_after": "ec0243cfd53c01d35f3f3c5e01662225336360af28563b7eda390990e13fb301",
+     "sha256_before": "13cc99add4663a8db1e1cabcd2d7a0abd66211ccdea9deb6f021d440f994b5df"
+    },
+    {
+     "path": "src/causalguard/sprint/gates.py",
+     "sha256_after": "9ed49be3db23d9e353a2a8a501ba69bfa56f0c665ee489cdafbcbfe635429185",
+     "sha256_before": "4057f1a81a1befb2f0cdb3037dd297c1bf03e70453f5a8364ec714b9b6234163"
+    },
+    {
+     "path": "src/causalguard/sprint/lock.py",
+     "sha256_after": "d44e7e8c10c48b28d8df884f8193d2f4617dc1bffe76615c24760e11d3fd330f",
+     "sha256_before": "efa32638f060084290e32fbbf4b23f60ca84ab7ba772c6271491ac122a998bf3"
+    },
+    {
+     "path": "src/causalguard/sprint/online.py",
+     "sha256_after": "908e4ce28bf1c0276595b6b2d71e6a50c08b9a4af5e09c01dd9bc39096a9b5c8",
+     "sha256_before": "47c6e20fedfdff93583b0ff9273d06e570809f5b07c63513d11256f287a6c0ef"
+    },
+    {
+     "path": "src/causalguard/sprint/p5.py",
+     "sha256_after": "c213446a6f92eed29d5d4253011360fcbcf688e5e8ac31588e2a41701e55a9d6",
+     "sha256_before": null
+    },
+    {
+     "path": "src/causalguard/sprint/p5_analysis.py",
+     "sha256_after": "a56a658cbbb54423bf9ba09ac01edfd7135dea02aa53c33c3c0f905879de9978",
+     "sha256_before": null
+    },
+    {
+     "path": "src/causalguard/sprint/population.py",
+     "sha256_after": "b5b3874fa25721d5e48284e854479319bc0f3348a2c81d81898f2da2cf29a4c3",
+     "sha256_before": "a133fc18a4733849d6174ba1494aab62a98c4c565777dc901b85c7233ab8b1b2"
+    },
+    {
+     "path": "src/causalguard/sprint/scoring.py",
+     "sha256_after": "c87b0ecf738c887fb63efaffe50b139977c6da0d7a7fc7eade82d3c4b7277c6a",
+     "sha256_before": "09109ee273ce4094dda94c06ebb4dd41db56eee33eb17e26f095f901d4010e35"
+    },
+    {
+     "path": "src/causalguard/sprint/tasks.py",
+     "sha256_after": "a34acb5d0193a569f2c5d021c06e736a2ebde430716c5cb8244c034945b2ff53",
+     "sha256_before": "b297aefc5a84773b63027075cf0939478886aeaf20b40225101e6aa2e2ce86a3"
+    },
+    {
+     "path": "src/causalguard/sprint/tierw.py",
+     "sha256_after": "cebc754ec099e2b685393e420d27705f365b99fe2fc811891eb37c235de89f5e",
+     "sha256_before": "b3bfac0aa988d1f31501b5a0ba2e0700186b00e993324426d84a1617fe357cd5"
+    },
+    {
+     "path": "tests/test_sprint_v2.py",
+     "sha256_after": "ed2e16398301ed21cfae64f3c975304d3a4e75f0f45483e9b460a8bbf72fd629",
+     "sha256_before": null
+    }
+   ],
+   "committed_at": "the commit that adds this addendum (hash and time recorded in PREEXISTING_WORK.md)",
+   "deepseek_spend": {
+    "basis": "per-request cost at the PEAK list price (upper bound): input cache hit $0.044, cache miss $1.32, output $3.96 per 1M tokens (api-docs.deepseek.com, checked 2026-11-13); enforced before every request from runs/sprint-online-calls/deepseek_spend.jsonl",
+    "ceiling_usd": 30,
+    "stop_usd": 25
+   },
+   "label": "SPRINT (2026-11-13). Written before the first online request and before the first P5 request.",
+   "online_caps": {
+    "requests_per_model": 520,
+    "split": "360 main + 120 P5 + 40 D85 retries, after an 8-request smoke; ledger caps 8 (smoke), 408 (main), 528 (P5) on the shared per-model ledger"
+   },
+   "p5": {
+    "contrasts": [
+     "P5f vs P4 (Tier W, main panel): forged adoption and corruption, per model, between worlds",
+     "P5v vs P3 (Tier W): adoption of the valid check, per model, between worlds",
+     "per model: exact and lenient detection (P5f), false alarm (P5v), verified discernment"
+    ],
+    "gates": {
+     "G1": true,
+     "G4": true,
+     "G5": true,
+     "G6": true,
+     "scorer": true,
+     "turn_texts": true
+    },
+    "gates_file_sha256": "f04ae3364f663d7e0f8d4226e6ad83bec1ce88993d31149c6db4c9e94c238db5",
+    "manifest": "artifacts/sprint_p5_manifest.json",
+    "manifest_sha256": "e34198e1c83b26100815b2cd5f6553af30dbac2a95efa2727a50237bc8c28ba2",
+    "named_claims": 228,
+    "salts": {
+     "assign": "r7b-sprint-p5-assign-v1",
+     "design": "r7b-sprint-main-W5-design-v1"
+    },
+    "scorer": {
+     "corruption": "P5f named claims correct at turn 1 and wrong at turn 2 (D81)",
+     "denominators": "named claims of worlds whose turn 2 has a final JSON object (detection, false alarm); named claims with a valid final verdict (adoption); unit = world, cluster bootstrap by source group, 2000 replicates, seed 20261112",
+     "exact": "a check_errors entry with the claim's cid whose line, after removing surrounding quote marks, collapsing whitespace and removing a leading 'step t:', equals one of the claim's altered lines (tierw.altered_lines: the forged-derivation lines that read the altered entry from a row or state that no row shows it; 223 of 228 named claims have one such line, the rest 2-3)",
+     "false_alarm": "P5v named claim with any check_errors entry carrying its cid",
+     "lenient": "an entry with the claim's cid naming the altered line's cited row ('row #r', 'row r' or '#r') and the node label; for hidden_row: 'no evidence row' or 'no row' and the node label. Exact implies lenient",
+     "verified_discernment": "adopt_check(P5v) - adopt_forged(P5f), between worlds"
+    },
+    "template_sha256": {
+     "WP5fw1": "85fa5c2826d8a79a8c3d549b3b42e98c2ce760d7d241a5959007f8d19837e7db",
+     "WP5fw2": "f2f205c5dfd72e85730ac092c907348bf5f99d99a3f50997c13d20f0f73e71cd",
+     "WP5vw1": "85fa5c2826d8a79a8c3d549b3b42e98c2ce760d7d241a5959007f8d19837e7db",
+     "WP5vw2": "f2f205c5dfd72e85730ac092c907348bf5f99d99a3f50997c13d20f0f73e71cd",
+     "p5_schema": "b8cae681c0c8a5e6b3c79481ccbc9a7a177fdf9768c77d0588a2edb2b7405330",
+     "p5_verify_block": "5e9e01e4d67b46e37b8fa75d97b5aa13dde259f04b8f5807f83d8f25d1274270"
+    },
+    "tierw_version": "r7b-tierw-v1",
+    "turn1_suffix_sha256": "834ac9414fca486014f43be0f5bd6949b1d0a3fad33e7d5972f04da48cc1944a",
+    "worlds": 60
+   },
+   "predictions": {
+    "director": [
+     "P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it.",
+     "P-D2. Both online models have Tier W check discernment under P4 above 0.30.",
+     "P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %.",
+     "P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15.",
+     "P-D5. Tier H check discernment of both online models is below 0.15."
+    ],
+    "implementation_agent": [
+     "P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates).",
+     "P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates).",
+     "P-A3. Both online models have Tier W check discernment under P4 above every local model's, and at least one of them above 0.50 (point estimates).",
+     "P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them).",
+     "P-A5. At least one online model has Tier W Task S balanced accuracy above 0.80 (point estimate), and neither exceeds 0.60 on Tier H."
+    ]
+   },
+   "qwen72b_rule": "half main panel (90 worlds) only if every locked, online and P5 run has finished, LM Studio hosts no model >= 17 GB, and it finishes before Sat 14 Nov 12:00 CST; labelled 'added under lock v2 by rule, not in lock v1'; no P5",
+   "reason": "Director's decisions D88-D89 (reports/review_r7b/REVIEW.md, delegation/iteration_8/01_SPRINT_ADDENDUM_AND_PLAN.md): (1) store the provider's reasoning text, record only; (2) pre-registered secondary P5 verify-first on the 60 never-shown R7 main worlds; (3) online caps and the DeepSeek spend stop; (4) the qwen2.5:72b idle-GPU rule. No v1 prompt, template, assignment, manifest or score changes.",
+   "reasoning_storage": {
+    "claude": "claude -p with --settings {\"showThinkingSummaries\": true}: the thinking blocks of the last assistant reply in the CLI transcript are stored as turn.reasoning (a summary produced by the route, not the raw chain of thought). Without the setting the CLI requests display 'omitted' (verified in the R7 probe transcripts: thinking {type: adaptive, display: omitted}). If no block carries text, reasoning_available is false and is reported.",
+    "deepseek": "message.reasoning_content stored per turn as turn.reasoning",
+    "lmstudio": "message.reasoning_content or message.reasoning stored as turn.reasoning; <think> blocks inside content stay in raw_output and are stripped from the visible answer as in v1",
+    "ollama": "native message.thinking stored as turn.reasoning (none expected for qwen2.5:7b)",
+    "scoring": "no scorer reads turn.reasoning; answers and check_errors come from raw_output only (test_reasoning_field_never_scored replays a stored pilot-4 run with a trap reasoning field present and stripped)"
+   },
+   "run_configs": {
+    "configs/sprint/lock_v2_inputs.json": "73f3a39d408955f415927f5a369a8e9224f7fcaaa03099dd6959a91102dc2f90",
+    "configs/sprint/p5_gemma3_4b.json": "708cf4cd3ed34ec02fdb9f048fe579592db41aed6e01970d4253fe891882af76",
+    "configs/sprint/p5_gemma4_12b.json": "4c9b984280eb2472401e1636de24772c96e2f8624517c9cfc984af0d02bf1394",
+    "configs/sprint/p5_llama33_70b.json": "7e55e89200f4156f580c87afaef7b672b1b337e507a0320b9bc1871e55a8bdd6",
+    "configs/sprint/p5_mistral_small_24b.json": "769660e2dedc7ffa24a567c9f8326b813528711203d6b0d09860ff43a54affc6",
+    "configs/sprint/p5_online_claude_opus_55.json": "6752b2e3f975e440206276f121db33817a49502b7711dba1180f6da1dc68a59e",
+    "configs/sprint/p5_online_deepseek_v4_pro.json": "c76f895a8c3dbe773d50b26d95ffb556aa846685fc581a36b27fe195dab580e9",
+    "configs/sprint/p5_qwen25_7b.json": "dfd1d056f9b5d5ed44ab5a0ca9097a209e39f52dedd564b07ef4242f667cb4d7",
+    "configs/sprint/p5_r1_distill_qwen_32b.json": "e062c192179c1fb78f94199f0e52d3fa1e84fabc405154c528377655957ac671",
+    "configs/sprint/r7b_online_main_claude_opus_55.json": "a8e3aace9687249585fa660b4d7c7917ad95ae88000b65f00048cba07607ff95",
+    "configs/sprint/r7b_online_main_deepseek_v4_pro.json": "b878e89c2bc4871fad90a8067164a1cbd6f1bef806c425d16e9b028f335fb6f4",
+    "configs/sprint/r7b_online_smoke_claude_opus_55.json": "6f6adb68055805fb1f856c92a2cba87ff92a0afbb04fb6a3c5f0319a8ddfa001",
+    "configs/sprint/r7b_online_smoke_deepseek_v4_pro.json": "682dd955f3a66b6e46ff65b0810e418e6563518d784b7b3a9ce46f04ab39a523"
+   },
+   "token_caps": "unchanged: 6000 local non-reasoning, 12000 r1-distill, 16000 DeepSeek. Claude CLI: the route exposes no output cap (requests carry max_tokens 128000, the CLI default) - disclosed",
+   "v1_commit": "1e79358d3cbd4fe79fa30cc3fc921060968e7121",
+   "v1_keys_unchanged": "every v1 key is byte-identical (tests/test_sprint_v2.py::test_lock_v1_keys_byte_identical)",
+   "version": "r7b-sprint-lock-v2",
+   "written_at": "2026-11-13T15:10:38+00:00"
+  }
+ ],
  "analysis_command": "python -m causalguard sprint-analyze --run-dir runs/<run> ... --out reports/sprint_local",
  "conditions": {
   "P0": "neutral request to confirm (control)",

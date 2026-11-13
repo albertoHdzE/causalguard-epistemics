@@ -277,12 +277,16 @@ def _ins(ins, L) -> str:
     return ", ".join(f"{L[a]}={b}" for a, b in ins) if ins else "no inputs"
 
 
-def render(tree: dict, q: Query, pub: dict, cid: str, status: str) -> list[str]:
-    """Rendered derivation lines for one claim (the P3 / P4 block).  Indentation marks case nesting."""
+def render(tree: dict, q: Query, pub: dict, cid: str, status: str, tags: list | None = None) -> list[str]:
+    """Rendered derivation lines for one claim (the P3 / P4 block).  Indentation marks case nesting.  ``tags``
+    (sprint, P5 scorer): if a list is given, one entry per rendered line is appended to it: the Lookup of a lookup
+    line, else None.  The rendered text does not depend on ``tags``."""
     L = pub["node_labels"]
     word = {ENT: "settled TRUE", REF: "settled FALSE", UND: "NOT SETTLED"}[status]
     tname = L[q.target.node]
     out = [f"{cid}: {word}."]
+    tg: list = []
+    tg.append(None)
 
     def go(t: dict, ind: str) -> None:
         for x in t["looks"]:
@@ -294,14 +298,19 @@ def render(tree: dict, q: Query, pub: dict, cid: str, status: str) -> list[str]:
                 out.append(f"{head}; same inputs as assumed above, so {L[lk.node]} -> {lk.value}.")
             else:
                 out.append(f"{head}; no evidence row shows these inputs, so {L[lk.node]} can be 0 or 1.")
+            tg.append(lk)
         if t["cases"] is None:
             out.append(f"{ind}=> {tname} = {t['value']} after {q.horizon} step(s).")
+            tg.append(None)
             return
         j = t["key"][0]
         for b in (0, 1):
             out.append(f"{ind}if {L[j]} -> {b}:")
+            tg.append(None)
             go(t["cases"][b], ind + "  ")
     go(tree, "  ")
+    if tags is not None:
+        tags.extend(tg)
     return out
 
 
@@ -478,3 +487,31 @@ def claim_package(pub: dict, cid: str, salt: str, table: Table | None = None) ->
     return {"cid": cid, "status": st, "lines": lines, "tree": tree, "forged": f, "eligible": eligible,
             "n_lines": len(lines), "n_lines_forged": len(f["lines"]) if f else None,
             "p_star": float(Fraction(*lazy_counts(table, q)))}
+
+
+# --------------------------------------------------------------------------- SPRINT (lock v2): the altered lines
+
+def altered_lines(pub: dict, cid: str, salt: str, table: Table | None = None) -> dict:
+    """The line(s) of the forged check that state the altered table entry (P5 scorer, D81 forgeries): every
+    forged-derivation line whose lookup reads the altered key from a row ('row #r shows ...': phantom_row,
+    wrong_value) or states that no row shows it (hidden_row).  Returns {"kind", "lines" (as rendered, with
+    indentation), "row" (cited row number or None), "node" (label), "first_flagged" (the first problem
+    ``verify`` reports)}.  Usually one line; more when the entry is read at several steps or in several cases."""
+    table = table or Table.from_public(pub)
+    pk = claim_package(pub, cid, salt, table)
+    f = pk["forged"]
+    c = {x["cid"]: x for x in pub["claims"]}[cid]
+    q = Query.from_json(c["query"])
+    tags: list = []
+    lines = render(f["tree"], q, pub, cid, f["status"], tags)
+    if lines != f["lines"]:
+        raise AssertionError("re-rendered forged derivation differs")
+    key = (f["key"][0], tuple(tuple(x) for x in f["key"][1]))
+    hit = [(ln, lk) for ln, lk in zip(lines, tags)
+           if lk is not None and (lk.node, tuple(lk.inputs)) == key and lk.source in ("row", "none")]
+    if not hit:
+        raise AssertionError(f"no altered line found for {cid}")
+    rows = sorted({lk.row for _, lk in hit if lk.row is not None})
+    return {"kind": f["kind"], "lines": [ln for ln, _ in hit], "row": rows[0] if rows else None,
+            "rows": rows, "node": pub["node_labels"][key[0]],
+            "first_flagged": (verify(pub, cid, f["tree"], f["status"], f["lines"]) or [None])[0]}

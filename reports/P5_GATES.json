@@ -1,0 +1,98 @@
+{
+ "G1": {
+  "claims": 480,
+  "cross_tier_claims_settled_h": 1,
+  "cross_tier_violations": [],
+  "cross_tier_worlds": 60,
+  "failures": [],
+  "manifest": "artifacts/sprint_p5_manifest.json",
+  "pass": true,
+  "status_counts": {
+   "H": {},
+   "W": {
+    "entailed": 122,
+    "refuted": 145,
+    "underdetermined": 213
+   }
+  },
+  "worlds": 60,
+  "worlds_agree": 60
+ },
+ "G4": {
+  "denominator_messages": 240,
+  "manifest": "artifacts/sprint_p5_manifest.json",
+  "pass": true,
+  "pass_messages": 240,
+  "problems": [],
+  "swap_messages": 240,
+  "swap_unchanged": 240
+ },
+ "G5": {
+  "denominator_main_worlds": 60,
+  "earlier_model_facing_mechanisms": 148,
+  "earlier_runs": 14,
+  "overlap_mechanism_earlier": 0,
+  "overlap_mechanism_sprint": 0,
+  "overlap_task_sprint": 0,
+  "pass": true,
+  "shown_sprint_worlds": 316
+ },
+ "G6": {
+  "H_claims": 0,
+  "H_forged_differs": 0,
+  "W_claims": 228,
+  "W_p3_pass": 228,
+  "W_p4_fail": 228,
+  "forged_status_H": {},
+  "forged_status_W": {
+   "entailed->refuted": 39,
+   "entailed->underdetermined": 39,
+   "refuted->entailed": 35,
+   "refuted->underdetermined": 44,
+   "underdetermined->entailed": 34,
+   "underdetermined->refuted": 37
+  },
+  "forgery_kinds": {
+   "hidden_row": 77,
+   "phantom_row": 54,
+   "wrong_value": 97
+  },
+  "manifest": "artifacts/sprint_p5_manifest.json",
+  "manifest_mismatch": 0,
+  "pass": true,
+  "problems": []
+ },
+ "altered_lines": {
+  "hidden_row|1 line(s)": 42,
+  "phantom_row|1 line(s)": 24,
+  "wrong_value|1 line(s)": 48,
+  "wrong_value|3 line(s)": 1
+ },
+ "manifest": "artifacts/sprint_p5_manifest.json",
+ "manifest_sha256": "e34198e1c83b26100815b2cd5f6553af30dbac2a95efa2727a50237bc8c28ba2",
+ "pass": true,
+ "scorer": {
+  "empty": 115,
+  "empty_zero": 115,
+  "lenient_only": 115,
+  "lenient_only_ok": 115,
+  "other_line": 115,
+  "other_line_not_exact": 115,
+  "pass": true,
+  "planted_exact": 115,
+  "planted_exact_hit": 115,
+  "planted_false_alarm": 113,
+  "planted_false_alarm_counted": 113,
+  "problems": []
+ },
+ "turn_texts": {
+  "denominator_items": 60,
+  "denominator_messages": 240,
+  "p5_minus_insert_equals_p3p4": 240,
+  "pass": true,
+  "problems": [],
+  "turn1_suffix_equal_main": 60,
+  "turn1_suffix_sha256": "834ac9414fca486014f43be0f5bd6949b1d0a3fad33e7d5972f04da48cc1944a",
+  "turn1_suffix_sha256_from_code": "834ac9414fca486014f43be0f5bd6949b1d0a3fad33e7d5972f04da48cc1944a"
+ }
+}

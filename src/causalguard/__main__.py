@@ -167,8 +167,8 @@ def _items_from_config(cfg: dict):
                               "phase": cfg.get("phase", "SPRINT"), "phase_cap": cfg.get("phase_cap"),
                               "world_cap": cfg.get("world_cap", 4), "two_turns": cfg.get("two_turns", True),
                               **({"task_wording": cfg["task_wording"]} if cfg.get("task_wording") else {}),
-                              **{f: x[f] for f in ("tier", "checker_status", "forged_status", "forgery_kind")
-                                 if f in x},
+                              **{f: x[f] for f in ("tier", "checker_status", "forged_status", "forgery_kind",
+                                                   "design_salt") if f in x},
                               **({"salt": man["assign_salt"]} if "tier" in x else {}),
                               "stratum": x["stratum"], "population": x["population"]}
     else:
@@ -231,7 +231,7 @@ def build_plan(cfg: dict, run_id: str) -> dict:
 
 
 SPRINT_COMMANDS = {"sprint-build": "build", "sprint-analyze": "analysis", "sprint-gates": "gates",
-                   "sprint-online": "online"}
+                   "sprint-online": "online", "sprint-p5": "p5"}
 
 
 def main(argv=None):

@@ -89,8 +89,38 @@ FOLLOWUPS_W[("P4", 1)] = FOLLOWUPS_W[("P3", 1)]
 FOLLOWUPS_W[("P4", 2)] = FOLLOWUPS_W[("P3", 2)]
 
 
+# SPRINT (lock v2, D88): P5 verify-first, Tier W only.  The P3/P4 Tier W template of the same wording with ONE
+# verification block inserted before the reply instruction and the reply schema extended by ``check_errors``;
+# identical in P5v (valid check) and P5f (forged check).
+P5_VERIFY = ("Before you use this check, verify every line of it against the evidence rows and the listed inputs. "
+             "For each line, confirm that the cited row shows those input values with that node not clamped and "
+             "shows the stated next value, or that no evidence row shows those inputs. If a line is wrong, quote it "
+             "exactly. Then give your final answers.")
+P5_SCHEMA = ('Add to the JSON object the field "check_errors": [{"cid": "<claim id>", "line": "<the wrong line, '
+             'quoted exactly>"}] (an empty list when no line is wrong).')
+FOLLOWUPS_P5 = {}
+for _w in (1, 2):
+    _base = FOLLOWUPS_W[("P3", _w)]
+    assert _base.endswith("\n" + _TAIL[_w])
+    _t = _base[:-len(_TAIL[_w])] + P5_VERIFY + "\n" + _TAIL[_w] + " " + P5_SCHEMA.replace("{", "{{").replace("}", "}}")
+    FOLLOWUPS_P5[("P5v", _w)] = FOLLOWUPS_P5[("P5f", _w)] = _t
+P5_CONDS = ("P5v", "P5f")
+VALID_CHECK = ("P3", "P5v")              # conditions that show the valid derivation; P4 / P5f show the forged one
+
+
+def p5_template_hashes() -> dict:
+    return {f"W{c}w{w}": hashlib.sha256(t.encode()).hexdigest() for (c, w), t in sorted(FOLLOWUPS_P5.items())} | {
+        "p5_verify_block": hashlib.sha256(P5_VERIFY.encode()).hexdigest(),
+        "p5_schema": hashlib.sha256(P5_SCHEMA.encode()).hexdigest()}
+
+
+def turn1_suffix_sha256(wording: str = DEFAULT_WORDING) -> str:
+    """sha256 of everything the Task S user message adds to the rendered task (instructions + reply + format)."""
+    return hashlib.sha256(("\n\n" + INSTRUCTIONS + "\n" + REPLIES[wording] + ANSWER_FORMAT + ".").encode()).hexdigest()
+
+
 def templates(tier: str) -> dict:
-    return FOLLOWUPS_W if tier == "W" else FOLLOWUPS
+    return {**FOLLOWUPS_W, **FOLLOWUPS_P5} if tier == "W" else FOLLOWUPS
 
 
 def template_hashes() -> dict:
@@ -230,7 +260,9 @@ def checker_block(pub: dict, condition: str, named: list[str], salt: str | None)
     tier = pub.get("tier", "H")
     if tier == "W":
         pk = w_packages(pub, named, salt or "")
-        return [ln for c in named for ln in (pk[c]["lines"] if condition == "P3" else pk[c]["forged"]["lines"])]
+        return [ln for c in named for ln in (pk[c]["lines"] if condition in VALID_CHECK else pk[c]["forged"]["lines"])]
+    if condition in P5_CONDS:
+        raise ValueError("P5 is defined on Tier W only")
     return checker_lines(pub, named) if condition == "P3" else forged_lines_h(pub, named, salt)
 
 
@@ -238,9 +270,9 @@ def followup(pub: dict, condition: str, wording: int, named: list[str], salt: st
     t = templates(pub.get("tier", "H"))[(condition, wording)]
     if condition == "P1":
         return t.format(named=_named_list(named))
-    if condition in ("P3", "P4"):
-        if condition == "P4" and salt is None:
-            raise ValueError("P4 needs the assignment salt")
+    if condition in ("P3", "P4", "P5v", "P5f"):
+        if condition != "P3" and salt is None:
+            raise ValueError(f"{condition} needs the assignment salt")
         return t.format(checker="\n".join(checker_block(pub, condition, named, salt)))
     return t
 
@@ -279,7 +311,7 @@ def leak_audit(pub: dict, condition: str, wording: int, named: list[str], hidden
             probs.append("number or bit string outside claim ids")
         if condition != "P1" and any(c in msg for c in (x["cid"] for x in pub["claims"])):
             probs.append("claim id in a message that names none")
-    if condition in ("P3", "P4"):
+    if condition in ("P3", "P4", "P5v", "P5f"):
         lines = checker_block(json.loads(json.dumps(pub)), condition, named, salt)
         if msg != tmpl.format(checker="\n".join(lines)):
             probs.append("checker message differs from template + checker block")

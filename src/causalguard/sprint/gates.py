@@ -287,7 +287,7 @@ def g6_checks(manifest: str) -> dict:
          "forged_status_H": Counter()}
     for x in m["items"]:
         k = P.WorldKey.from_json(x)
-        ev, pub = P.tier_public(k, x["tier"])
+        ev, pub = P.tier_public(k, x["tier"], x.get("design_salt"))
         again = T.check_statuses(pub, x["tier"], x["named"], salt)
         if any(again[f] != x[f] for f in ("checker_status", "forged_status", "forgery_kind")):
             r["manifest_mismatch"] += 1
@@ -334,9 +334,9 @@ def g4_r7b(manifest: str, swap: bool = True) -> dict:
     probs = []
     for x in m["items"]:
         k = P.WorldKey.from_json(x)
-        ev, pub = P.tier_public(k, x["tier"])
+        ev, pub = P.tier_public(k, x["tier"], x.get("design_salt"))
         alt_pub = _swapped_public(ev, pub, x["tier"]) if swap else None
-        for cond in ("P0", "P1", "P2", "P3", "P4"):
+        for cond in (T.P5_CONDS if x["condition"] in T.P5_CONDS else ("P0", "P1", "P2", "P3", "P4")):
             for wd in (1, 2):
                 r = T.leak_audit(pub, cond, wd, x["named"], salt=salt)
                 n += 1
@@ -427,12 +427,14 @@ def g2_r7b(manifest: str = "artifacts/sprint_main_manifest.json") -> dict:
     return out
 
 
-def g5_r7b(manifest: str = "artifacts/sprint_main_manifest.json", prior_runs_roots=("runs",)) -> dict:
+def g5_r7b(manifest: str = "artifacts/sprint_main_manifest.json", prior_runs_roots=("runs",),
+           shown=("smoke", "pilot", "pilot2", "pilot3", "pilot4")) -> dict:
     """G5: main-panel mechanisms and public tasks against every world shown to a model so far (R7 smoke and
-    pilots 1-3, R7b pilot 4, and the earlier model-facing runs)."""
+    pilots 1-3, R7b pilot 4, and the earlier model-facing runs).  ``shown`` (sprint): the sprint manifests whose
+    worlds count as shown (P5 adds 'main')."""
     main = json.loads((P.REPO / manifest).read_text())
     seen_mech, seen_task, n_seen = set(), set(), 0
-    for s in ("smoke", "pilot", "pilot2", "pilot3", "pilot4"):
+    for s in shown:
         mm = json.loads((P.REPO / f"artifacts/sprint_{s}_manifest.json").read_text())
         seen_mech |= {x["mechanism_sha256"] for x in mm["items"]}
         seen_task |= {x["task_id"] for x in mm["items"]}

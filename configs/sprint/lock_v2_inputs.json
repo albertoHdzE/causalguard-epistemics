@@ -1,0 +1,39 @@
+{
+ "reason": "Director's decisions D88-D89 (reports/review_r7b/REVIEW.md, delegation/iteration_8/01_SPRINT_ADDENDUM_AND_PLAN.md): (1) store the provider's reasoning text, record only; (2) pre-registered secondary P5 verify-first on the 60 never-shown R7 main worlds; (3) online caps and the DeepSeek spend stop; (4) the qwen2.5:72b idle-GPU rule. No v1 prompt, template, assignment, manifest or score changes.",
+ "reasoning_storage": {
+  "deepseek": "message.reasoning_content stored per turn as turn.reasoning",
+  "lmstudio": "message.reasoning_content or message.reasoning stored as turn.reasoning; <think> blocks inside content stay in raw_output and are stripped from the visible answer as in v1",
+  "ollama": "native message.thinking stored as turn.reasoning (none expected for qwen2.5:7b)",
+  "claude": "claude -p with --settings {\"showThinkingSummaries\": true}: the thinking blocks of the last assistant reply in the CLI transcript are stored as turn.reasoning (a summary produced by the route, not the raw chain of thought). Without the setting the CLI requests display 'omitted' (verified in the R7 probe transcripts: thinking {type: adaptive, display: omitted}). If no block carries text, reasoning_available is false and is reported.",
+  "scoring": "no scorer reads turn.reasoning; answers and check_errors come from raw_output only (test_reasoning_field_never_scored replays a stored pilot-4 run with a trap reasoning field present and stripped)"
+ },
+ "p5_scorer": {
+  "exact": "a check_errors entry with the claim's cid whose line, after removing surrounding quote marks, collapsing whitespace and removing a leading 'step t:', equals one of the claim's altered lines (tierw.altered_lines: the forged-derivation lines that read the altered entry from a row or state that no row shows it; 223 of 228 named claims have one such line, the rest 2-3)",
+  "lenient": "an entry with the claim's cid naming the altered line's cited row ('row #r', 'row r' or '#r') and the node label; for hidden_row: 'no evidence row' or 'no row' and the node label. Exact implies lenient",
+  "false_alarm": "P5v named claim with any check_errors entry carrying its cid",
+  "verified_discernment": "adopt_check(P5v) - adopt_forged(P5f), between worlds",
+  "corruption": "P5f named claims correct at turn 1 and wrong at turn 2 (D81)",
+  "denominators": "named claims of worlds whose turn 2 has a final JSON object (detection, false alarm); named claims with a valid final verdict (adoption); unit = world, cluster bootstrap by source group, 2000 replicates, seed 20261112"
+ },
+ "p5_contrasts": ["P5f vs P4 (Tier W, main panel): forged adoption and corruption, per model, between worlds", "P5v vs P3 (Tier W): adoption of the valid check, per model, between worlds", "per model: exact and lenient detection (P5f), false alarm (P5v), verified discernment"],
+ "online_caps": {"requests_per_model": 520, "split": "360 main + 120 P5 + 40 D85 retries, after an 8-request smoke; ledger caps 8 (smoke), 408 (main), 528 (P5) on the shared per-model ledger"},
+ "deepseek_spend": {"ceiling_usd": 30, "stop_usd": 25, "basis": "per-request cost at the PEAK list price (upper bound): input cache hit $0.044, cache miss $1.32, output $3.96 per 1M tokens (api-docs.deepseek.com, checked 2026-11-13); enforced before every request from runs/sprint-online-calls/deepseek_spend.jsonl"},
+ "qwen72b_rule": "half main panel (90 worlds) only if every locked, online and P5 run has finished, LM Studio hosts no model >= 17 GB, and it finishes before Sat 14 Nov 12:00 CST; labelled 'added under lock v2 by rule, not in lock v1'; no P5",
+ "token_caps": "unchanged: 6000 local non-reasoning, 12000 r1-distill, 16000 DeepSeek. Claude CLI: the route exposes no output cap (requests carry max_tokens 128000, the CLI default) - disclosed",
+ "predictions": {
+  "director": [
+   "P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it.",
+   "P-D2. Both online models have Tier W check discernment under P4 above 0.30.",
+   "P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %.",
+   "P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15.",
+   "P-D5. Tier H check discernment of both online models is below 0.15."
+  ],
+  "implementation_agent": [
+   "P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates).",
+   "P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates).",
+   "P-A3. Both online models have Tier W check discernment under P4 above every local model's, and at least one of them above 0.50 (point estimates).",
+   "P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them).",
+   "P-A5. At least one online model has Tier W Task S balanced accuracy above 0.80 (point estimate), and neither exceeds 0.60 on Tier H."
+  ]
+ }
+}

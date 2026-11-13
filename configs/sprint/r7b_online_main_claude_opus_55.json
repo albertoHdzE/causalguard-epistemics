@@ -1,9 +1,9 @@
 {
  "study": "SPRINT",
  "mode": "development",
- "global_cap": 400,
+ "global_cap": 408,
  "phase": "SPRINT",
- "phase_cap": 400,
+ "phase_cap": 408,
  "call_ledger": "RUNS/sprint-online-calls/claude_opus_55.jsonl",
  "workers": 4,
  "item_timeout_s": 7200,
@@ -18,9 +18,10 @@
   "max_transport_retries": 0,
   "seed": null,
   "extra": {
-   "effort": "high"
+   "effort": "high",
+   "thinking_summaries": true
   }
  },
- "note": "R7b SPRINT main panel (both tiers, 180 worlds), online model; LAUNCH ONLY after the director's review of the local run (docs/SPRINT_AUTHORISATION.md), and only after the online smoke config passes. Same locked panel and wording as the local models; only the model changes.",
+ "note": "SPRINT main panel (lock v2): 180 worlds, 360 requests; the cap 408 counts the shared ledger = 8 smoke + 360 main + 40 D85 retries. Run from the lock-v2 snapshot after the smoke passes.",
  "task_wording": "v3"
 }

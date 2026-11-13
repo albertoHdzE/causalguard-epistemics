@@ -1,0 +1,26 @@
+{
+ "study": "SPRINT",
+ "mode": "development",
+ "global_cap": 6000,
+ "phase": "SPRINT",
+ "phase_cap": 6000,
+ "call_ledger": "RUNS/sprint-calls/ledger.jsonl",
+ "workers": 2,
+ "item_timeout_s": 7200,
+ "world_cap": 4,
+ "run_id": "p5-mistral_small_24b-v1",
+ "manifest": "artifacts/sprint_p5_manifest.json",
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "lmstudio",
+  "base_url": "http://127.0.0.1:1234/v1",
+  "model": "mistral-small-3.2-24b-instruct-2506-mlx",
+  "max_tokens": 6000,
+  "seed": 0,
+  "timeout_s": 600,
+  "max_transport_retries": 1,
+  "extra": {}
+ },
+ "note": "SPRINT P5 verify-first (lock v2), local inference only; full P5 panel (60 Tier W worlds, 120 requests)",
+ "task_wording": "v3"
+}

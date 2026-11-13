@@ -145,5 +145,75 @@ def main_r7b(path: str) -> int:
     return 0
 
 
+# =========================================================================== SPRINT: lock addendum v2 (D88)
+
+V1_COMMIT = "1e79358d3cbd4fe79fa30cc3fc921060968e7121"
+V2_FILES = ["src/causalguard/sprint/p5.py", "src/causalguard/sprint/p5_analysis.py", "artifacts/sprint_p5_manifest.json", "reports/P5_GATES.json",
+            "reports/R7B_WORKED_EXAMPLE.md", "src/causalguard/sprint/gates.py", "src/causalguard/sprint/build.py",
+            "src/causalguard/sprint/online.py", "src/causalguard/sprint/lock.py", "tests/test_sprint_v2.py",
+            "scripts/sprint_local_p5.sh", "configs/sprint/lock_v2_inputs.json",
+            "configs/sprint/r7b_online_smoke_deepseek_v4_pro.json", "configs/sprint/r7b_online_smoke_claude_opus_55.json",
+            "configs/sprint/r7b_online_main_deepseek_v4_pro.json", "configs/sprint/r7b_online_main_claude_opus_55.json",
+            "configs/sprint/p5_online_deepseek_v4_pro.json", "configs/sprint/p5_online_claude_opus_55.json"] + [
+            f"configs/sprint/p5_{m}.json" for m in ("gemma3_4b", "qwen25_7b", "mistral_small_24b", "llama33_70b",
+                                                   "gemma4_12b", "r1_distill_qwen_32b")]
+
+
+def _sha_at(commit: str, path: str) -> str | None:
+    import subprocess
+    r = subprocess.run(["git", "show", f"{commit}:{path}"], cwd=P.REPO, capture_output=True)
+    return hashlib.sha256(r.stdout).hexdigest() if r.returncode == 0 else None
+
+
+def addendum_v2(inputs: dict, v1: dict) -> dict:
+    """Lock addendum v2: every file named in v1 ``files_sha256`` and every v2 file, with its sha256 at the v1 commit
+    (None = new) and now; the P5 design objects (hashes recomputed); caps, rules and predictions from ``inputs``."""
+    import datetime
+
+    from . import tierw as TW
+    m = json.loads((P.REPO / "artifacts/sprint_p5_manifest.json").read_text())
+    gates = json.loads((P.REPO / "reports/P5_GATES.json").read_text())
+    files = sorted(set(v1["files_sha256"]) | set(V2_FILES))
+    changed = [{"path": f, "sha256_before": _sha_at(V1_COMMIT, f), "sha256_after": _sha(f)} for f in files]
+    changed = [c for c in changed if c["sha256_before"] != c["sha256_after"]]
+    return {
+        "version": "r7b-sprint-lock-v2",
+        "written_at": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+        "committed_at": "the commit that adds this addendum (hash and time recorded in PREEXISTING_WORK.md)",
+        "label": "SPRINT (2026-11-13). Written before the first online request and before the first P5 request.",
+        "reason": inputs["reason"],
+        "v1_commit": V1_COMMIT,
+        "v1_keys_unchanged": "every v1 key is byte-identical (tests/test_sprint_v2.py::test_lock_v1_keys_byte_identical)",
+        "changed_files": changed,
+        "reasoning_storage": inputs["reasoning_storage"],
+        "p5": {"manifest": "artifacts/sprint_p5_manifest.json", "manifest_sha256": _sha("artifacts/sprint_p5_manifest.json"),
+               "worlds": m["n_worlds"], "named_claims": sum(len(x["named"]) for x in m["items"]),
+               "salts": {"design": P.P5_DESIGN_SALT, "assign": P.P5_ASSIGN_SALT}, "tierw_version": TW.TIERW_VERSION,
+               "template_sha256": T.p5_template_hashes(), "turn1_suffix_sha256": T.turn1_suffix_sha256(),
+               "gates": {g: gates[g]["pass"] for g in ("G1", "G4", "G5", "G6", "turn_texts", "scorer")},
+               "gates_file_sha256": _sha("reports/P5_GATES.json"), "scorer": inputs["p5_scorer"],
+               "contrasts": inputs["p5_contrasts"]},
+        "online_caps": inputs["online_caps"], "deepseek_spend": inputs["deepseek_spend"],
+        "qwen72b_rule": inputs["qwen72b_rule"], "token_caps": inputs["token_caps"],
+        "run_configs": {f: _sha(f) for f in V2_FILES if f.startswith("configs/")},
+        "predictions": inputs["predictions"],
+    }
+
+
+def main_v2(path: str) -> int:
+    inputs = json.loads(open(path).read())
+    lp = P.REPO / "docs/SPRINT_DESIGN_LOCK.json"
+    lock = json.loads(lp.read_text())
+    v1 = {k: v for k, v in lock.items() if k != "addenda"}
+    if any(a.get("version") == "r7b-sprint-lock-v2" for a in lock.get("addenda", [])):
+        raise SystemExit("lock v2 already written")
+    lock["addenda"] = lock.get("addenda", []) + [addendum_v2(inputs, v1)]
+    lp.write_text(json.dumps(lock, indent=1, sort_keys=True) + "\n")
+    print("wrote lock addendum v2 into docs/SPRINT_DESIGN_LOCK.json")
+    return 0
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 2 and sys.argv[2] == "--v2":
+        sys.exit(main_v2(sys.argv[1]))
     sys.exit(main_r7b(sys.argv[1]) if len(sys.argv) > 2 and sys.argv[2] == "--r7b" else main())

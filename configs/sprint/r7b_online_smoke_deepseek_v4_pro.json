@@ -28,7 +28,8 @@
      "type": "enabled"
     },
     "reasoning_effort": "high"
-   }
+   },
+   "spend_ledger": "RUNS/sprint-online-calls/deepseek_spend.jsonl"
   }
  },
  "note": "R7b online smoke: 2 Tier W + 2 Tier H pilot-4 worlds (never main panel), 8 requests. LAUNCH ONLY after the director's review.",

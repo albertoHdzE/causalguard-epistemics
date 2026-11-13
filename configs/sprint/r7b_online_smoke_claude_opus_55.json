@@ -18,7 +18,8 @@
   "max_transport_retries": 0,
   "seed": null,
   "extra": {
-   "effort": "high"
+   "effort": "high",
+   "thinking_summaries": true
   }
  },
  "note": "R7b online smoke: 2 Tier W + 2 Tier H pilot-4 worlds (never main panel), 8 requests. LAUNCH ONLY after the director's review.",

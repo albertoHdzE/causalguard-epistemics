@@ -20,13 +20,19 @@ MAX_PROBES = 5
 ENV_FILE = str(REPO.parent / ".env")
 TARGETS = {
     "claude": {"kind": "claude_cli", "model": "claude-opus-5-5", "max_tokens": 4000, "timeout_s": 600,
-               "max_transport_retries": 0, "seed": None, "extra": {}},
+               "max_transport_retries": 0, "seed": None, "extra": {"effort": "high", "thinking_summaries": True}},
     "deepseek": {"kind": "openai_compatible", "backend": "deepseek", "base_url": "https://api.deepseek.com",
                  "model": "deepseek-v4-pro", "allow_remote": True, "max_tokens": 16000, "timeout_s": 900,
                  "max_transport_retries": 1, "seed": 0,
                  "extra": {"api_key_env": "DEEPSEEK_API_KEY", "env_file": ENV_FILE,
-                           "body": {"thinking": {"type": "enabled"}, "reasoning_effort": "high"}}},
+                           "body": {"thinking": {"type": "enabled"}, "reasoning_effort": "high"},
+                           "spend_ledger": "RUNS/sprint-online-calls/deepseek_spend.jsonl"}},
 }
+# SPRINT (lock v2, decision 8): one probe per provider, only to confirm that the reasoning text is returned and
+# stored.  A small arithmetic question (no evidence row, no claim) so that the model thinks at all.
+PROBE_REASONING = ("A shop sells pencils in packs of 7 and erasers in packs of 4. What is the smallest number of "
+                   "pencils you can buy so that you can pair every pencil with exactly one eraser and have no eraser "
+                   "left over? Reply with the number only.")
 PROBE_SYSTEM = "You are a test endpoint."
 PROBE_1 = "Reply with exactly the word READY and nothing else."
 PROBE_2 = "What word did you reply with in your previous message? Reply with that word only."
@@ -73,14 +79,46 @@ def probe(target: str, two_turn: bool = False) -> dict:
     return out
 
 
+def probe_reasoning(target: str) -> dict:
+    """One non-benchmark request; records whether the provider returned reasoning text and stores it."""
+    from ..llm.providers import make_provider
+    log = _log(target)
+    log.parent.mkdir(parents=True, exist_ok=True)
+    prev = [json.loads(x) for x in log.read_text().splitlines() if x.strip()] if log.exists() else []
+    if any(x.get("phase") == "reasoning" for x in prev) or len(prev) + 1 > MAX_PROBES:
+        raise SystemExit(f"{target}: the reasoning probe was already used or the probe cap is reached")
+    prov = make_provider(TARGETS[target])
+    msgs = [{"role": "system", "content": PROBE_SYSTEM}, {"role": "user", "content": PROBE_REASONING}]
+    if any(_EVIDENCE.search(m["content"]) for m in msgs):
+        raise SystemExit("refusing: probe text looks like a benchmark item")
+    with log.open("a") as fh:
+        fh.write(json.dumps({"target": target, "turn": 1, "phase": "reasoning"}) + "\n")
+    res = prov.chat(msgs, 0.0, None)
+    a = res["attempts"][-1]
+    rs = res.get("reasoning")
+    out = {"target": target, "model": TARGETS[target]["model"], "ok": res["ok"], "reply": (res["raw_output"] or "")[:200],
+           "failure": res["failure"], "reasoning_available": bool(rs), "reasoning_chars": len(rs) if rs else 0,
+           "reasoning_text": rs, "reasoning_tokens": a.get("reasoning_tokens"), "cost": a.get("cost"),
+           "latency_s": a.get("latency_s"), "completion_tokens": a.get("completion_tokens"),
+           "metadata": prov.metadata()}
+    rec = REPO / "reports" / "sprint_online" / f"reasoning_probe_{target}.json"
+    rec.parent.mkdir(parents=True, exist_ok=True)
+    rec.write_text(json.dumps(out, indent=1, sort_keys=True) + "\n")
+    print(json.dumps({k: v for k, v in out.items() if k != "reasoning_text"}, indent=1, sort_keys=True))
+    return out
+
+
 def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="causalguard sprint-online")
-    ap.add_argument("step", choices=("probe",))
+    ap.add_argument("step", choices=("probe", "reasoning-probe"))
     ap.add_argument("--target", choices=sorted(TARGETS), required=True)
     ap.add_argument("--two-turn", action="store_true")
     a = ap.parse_args(argv)
-    probe(a.target, a.two_turn)
+    if a.step == "reasoning-probe":
+        probe_reasoning(a.target)
+    else:
+        probe(a.target, a.two_turn)
     return 0
 
 

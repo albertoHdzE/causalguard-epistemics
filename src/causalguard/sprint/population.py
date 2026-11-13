@@ -195,14 +195,16 @@ MAIN_TIER_COUNTS = {"synthetic": (13, 6), "published": (16, 12)}
 PILOT4_TIER_COUNTS = {"synthetic": (3, 1), "published": (0, 0)}
 
 
-def evaluator_w(k: WorldKey, budgets: tuple[int, ...] = TIERW_BUDGETS) -> Evaluator:
+def evaluator_w(k: WorldKey, budgets: tuple[int, ...] = TIERW_BUDGETS, design_salt: str | None = None) -> Evaluator:
     """Tier W world: the SAME hidden mechanism as Tier H, the same evidence/claim design procedure on its own design
-    stream, with a smaller budget drawn by hash (the design never touches the mechanism)."""
+    stream, with a smaller budget drawn by hash (the design never touches the mechanism).  ``design_salt``
+    (sprint, lock v2): a fresh design stream for the P5 worlds; None = the split's Tier W stream (lock v1)."""
     w = build_world(k)
     if not w.realizable():
         raise AssertionError(f"{k.wkey} leaves H(8, 3)")
-    B = budgets[int(_h(TIERW_DESIGN_SALT[k.split], "budget", k.wkey), 16) % len(budgets)]
-    return Evaluator.from_world(w, make_design(TIERW_DESIGN_SALT[k.split], k.index,
+    salt = design_salt or TIERW_DESIGN_SALT[k.split]
+    B = budgets[int(_h(salt, "budget", k.wkey), 16) % len(budgets)]
+    return Evaluator.from_world(w, make_design(salt, k.index,
                                                f"r7b|W|{k.population}|{k.stratum}|{k.source_key}", budget=B))
 
 
@@ -216,9 +218,9 @@ def public_w(ev: Evaluator) -> dict:
     return pub
 
 
-def tier_public(k: WorldKey, tier: str) -> tuple[Evaluator, dict]:
+def tier_public(k: WorldKey, tier: str, design_salt: str | None = None) -> tuple[Evaluator, dict]:
     if tier == "W":
-        ev = evaluator_w(k)
+        ev = evaluator_w(k, design_salt=design_salt)
         return ev, public_w(ev)
     ev = evaluator(k)
     return ev, ev.public()
@@ -315,3 +317,50 @@ def manifest_r7b(split: str, counts: dict, fixed: dict | None = None) -> dict:
             "assign_salt": ASSIGN_SALT_R7B[split], "tierw_budgets": list(TIERW_BUDGETS),
             "tier_counts": {"W": sum(x["tier"] == "W" for x in items), "H": sum(x["tier"] == "H" for x in items)},
             "n_worlds": len(items), "items": items}
+
+
+# =========================================================================== SPRINT (lock v2): P5 verify-first
+
+P5_DESIGN_SALT = "r7b-sprint-main-W5-design-v1"
+P5_ASSIGN_SALT = "r7b-sprint-p5-assign-v1"
+P5_CONDITIONS = ("P5v", "P5f")
+POP_VERSION_P5 = "r7b-sprint-p5-population-v1"
+
+
+def p5_keys() -> list[WorldKey]:
+    """The 60 R7 main worlds never shown to any model (D79): main-split worlds outside both R7b main tiers."""
+    keys = world_keys("main")
+    tiers = split_tiers(keys, MAIN_TIER_COUNTS)
+    return [k for k in keys if tiers[k.wkey] is None]
+
+
+def manifest_p5() -> dict:
+    """P5 manifest: Tier W rendering on the fresh design stream ``P5_DESIGN_SALT``; named claims (up to 4 smallest
+    sha256(P5 salt, wkey, cid) among eligible claims), forgeries by the D81 hashes under the P5 salt; one round-robin
+    over P5v / P5f across strata in sha256(P5 salt, 'order', wkey) order, wording alternating per round."""
+    from . import tierw as TW
+    keys = p5_keys()
+    items, by = [], {}
+    for k in keys:
+        by.setdefault(k.stratum, []).append(k)
+    i = 0
+    for s in sorted(by):
+        for k in sorted(by[s], key=lambda k: _h(P5_ASSIGN_SALT, "order", k.wkey)):
+            ev, pub = tier_public(k, "W", P5_DESIGN_SALT)
+            tab = TW.Table.from_public(pub)
+            el = [c["cid"] for c in pub["claims"] if TW.claim_package(pub, c["cid"], P5_ASSIGN_SALT, tab)["eligible"]]
+            named = sorted(sorted(el, key=lambda c: _h(P5_ASSIGN_SALT, "named", k.wkey, c))[:N_NAMED],
+                           key=lambda c: int(c[1:]))
+            cond = P5_CONDITIONS[i % 2]
+            items.append({**k.to_json(), "tier": "W", "condition": cond, "wording": 1 + (i // 2) % 2,
+                          "named": named, "design_salt": P5_DESIGN_SALT, "task_id": pub["task_id"],
+                          "world_id": ev.world.world_id,
+                          "mechanism_sha256": hashlib.sha256(json.dumps(ev.world.net.canonical().to_json(),
+                                                                        sort_keys=True).encode()).hexdigest(),
+                          "public_sha256": hashlib.sha256(json.dumps(pub, sort_keys=True).encode()).hexdigest(),
+                          "budget": ev.design.budget, "eligible_claims": len(el),
+                          **checks_for(pub, "W", named, P5_ASSIGN_SALT)})
+            i += 1
+    return {"version": POP_VERSION_P5, "split": "main", "r5_split": R5_SPLIT["main"],
+            "design_salt": {"W": P5_DESIGN_SALT}, "assign_salt": P5_ASSIGN_SALT, "tierw_budgets": list(TIERW_BUDGETS),
+            "tier_counts": {"W": len(items)}, "n_worlds": len(items), "items": items}
