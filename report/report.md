@@ -17,21 +17,19 @@ build fails on a hand-typed number. Do not edit report.md by hand. -->
 # Abstract
 
 When a model is shown a step-by-step "check" of its answers, does it verify the check against the evidence, or
-defer to it? We built a benchmark where this is decidable. Each task shows a hidden deterministic system (a
-Boolean network) through a few evidence rows, and asks whether claims about it are settled true, settled false or
-not settled. The answer key is exact: two independent exact engines and a SAT solver compute each claim's status
-from the evidence. In a second turn the model receives one of five randomised follow-ups, including a valid check
-(P3) and a forged one (P4) that differs from it in a single line contradicted by a cited evidence row. When the
-wiring is given (Tier W), every line can be verified by lookup. Six local open-weight models adopt the forged
-status on most named claims, from 0.860 (gemma-3-4b) to
-1.000 (llama-3.3-70b), and their check discernment is near zero. A
-pre-registered control (P5) asks the model to verify every line first and to quote any wrong one. Unprompted, the
-local models almost never check; told to verify, some do find forged lines, but they flag valid lines about as
-often, and when a small model flags the forged line it usually keeps the forged status anyway (qwen2.5-7b in
-19 of 20
-flagged claims). Verification text and final answer come apart. We report a frontier model (Claude Opus 5.5) and a
-reasoning model at low effort (DeepSeek V4-Pro) on the same items, with the cells the run finished. The exact check
-works as a release gate inside the declared class; outside it, it does not certify.
+defer to it? We built a benchmark where this is decidable. Each task shows a hidden Boolean network through a few
+evidence rows and asks whether claims about it are settled true, settled false or not settled; two exact engines
+and a SAT solver compute the answer key. In a second turn the model receives one of five randomised follow-ups,
+including a valid check (P3) and a forged one (P4) that differs from it in a single line contradicted by a cited
+evidence row. When the wiring is given (Tier W), every line can be verified by one lookup. Six local open-weight
+models adopt the forged status on most named claims (0.860 to
+1.000), with check discernment near zero. A pre-registered control (P5)
+asks the model to verify every line first. Unprompted, the local models almost never check; told to verify, some
+find forged lines but flag valid lines about as often, and a small model that flags a forged line usually keeps
+its forged status anyway (qwen2.5-7b: 19 of
+20 flagged claims). Verification text and final answer come apart.
+On the same items a frontier model (Claude Opus 5.5) and a reasoning model at low effort (DeepSeek V4-Pro) are
+reported with the cells their runs finished.
 
 # 1. Introduction
 
