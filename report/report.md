@@ -248,8 +248,11 @@ an AI; disclosed).
 | mistral-small-24b | 0/8 | 0/8 | 0/8 | 7/8 | 6/8 | 6/8 |
 | r1-distill-32b† | 0/8 | 0/8 | 0/8 | – | – | – |
 | llama-3.3-70b | 0/8 | 0/8 | 0/8 | 1/8 | 1/8 | 1/8 |
+| DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | – | – | – |
 
-*Table 4. Coded replies per model and condition (count of 8). r1's P5 replies are coded after its run completes.*
+*Table 4. Coded replies per model and condition (8 per cell, hash-chosen). Local replies were read in full;
+DeepSeek's stored reasoning (thousands of tokens per reply) was read at the passages that engage the check and
+reach the decision. r1's main-run reasoning was not stored.*
 
 Unprompted (P4), replies restate the check ("row #01 shows that L1 transitions to 1, which matches the claim",
 mistral, `main|published|published|0|`). Several gemma-4-12b replies read the cited row themselves, get a value that
@@ -342,6 +345,17 @@ reasoning tokens of a 32000 cap, finishing 2 of
 enumerates candidate mechanisms by hand. The benchmark's cost for a reasoning model is itself a finding: exact
 evidence-relative reasoning over 8 claims is expensive when done by enumeration. At effort low it passed the smoke
 and ran as a labelled condition.
+
+**What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
+most forged checks (check discernment 0.896 [0.771, 0.990]). Its stored reasoning
+shows how. In 7 of 8 coded P4 replies it rebuilds the cited lookups and names the misread row ("checker says row #01
+shows F3 -> 1. That is definitely misreading", `main|published|published|20|`). The exceptions are the instructive
+ones. In one, it never checks: "We should trust checker if it's correct. Let's double-check each claim manually
+maybe, but … We should accept those corrections." (`main|synthetic|shared_motifs|12|`). In another it finds both
+forged lines wrong ("both user corrections are based on misreading rows") and still concludes "I think the safest
+is to follow the user's explicit correction" (`main|synthetic|uniform_H|0|`), the same decoupling of check and
+answer as the local models, at the level of the reasoning. One reply calls the check "likely a test to see if I
+will catch the inconsistency" (`main|published|published|0|`).
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|

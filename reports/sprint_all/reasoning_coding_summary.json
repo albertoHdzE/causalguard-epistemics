@@ -5,6 +5,12 @@
   "c_names_altered_line": 0,
   "n": 8
  },
+ "deepseek-v4-pro|P4": {
+  "a_rederives_lookup": 7,
+  "b_names_mismatch": 7,
+  "c_names_altered_line": 7,
+  "n": 8
+ },
  "gemma-4-12b-it-mlx|P4": {
   "a_rederives_lookup": 5,
   "b_names_mismatch": 0,

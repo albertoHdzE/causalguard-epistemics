@@ -8,6 +8,15 @@
    "worlds": 18
   }
  },
+ "deepseek-v4-pro": {
+  "P4": {
+   "screen_reasoning": 24,
+   "screen_reply": 0,
+   "with_reasoning": 24,
+   "with_turn2": 24,
+   "worlds": 24
+  }
+ },
  "gemma-4-12b-it-mlx": {
   "P4": {
    "screen_reasoning": 0,

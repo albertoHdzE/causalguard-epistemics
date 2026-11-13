@@ -242,10 +242,9 @@ def table_coding(D) -> str:
     C = D.get("C") or {}
     L = ["| model | P4: (a) own lookup | P4: (b) names a mismatch | P4: (c) names the altered line | "
          "P5f: (a) | P5f: (b) | P5f: (c) |", "|---|---|---|---|---|---|---|"]
-    ms = _models({k.split("|")[0] for k in C})
-    for m in ms:
-        def cell(cond, code):
-            v = C.get(f"{m}|{cond}")
+    for m in _models(C):
+        def cell(cond, code, m=m):
+            v = C[m].get(cond)
             return f"{v[code]}/{v['n']}" if v else "–"
         L.append(f"| {NAME.get(m, m)} | " + " | ".join(cell(cd, c) for cd in ("P4", "P5f") for c in (
             "a_rederives_lookup", "b_names_mismatch", "c_names_altered_line")) + " |")
@@ -307,7 +306,10 @@ def main(argv=None) -> int:
     D = {"A": json.loads((d / "analysis.json").read_text()), "P": json.loads((d / "p5_analysis.json").read_text()),
          "R": json.loads((d / "report_data.json").read_text())}
     if (d / "reasoning_coding_summary.json").exists():
-        D["C"] = json.loads((d / "reasoning_coding_summary.json").read_text())
+        D["C"] = {}
+        for k, v in json.loads((d / "reasoning_coding_summary.json").read_text()).items():
+            m, cond = k.split("|")
+            D["C"].setdefault(m, {})[cond] = v
     src = Path(a.src).read_text()
     bad = check_prose(src)
     out, errs = fill(src, D)
