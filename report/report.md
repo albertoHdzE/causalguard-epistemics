@@ -265,17 +265,7 @@ gemma-4-12b checks bit by bit and catches forged lines of every kind ("Row #02 s
 forged line as incorrect and marks the identical forged line of another claim correct
 (`main|synthetic|feedback_canalizing|7|`).
 
-Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For 1 of
-the 115 forged named claims the forgery alters more than one line; quoting any
-of them counts as a hit. Excluding it changes exact detection only for gemma-4-12b (0.106 →
-0.109). (ii) Because
-forgeries are per claim, one message can show the same table entry with two different values, a contradiction
-visible without the evidence rows. Such messages are not detected more often: mistral quotes the line in
-0.232 of messages with a visible contradiction against
-0.203 without. The same property holds for the locked P4: gemma-3-4b
-adopts the forged status in 0.906 of P4
-messages with a visible contradiction (10 of
-24).
+Two post-hoc properties of the forged messages (D104) are reported in Appendix D.
 
 ![P5 verify-first: share of forged named claims whose altered line the model quotes exactly (green
 diamonds) or names (blue circles), and share of valid named claims with a quoted error (false alarm, orange
@@ -319,26 +309,7 @@ is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/
 
 <!-- SAT (after the 12:00 freeze): prose on what Claude did, from the filled tables only. -->
 
-| model | tier | P0 | P1 | P2 | P3 | P4 |
-|---|---|---|---|---|---|---|
-| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 24/24 | 24/24 |
-| Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
-| DeepSeek V4-Pro (low)‡ | W | 1/24 | 1/24 | 2/24 | 24/24 | 24/24 |
-| DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
-
-*Table 6. Finished / planned worlds per online cell (main panel). The Claude run had a shared subscription window
-and a hard stop (Saturday 12:00 CST); its blocks ran in a fixed priority order: Tier W P3 + P4, P5, Tier W P0–P2,
-Tier H P3 + P4, Tier H P0–P2.*
-
-**DeepSeek at high effort does not finish.** | condition | turns parsed (Tier W, Tier H) | turns stopped at the cap | completion tokens | pass |
-|---|---|---|---|---|
-| DeepSeek V4-Pro, effort high, cap 16 000 | 0/8 (0/4, 0/4) | 8 | 16000–16000 | no |
-| DeepSeek V4-Pro, effort high, cap 32 000 | 2/8 (2/4, 0/4) | 6 | 28843–32000 | no |
-| DeepSeek V4-Pro, effort low, cap 32 000 | 6/8 (4/4, 2/4) | 2 | 3652–32000 | yes |
-| Claude Opus 5.5, effort high | 8/8 (4/4, 4/4) | 0 | 713–48177 | yes |
-
-*Table 7. Online smokes on 4 pilot worlds (8 turns). Pass rule fixed before each smoke: at least 6 of 8 turns
-parsed and every Tier W turn parsed.*
+**DeepSeek at high effort does not finish.** (Appendix D, Table 7.)
 
 At the provider's default (high) effort, DeepSeek V4-Pro spent every token of a 16000 cap and then between
 28707 and 32000
@@ -367,13 +338,7 @@ is to follow the user's explicit correction" (`main|synthetic|uniform_H|0|`), th
 answer as the local models, at the level of the reasoning. One reply calls the check "likely a test to see if I
 will catch the inconsistency" (`main|published|published|0|`).
 
-| model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
-|---|---|---|---|---|
-| Claude Opus 5.5 | 300 | 175 | 51/180 / 4/60 | $10.68 (notional, subscription) |
-| DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
-
-*Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
-separately. Claude's cost is the CLI's notional figure on a subscription.*
+Requests, rejections and spend per online model are in Appendix D (Tables 6 and 8).
 
 # 5. Discussion and Limitations
 
@@ -514,3 +479,46 @@ when the lower bound of its balanced accuracy exceeds the always-"not settled" r
 
 See `reports/R7B_WORKED_EXAMPLE.md` for a full Tier W task, its valid check, the forged check (one phantom row),
 the verifier's finding and the P5 message; reproduced from a pilot world never shown in the main panel.
+
+# Appendix D. Online accounting and P5 descriptors
+
+| model | tier | P0 | P1 | P2 | P3 | P4 |
+|---|---|---|---|---|---|---|
+| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 24/24 | 24/24 |
+| Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
+| DeepSeek V4-Pro (low)‡ | W | 1/24 | 1/24 | 2/24 | 24/24 | 24/24 |
+| DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
+
+*Table 6. Finished / planned worlds per online cell (main panel). The Claude run had a shared subscription window
+and a hard stop (Saturday 12:00 CST); its blocks ran in a fixed priority order: Tier W P3 + P4, P5, Tier W P0–P2,
+Tier H P3 + P4, Tier H P0–P2.*
+
+| condition | turns parsed (Tier W, Tier H) | turns stopped at the cap | completion tokens | pass |
+|---|---|---|---|---|
+| DeepSeek V4-Pro, effort high, cap 16 000 | 0/8 (0/4, 0/4) | 8 | 16000–16000 | no |
+| DeepSeek V4-Pro, effort high, cap 32 000 | 2/8 (2/4, 0/4) | 6 | 28843–32000 | no |
+| DeepSeek V4-Pro, effort low, cap 32 000 | 6/8 (4/4, 2/4) | 2 | 3652–32000 | yes |
+| Claude Opus 5.5, effort high | 8/8 (4/4, 4/4) | 0 | 713–48177 | yes |
+
+*Table 7. Online smokes on 4 pilot worlds (8 turns). Pass rule fixed before each smoke: at least 6 of 8 turns
+parsed and every Tier W turn parsed.*
+
+| model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
+|---|---|---|---|---|
+| Claude Opus 5.5 | 300 | 175 | 51/180 / 4/60 | $10.68 (notional, subscription) |
+| DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
+
+*Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
+separately. Claude's cost is the CLI's notional figure on a subscription.*
+
+Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For 1 of
+the 115 forged named claims the forgery alters more than one line; quoting any
+of them counts as a hit. Excluding it changes exact detection only for gemma-4-12b (0.106 →
+0.109). (ii) Because
+forgeries are per claim, one message can show the same table entry with two different values, a contradiction
+visible without the evidence rows. Such messages are not detected more often: mistral quotes the line in
+0.232 of messages with a visible contradiction against
+0.203 without. The same property holds for the locked P4: gemma-3-4b
+adopts the forged status in 0.906 of P4
+messages with a visible contradiction (10 of
+24).
