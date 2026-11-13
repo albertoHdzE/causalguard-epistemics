@@ -1,5 +1,26 @@
 # CausalGuard — compressed symbolic models for auditable epistemic improvement
 
+## AI x Epistemics sprint submission (branch `sprint`, 2026-11-13 to 2026-11-15)
+
+**Report:** `report/report.pdf` (source `report/report.src.md`; every number is filled from
+`reports/sprint_all/*.json` by `report/fill.py`, which fails on a hand-typed number). *Models adopt forged checks
+they could verify*: six local models and two online models on an exact benchmark of evidence-relative reasoning;
+a forged check differs from the valid one in one line a cited evidence row contradicts; a pre-registered
+verify-first control (P5) separates "cannot verify" from "does not verify".
+
+**What is pre-sprint and what is sprint work.** The engines, the benchmark, Tier W, the forged checks (P0–P4), lock
+v1 and the local main panel were built before the sprint (2026-11-09 to 2026-11-12). Everything committed on
+branch `sprint` after `66e4065` is sprint work, listed commit by commit in `PREEXISTING_WORK.md`: P5, reasoning
+storage, lock addendum v2 and its amendments, the online runs, the analysis, the reasoning coding and the report.
+
+```bash
+scripts/sprint_analyze_all.sh            # every analysis behind the report -> reports/sprint_all
+python report/fill.py && report/build.sh  # report.md, report.pdf, report.docx
+```
+
+Design lock: `docs/SPRINT_DESIGN_LOCK.json` (v1, addendum v2, amendments v2-a1..a3). Decisions: `DECISIONS.md`
+(D90 onward for the sprint). Coding sheet: `reports/sprint_all/reasoning_coding.csv`.
+
 **Status: development release `v0.5.0-dev` (iteration 5, R5 batch, 2026-11-11; four bounded tracks G/C/A/M). Not a final study release; no confirmatory result exists; confirmatory runs are NOT authorized (no freeze record). Start at `reports/REVIEW_READY_R5.md`. Releases `v0.1.0-dev`..`v0.4.0-dev` and their records are preserved unchanged.**
 
 **R5 in one paragraph (development evidence):** description-length-weighted averaging beats uniform averaging on held-out worlds, but OUR hierarchical prior shows no detected advantage over the best generic codec (gate − CGH +0.002 [−0.004, 0.008] Brier) and its hierarchy adds ≈ 0 outside generator-matched families; an independent generic counter matches our exact counts and is faster at k = 3 (ours still beats generic SAT); two local LLMs investigate worse than the exact EIG controller (−0.11, −0.34 resolved@4); verified claims can be false under wrong-but-consistent assumptions (10/103), and a public challenge policy halves that at modest coverage cost. Run `python -m causalguard r5-demo` for an illustration.

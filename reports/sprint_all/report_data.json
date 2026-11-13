@@ -19,11 +19,16 @@
    "cap": 520,
    "rejected_backfilled": 0,
    "rejected_without_inference": 0,
-   "requests_sent": 136,
-   "slots_used": 136,
+   "requests_sent": 149,
+   "slots_used": 149,
    "spend_lines_backfilled": 12,
-   "spend_usd_request_time": 4.64,
-   "spend_usd_upper": 9.27
+   "spend_usd_request_time": 5.12,
+   "spend_usd_upper": 10.24
+  },
+  "local": {
+   "before_sprint": 2509,
+   "cap": 6000,
+   "requests": 3176
   }
  },
  "p5_design": {

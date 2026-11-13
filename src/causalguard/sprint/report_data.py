@@ -113,6 +113,8 @@ def accounting() -> dict:
                       "rejected_backfilled": sum(1 for r in recs if r.get("kind") == "usage_limit_rejected"
                                                  and r.get("backfilled")),
                       "slots_used": ledger_used(recs), "cap": 520}
+    out["local"] = {"requests": ledger_used(_jsonl(_runs() / "sprint-calls" / "ledger.jsonl")), "cap": 6000,
+                    "before_sprint": 2509}
     sp = _jsonl(calls / "deepseek_spend.jsonl")
     out[DEEPSEEK]["spend_usd_request_time"] = round(sum(x["usd"] for x in sp), 2)
     out[DEEPSEEK]["spend_usd_upper"] = round(sum(x["usd_upper"] for x in sp), 2)

@@ -179,7 +179,8 @@ def table_predictions(D) -> str:
 
 def table_online(D) -> str:
     R, A, P = D["R"], D["A"], D["P"]
-    L = ["| model | requests sent | rejected without inference | worlds finished: main / P5 | recorded cost |",
+    L = ["| model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | "
+         "recorded cost |",
          "|---|---|---|---|---|"]
     for m in ("claude-opus-5-5", "deepseek-v4-pro"):
         a = R["accounting"][m]

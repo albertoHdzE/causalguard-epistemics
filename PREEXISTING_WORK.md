@@ -22,4 +22,14 @@ Everything committed on branch `sprint` after `66e4065` is sprint work. One row 
 | Commit | Time (CST) | What |
 |---|---|---|
 | `b55110f` | 2026-11-13 | Director's review of R7b and the iteration-8 assignment (sprint addendum, D87–D89) |
-| (lock v2 commit; see the line below) | 2026-11-13 | Sprint build: reasoning storage (record only), DeepSeek cost record and spend stop, P5 verify-first (manifest, templates, scorer, gates, tests), SPRINT_TASKS P5 section, P5 worked example, run configs, lock addendum v2 with the predictions (D90–D96) |
+| `f8e1fb3` | 2026-11-13 09:15 | Sprint build and **lock addendum v2** (before the first P5 and online request): reasoning storage (record only), DeepSeek cost record and spend stop, P5 verify-first (manifest, templates, scorer, gates, tests), SPRINT_TASKS P5 section, P5 worked example, run configs, predictions (D90–D96) |
+| `e9d7b2c` | 2026-11-13 09:16 | Lock v2 amendment v2-a1: Claude thinking summaries via `--thinking-display summarized` (D97) |
+| `63a2ca0` | 2026-11-13 09:18 | Pre-registered reasoning coding (screen, hash sample, three codes), before any sprint reply was read (D98) |
+| `7c923a3` | 2026-11-13 09:27 | Lock v2 amendment v2-a2: the one DeepSeek repair (cap 32 000), time-of-day spend price; Claude smoke passed (D99) |
+| `16866cb` | 2026-11-13 09:38 | DeepSeek stop record at high effort (D100) |
+| `242184f` | 2026-11-13 14:03 | Day-1 status note for the director |
+| `a47f0df` | 2026-11-13 14:12 | Director decisions on the two online stops and the iteration 9 assignment (D101–D106) |
+| `309fb1c` | 2026-11-13 14:35 | Lock v2 amendment v2-a3: Claude priority blocks, usage-limit pause outside the cap, Saturday 12:00 CST hard stop; DeepSeek low-effort condition; spend stop on the upper bound; spend-record back-fill; pre-push secret scan (D107–D108) |
+| `b39503f` | 2026-11-13 15:05 | Analysis for the report: per-model merge of runs, n finished / n planned per cell, minimum-cell gate, P5 descriptors (D104), report data and every prediction by coded rule (D109) |
+| `40acd43` | 2026-11-13 15:17 | Report pipeline: figures 1–3, `report/fill.py` (fails on hand-typed numbers), report source on local data (D110) |
+| `4a9eb03` | 2026-11-13 15:27 | Reasoning coding of the local sample; P5 post-hoc: integer-id sensitivity, flagged-then-adopted, forgery kind (D111–D112) |

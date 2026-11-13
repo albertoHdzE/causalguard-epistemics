@@ -53,8 +53,9 @@ Our main contributions are:
    commit, valid check, forged check) are assigned by hash to disjoint worlds. Two tiers separate "cannot verify"
    (wiring hidden) from "could verify by lookup" (wiring given).
 2. **A forged-check measurement with a verify-first control.** Six local models adopt forged checks they could
-   verify. A pre-registered condition that tells them to verify shows that they do not find the forged line. The
-   remaining explanation is deference, not inability to follow an instruction.
+   verify. A pre-registered condition that tells them to verify shows that some can find the forged line, but
+   their flags do not separate forged from valid lines, and their answers often follow the forged check even after
+   they call its line wrong.
 3. **A pre-registered, fully disclosed run.** A design lock with predictions preceded every request. Every number
    in this report is generated from the raw runs. Predictions that failed are reported as failed.
 
@@ -162,7 +163,7 @@ condition (reasoning effort low).*
 On Tier W every local model adopts the forged status on most named claims. llama-3.3-70b, mistral-small-24b and
 gemma-4-12b adopt it on every named claim (1.000). Corruption, the share
 of answers that were right at turn 1 and became wrong, is between
-0.917 (r1) and 1.000. Check
+0.906 (qwen2.5-7b) and 1.000. Check
 discernment is indistinguishable from zero for all six (for example mistral
 0.000 [0.000, 0.000], gemma-3
 0.033 [−0.101, 0.154]). The forged line was verifiable with one lookup in a row the
@@ -298,8 +299,8 @@ squares). Lines are 95 % intervals.](../reports/sprint_all/fig3_p5.png){width=72
 
 *Table 5. Task S (turn 1) per model and tier, with the surface rule fitted on non-panel worlds as the reference.*
 
-Without pressure, five of the six local models are at the floor of Task S on both tiers: their balanced accuracy
-is near that of answering "not settled" everywhere. They err in opposite directions: gemma-3-4b gives a definite
+Without pressure, five of the six local models are at the floor of Task S on Tier W: the lower bound of their
+balanced accuracy does not exceed that of answering "not settled" everywhere (post-hoc rule, Appendix B). They err in opposite directions: gemma-3-4b gives a definite
 verdict on 0.881 of open claims; llama-3.3-70b answers "not settled" on
 0.845 of settled ones (Figure 3). Only r1-distill is off the floor on Tier W
 (0.462 [0.410, 0.513]), and it too has zero check discernment
@@ -342,10 +343,10 @@ enumerates candidate mechanisms by hand. The benchmark's cost for a reasoning mo
 evidence-relative reasoning over 8 claims is expensive when done by enumeration. At effort low it passed the smoke
 and ran as a labelled condition.
 
-| model | requests sent | rejected without inference | worlds finished: main / P5 | recorded cost |
+| model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
 | Claude Opus 5.5 | 277 | 175 | 45/180 / 0 | $8.66 (notional, subscription) |
-| DeepSeek V4-Pro (low)‡ | 136 | 0 | 48/180 / 1/60 | $4.64 at request-time price; $9.27 upper bound |
+| DeepSeek V4-Pro (low)‡ | 149 | 0 | 48/180 / 1/60 | $5.12 at request-time price; $10.24 upper bound |
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
 separately. Claude's cost is the CLI's notional figure on a subscription.*
@@ -459,7 +460,9 @@ low-effort condition, the spend stop on the upper bound. Every commit is listed 
 
 **Predictions against outcomes** (11 met, 3
 not met; a prediction whose cell has fewer than 12 finished worlds, or whose model was not run, is "not testable in
-this run"). The rule that decides each outcome and its values are in `reports/sprint_all/report_data.json`.
+this run"). The lock does not define "the floor" used by two predictions; post-hoc, a model is off the Tier W floor
+when the lower bound of its balanced accuracy exceeds the always-"not settled" row at the reported precision
+(llama-3.3-70b is the edge case and counts as at the floor). The rule that decides each outcome and its values are in `reports/sprint_all/report_data.json`.
 
 | lock | by | prediction | outcome |
 |---|---|---|---|
