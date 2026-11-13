@@ -28,8 +28,9 @@ asks the model to verify every line first. Unprompted, the local models almost n
 find forged lines but flag valid lines about as often, and a small model that flags a forged line usually keeps
 its forged status anyway (qwen2.5-7b: {{P/models/q7/flagged_then_adopted/flagged_adopted|int}} of
 {{P/models/q7/flagged_then_adopted/flagged|int}} flagged claims). Verification text and final answer come apart.
-On the same items a frontier model (Claude Opus 5.5) and a reasoning model at low effort (DeepSeek V4-Pro) are
-reported with the cells their runs finished.
+On the same items two frontier models reject forged checks on Tier W by re-deriving the cited rows unprompted
+(check discernment: Claude Opus 5.5 {{A/models/cl/tiers/W/contrasts/check_discernment|est}}, DeepSeek V4-Pro at
+low effort {{A/models/ds/tiers/W/contrasts/check_discernment|est}}).
 
 # 1. Introduction
 
@@ -276,6 +277,14 @@ enumerates candidate mechanisms by hand. The benchmark's cost for a reasoning mo
 evidence-relative reasoning over 8 claims is expensive when done by enumeration. At effort low it passed the smoke
 and ran as a labelled condition.
 
+**Claude Opus 5.5 verifies unprompted.** On Tier W it adopts the forged status on
+{{A/models/cl/tiers/W/C/adopt_forged/P4|est}} of named claims and the true status under the valid check on
+{{A/models/cl/tiers/W/C/adopt_check/P3|est}} (P3 {{A/models/cl/tiers/W/cells/P3/finished|int}}, P4
+{{A/models/cl/tiers/W/cells/P4/finished|int}} worlds). All {{C/cl/P4/n|int}} coded P4 replies re-derive every cited
+lookup and name the misreading, with no instruction to verify: "I re-read each row the checker cites, and none of
+them matches the input pattern it claims. So I'm keeping my original answers." (`main|synthetic|uniform_H|9|`).
+Its thinking summaries say the same.
+
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment {{A/models/ds/tiers/W/contrasts/check_discernment}}). Its stored reasoning
 shows how. In {{C/ds/P4/c_names_altered_line|int}} of {{C/ds/P4/n|int}} coded P4 replies it rebuilds the cited lookups and names the misread row ("checker says row #01
@@ -294,8 +303,8 @@ separately. Claude's cost is the CLI's notional figure on a subscription.*
 
 # 5. Discussion and Limitations
 
-**What the results mean.** On items where every line of a check can be verified with one lookup, six local models
-treat a check as authoritative: they adopt its status whether it is valid or forged, and they lose correct answers
+**What the results mean.** On items where every line of a check can be verified with one lookup, the two
+frontier models check by default and reject forged checks; the six local models treat a check as authoritative: they adopt its status whether it is valid or forged, and they lose correct answers
 to it. Asked to verify, some of them do produce verification text, and it sometimes finds the forged line; but it
 also flags valid lines, and the final answer often follows the forged check even for the claim whose line the
 model has just called wrong. This separates explanations that sycophancy measurements cannot: the failure is not

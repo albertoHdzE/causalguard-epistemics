@@ -33,20 +33,20 @@ rule; DeepSeek ran as the labelled condition "reasoning effort low" through the 
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 277 | 175 | 45/180 / 0 | $8.66 (notional, subscription) |
-| DeepSeek V4-Pro (low)‡ | 149 | 0 | 48/180 / 1/60 | $5.12 at request-time price; $10.24 upper bound |
+| Claude Opus 5.5 | 300 | 175 | 51/180 / 4/60 | $10.68 (notional, subscription) |
+| DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 | model | tier | P0 | P1 | P2 | P3 | P4 |
 |---|---|---|---|---|---|---|
-| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 23/24 | 19/24 |
+| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 24/24 | 24/24 |
 | Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
-| DeepSeek V4-Pro (low)‡ | W | 0/24 | 0/24 | 0/24 | 24/24 | 24/24 |
+| DeepSeek V4-Pro (low)‡ | W | 1/24 | 1/24 | 2/24 | 24/24 | 24/24 |
 | DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
 
 Usage-limit rejections (no inference; outside the cap): 175, of
 which 173 are the v1 rejections back-filled. Claude call-ledger slots used:
-102 of 520. DeepSeek slots: 149 of 520; spend
-$5.12 at the request-time price, $10.24
+125 of 520. DeepSeek slots: 255 of 520; spend
+$8.90 at the request-time price, $17.79
 upper bound (12 early lines back-filled, D107).
 
 <!-- SAT: block runs finished; whether the $25 upper-bound stop cut DeepSeek; Claude hard stop outcome. -->
@@ -63,9 +63,10 @@ models that flag the forged line often keep its conclusion.
 | qwen2.5-7b | 30/30; 30/30 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.940 [0.889, 0.982] | 0.072 [−0.024, 0.179] | −0.029 [−0.093, 0.045] |
 | gemma-4-12b† | 30/30; 30/30 | 0.106 [0.020, 0.206] | 0.106 [0.020, 0.206] | 0.057 [0.009, 0.127] | 0.571 [0.420, 0.716] | −0.429 [−0.573, −0.289] | 0.263 [0.074, 0.450] |
 | mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
-| r1-distill-32b† | 14/30; 17/30 | 0.062 [0.014, 0.125] | 0.078 [0.025, 0.139] | 0.083 [0.019, 0.167] | 0.734 [0.554, 0.897] | −0.175 [−0.373, 0.014] | 0.147 [−0.033, 0.339] |
+| r1-distill-32b† | 22/30; 23/30 | 0.143 [0.060, 0.239] | 0.167 [0.076, 0.264] | 0.087 [0.018, 0.174] | 0.667 [0.524, 0.807] | −0.242 [−0.417, −0.064] | 0.224 [0.068, 0.392] |
 | llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
-| DeepSeek V4-Pro (low)‡ | 1/30; 0/30 | – | – | 0.000* | – | not testable (n P4 24, n P5f 0) | – |
+| Claude Opus 5.5 | 2/30; 2/30 | 1.000* | 1.000* | 0.000* | 0.000* | not testable (n P4 24, n P5f 2) | – |
+| DeepSeek V4-Pro (low)‡ | 29/30; 25/30 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
 
 | model | check_errors entries dropped by the locked parser (integer ids) | exact detection, ids accepted | false alarm, ids accepted | flagged the altered line | of those, forged status kept |
 |---|---|---|---|---|---|
@@ -73,9 +74,10 @@ models that flag the forged line often keep its conclusion.
 | qwen2.5-7b | 93 of 93 | 0.155 [0.073, 0.242] | 0.376 [0.245, 0.513] | 20 | 19 |
 | gemma-4-12b† | 52 of 68 | 0.330 [0.213, 0.454] | 0.273 [0.176, 0.384] | 40 | 15 |
 | mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
-| r1-distill-32b† | 0 of 19 | 0.062 [0.014, 0.125] | 0.083 [0.019, 0.167] | 5 | 0 |
+| r1-distill-32b† | 0 of 33 | 0.143 [0.060, 0.239] | 0.087 [0.018, 0.174] | 14 | 3 |
 | llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
-| DeepSeek V4-Pro (low)‡ | 0 of 0 | – | 0.000 [0.000, 0.000] | 0 | 0 |
+| Claude Opus 5.5 | 0 of 8 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 8 | 0 |
+| DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
 
 | model | P4: (a) own lookup | P4: (b) names a mismatch | P4: (c) names the altered line | P5f: (a) | P5f: (b) | P5f: (c) |
 |---|---|---|---|---|---|---|
@@ -85,6 +87,8 @@ models that flag the forged line often keep its conclusion.
 | mistral-small-24b | 0/8 | 0/8 | 0/8 | 7/8 | 6/8 | 6/8 |
 | r1-distill-32b† | 0/8 | 0/8 | 0/8 | – | – | – |
 | llama-3.3-70b | 0/8 | 0/8 | 0/8 | 1/8 | 1/8 | 1/8 |
+| Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | – | – | – |
+| DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | 8/8 | 8/8 | 8/8 |
 
 ## 4. Predictions against outcomes
 
@@ -125,7 +129,7 @@ models that flag the forged line often keep its conclusion.
 
 ## 6. Resources against ceilings
 
-Local requests (sprint ledger): 3176 of 6000. Online:
+Local requests (sprint ledger): 3203 of 6000. Online:
 see §2.
 
 ## 7. Where the director's plan is wrong or will not impress the judges

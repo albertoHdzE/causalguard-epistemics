@@ -28,8 +28,9 @@ asks the model to verify every line first. Unprompted, the local models almost n
 find forged lines but flag valid lines about as often, and a small model that flags a forged line usually keeps
 its forged status anyway (qwen2.5-7b: 19 of
 20 flagged claims). Verification text and final answer come apart.
-On the same items a frontier model (Claude Opus 5.5) and a reasoning model at low effort (DeepSeek V4-Pro) are
-reported with the cells their runs finished.
+On the same items two frontier models reject forged checks on Tier W by re-deriving the cited rows unprompted
+(check discernment: Claude Opus 5.5 1.000, DeepSeek V4-Pro at
+low effort 0.896).
 
 # 1. Introduction
 
@@ -148,9 +149,9 @@ before the online runs resumed).
 | r1-distill-32b† | H | 6/6; 6/6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
 | llama-3.3-70b | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
 | llama-3.3-70b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| Claude Opus 5.5 | W | 23/24; 19/24 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** |
+| Claude Opus 5.5 | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** |
 | Claude Opus 5.5 | H | 0 finished | | | | |
-| DeepSeek V4-Pro (low)‡ | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 0.104 [0.010, 0.228] | 0.104 [0.010, 0.228] | **0.896 [0.771, 0.990]** |
+| DeepSeek V4-Pro (low)‡ | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 0.104 [0.010, 0.232] | 0.104 [0.010, 0.232] | **0.896 [0.771, 0.990]** |
 | DeepSeek V4-Pro (low)‡ | H | 0 finished | | | | |
 
 *Table 1. Task P per model and tier: share of named claims whose final verdict adopts the check's status, under
@@ -188,9 +189,10 @@ worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
 | qwen2.5-7b | 30/30; 30/30 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.940 [0.889, 0.982] | 0.072 [−0.024, 0.179] | −0.029 [−0.093, 0.045] |
 | gemma-4-12b† | 30/30; 30/30 | 0.106 [0.020, 0.206] | 0.106 [0.020, 0.206] | 0.057 [0.009, 0.127] | 0.571 [0.420, 0.716] | −0.429 [−0.573, −0.289] | 0.263 [0.074, 0.450] |
 | mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
-| r1-distill-32b† | 14/30; 17/30 | 0.062 [0.014, 0.125] | 0.078 [0.025, 0.139] | 0.083 [0.019, 0.167] | 0.734 [0.554, 0.897] | −0.175 [−0.373, 0.014] | 0.147 [−0.033, 0.339] |
+| r1-distill-32b† | 22/30; 23/30 | 0.143 [0.060, 0.239] | 0.167 [0.076, 0.264] | 0.087 [0.018, 0.174] | 0.667 [0.524, 0.807] | −0.242 [−0.417, −0.064] | 0.224 [0.068, 0.392] |
 | llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
-| DeepSeek V4-Pro (low)‡ | 1/30; 0/30 | – | – | 0.000* | – | not testable (n P4 24, n P5f 0) | – |
+| Claude Opus 5.5 | 2/30; 2/30 | 1.000* | 1.000* | 0.000* | 0.000* | not testable (n P4 24, n P5f 2) | – |
+| DeepSeek V4-Pro (low)‡ | 29/30; 25/30 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
 
 *Table 2. P5 verify-first (Tier W, 60 worlds per model; locked scorer). Exact and lenient detection of the altered
 line in forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its difference from
@@ -212,9 +214,10 @@ its detection interval (Figure 2).
 | qwen2.5-7b | 93 of 93 | 0.155 [0.073, 0.242] | 0.376 [0.245, 0.513] | 20 | 19 |
 | gemma-4-12b† | 52 of 68 | 0.330 [0.213, 0.454] | 0.273 [0.176, 0.384] | 40 | 15 |
 | mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
-| r1-distill-32b† | 0 of 19 | 0.062 [0.014, 0.125] | 0.083 [0.019, 0.167] | 5 | 0 |
+| r1-distill-32b† | 0 of 33 | 0.143 [0.060, 0.239] | 0.087 [0.018, 0.174] | 14 | 3 |
 | llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
-| DeepSeek V4-Pro (low)‡ | 0 of 0 | – | 0.000 [0.000, 0.000] | 0 | 0 |
+| Claude Opus 5.5 | 0 of 8 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 8 | 0 |
+| DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
 
 *Table 3. P5f, post-hoc. Entries the locked parser drops; exact detection and false alarm when integer claim ids
 are accepted; named forged claims whose altered line the reply flagged (lenient, ids accepted), and how many of
@@ -246,7 +249,8 @@ an AI; disclosed).
 | mistral-small-24b | 0/8 | 0/8 | 0/8 | 7/8 | 6/8 | 6/8 |
 | r1-distill-32b† | 0/8 | 0/8 | 0/8 | – | – | – |
 | llama-3.3-70b | 0/8 | 0/8 | 0/8 | 1/8 | 1/8 | 1/8 |
-| DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | – | – | – |
+| Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | – | – | – |
+| DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | 8/8 | 8/8 | 8/8 |
 
 *Table 4. Coded replies per model and condition (8 per cell, hash-chosen). Local replies were read in full;
 DeepSeek's stored reasoning (thousands of tokens per reply) was read at the passages that engage the check and
@@ -281,15 +285,15 @@ squares). Lines are 95 % intervals.](../reports/sprint_all/fig3_p5.png){width=72
 
 | model | tier | worlds | overclaim | underclaim | balanced accuracy | BA − surface rule |
 |---|---|---|---|---|---|---|
-| *surface rule (reference)* | W | | 0.597 [0.504, 0.690] | 0.201 [0.139, 0.269] | 0.570 [0.523, 0.618] | |
+| *surface rule (reference)* | W | | 0.604 [0.512, 0.689] | 0.201 [0.142, 0.268] | 0.569 [0.521, 0.617] | |
 | gemma-3-4b | W | 120/120 | 0.881 [0.832, 0.930] | 0.094 [0.054, 0.143] | 0.345 [0.318, 0.372] | −0.194 [−0.236, −0.152] |
 | qwen2.5-7b | W | 120/120 | 0.514 [0.423, 0.600] | 0.446 [0.362, 0.534] | 0.353 [0.317, 0.388] | −0.187 [−0.232, −0.141] |
 | gemma-4-12b† | W | 60/60 | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.343 [0.302, 0.386] | −0.218 [−0.272, −0.158] |
 | mistral-small-24b | W | 120/120 | 0.126 [0.077, 0.181] | 0.841 [0.786, 0.891] | 0.345 [0.320, 0.370] | −0.195 [−0.235, −0.152] |
 | r1-distill-32b† | W | 60/60 | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.462 [0.410, 0.513] | −0.099 [−0.166, −0.032] |
 | llama-3.3-70b | W | 120/120 | 0.129 [0.082, 0.179] | 0.845 [0.801, 0.885] | 0.353 [0.333, 0.374] | −0.187 [−0.220, −0.151] |
-| Claude Opus 5.5 | W | 45/120 | 0.034 [0.000, 0.091] | 0.003 [0.000, 0.009] | 0.993 [0.984, 1.000] | 0.423 [0.373, 0.472] |
-| DeepSeek V4-Pro (low)‡ | W | 48/120 | 0.023 [0.000, 0.073] | 0.024 [0.000, 0.075] | 0.995 [0.987, 1.000] | 0.424 [0.376, 0.474] |
+| Claude Opus 5.5 | W | 51/120 | 0.031 [0.000, 0.083] | 0.003 [0.000, 0.008] | 0.994 [0.986, 1.000] | 0.424 [0.376, 0.473] |
+| DeepSeek V4-Pro (low)‡ | W | 52/120 | 0.021 [0.000, 0.067] | 0.022 [0.000, 0.068] | 0.995 [0.988, 1.000] | 0.428 [0.381, 0.474] |
 | *surface rule (reference)* | H | | 0.537 [0.442, 0.635] | 0.137 [0.042, 0.248] | 0.548 [0.475, 0.639] | |
 | gemma-3-4b | H | 60/60 | 0.641 [0.548, 0.737] | 0.317 [0.196, 0.437] | 0.343 [0.283, 0.405] | −0.247 [−0.337, −0.153] |
 | qwen2.5-7b | H | 60/60 | 0.421 [0.308, 0.540] | 0.541 [0.405, 0.679] | 0.388 [0.328, 0.448] | −0.202 [−0.288, −0.118] |
@@ -317,9 +321,9 @@ is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/
 
 | model | tier | P0 | P1 | P2 | P3 | P4 |
 |---|---|---|---|---|---|---|
-| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 23/24 | 19/24 |
+| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 24/24 | 24/24 |
 | Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
-| DeepSeek V4-Pro (low)‡ | W | 0/24 | 0/24 | 0/24 | 24/24 | 24/24 |
+| DeepSeek V4-Pro (low)‡ | W | 1/24 | 1/24 | 2/24 | 24/24 | 24/24 |
 | DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
 
 *Table 6. Finished / planned worlds per online cell (main panel). The Claude run had a shared subscription window
@@ -344,6 +348,14 @@ enumerates candidate mechanisms by hand. The benchmark's cost for a reasoning mo
 evidence-relative reasoning over 8 claims is expensive when done by enumeration. At effort low it passed the smoke
 and ran as a labelled condition.
 
+**Claude Opus 5.5 verifies unprompted.** On Tier W it adopts the forged status on
+0.000 of named claims and the true status under the valid check on
+1.000 (P3 24, P4
+24 worlds). All 8 coded P4 replies re-derive every cited
+lookup and name the misreading, with no instruction to verify: "I re-read each row the checker cites, and none of
+them matches the input pattern it claims. So I'm keeping my original answers." (`main|synthetic|uniform_H|9|`).
+Its thinking summaries say the same.
+
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment 0.896 [0.771, 0.990]). Its stored reasoning
 shows how. In 7 of 8 coded P4 replies it rebuilds the cited lookups and names the misread row ("checker says row #01
@@ -357,16 +369,16 @@ will catch the inconsistency" (`main|published|published|0|`).
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 277 | 175 | 45/180 / 0 | $8.66 (notional, subscription) |
-| DeepSeek V4-Pro (low)‡ | 149 | 0 | 48/180 / 1/60 | $5.12 at request-time price; $10.24 upper bound |
+| Claude Opus 5.5 | 300 | 175 | 51/180 / 4/60 | $10.68 (notional, subscription) |
+| DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
 separately. Claude's cost is the CLI's notional figure on a subscription.*
 
 # 5. Discussion and Limitations
 
-**What the results mean.** On items where every line of a check can be verified with one lookup, six local models
-treat a check as authoritative: they adopt its status whether it is valid or forged, and they lose correct answers
+**What the results mean.** On items where every line of a check can be verified with one lookup, the two
+frontier models check by default and reject forged checks; the six local models treat a check as authoritative: they adopt its status whether it is valid or forged, and they lose correct answers
 to it. Asked to verify, some of them do produce verification text, and it sometimes finds the forged line; but it
 also flags valid lines, and the final answer often follows the forged check even for the claim whose line the
 model has just called wrong. This separates explanations that sycophancy measurements cannot: the failure is not

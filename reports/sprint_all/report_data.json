@@ -2,33 +2,34 @@
  "accounting": {
   "claude-opus-5-5": {
    "block_runs": {
+    "p5-claude_opus_55-v1": "2026-11-13T22:00:36Z",
     "r7b-main-claude_opus_55-v1": "2026-11-13T15:37:22Z",
     "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z"
    },
    "cap": 520,
    "cost": {
-    "usd_notional": 8.66,
-    "worlds": 45
+    "usd_notional": 10.68,
+    "worlds": 56
    },
    "rejected_backfilled": 173,
    "rejected_without_inference": 175,
-   "requests_sent": 277,
-   "slots_used": 102
+   "requests_sent": 300,
+   "slots_used": 125
   },
   "deepseek-v4-pro": {
    "cap": 520,
    "rejected_backfilled": 0,
    "rejected_without_inference": 0,
-   "requests_sent": 149,
-   "slots_used": 149,
+   "requests_sent": 255,
+   "slots_used": 255,
    "spend_lines_backfilled": 12,
-   "spend_usd_request_time": 5.12,
-   "spend_usd_upper": 10.24
+   "spend_usd_request_time": 8.9,
+   "spend_usd_upper": 17.79
   },
   "local": {
    "before_sprint": 2509,
    "cap": 6000,
-   "requests": 3176
+   "requests": 3203
   }
  },
  "p5_design": {
@@ -204,14 +205,14 @@
    "text": "P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it.",
    "values": {
     "ba_W": {
-     "claude-opus-5-5": 0.9928,
-     "deepseek-v4-pro": 0.9948
+     "claude-opus-5-5": 0.9937,
+     "deepseek-v4-pro": 0.9952
     },
     "ba_W_lo": {
-     "claude-opus-5-5": 0.984,
-     "deepseek-v4-pro": 0.9867
+     "claude-opus-5-5": 0.9855,
+     "deepseek-v4-pro": 0.9877
     },
-    "surface_W": 0.5695
+    "surface_W": 0.5694
    }
   },
   {
@@ -238,8 +239,8 @@
    "values": {
     "exact": {
      "claude-opus-5-5": null,
-     "deepseek-r1-distill-qwen-32b": 0.0625,
-     "deepseek-v4-pro": null,
+     "deepseek-r1-distill-qwen-32b": 0.1429,
+     "deepseek-v4-pro": 0.9565,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0083,
      "llama-3.3-70b-instruct": 0.0583,
@@ -258,8 +259,8 @@
    "values": {
     "adopt_forged_P5f_minus_P4": {
      "claude-opus-5-5": null,
-     "deepseek-r1-distill-qwen-32b": -0.1747,
-     "deepseek-v4-pro": null,
+     "deepseek-r1-distill-qwen-32b": -0.2424,
+     "deepseek-v4-pro": -0.1042,
      "gemma-4-12b-it-mlx": -0.4295,
      "google/gemma-3-4b": -0.1793,
      "llama-3.3-70b-instruct": 0.0,
@@ -301,7 +302,7 @@
    "text": "P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates).",
    "values": {
     "exact": {
-     "deepseek-r1-distill-qwen-32b": 0.0625,
+     "deepseek-r1-distill-qwen-32b": 0.1429,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0083,
      "llama-3.3-70b-instruct": 0.0583,
@@ -309,7 +310,7 @@
      "qwen2.5:7b": 0.0
     },
     "lenient": {
-     "deepseek-r1-distill-qwen-32b": 0.0781,
+     "deepseek-r1-distill-qwen-32b": 0.1667,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0167,
      "llama-3.3-70b-instruct": 0.0583,
@@ -361,7 +362,7 @@
    "text": "P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them).",
    "values": {
     "adopt_forged_P5f_minus_P4": {
-     "deepseek-r1-distill-qwen-32b": -0.1747,
+     "deepseek-r1-distill-qwen-32b": -0.2424,
      "gemma-4-12b-it-mlx": -0.4295,
      "google/gemma-3-4b": -0.1793,
      "llama-3.3-70b-instruct": 0.0,
@@ -387,8 +388,8 @@
      "deepseek-v4-pro": null
     },
     "ba_W": {
-     "claude-opus-5-5": 0.9928,
-     "deepseek-v4-pro": 0.9948
+     "claude-opus-5-5": 0.9937,
+     "deepseek-v4-pro": 0.9952
     }
    }
   }

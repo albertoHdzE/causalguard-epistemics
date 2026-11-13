@@ -1,4 +1,10 @@
 {
+ "claude-opus-5-5|P4": {
+  "a_rederives_lookup": 8,
+  "b_names_mismatch": 8,
+  "c_names_altered_line": 8,
+  "n": 8
+ },
  "deepseek-r1-distill-qwen-32b|P4": {
   "a_rederives_lookup": 0,
   "b_names_mismatch": 0,
@@ -9,6 +15,12 @@
   "a_rederives_lookup": 7,
   "b_names_mismatch": 7,
   "c_names_altered_line": 7,
+  "n": 8
+ },
+ "deepseek-v4-pro|P5f": {
+  "a_rederives_lookup": 8,
+  "b_names_mismatch": 8,
+  "c_names_altered_line": 8,
   "n": 8
  },
  "gemma-4-12b-it-mlx|P4": {

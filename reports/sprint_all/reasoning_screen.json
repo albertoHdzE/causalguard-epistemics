@@ -1,4 +1,13 @@
 {
+ "claude-opus-5-5": {
+  "P4": {
+   "screen_reasoning": 24,
+   "screen_reply": 24,
+   "with_reasoning": 24,
+   "with_turn2": 24,
+   "worlds": 24
+  }
+ },
  "deepseek-r1-distill-qwen-32b": {
   "P4": {
    "screen_reasoning": 0,
@@ -15,6 +24,13 @@
    "with_reasoning": 24,
    "with_turn2": 24,
    "worlds": 24
+  },
+  "P5f": {
+   "screen_reasoning": 23,
+   "screen_reply": 23,
+   "with_reasoning": 23,
+   "with_turn2": 23,
+   "worlds": 30
   }
  },
  "gemma-4-12b-it-mlx": {
