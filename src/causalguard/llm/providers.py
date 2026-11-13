@@ -410,8 +410,8 @@ class ClaudeCLIProvider(BaseProvider):
              "--strict-mcp-config", "--setting-sources", "", "--disable-slash-commands", "--output-format", "json"]
         if self.cfg.extra.get("effort"):
             a += ["--effort", self.cfg.extra["effort"]]
-        if self.cfg.extra.get("thinking_summaries"):     # SPRINT (lock v2): ask for the thinking summary text
-            a += ["--settings", json.dumps({"showThinkingSummaries": True})]
+        if self.cfg.extra.get("thinking_summaries"):     # SPRINT (lock v2, D97): ask for the thinking summary text
+            a += ["--thinking-display", "summarized"]
         return a + (["--resume", session] if resume else ["--session-id", session])
 
     def _send(self, messages, temperature, seed):

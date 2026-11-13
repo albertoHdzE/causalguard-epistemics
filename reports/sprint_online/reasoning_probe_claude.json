@@ -1,0 +1,49 @@
+{
+ "completion_tokens": 19,
+ "cost": {
+  "basis": "claude -p total_cost_usd (subscription; notional)",
+  "reasoning_available": false,
+  "thinking_blocks": 0,
+  "thinking_blocks_with_text": 0,
+  "total_cost_usd": 0.005484
+ },
+ "failure": null,
+ "latency_s": 2.5565,
+ "metadata": {
+  "backend": "claude_cli",
+  "cli_version": "2.1.322 (Claude Code)",
+  "isolation_flags": [
+   "--model",
+   "claude-opus-5-5",
+   "--system-prompt",
+   "<system>",
+   "--tools",
+   "",
+   "--strict-mcp-config",
+   "--setting-sources",
+   "",
+   "--disable-slash-commands",
+   "--output-format",
+   "json",
+   "--effort",
+   "high",
+   "--settings",
+   "{\"showThinkingSummaries\": true}"
+  ],
+  "limitations": [
+   "sampling temperature cannot be set on this route",
+   "no seed",
+   "model revision not exposed beyond the reported model id"
+  ],
+  "model": "claude-opus-5-5",
+  "provider_kind": "real"
+ },
+ "model": "claude-opus-5-5",
+ "ok": true,
+ "reasoning_available": false,
+ "reasoning_chars": 0,
+ "reasoning_text": null,
+ "reasoning_tokens": null,
+ "reply": "LCM of 7 and 4 = 28.\n\n28",
+ "target": "claude"
+}

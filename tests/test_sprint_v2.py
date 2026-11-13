@@ -169,7 +169,8 @@ def test_claude_thinking_text_from_transcript(tmp_path, monkeypatch):
     monkeypatch.setattr(PR.ClaudeCLIProvider, "transcript", staticmethod(lambda w, s: tr))
     th = prov.thinking_text("w", "s")
     assert th == {"text": "summary B", "blocks": 2, "with_text": 1}
-    assert "--settings" in prov.argv("sys", "sess", False)
+    a = prov.argv("sys", "sess", False)
+    assert a[a.index("--thinking-display") + 1] == "summarized"
 
 
 # --------------------------------------------------------------------------- lock v1 keys

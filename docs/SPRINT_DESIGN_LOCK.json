@@ -1,6 +1,19 @@
 {
  "addenda": [
   {
+   "amendments": [
+    {
+     "before": "before any online benchmark request and before any P5 request (only the two non-benchmark reasoning probes had run)",
+     "change": "ClaudeCLIProvider.argv: --settings {...} replaced by --thinking-display summarized",
+     "files": {
+      "src/causalguard/llm/providers.py": "b074fb2f219249b6a7e15a09ead5d769904cfef4ff7f62d0d1a04a47b757f960",
+      "tests/test_sprint_v2.py": "e9df16adebe8714678c6295fa9d80f4f160a3f57546ebf72b29dc1d3e02890fc"
+     },
+     "id": "v2-a1",
+     "reason": "The Claude reasoning probe (reports/sprint_online/reasoning_probe_claude.json) showed that --settings {\"showThinkingSummaries\": true} is not applied under -p: the recorded request still carried thinking {type: adaptive, display: omitted}. The CLI's own (hidden) flag --thinking-display accepts summarized|omitted|highlights (validated offline). Record-only display change; no prompt, template, assignment or score changes.",
+     "written_at": "2026-11-13T15:16:49+00:00"
+    }
+   ],
    "changed_files": [
     {
      "path": "artifacts/sprint_p5_manifest.json",

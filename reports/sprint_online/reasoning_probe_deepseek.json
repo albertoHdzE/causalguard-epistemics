@@ -1,0 +1,68 @@
+{
+ "completion_tokens": 213,
+ "cost": {
+  "basis": "peak list price",
+  "cache_hit_tokens": 0,
+  "cache_miss_tokens": 143,
+  "output_tokens": 213,
+  "usd_upper": 0.001032
+ },
+ "failure": null,
+ "latency_s": 3.3445,
+ "metadata": {
+  "backend": "deepseek",
+  "base_url": "https://api.deepseek.com",
+  "chat_template_sha256": null,
+  "format": null,
+  "limitations": [
+   "no model digest/revision exposed by this backend",
+   "server version not exposed by this backend",
+   "seed is sent but whether the backend honours it is not verified"
+  ],
+  "model": "deepseek-v4-pro",
+  "model_digest": null,
+  "model_parameters": null,
+  "models_entry": {
+   "api_capabilities": {
+    "anthropic_messages": {
+     "system_prompt_update": "leading-only",
+     "tool_update": "leading-only"
+    }
+   },
+   "context_window": 1048576,
+   "effort": {
+    "default_level": "high",
+    "supported_levels": [
+     "low",
+     "high",
+     "max"
+    ]
+   },
+   "id": "deepseek-v4-pro",
+   "input_modalities": [
+    "text"
+   ],
+   "max_output_tokens": 393216,
+   "name": "DeepSeek-V4-Pro",
+   "object": "model",
+   "output_modalities": [
+    "text"
+   ],
+   "owned_by": "deepseek"
+  },
+  "parameter_size": null,
+  "provider_kind": "real",
+  "quantization": null,
+  "seed_honoured": "not_verified",
+  "seed_sent": true,
+  "server_version": null
+ },
+ "model": "deepseek-v4-pro",
+ "ok": true,
+ "reasoning_available": true,
+ "reasoning_chars": 809,
+ "reasoning_text": "We need answer number only. Need solve. The question: pencils in packs of 7, erasers packs of 4. Need smallest number of pencils you can buy so that you can pair every pencil with exactly one eraser and have no eraser left over. Need interpret: Buy some packs of pencils (multiples of 7) and some packs of erasers (multiples of 4) such that number of pencils equals number of erasers? \"smallest number of pencils you can buy so that you can pair every pencil with exactly one eraser and have no eraser left over\" means pencils count = erasers count. Need smallest positive multiple of 7 that is also multiple of 4? LCM of 7 and 4 = 28. So smallest number of pencils = 28. But check: can buy 4 packs of pencils? 4*7=28 pencils, and 7 packs of erasers=28 erasers. Pair. Smallest number pencils is 28. Final: 28.",
+ "reasoning_tokens": 211,
+ "reply": "28",
+ "target": "deepseek"
+}
