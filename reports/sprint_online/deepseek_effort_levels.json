@@ -1,0 +1,14 @@
+{
+ "source": "https://api-docs.deepseek.com/guides/thinking_mode",
+ "fetched": "2026-11-13 (CST)",
+ "excerpt": "Thinking Effort Control (2) {\"reasoning_effort\": \"low/high/max\"} {\"output_config\": {\"effort\": \"low/high/max\"}} (1) Thinking mode is enabled by default, with the default effort being high (2) The mapping between the effort set by the user and the model's actual reasoning effort is as follows: Requested effort Actual mapped effort minimal low low low medium high high high xhigh high max max ultra max When using Chat Completion with the OpenAI SDK to set the thinking parameter, you need to pass the thinking parameter ",
+ "models_endpoint_effort": {
+  "default_level": "high",
+  "supported_levels": [
+   "low",
+   "high",
+   "max"
+  ]
+ },
+ "models_endpoint_source": "reports/sprint_online/reasoning_probe_deepseek.json (metadata.models_entry, recorded 2026-11-13 before lock v2-a2)"
+}

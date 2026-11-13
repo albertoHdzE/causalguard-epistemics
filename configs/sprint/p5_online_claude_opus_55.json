@@ -1,12 +1,12 @@
 {
  "study": "SPRINT",
  "mode": "development",
- "global_cap": 528,
+ "global_cap": 520,
  "phase": "SPRINT",
- "phase_cap": 528,
+ "phase_cap": 520,
  "call_ledger": "RUNS/sprint-online-calls/claude_opus_55.jsonl",
- "workers": 4,
- "item_timeout_s": 7200,
+ "workers": 2,
+ "item_timeout_s": 28800,
  "world_cap": 4,
  "run_id": "p5-claude_opus_55-v1",
  "manifest": "artifacts/sprint_p5_manifest.json",
@@ -19,9 +19,11 @@
   "seed": null,
   "extra": {
    "effort": "high",
-   "thinking_summaries": true
+   "thinking_summaries": true,
+   "pause_file": "RUNS/sprint-online-calls/claude_pause.json",
+   "hard_stop_utc": "2026-11-14T18:00:00+00:00"
   }
  },
- "note": "SPRINT P5 verify-first (lock v2): 60 Tier W worlds, 120 requests; cap 528 on the shared ledger = 8 smoke + 360 main + 120 P5 + 40 retries.",
+ "note": "SPRINT P5 verify-first (lock v2), Claude priority block B2 (amendment v2-a3): 60 Tier W worlds, 120 requests; usage-limit pause, hard stop Sat 14 Nov 12:00 CST; cap 520 on the shared ledger.",
  "task_wording": "v3"
 }

@@ -108,13 +108,106 @@ def probe_reasoning(target: str) -> dict:
     return out
 
 
+def _runs() -> Path:
+    return Path(os.environ.get("CAUSALGUARD_RUNS", REPO / "runs"))
+
+
+def fix_records(dry: bool = False) -> dict:
+    """SPRINT amendment v2-a3 (record only; director D101/D102), idempotent.
+
+    (1) DeepSeek spend: every line gets ``usd``, ``usd_upper``, ``peak``, ``t``; the 12 lines written before v2-a2
+    are back-filled from the recorded tokens of their request (smoke v1 attempts and the reasoning probe), matched
+    on the recorded peak figure, which must reproduce; the 3 fake test lines have no request.
+    (2) Claude call ledger: each world of ``r7b-main-claude_opus_55-v1`` that the subscription window rejected
+    before inference (``usage_limit_reached``; 172 at turn 1, 1 at turn 2 after a real turn 1) used one slot for
+    the rejected request; one line ``{kind: usage_limit_rejected, voids_slot:
+    true, backfilled: true}`` per such world cancels it.  The original files are kept beside them (``.pre-v2-a3``).
+    """
+    import glob
+
+    from ..llm import providers as PR
+    from ..llm.harness import ledger_used
+    out = {}
+    sp = _runs() / "sprint-online-calls" / "deepseek_spend.jsonl"
+    lines = [json.loads(x) for x in sp.read_text().splitlines() if x.strip()]
+    usages = {}
+    for f in sorted(glob.glob(str(_runs() / "r7b-smoke-deepseek_v4_pro-v1" / "attempts" / "*" / "*.json"))):
+        for t in json.loads(Path(f).read_text())["output"]["episode"].get("turns", []):
+            for a in t["attempts"]:
+                c = a.get("cost") or {}
+                usages[c["usd_upper"]] = {"prompt_cache_hit_tokens": c["cache_hit_tokens"],
+                                          "prompt_cache_miss_tokens": c["cache_miss_tokens"],
+                                          "completion_tokens": c["output_tokens"]}
+    pr = json.loads((REPO / "reports/sprint_online/reasoning_probe_deepseek.json").read_text())["cost"]
+    usages[pr["usd_upper"]] = {"prompt_cache_hit_tokens": pr["cache_hit_tokens"],
+                               "prompt_cache_miss_tokens": pr["cache_miss_tokens"],
+                               "completion_tokens": pr["output_tokens"]}
+    fixed = PR.spend_backfill(lines, usages)
+    out["deepseek_spend"] = {"lines": len(fixed), "backfilled": sum(1 for x in fixed if x.get("backfilled")),
+                             "from_tokens": sum(1 for x in fixed if x.get("backfill_source") == "recorded tokens"),
+                             "usd": round(sum(x["usd"] for x in fixed), 6),
+                             "usd_upper": round(sum(x["usd_upper"] for x in fixed), 6)}
+    cl = _runs() / "sprint-online-calls" / "claude_opus_55.jsonl"
+    recs = [json.loads(x) for x in cl.read_text().splitlines() if x.strip()]
+    have = {r["world_id"] for r in recs if r.get("kind") == "usage_limit_rejected" and r.get("backfilled")}
+    new = []
+    tids = _task_ids(_runs() / "r7b-main-claude_opus_55-v1")
+    for f in sorted(glob.glob(str(_runs() / "r7b-main-claude_opus_55-v1" / "attempts" / "*" / "*.json"))):
+        d = json.loads(Path(f).read_text())
+        o = d["output"]
+        if d["status"] != "ok" and PR.USAGE_LIMIT_MARK in str(o.get("error")):
+            turn = str(o["error"])[len("ProviderFailure('turn "):][:1]
+            wid, cond = tids[d["item_id"]]
+            call = "S|t1" if turn == "1" else f"P|{cond}|t2"
+            if not any(r.get("world_id") == wid and r.get("call") == call and "kind" not in r for r in recs):
+                raise SystemExit(f"{wid}: no slot line for the rejected request {call}")
+            if wid not in have:
+                new.append({"kind": "usage_limit_rejected", "voids_slot": True, "world_id": wid, "call": call,
+                            "phase": "SPRINT", "backfilled": True, "run_id": "r7b-main-claude_opus_55-v1",
+                            "attempt_finished": d["finished"], "message": PR.usage_limit_message(
+                                str(o["error"]).replace("\\", ""))[:120]})
+    after = recs + new
+    out["claude_ledger"] = {"lines_before": len(recs), "rejections_voided_now": len(new),
+                            "rejections_voided_total": sum(1 for r in after if r.get("voids_slot")),
+                            "slots_used_before": ledger_used(recs), "slots_used_after": ledger_used(after)}
+    if not dry:
+        if any(not x.get("backfilled") and "usd" not in x for x in lines) or fixed != lines:
+            bak = sp.with_suffix(".jsonl.pre-v2-a3")
+            if not bak.exists():
+                bak.write_bytes(sp.read_bytes())
+            sp.write_text("".join(json.dumps(x) + "\n" for x in fixed))
+        if new:
+            bak = cl.with_suffix(".jsonl.pre-v2-a3")
+            if not bak.exists():
+                bak.write_bytes(cl.read_bytes())
+            with open(cl, "a") as fh:
+                fh.write("".join(json.dumps(x) + "\n" for x in new))
+    return out
+
+
+def _task_ids(run_dir: Path) -> dict[str, tuple[str, str]]:
+    """item id -> (the world id the call ledger records (the public task id, recomputed from the planned world), condition)."""
+    from . import population as P
+    plan = json.loads((run_dir / "plan.json").read_text())
+    out = {}
+    for e in plan["items"]:
+        p = e["payload"]
+        k = P.WorldKey.from_json(p["world"])
+        out[e["item_id"]] = (P.tier_public(k, p.get("tier", "H"), p.get("design_salt"))[1]["task_id"], p["condition"])
+    return out
+
+
 def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="causalguard sprint-online")
-    ap.add_argument("step", choices=("probe", "reasoning-probe"))
-    ap.add_argument("--target", choices=sorted(TARGETS), required=True)
+    ap.add_argument("step", choices=("probe", "reasoning-probe", "fix-records"))
+    ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--target", choices=sorted(TARGETS))
     ap.add_argument("--two-turn", action="store_true")
     a = ap.parse_args(argv)
+    if a.step == "fix-records":
+        print(json.dumps(fix_records(a.dry), indent=1, sort_keys=True))
+        return 0
     if a.step == "reasoning-probe":
         probe_reasoning(a.target)
     else:

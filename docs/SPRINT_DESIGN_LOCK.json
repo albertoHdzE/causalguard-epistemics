@@ -29,6 +29,119 @@
      "smoke_v2_pass_rule": "at least 6 of 8 turns with a parsed answer and every Tier W turn parsed; otherwise DeepSeek stops and is reported",
      "worst_case_main_usd_offpeak": 23.43,
      "written_at": "2026-11-13T15:27:07+00:00"
+    },
+    {
+     "before": "after the Claude main v1 run was stopped by the subscription window (6 worlds finished) and the DeepSeek high-effort smoke failed; before any further Claude or DeepSeek request",
+     "change": {
+      "claude_finished_in_v1_stand": "6 worlds of r7b-main-claude_opus_55-v1 (B1 3, B3 3) are excluded from the block runs and analysed with them",
+      "claude_hard_stop_utc": "2026-11-14T18:00:00+00:00 (Sat 14 Nov 12:00 CST); a pause ending after it stops the run",
+      "claude_priority_order": [
+       [
+        "B1",
+        "r7b-main-claude_opus_55-v2-b1",
+        [
+         [
+          "W",
+          "P3"
+         ],
+         [
+          "W",
+          "P4"
+         ]
+        ],
+        45
+       ],
+       [
+        "B2",
+        "p5-claude_opus_55-v1",
+        "P5v+P5f",
+        60
+       ],
+       [
+        "B3",
+        "r7b-main-claude_opus_55-v2-b3",
+        [
+         [
+          "W",
+          "P0"
+         ],
+         [
+          "W",
+          "P1"
+         ],
+         [
+          "W",
+          "P2"
+         ]
+        ],
+        69
+       ],
+       [
+        "B4",
+        "r7b-main-claude_opus_55-v2-b4",
+        [
+         [
+          "H",
+          "P3"
+         ],
+         [
+          "H",
+          "P4"
+         ]
+        ],
+        24
+       ],
+       [
+        "B5",
+        "r7b-main-claude_opus_55-v2-b5",
+        [
+         [
+          "H",
+          "P0"
+         ],
+         [
+          "H",
+          "P1"
+         ],
+         [
+          "H",
+          "P2"
+         ]
+        ],
+        36
+       ]
+      ],
+      "claude_workers": 2,
+      "deepseek_condition": "deepseek-v4-pro, thinking enabled, reasoning_effort low (the API maps medium to high; D108), max_tokens 32000; smoke r7b-smoke-deepseek_v4_pro_low-v1 on the same 4 pilot-4 worlds, v2-a2 pass rule; on pass: the same priority blocks at 8 workers",
+      "deepseek_spend_stop": "$25 on the peak-price upper bound (usd_upper)",
+      "online_cap": 520,
+      "records": "sprint-online fix-records: DeepSeek spend lines back-filled (usd, peak; backfilled: true); 173 voiding lines for the v1 Claude rejections (backfilled: true); originals kept as .pre-v2-a3",
+      "usage_limit": "a usage_limit_reached reply is recorded as {kind: usage_limit_rejected, voids_slot: true} in the call ledger (outside the 520 cap, counted separately); all workers pause until the stated reset (+60 s) or, with none, 15 min then one probe; turn-2 rejection: session transcript restored, same request resent"
+     },
+     "files": {
+      "configs/sprint/p5_online_claude_opus_55.json": "382d61b3eb44e361fc38ff0ed334c28e5a3366c83c5ec58290b12254cb060e26",
+      "configs/sprint/p5_online_deepseek_v4_pro_low.json": "c7b06ec65cbf4d8a3ee0e89c389704b0c0445131a81878e2f1a9088c6cf22c80",
+      "configs/sprint/r7b_online_main_claude_opus_55_b1.json": "b8d0dff8408d97c166697d9c49005996641890f4dcc353075f0dce53428ac8ba",
+      "configs/sprint/r7b_online_main_claude_opus_55_b3.json": "dfa00e037b5d310f780f63b0ee32e009a8102e13038f1b50c8f6a14a3055ee8d",
+      "configs/sprint/r7b_online_main_claude_opus_55_b4.json": "d0f41b8cdd437a2223d103a52ac7eb29dbed8fcbe52ef4c351c4454232f2963c",
+      "configs/sprint/r7b_online_main_claude_opus_55_b5.json": "ae0d59fb121df95c3c053a07d176ace660c95ef675601f479115a00748cff402",
+      "configs/sprint/r7b_online_main_deepseek_v4_pro_low_b1.json": "f650fe75b2b44113912c29ce52c30a0efd6886fd280267abcc730c14e4debd21",
+      "configs/sprint/r7b_online_main_deepseek_v4_pro_low_b3.json": "554fe8d698eb621456414ba084758d571c12db1cdf708945ad5d2bacda415474",
+      "configs/sprint/r7b_online_main_deepseek_v4_pro_low_b4.json": "d3b68f55b4af7251da7e89ccef9902ba58a2bf696d03b8e1e3d654ddf7e60270",
+      "configs/sprint/r7b_online_main_deepseek_v4_pro_low_b5.json": "b7538658bd0ed748949c37d4088ab837551e4cc13f3cb059a79ad9f02d66add2",
+      "configs/sprint/r7b_online_smoke_deepseek_v4_pro_low.json": "ddbc4559334b112fc8d7a052bb5e2b41309cca1a5b4b6feeec40b9fcfb4a614b",
+      "scripts/sprint_online_blocks.sh": "0f0fa9fd8d65b78950a90a375dc4916566b22e69da6ce4838c5bf25cf1ff3865",
+      "src/causalguard/__main__.py": "1d42cd185188db4392d4a4bd2ec3842abae05314fcf236715df2ecc587d48acf",
+      "src/causalguard/llm/harness.py": "b867a602dca9251e7180facc49f23225eb54784876e716b418112549242e3afd",
+      "src/causalguard/llm/providers.py": "9b7fd128562fb9defe51330c680c84c95b087a2dba30a272fe4770438f717d0a",
+      "src/causalguard/sprint/episode.py": "b8604b9c5378e702e438499c5a837df904ad120616d1e87985537ea3a8fa45b8",
+      "src/causalguard/sprint/online.py": "7b4216cc1f90c201cb3cf8deb86aa3a4f916192d7ecb72f6e7a0aa992a4f5ea1",
+      "tests/test_sprint_v2.py": "794b0f05ec99a5c650871e33ff72c595933001511d227647744bc7b58ef7d215",
+      "tests/test_sprint_v2a3.py": "41e7078e86aed492e616cff449228548232021b331b79a19401cbabe9092b822"
+     },
+     "id": "v2-a3",
+     "reason": "Director decisions D101/D102 (delegation/iteration_9/01_ONLINE_DECISIONS_AND_DAY2_PLAN.md). The run order is not a scientific quantity: items, assignments, prompts, templates and scoring are unchanged; the lock fixed the hash order only as a reproducibility convenience, and it is kept inside each block.",
+     "written_at": "2026-11-13T20:34:38+00:00"
     }
    ],
    "changed_files": [

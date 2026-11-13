@@ -149,7 +149,7 @@ def test_deepseek_cost_peak_upper_bound(tmp_path):
     led = str(tmp_path / "spend.jsonl")
     PR.spend_record(led, {"usd_upper": 24.5})
     PR.spend_record(led, {"usd": 0.6, "usd_upper": 1.2})
-    assert PR.spend_total(led) == pytest.approx(25.1)
+    assert PR.spend_total(led) == pytest.approx(25.7)          # v2-a3: the stop uses the upper bound
 
 
 def test_deepseek_spend_stop_blocks_the_request(tmp_path):

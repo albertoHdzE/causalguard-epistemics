@@ -58,6 +58,14 @@ class CapExceeded(Exception):
         self.scope = scope
 
 
+class HardStop(Exception):
+    """SPRINT (amendment v2-a3): no Claude benchmark request at or after the hard stop, and no usage-limit wait that
+    would end after it.  The world item fails (not finished); it is never scored."""
+
+
+USAGE_LIMIT_MARK = "usage_limit_reached"
+
+
 @dataclass
 class ProviderConfig:
     kind: str = "openai_compatible"        # 'openai_compatible' | 'mock' | 'replay'
@@ -372,16 +380,42 @@ def _runs_path(p: str | None) -> str | None:
     return p
 
 
-def spend_total(ledger: str | None) -> float:
+def spend_total(ledger: str | None, field: str = "usd_upper") -> float:
+    """Recorded DeepSeek spend.  The stop uses the peak-price upper bound (amendment v2-a3, director D101); ``usd``
+    (list price at request time) is the off-peak figure reported beside it."""
     ledger = _runs_path(ledger)
     if not ledger or not Path(ledger).exists():
         return 0.0
     tot = 0.0
     for x in Path(ledger).read_text().splitlines():
         if x.strip():
-            d = json.loads(x)
-            tot += d["usd"] if "usd" in d else d["usd_upper"]      # lines before v2-a2 carry the peak price only
+            tot += json.loads(x)[field]
     return tot
+
+
+def spend_backfill(lines: list[dict], usages: dict[float, dict]) -> list[dict]:
+    """SPRINT (amendment v2-a3): give every spend line ``usd``, ``usd_upper``, ``peak`` and ``t``.  A line without
+    ``usd`` (written before v2-a2) is recomputed by ``deepseek_cost`` from the recorded usage of its request
+    (``usages``: usd_upper -> usage, matched on the recorded peak figure, which must reproduce) at the line's time;
+    a line with no recorded request (the three fake test lines) gets ``usd`` from ``usd_upper`` and the time-of-day
+    rule.  Back-filled lines carry ``backfilled: true``."""
+    out = []
+    for d in lines:
+        if "usd" in d:
+            out.append(d)
+            continue
+        u = usages.get(d["usd_upper"])
+        if u is not None:
+            c = deepseek_cost(u, d["t"])
+            if c["usd_upper"] != d["usd_upper"]:
+                raise ValueError(f"recorded usage does not reproduce the recorded peak figure {d['usd_upper']}")
+            usd, src = c["usd"], "recorded tokens"
+        else:
+            pk = deepseek_peak(d["t"])
+            usd, src = (d["usd_upper"] if pk else round(d["usd_upper"] / 2, 6)), "no recorded request (test line)"
+        out.append({"usd": usd, "usd_upper": d["usd_upper"], "peak": deepseek_peak(d["t"]), "t": d["t"],
+                    "backfilled": True, "backfill_source": src})
+    return out
 
 
 def spend_record(ledger: str | None, cost: dict) -> None:
@@ -394,6 +428,40 @@ def spend_record(ledger: str | None, cost: dict) -> None:
         fh.write(json.dumps({k: cost[k] for k in ("usd", "usd_upper", "peak") if k in cost} | {"t": time.time()})
                  + "\n")
         fcntl.flock(fh, fcntl.LOCK_UN)
+
+
+def usage_limit_message(out: str) -> str:
+    """The human-readable rejection text of the CLI (e.g. "You've hit your 5-hour limit · resets 1:40pm (...)")."""
+    import re
+    m = re.search(r'"result"\s*:\s*"([^"]*)"', out or "")
+    return m.group(1) if m else (out or "")[-200:]
+
+
+def parse_reset(msg: str, now: float) -> float | None:
+    """The reset time stated in a usage-limit message ("resets 1:40pm (America/Mexico_City)", optionally with a
+    date "resets Nov 14, 3am (...)"), as a timestamp after ``now``; None when the message states none."""
+    import datetime
+    import re
+    from zoneinfo import ZoneInfo
+    m = re.search(r"resets\s+(?:([A-Z][a-z]{2})\s+(\d{1,2}),?\s+(?:at\s+)?)?(\d{1,2})(?::(\d{2}))?\s*([ap]m)"
+                  r"\s*\(([^)]+)\)", msg or "")
+    if not m:
+        return None
+    mon, day, hh, mm, ap, tz = m.groups()
+    try:
+        z = ZoneInfo(tz)
+    except Exception:  # noqa: BLE001
+        return None
+    h = int(hh) % 12 + (12 if ap == "pm" else 0)
+    base = datetime.datetime.fromtimestamp(now, z)
+    if mon:
+        mo = datetime.datetime.strptime(mon, "%b").month
+        t = base.replace(month=mo, day=int(day), hour=h, minute=int(mm or 0), second=0, microsecond=0)
+    else:
+        t = base.replace(hour=h, minute=int(mm or 0), second=0, microsecond=0)
+        if t.timestamp() <= now:
+            t += datetime.timedelta(days=1)
+    return t.timestamp()
 
 
 class ClaudeCLIProvider(BaseProvider):
@@ -419,6 +487,9 @@ class ClaudeCLIProvider(BaseProvider):
         self.binary = cfg.extra.get("binary", "claude")
         self.sessions: dict[str, tuple[str, str]] = {}      # hash(sys, user1, reply) -> (session id, workdir)
         self.last_usage: dict | None = None
+        self.usage_rejections: list[dict] = []
+        import uuid
+        self.token = uuid.uuid4().hex
 
     @staticmethod
     def _conv_hash(msgs: list[dict]) -> str:
@@ -458,6 +529,9 @@ class ClaudeCLIProvider(BaseProvider):
                                cwd=workdir, env=env, timeout=self.cfg.timeout_s)
         except subprocess.TimeoutExpired:
             raise TransportError("claude_cli timeout") from None
+        if USAGE_LIMIT_MARK in (p.stdout or "") or USAGE_LIMIT_MARK in (p.stderr or ""):
+            # v2-a3: the subscription window rejected the request before inference; never retried here (chat pauses)
+            raise FatalProviderError(f"{USAGE_LIMIT_MARK}: {usage_limit_message(p.stdout or p.stderr)}")
         if p.returncode != 0:
             raise TransportError(f"claude_cli exit {p.returncode}: {(p.stderr or p.stdout)[-300:]}")
         try:
@@ -484,6 +558,115 @@ class ClaudeCLIProvider(BaseProvider):
                 "content": text, "finish_reason": r.get("stop_reason") or r.get("subtype"), "prompt_tokens": tin,
                 "completion_tokens": u.get("output_tokens"), "response_model": ",".join(sorted(
                     (r.get("modelUsage") or {}).keys())) or self.cfg.model, "isolation": iso}
+
+    # ---- SPRINT amendment v2-a3: the subscription's usage window
+    def chat(self, messages, temperature, seed, before_attempt=None):
+        """On a usage-limit rejection: record it (``kind: usage_limit_rejected``, voiding its call-ledger slot), put
+        every worker of this model on pause until the reset time the CLI states (else one probe every 15 min),
+        restore the conversation to its state before the rejected request, and send the same request again.  No
+        request is sent at or after ``extra.hard_stop_utc``, nor after a pause that would end after it."""
+        while True:
+            self._usage_gate()
+            snap = self._session_snapshot(messages)
+            res = super().chat(messages, temperature, seed, before_attempt)
+            if res["ok"] or USAGE_LIMIT_MARK not in str(res.get("failure")):
+                if res["ok"]:
+                    self._usage_clear()
+                return res
+            until, parsed = self._usage_pause(str(res["failure"]))
+            budget = getattr(before_attempt, "__self__", None)
+            info = {"until": until, "reset_parsed": parsed, "message": str(res["failure"])[:200],
+                    "latency_s": (res["attempts"] or [{}])[-1].get("latency_s")}
+            if hasattr(budget, "void_last"):
+                budget.void_last("usage_limit_rejected", **info)
+            self.usage_rejections.append(info)
+            self._session_restore(snap)
+
+    def _hard_stop(self) -> float | None:
+        import datetime
+        h = self.cfg.extra.get("hard_stop_utc")
+        return datetime.datetime.fromisoformat(h).timestamp() if h else None
+
+    def _pause_path(self) -> Path | None:
+        p = _runs_path(self.cfg.extra.get("pause_file"))
+        return Path(p) if p else None
+
+    def _pause_io(self, fn):
+        """Run ``fn(state) -> new state | None`` under an exclusive lock of the pause file (shared by all workers)."""
+        pf = self._pause_path()
+        pf.parent.mkdir(parents=True, exist_ok=True)
+        with open(str(pf) + ".lock", "a") as lk:
+            fcntl.flock(lk, fcntl.LOCK_EX)
+            try:
+                st = json.loads(pf.read_text()) if pf.exists() and pf.read_text().strip() else {}
+                new = fn(st)
+                if new is not None:
+                    pf.write_text(json.dumps(new))
+                return st
+            finally:
+                fcntl.flock(lk, fcntl.LOCK_UN)
+
+    def _usage_gate(self) -> None:
+        hs = self._hard_stop()
+        while True:
+            now = time.time()
+            if hs is not None and now >= hs:
+                raise HardStop(f"hard stop {self.cfg.extra['hard_stop_utc']} reached")
+            if self._pause_path() is None:
+                return
+            box = {}
+
+            def step(st, now=now):
+                if not st.get("until"):
+                    box["go"] = True
+                    return None
+                if now < st["until"]:
+                    box["wait"] = st["until"] - now
+                    return None
+                if not st.get("probe") or now - st.get("probe_t", 0) > self.cfg.timeout_s + 60:
+                    box["go"] = True                      # this worker sends the probe; the others wait for it
+                    return {**st, "probe": self.token, "probe_t": now}
+                box["wait"] = 20.0
+                return None
+            st = self._pause_io(step)
+            if box.get("go"):
+                return
+            if hs is not None and st.get("until") and st["until"] > hs:
+                raise HardStop("usage-limit pause lasts past the hard stop")
+            time.sleep(min(box["wait"], 60.0))
+
+    def _usage_pause(self, msg: str) -> tuple[float, bool]:
+        now = time.time()
+        reset = parse_reset(msg, now)
+        until = reset + 60 if reset is not None else now + float(self.cfg.extra.get("probe_interval_s", 900))
+        if self._pause_path() is not None:
+            self._pause_io(lambda st: {"until": until, "reset_parsed": reset is not None, "since": st.get("since", now)})
+        return until, reset is not None
+
+    def _usage_clear(self) -> None:
+        pf = self._pause_path()
+        if pf is not None and pf.exists():
+            self._pause_io(lambda st: {} if st else None)
+
+    def _session_snapshot(self, messages):
+        if len(messages) <= 2:
+            return None                                   # turn 1: a rejected request is retried in a new session
+        key = self._conv_hash(messages[:-1])
+        if key not in self.sessions:
+            return None
+        session, workdir = self.sessions[key]
+        tp = self.transcript(workdir, session)
+        return tp, (tp.read_bytes() if tp.exists() else None)
+
+    @staticmethod
+    def _session_restore(snap) -> None:
+        if snap is None:
+            return
+        tp, data = snap
+        if data is None:
+            tp.unlink(missing_ok=True)
+        else:
+            tp.write_bytes(data)
 
     SDK_PREFIX = "You are a Claude agent, built on Anthropic's Claude Agent SDK."
 

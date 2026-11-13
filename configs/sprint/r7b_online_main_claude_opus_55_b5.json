@@ -1,0 +1,44 @@
+{
+ "study": "SPRINT",
+ "mode": "development",
+ "global_cap": 520,
+ "phase": "SPRINT",
+ "phase_cap": 520,
+ "call_ledger": "RUNS/sprint-online-calls/claude_opus_55.jsonl",
+ "workers": 2,
+ "item_timeout_s": 28800,
+ "world_cap": 4,
+ "run_id": "r7b-main-claude_opus_55-v2-b5",
+ "manifest": "artifacts/sprint_main_manifest.json",
+ "provider": {
+  "kind": "claude_cli",
+  "model": "claude-opus-5-5",
+  "max_tokens": 16000,
+  "timeout_s": 600,
+  "max_transport_retries": 0,
+  "seed": null,
+  "extra": {
+   "effort": "high",
+   "thinking_summaries": true,
+   "pause_file": "RUNS/sprint-online-calls/claude_pause.json",
+   "hard_stop_utc": "2026-11-14T18:00:00+00:00"
+  }
+ },
+ "note": "SPRINT amendment v2-a3, Claude priority block B5 Tier H P0-P2 (completeness): the main-panel worlds of these cells in the locked hash order, minus the worlds finished in r7b-main-claude_opus_55-v1. Usage-limit pause, hard stop Sat 14 Nov 12:00 CST; cap 520 on the shared ledger (rejections void their slot).",
+ "task_wording": "v3",
+ "cells": [
+  [
+   "H",
+   "P0"
+  ],
+  [
+   "H",
+   "P1"
+  ],
+  [
+   "H",
+   "P2"
+  ]
+ ],
+ "exclude_ok_from": "r7b-main-claude_opus_55-v1"
+}

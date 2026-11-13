@@ -26,6 +26,7 @@ import fcntl
 import hashlib
 import json
 import re
+import time
 from collections import Counter
 from pathlib import Path
 
@@ -78,12 +79,12 @@ class CallBudget:
                     fcntl.flock(fh, fcntl.LOCK_EX)
                     try:
                         fh.seek(0)
-                        lines = [line for line in fh if line.strip()]
-                        used = len(lines)
+                        recs = [json.loads(line) for line in fh if line.strip()]
+                        used = ledger_used(recs)
                         if used >= self.global_cap:
                             raise CapExceeded("global_cap_reached", f"{used} >= {self.global_cap}")
                         if self.phase_cap is not None:
-                            pu = sum(1 for line in lines if json.loads(line).get("phase") == self.phase)
+                            pu = ledger_used([r for r in recs if r.get("phase") == self.phase])
                             if pu >= self.phase_cap:
                                 raise CapExceeded("phase_cap_reached", f"{self.phase}: {pu} >= {self.phase_cap}")
                         fh.seek(0, 2)
@@ -95,6 +96,30 @@ class CallBudget:
                     finally:
                         fcntl.flock(fh, fcntl.LOCK_UN)
         self.n += 1
+
+    def void_last(self, kind: str, **info) -> None:
+        """SPRINT (amendment v2-a3): the last counted attempt reached no model (a usage-limit rejection).  A ledger
+        line ``{kind, voids_slot: true, ...}`` cancels its slot for the global and phase caps, and the per-world
+        count is undone; the rejection itself stays on record and is counted separately."""
+        self.n = max(0, self.n - 1)
+        if self.ledger is None:
+            return
+        rec = {"kind": kind, "voids_slot": True, "world_id": self.world_id, "call": self.current, "t": time.time(),
+               **info}
+        if self.phase is not None:
+            rec["phase"] = self.phase
+        with self.ledger.open("a") as fh:
+            fcntl.flock(fh, fcntl.LOCK_EX)
+            try:
+                fh.write(json.dumps(rec) + "\n")
+                fh.flush()
+            finally:
+                fcntl.flock(fh, fcntl.LOCK_UN)
+
+
+def ledger_used(recs: list[dict]) -> int:
+    """Slots used in a call ledger: request lines (no ``kind``) minus lines that void a slot (v2-a3)."""
+    return sum(1 for r in recs if "kind" not in r) - sum(1 for r in recs if r.get("voids_slot"))
 
 
 def derive_seed(base: int | None, world_id: str, call_id: str) -> int | None:

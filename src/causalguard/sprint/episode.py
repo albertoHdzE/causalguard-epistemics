@@ -119,7 +119,7 @@ def run_episode(pub: dict, assignment: dict, provider, budget, seed: int | None,
 def sprint_world(p: dict) -> dict:
     """Runner item: one (model, world).  Payload: the manifest item + provider + caps + ledger."""
     from ..llm.harness import CallBudget
-    from ..llm.providers import make_provider
+    from ..llm.providers import HardStop, make_provider
     k = P.WorldKey.from_json(p["world"])
     tier = p.get("tier", "H")                       # R7b (D79): 'W' wiring given, 'H' wiring hidden
     ev, pub = P.tier_public(k, tier, p.get("design_salt"))     # design_salt: P5 worlds (lock v2)
@@ -138,7 +138,7 @@ def sprint_world(p: dict) -> dict:
         episode = run_episode(pub, assignment, provider, budget, p["provider"].get("seed", 0),
                               two_turns=p.get("two_turns", True), wording=p.get("task_wording", T.DEFAULT_WORDING))
         status = "ok"
-    except ProviderFailure:
+    except (ProviderFailure, HardStop):    # v2-a3: a hard-stopped world is not finished (runner status error)
         raise
     except Exception as e:     # CapExceeded or harness error: recorded, never dropped
         episode, status = {"assignment": assignment, "turns": [], "error": f"{type(e).__name__}: {str(e)[:400]}"}, \

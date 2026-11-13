@@ -135,6 +135,14 @@ def _items_from_config(cfg: dict):
         items = sorted(man["items"], key=lambda x: hashlib.sha256(f"r7-run-order|{x['wkey']}".encode()).hexdigest())
         if cfg.get("tiers"):                # R7b pilot: restrict a model to some tiers
             items = [x for x in items if x.get("tier") in cfg["tiers"]]
+        if cfg.get("cells"):                # amendment v2-a3: one priority block = a set of (tier, condition) cells
+            cells = {tuple(c) for c in cfg["cells"]}
+            items = [x for x in items if (x.get("tier"), x["condition"]) in cells]
+        if cfg.get("exclude_ok_from"):      # v2-a3: worlds already finished in an earlier run of the model stand
+            from .runner import default_runs_root, read_attempts
+            done = {a[-1]["output"]["wkey"] for a in read_attempts(default_runs_root() / cfg["exclude_ok_from"]).values()
+                    if a[-1]["status"] == "ok" and a[-1]["output"].get("status") == "ok"}
+            items = [x for x in items if x["wkey"] not in done]
         if cfg.get("per_tier"):             # R7b online smoke: the first k worlds per tier in run order
             cnt: dict = {}
             keep = []

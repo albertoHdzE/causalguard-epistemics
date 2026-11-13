@@ -1,0 +1,39 @@
+{
+ "study": "SPRINT",
+ "mode": "development",
+ "global_cap": 24,
+ "phase": "SPRINT",
+ "phase_cap": 24,
+ "call_ledger": "RUNS/sprint-online-calls/deepseek_v4_pro.jsonl",
+ "workers": 8,
+ "item_timeout_s": 7200,
+ "world_cap": 4,
+ "run_id": "r7b-smoke-deepseek_v4_pro_low-v1",
+ "manifest": "artifacts/sprint_pilot4_manifest.json",
+ "provider": {
+  "kind": "openai_compatible",
+  "backend": "deepseek",
+  "base_url": "https://api.deepseek.com",
+  "model": "deepseek-v4-pro",
+  "allow_remote": true,
+  "max_tokens": 32000,
+  "timeout_s": 900,
+  "max_transport_retries": 1,
+  "seed": 0,
+  "extra": {
+   "api_key_env": "DEEPSEEK_API_KEY",
+   "env_file": "/Users/alberto/Documents/projects/AI-security/.env",
+   "body": {
+    "thinking": {
+     "type": "enabled"
+    },
+    "reasoning_effort": "low"
+   },
+   "spend_ledger": "RUNS/sprint-online-calls/deepseek_spend.jsonl",
+   "spend_stop_usd": 25.0
+  }
+ },
+ "note": "SPRINT amendment v2-a3 (director D101): DeepSeek V4-Pro at reasoning effort LOW, a new labelled model condition (the API maps 'medium' to 'high'; low is the one step below high). Same 4 pilot-4 worlds, cap 32000, pass rule of v2-a2. Shared ledger already holds 16 smoke requests.",
+ "task_wording": "v3",
+ "per_tier": 2
+}
