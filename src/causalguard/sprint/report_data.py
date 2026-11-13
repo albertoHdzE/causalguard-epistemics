@@ -178,8 +178,11 @@ def predictions(A: dict, P5: dict) -> list[dict]:
         return _est(((v or {}).get("vs_main") or {}).get("adopt_forged_P5f_minus_P4"))
 
     def off_floor(m):
+        """Post-hoc operationalisation (the lock does not define 'the floor'): Tier W balanced-accuracy lower bound
+        above the always-not-settled row at the reported precision (3 decimals).  llama-3.3-70b is the edge case
+        (lower bound 0.3334 against 0.3333): at the floor under this rule, as in the R7b report and review."""
         lo = ba(m, "W", "lo")
-        return None if lo is None else lo > never("W")
+        return None if lo is None else round(lo, 3) > round(never("W"), 3)
 
     online = [CLAUDE, DEEPSEEK]
     sw = surf("W")
@@ -193,7 +196,7 @@ def predictions(A: dict, P5: dict) -> list[dict]:
     # ---- lock v1
     ov = {m: _est(tier(m, "W")["S"]["overclaim"]) for m in loc}
     add("v1-D1", "director", A_LOCK["director"][0], "some local model has Tier W BA lower bound above the always-not-"
-        "settled row, and every local model has Tier W overclaim > 0.20",
+        "settled row (3 decimals; post-hoc), and every local model has Tier W overclaim > 0.20",
         any(off_floor(m) for m in loc) and all(v > 0.20 for v in ov.values()),
         {"off_floor": {m: off_floor(m) for m in loc}, "overclaim_W": ov})
     bh = {m: _est(tier(m, "H")["contrasts"].get("balanced_accuracy_minus_surface")) for m in loc}
@@ -238,7 +241,8 @@ def predictions(A: dict, P5: dict) -> list[dict]:
                         *(None if ex[m] is None else ex[m] < 0.15 for m in loc)]), {"exact": ex})
     fl = {m: off_floor(m) for m in online + loc}
     dd = {m: p5d(m) for m in online + loc}
-    add("P-D4", "director", B_LOCK["director"][3], "off the Tier W floor: P5f − P4 forged adoption < −0.15; at the "
+    add("P-D4", "director", B_LOCK["director"][3], "off the Tier W floor (BA lower bound above the always-not-settled "
+        "row at 3 decimals; post-hoc, the lock does not define the floor): P5f − P4 forged adoption < −0.15; at the "
         "floor: |P5f − P4| ≤ 0.15 (point estimates)",
         _all(None if fl[m] is None or dd[m] is None else (dd[m] < -0.15 if fl[m] else abs(dd[m]) <= 0.15)
              for m in fl), {"off_floor_W": fl, "adopt_forged_P5f_minus_P4": dd})
@@ -277,6 +281,16 @@ A_LOCK = _LOCK["predictions"]
 B_LOCK = _LOCK["addenda"][0]["predictions"]
 
 
+def p5_design() -> dict:
+    """Named claims of the P5 manifest, and how many forged (P5f) named claims have more than one altered line
+    (D93 counted 5 of 228 over ALL named claims, P5v included; detection scores only the P5f ones)."""
+    from .p5 import MANIFEST, altered
+    m = json.loads((REPO / MANIFEST).read_text())
+    f = [a for x in m["items"] if x["condition"] == "P5f" for a in altered(x, m["assign_salt"]).values()]
+    return {"named_claims": sum(len(x["named"]) for x in m["items"]), "forged_named_claims": len(f),
+            "forged_multi_line": sum(len(a["lines"]) > 1 for a in f)}
+
+
 def build(out: str) -> dict:
     o = Path(out)
     A = json.loads((o / "analysis.json").read_text())
@@ -292,7 +306,7 @@ def build(out: str) -> dict:
                             "p5-qwen25_7b-v1", "p5-gemma3_4b-v1", "r7b-smoke-claude_opus_55-v1",
                             "r7b-smoke-deepseek_v4_pro-v1", "r7b-main-claude_opus_55-v1",
                             "r7b-main-claude_opus_55-v2-b1", "r7b-smoke-deepseek_v4_pro_low-v1")}},
-           "predictions": predictions(A, P5)}
+           "p5_design": p5_design(), "predictions": predictions(A, P5)}
     res["predictions_summary"] = {k: sum(1 for p in res["predictions"] if p["outcome"] == k)
                                   for k in ("met", "not met", NT)}
     (o / "report_data.json").write_text(json.dumps(res, indent=1, sort_keys=True, default=str) + "\n")
@@ -304,7 +318,10 @@ def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="causalguard sprint-report-data")
     ap.add_argument("--out", default="reports/sprint_all")
-    build(ap.parse_args(argv).out)
+    out = ap.parse_args(argv).out
+    build(out)
+    from .figures import draw
+    draw(out)
     return 0
 
 

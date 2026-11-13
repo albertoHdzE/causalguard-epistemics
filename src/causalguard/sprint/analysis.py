@@ -51,6 +51,7 @@ def load(run_dirs: list[str]) -> list[dict]:
                     "answers_changed_by_reparse": reparsed,
                     "manifest": r["plan"]["config"]["manifest"], "planned": len(r["plan"]["items"]),
                     "planned_ids": [e["item_id"] for e in r["plan"]["items"]],
+                    "block_run": bool(r["plan"]["config"].get("cells")),
                     "completed": len(recs), "failed": sorted(r["failures"]), "missing": sorted(r["missing"]),
                     "records": recs, "worlds": [S.score_world(x) for x in recs]})
     return merge_by_model(out)
@@ -65,13 +66,15 @@ def merge_by_model(runs: list[dict]) -> list[dict]:
         groups.setdefault((r["model"], r["manifest"]), []).append(r)
     out = []
     for (model, man), rs in groups.items():
-        if len(rs) == 1:
+        if len(rs) == 1 and not rs[0].get("block_run"):
             out.append(rs[0])
             continue
         done = [x["wkey"] for r in rs for x in r["records"]]
         if len(done) != len(set(done)):
             raise SystemExit(f"{model}: a world is finished in two runs")
         planned = sorted({i for r in rs for i in r["planned_ids"]})
+        if any(r.get("block_run") for r in rs):       # v2-a3 priority blocks: the whole panel is planned
+            planned = sorted(x["wkey"] for x in json.loads((P.REPO / man).read_text())["items"])
         recs, ws = [], []
         for r in rs:
             recs += r["records"]

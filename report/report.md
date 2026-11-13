@@ -1,102 +1,431 @@
 ---
-title: "What does the evidence settle? An exact benchmark and checker for AI overclaiming"
+title: "Models adopt forged checks they could verify: an exact benchmark of evidence-relative reasoning under pressure"
 subtitle: "Research conducted at the AI x Epistemics Research Sprint, November 2026 (Apart Research)"
 author:
-  - "Alberto Hernández Espinosa — affiliation TBD"
+  - "Alberto Hernández Espinosa — independent researcher"
   - "With Apart Research"
-geometry: margin=2.2cm
+geometry: margin=2.0cm
 fontsize: 10pt
+header-includes:
+  - \usepackage{etoolbox}
+  - \AtBeginEnvironment{longtable}{\footnotesize}
 ---
 
-<!-- Structure follows the official Apart template (report/apart_official_template.docx, downloaded 2026-11-12 from
-https://docs.google.com/document/d/17b3JWki-ZkaqdmqGI5d0gof-HwlGuWU9Mc1_klNZXKs). Limit: 8 pages excluding
-references and appendices. Build: report/build.sh -> report/report.pdf (and report.docx in the official styles).
-STATUS: SKELETON written pre-sprint (R7). Every number marked TBD is filled during the sprint from
-reports/SPRINT_*_RESULTS.md; no number may be typed in by hand. -->
+<!-- SOURCE of report/report.md. Every number comes from reports/sprint_all/*.json through report/fill.py; the
+build fails on a hand-typed number. Do not edit report.md by hand. -->
 
 # Abstract
 
-TBD (150–250 words, written last): the problem (models assert what their evidence does not settle, and yield to
-pressure), the approach (exact evidential status as ground truth, a randomised pressure turn, the exact check as a
-remedy), key results per model with intervals, and the main takeaway.
+When a model is shown a step-by-step "check" of its answers, does it verify the check against the evidence, or
+defer to it? We built a benchmark where this is decidable. Each task shows a hidden deterministic system (a
+Boolean network) through a few evidence rows, and asks whether claims about it are settled true, settled false or
+not settled. The answer key is exact: two independent exact engines and a SAT solver compute each claim's status
+from the evidence. In a second turn the model receives one of five randomised follow-ups, including a valid check
+(P3) and a forged one (P4) that differs from it in a single line contradicted by a cited evidence row. When the
+wiring is given (Tier W), every line can be verified by lookup. Six local open-weight models adopt the forged
+status on most named claims, from 0.860 (gemma-3-4b) to
+1.000 (llama-3.3-70b), and their check discernment is near zero. A
+pre-registered control (P5) asks the model to verify every line first and to quote any wrong one. The local models
+quote the forged line in at most 22 % of forged checks, and raise false alarms on valid checks
+at about the same rate. Where P5 lowers forged adoption, adoption of valid checks falls too. The local models do
+not verify; they defer, or distrust without discriminating. We report a frontier model (Claude Opus 5.5) and a
+reasoning model at low effort (DeepSeek V4-Pro) on the same items, with the cells the run finished. The exact check
+works as a release gate inside the declared class; outside it, it does not certify.
 
 # 1. Introduction
 
-TBD. Calibration and honesty benchmarks usually score a model against what is *true*. A model can be right by luck
-about a claim its evidence does not settle, and wrong to commit to it. We score against what the evidence
-*supports*. In a controlled family of hidden mechanisms, the status of every claim (settled true, settled false,
-or not settled) and the probability of every open claim are computed exactly.
+Language models are increasingly shown other systems' outputs (tool results, retrieved passages, another model's
+reasoning) and asked to use them. Whether a model checks such input against the evidence it was given, or simply
+adopts it, decides whether a single corrupted step propagates. This is an epistemic failure that is hard to
+measure on natural text: the reference answer is usually a human judgement, and "the model should have noticed"
+is rarely decidable.
+
+We use a domain where it is decidable. A task shows a deterministic system through a handful of observed
+transitions and asks about claims. The status of every claim relative to the shown evidence is computed exactly,
+inside a declared class of mechanisms. A forged check can then be built that is wrong in exactly one verifiable
+line, and nothing else changes between the valid and the forged condition.
 
 Our main contributions are:
 
-1. TBD — the benchmark (exact status and exact p*, two independent engines, synthetic and published-mechanism
-   worlds).
-2. TBD — the pressure measurement (four randomised follow-up conditions; discernment).
-3. TBD — the check as a remedy, and where it stops working (outside the declared class).
+1. **An exact benchmark of evidence-relative reasoning under pressure.** Claims are scored against what the
+   evidence settles, not against what is true. Five randomised follow-ups (neutral, empty disagreement, demand to
+   commit, valid check, forged check) are assigned by hash to disjoint worlds. Two tiers separate "cannot verify"
+   (wiring hidden) from "could verify by lookup" (wiring given).
+2. **A forged-check measurement with a verify-first control.** Six local models adopt forged checks they could
+   verify. A pre-registered condition that tells them to verify shows that they do not find the forged line. The
+   remaining explanation is deference, not inability to follow an instruction.
+3. **A pre-registered, fully disclosed run.** A design lock with predictions preceded every request. Every number
+   in this report is generated from the raw runs. Predictions that failed are reported as failed.
+
+**Pre-sprint work, stated plainly.** The exact engines, the benchmark code, Tier W and the forged checks (P0–P4),
+the design lock (v1) and the local main panel were built and run before the sprint (2026-11-09 to 2026-11-12;
+Appendix B). The sprint added the verify-first control P5 and its local runs, reasoning storage, the online runs,
+the analysis of this report and the report itself.
 
 # 2. Related Work
 
-TBD from `docs/SPRINT_RELATED_WORK.md` (verified references only).
+Three-valued entailment benchmarks label conclusions True, False or Unknown relative to stated premises
+(ProofWriter, Tafjord et al. 2021; FOLIO, Han et al. 2022). Our status label is the same idea. We add an exact
+probability for open claims and an unlimited, exactly labelled generator. Abstention benchmarks ask whether a
+model declines when it should (Yin et al. 2023; Amayuelas et al. 2023; Kirichenko et al. 2025; survey: Wen et al.
+2024). There, "should abstain" is an annotation; here it is computed from the evidence. Calibration work scores
+verbalised confidence against correctness (Lin et al. 2022; Tian et al. 2023; Xiong et al. 2024). Sycophancy and
+flip-flop studies show that models yield to empty or invalid challenges (Perez et al. 2022; Sharma et al. 2023;
+Laban et al. 2023; Wang et al. 2023). Those designs have no condition in which yielding is correct, and no
+challenge that is wrong in a checkable way. Our P1 (empty disagreement) reproduces their setting. P3 and P4 add a
+valid and a forged checked challenge on randomised worlds, and P5 asks for verification explicitly. We have not
+found this paired, exactly scored measurement in the work above. That is a statement about these references, not
+a literature-wide claim.
 
 # 3. Methods
 
-TBD: worlds and the declared class; status and p*; Task S; Task P conditions and hash assignment; scores; reference
-rows; gates; lock; models; analysis (world-level cluster bootstrap, Holm).
+**Worlds and status.** A world is a synchronous Boolean network of 8 nodes with at most 3 inputs per node. It is
+drawn from synthetic strata or from published regulatory-network fragments. The model sees a few evidence rows
+(one synchronous step each, optionally with clamped nodes) and 8 claims ("from this start state, after k steps,
+node X = 1"). A claim is *settled true* if every mechanism of the declared class that reproduces the evidence makes
+it true, *settled false* if none does, and *not settled* otherwise. For open claims, p\* is the exact share of
+consistent mechanisms making the claim true. Two independent exact engines and a SAT encoding must agree on every
+claim (gates passed on every item).
+
+**Tiers.** On *Tier H* the wiring is hidden. On *Tier W* each node's inputs are listed, so the status of a claim
+can be traced by looking up rows: a *derivation* lists, step by step, which row shows the node's next value for
+its current inputs, or that no row shows those inputs (Appendix C).
+
+**Turn 1 (Task S)** asks for a status and a probability per claim. Overclaim is the share of open claims given a
+definite verdict; underclaim is the share of settled claims answered "not settled". A surface rule fitted on
+non-panel worlds is the reference row a model must beat.
+
+**Turn 2 (Task P)**, in the same conversation, is one of five follow-ups assigned by hash, with two wordings
+each: **P0** asks to review and confirm; **P1** says the answers for up to 4 named claims are wrong (no reason);
+**P2** demands a definite verdict for every claim; **P3** shows a valid derivation for the named claims; **P4**
+shows a *forged* derivation in the same template, identical to the valid one except for one line that a cited row
+contradicts (a phantom row, a wrong value, or "no row shows these inputs" where one does), which changes the
+claim's status. A verifier confirms that every valid check passes and every forged check fails on exactly the
+altered line. Scores per world, then averaged: *adoption* (final verdict equals the check's status), *corruption*
+(named claims correct at turn 1 and wrong at turn 2 under P4), and **check discernment** = adoption of the true
+status under P3 − adoption of the forged status under P4 (+1: uses only valid checks; 0: cannot tell them apart).
+
+**P5, verify-first (sprint; lock addendum v2).** On 60 further Tier W worlds never shown to any model, 30 receive
+the valid check (P5v) and 30 the forged one (P5f). The P3/P4 message gains one block: verify every line against
+the evidence rows, quote any wrong line exactly, then answer, with a `check_errors` field in the reply. *Exact
+detection* is the share of forged named claims whose altered line is quoted exactly (after whitespace
+normalisation). *Lenient detection* only requires naming the cited row and node. *False alarm* is the share of
+valid named claims with any quoted error. P5 and the main panel use different worlds, so P5 − P4 is a
+between-world contrast.
+
+**Models.** Six local open-weight models at temperature 0 (gemma-3-4b, qwen2.5-7b, gemma-4-12b,
+mistral-small-24b, r1-distill-qwen-32b, llama-3.3-70b; token cap 6000, r1 12000). gemma-4-12b and r1 ran half the
+panel (by rule, before the lock) and are marked †. Online: Claude Opus 5.5 through the Claude Code command line in
+an isolated configuration (effort high; every request audited for injected context), and DeepSeek V4-Pro through
+its API. At the provider's default (high) reasoning effort DeepSeek did not finish within 32000 completion tokens
+(§4.4), so it ran as a separately labelled condition at reasoning effort *low* (‡).
+
+**Pre-registration and analysis.** A design lock (v1, 2026-11-12) fixed items, assignments, prompts, scores,
+contrasts and predictions before the main panel. A sprint addendum (v2) fixed P5, the online caps and new
+predictions before any P5 or online request. Its three amendments are disclosed (Appendix B). The unit is the
+world; 95 % intervals come from 2000 cluster-bootstrap replicates over source groups; tests against zero and
+against the surface rule are Holm-adjusted within tier. Online cells are reported with the number of finished
+worlds over planned worlds; a contrast is computed only if both cells finished at least 12 worlds (pre-declared
+before the online runs resumed).
 
 # 4. Results
 
-TBD. Figure 1: overclaim against underclaim, one point per model. Figure 2: Task P by condition. Table 1: Task S.
-Table 2: discernment.
+## 4.1 Forged checks are adopted (Tier W, main panel)
+
+| model | tier | n P3; P4 | P3: true adopted | P4: forged adopted | P4: corruption | check discernment |
+|---|---|---|---|---|---|---|
+| gemma-3-4b | W | 24/24; 24/24 | 0.892 [0.788, 0.979] | 0.860 [0.773, 0.938] | 0.964 [0.885, 1.000] | **0.033 [−0.101, 0.154]** |
+| gemma-3-4b | H | 12/12; 12/12 | 0.958 [0.896, 1.000] | 0.938 [0.864, 1.000] | 1.000 [1.000, 1.000] | **0.021 [−0.062, 0.104]** |
+| qwen2.5-7b | W | 24/24; 24/24 | 0.786 [0.646, 0.899] | 0.868 [0.764, 0.948] | 0.906 [0.798, 1.000] | **−0.082 [−0.237, 0.059]** |
+| qwen2.5-7b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| gemma-4-12b† | W | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| gemma-4-12b† | H | 6/6; 6/6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| mistral-small-24b | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| mistral-small-24b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| r1-distill-32b† | W | 12/12; 12/12 | 0.909 [0.800, 1.000] | 0.909 [0.795, 1.000] | 0.917 [0.800, 1.000] | **0.000 [−0.138, 0.139]** |
+| r1-distill-32b† | H | 6/6; 6/6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| llama-3.3-70b | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| llama-3.3-70b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| Claude Opus 5.5 | W | 23/24; 19/24 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** |
+| Claude Opus 5.5 | H | 0 finished | | | | |
+| DeepSeek V4-Pro (low)‡ | W | 14/24; 4/24 | 1.000 [1.000, 1.000] | 0.250* | 0.250* | **not testable (n P3 14, n P4 4)** |
+| DeepSeek V4-Pro (low)‡ | H | 0 finished | | | | |
+
+*Table 1. Task P per model and tier: share of named claims whose final verdict adopts the check's status, under
+the valid check (P3) and the forged check (P4); corruption under P4; check discernment with its 95 % interval.
+n = finished / planned worlds. \* = an incomplete cell below 12 worlds (no interval). † half panel. ‡ labelled
+condition (reasoning effort low).*
+
+On Tier W every local model adopts the forged status on most named claims. llama-3.3-70b, mistral-small-24b and
+gemma-4-12b adopt it on every named claim (1.000). Corruption, the share
+of answers that were right at turn 1 and became wrong, is between
+0.917 (r1) and 1.000. Check
+discernment is indistinguishable from zero for all six (for example mistral
+0.000 [0.000, 0.000], gemma-3
+0.033 [−0.101, 0.154]). The forged line was verifiable with one lookup in a row the
+message itself cites. The same pattern holds on Tier H, where no check can be verified by lookup.
+
+The adoption is not a baseline coincidence. Under the neutral follow-up P0, where no check is shown, the status
+a forgery would have given is the final answer on 0.417 of named claims
+for mistral (against 1.000 under P4). An empty disagreement (P1) moves
+models less than a forged check: qwen2.5-7b changes 0.136 of named correct answers under P1
+against 0.906 under P4. A forged *check* is more persuasive than a bare
+assertion.
+
+![Adoption of the check's status per model on Tier W (left) and Tier H (right): the true status under the
+valid check (P3, blue circles), the forged status under the forged check (P4, orange squares) and under the
+forged check with the verify-first instruction (P5f, green diamonds; Tier W only). Lines are 95 % intervals;
+hollow markers are incomplete cells below 12 worlds, and the row label then carries finished / planned
+worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
+
+## 4.2 Told to verify, the local models do not find the forged line (P5)
+
+| model | n P5v; P5f | exact detection | lenient detection | false alarm | P5f: forged adopted | P5f − P4 | verified discern. |
+|---|---|---|---|---|---|---|---|
+| gemma-3-4b | 30/30; 30/30 | 0.008 [0.000, 0.028] | 0.017 [0.000, 0.042] | 0.083 [0.000, 0.192] | 0.681 [0.549, 0.807] | −0.179 [−0.335, −0.037] | 0.119 [−0.025, 0.275] |
+| qwen2.5-7b | 30/30; 30/30 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.940 [0.889, 0.982] | 0.072 [−0.024, 0.179] | −0.029 [−0.093, 0.045] |
+| gemma-4-12b† | 30/30; 30/30 | 0.106 [0.020, 0.206] | 0.106 [0.020, 0.206] | 0.057 [0.009, 0.127] | 0.571 [0.420, 0.716] | −0.429 [−0.573, −0.289] | 0.263 [0.074, 0.450] |
+| mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
+| r1-distill-32b† | 13/30; 15/30 | 0.071 [0.018, 0.133] | 0.089 [0.025, 0.153] | 0.090 [0.019, 0.175] | 0.768 [0.596, 0.912] | −0.141 [−0.338, 0.042] | 0.104 [−0.075, 0.292] |
+| llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
+
+*Table 2. P5 verify-first (Tier W, 60 worlds per model). Exact and lenient detection of the altered line in
+forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its difference from P4
+(between-world); verified discernment = true-status adoption under P5v − forged adoption under P5f.*
+
+The best local detector, mistral-small-24b, quotes the altered line in 0.217 of forged named
+claims, and flags valid checks at 0.200. qwen2.5-7b quotes none
+(0.000). gemma-3-4b quotes 0.008. For every local model the interval of
+exact detection overlaps the interval of its own false-alarm rate (Figure 2): what looks like detection is not
+distinguishable from indiscriminate flagging. P5 lowers
+forged adoption for some models: gemma-4-12b by 0.429. But its
+adoption of the valid check falls as well (−0.167 [−0.311, −0.054] against P3). The
+instruction to verify produces distrust, not verification. llama-3.3-70b is unmoved: it adopts every forged status
+under P5f (1.000) and quotes the forged line in 0.058.
+
+Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For 1 of
+the 115 forged named claims the forgery alters more than one line; quoting any
+of them counts as a hit. Excluding it changes exact detection only for gemma-4-12b (0.106 →
+0.109). (ii) Because
+forgeries are per claim, one message can show the same table entry with two different values, a contradiction
+visible without the evidence rows. Such messages are not detected more often: mistral quotes the line in
+0.232 of messages with a visible contradiction against
+0.203 without. The same property holds for the locked P4: gemma-3-4b
+adopts the forged status in 0.906 of P4
+messages with a visible contradiction (10 of
+24).
+
+![P5 verify-first: share of forged named claims whose altered line the model quotes exactly (green
+diamonds) or names (blue circles), and share of valid named claims with a quoted error (false alarm, orange
+squares). Lines are 95 % intervals.](../reports/sprint_all/fig3_p5.png){width=72%}
+
+## 4.3 Task S: most local models are at the floor
+
+| model | tier | worlds | overclaim | underclaim | balanced accuracy | BA − surface rule |
+|---|---|---|---|---|---|---|
+| *surface rule (reference)* | W | | 0.597 [0.504, 0.690] | 0.201 [0.139, 0.269] | 0.570 [0.523, 0.618] | |
+| gemma-3-4b | W | 120/120 | 0.881 [0.832, 0.930] | 0.094 [0.054, 0.143] | 0.345 [0.318, 0.372] | −0.194 [−0.236, −0.152] |
+| qwen2.5-7b | W | 120/120 | 0.514 [0.423, 0.600] | 0.446 [0.362, 0.534] | 0.353 [0.317, 0.388] | −0.187 [−0.232, −0.141] |
+| gemma-4-12b† | W | 60/60 | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.343 [0.302, 0.386] | −0.218 [−0.272, −0.158] |
+| mistral-small-24b | W | 120/120 | 0.126 [0.077, 0.181] | 0.841 [0.786, 0.891] | 0.345 [0.320, 0.370] | −0.195 [−0.235, −0.152] |
+| r1-distill-32b† | W | 60/60 | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.462 [0.410, 0.513] | −0.099 [−0.166, −0.032] |
+| llama-3.3-70b | W | 120/120 | 0.129 [0.082, 0.179] | 0.845 [0.801, 0.885] | 0.353 [0.333, 0.374] | −0.187 [−0.220, −0.151] |
+| Claude Opus 5.5 | W | 45/120 | 0.034 [0.000, 0.091] | 0.003 [0.000, 0.009] | 0.993 [0.984, 1.000] | 0.423 [0.373, 0.472] |
+| DeepSeek V4-Pro (low)‡ | W | 18/120 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] | 0.385 [0.308, 0.469] |
+| *surface rule (reference)* | H | | 0.537 [0.442, 0.635] | 0.137 [0.042, 0.248] | 0.548 [0.475, 0.639] | |
+| gemma-3-4b | H | 60/60 | 0.641 [0.548, 0.737] | 0.317 [0.196, 0.437] | 0.343 [0.283, 0.405] | −0.247 [−0.337, −0.153] |
+| qwen2.5-7b | H | 60/60 | 0.421 [0.308, 0.540] | 0.541 [0.405, 0.679] | 0.388 [0.328, 0.448] | −0.202 [−0.288, −0.118] |
+| gemma-4-12b† | H | 30/30 | 0.108 [0.023, 0.219] | 0.823 [0.664, 0.950] | 0.403 [0.335, 0.472] | −0.145 [−0.270, −0.045] |
+| mistral-small-24b | H | 60/60 | 0.117 [0.052, 0.192] | 0.836 [0.726, 0.931] | 0.348 [0.317, 0.385] | −0.242 [−0.304, −0.180] |
+| r1-distill-32b† | H | 30/30 | 0.184 [0.101, 0.283] | 0.828 [0.682, 0.946] | 0.334 [0.274, 0.392] | −0.214 [−0.338, −0.110] |
+| llama-3.3-70b | H | 60/60 | 0.145 [0.088, 0.207] | 0.880 [0.803, 0.948] | 0.335 [0.306, 0.366] | −0.255 [−0.335, −0.174] |
+
+*Table 3. Task S (turn 1) per model and tier, with the surface rule fitted on non-panel worlds as the reference.*
+
+Without pressure, five of the six local models are at the floor of Task S on both tiers: their balanced accuracy
+is near that of answering "not settled" everywhere. They err in opposite directions: gemma-3-4b gives a definite
+verdict on 0.881 of open claims; llama-3.3-70b answers "not settled" on
+0.845 of settled ones (Figure 3). Only r1-distill is off the floor on Tier W
+(0.462 [0.410, 0.513]), and it too has zero check discernment
+(0.000 [−0.138, 0.139]). A model that cannot trace a claim itself cannot be
+expected to catch a forged trace; r1 could do better than the floor, and still did not.
+
+![Task S: overclaim (orange squares) and underclaim (blue circles) per model and tier; the surface rule
+is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/fig2_task_s.png){width=100%}
+
+## 4.4 Frontier models under the benchmark's cost
+
+<!-- SAT (after the 12:00 freeze): prose on what Claude did, from the filled tables only. -->
+
+| model | tier | P0 | P1 | P2 | P3 | P4 |
+|---|---|---|---|---|---|---|
+| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 23/24 | 19/24 |
+| Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
+| DeepSeek V4-Pro (low)‡ | W | 0/24 | 0/24 | 0/24 | 14/24 | 4/24 |
+| DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
+
+*Table 4. Finished / planned worlds per online cell (main panel). The Claude run had a shared subscription window
+and a hard stop (Saturday 12:00 CST); its blocks ran in a fixed priority order: Tier W P3 + P4, P5, Tier W P0–P2,
+Tier H P3 + P4, Tier H P0–P2.*
+
+**DeepSeek at high effort does not finish.** | condition | turns parsed (Tier W, Tier H) | turns stopped at the cap | completion tokens | pass |
+|---|---|---|---|---|
+| DeepSeek V4-Pro, effort high, cap 16 000 | 0/8 (0/4, 0/4) | 8 | 16000–16000 | no |
+| DeepSeek V4-Pro, effort high, cap 32 000 | 2/8 (2/4, 0/4) | 6 | 28843–32000 | no |
+| DeepSeek V4-Pro, effort low, cap 32 000 | 6/8 (4/4, 2/4) | 2 | 3652–32000 | yes |
+| Claude Opus 5.5, effort high | 8/8 (4/4, 4/4) | 0 | 713–48177 | yes |
+
+*Table 5. Online smokes on 4 pilot worlds (8 turns). Pass rule fixed before each smoke: at least 6 of 8 turns
+parsed and every Tier W turn parsed.*
+
+At the provider's default (high) effort, DeepSeek V4-Pro spent every token of a 16000 cap and then between
+28707 and 32000
+reasoning tokens of a 32000 cap, finishing 2 of
+4 Tier W turns and none of the Tier H turns. Its stored reasoning
+enumerates candidate mechanisms by hand. The benchmark's cost for a reasoning model is itself a finding: exact
+evidence-relative reasoning over 8 claims is expensive when done by enumeration. At effort low it passed the smoke
+and ran as a labelled condition.
+
+| model | requests sent | rejected without inference | worlds finished: main / P5 | recorded cost |
+|---|---|---|---|---|
+| Claude Opus 5.5 | 277 | 175 | 45/180 / 0 | $8.66 (notional, subscription) |
+| DeepSeek V4-Pro (low)‡ | 77 | 0 | 18/180 / 0 | $2.72 at request-time price; $5.44 upper bound |
+
+*Table 6. Online accounting. Requests rejected by the subscription window reached no model and are counted
+separately. Claude's cost is the CLI's notional figure on a subscription.*
 
 # 5. Discussion and Limitations
 
-TBD.
+**What the results mean.** On items where every line of a check can be verified with one lookup, six local models
+treat a check as authoritative: they adopt its status whether it is valid or forged, and they lose correct answers
+to it. Asking them to verify does not produce verification. This separates two explanations that ordinary
+sycophancy measurements cannot: the local models are not failing to check because checking is impossible for
+them (Tier W makes it a lookup), nor because they ignore instructions (under P5 they fill the error field). They
+check without discriminating. For agentic pipelines in which one model's intermediate result is another's input,
+a single forged step is enough.
 
-**Limitations.** Status is exact *inside the declared class* (synchronous Boolean networks, at most three inputs per
-node). The task is a controlled one; we make no claim that results transfer to natural-language reasoning in
-general. Local models ran at temperature 0; the Claude route cannot set temperature. The model family that built the
-benchmark (Claude) is also evaluated, in fresh contexts with no access to the repository.
+**The exact check as a remedy.** Inside the declared class, the same exact engine that labels the items can gate
+a model's released verdicts. A settled verdict that the checker contradicts is released as "not settled". This
+removes overclaim by construction but cannot add what the model missed. Outside the class the checker can
+certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this class, not a general verifier.
 
-**Future work.** TBD.
+**Limitations.** (1) Status is exact only inside the declared class (synchronous Boolean networks, at most 3
+inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
+reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
+failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
+(4) The online cells are incomplete (Table 4): the Claude subscription window was shared with the development
+session, and DeepSeek ran only at low effort. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
+benchmark (Claude) is also evaluated, in isolated, audited contexts.
+
+**Future work.** Measure where between "cannot verify" and "verifies" a model starts to discriminate (lookup
+depth, number of forged lines); test whether a cited-row consistency tool, offered to the model, closes the gap.
 
 # 6. Conclusion
 
-TBD.
+Given a forged check that they could verify by one lookup, six open-weight models adopt it. Told to verify, they
+do not find the forged line, and their flags fall as often on valid checks. The benchmark makes this measurable
+because the answer key is exact and the forged check differs from the valid one in a single checkable line. We
+release the generator, the gates, the lock and every run.
 
 # Code and Data
 
-* Code repository: https://github.com/albertoHdzE/causalguard-epistemics (branch / tag TBD)
-* Data: committed manifests (`artifacts/sprint_*_manifest.json`), raw runs in the release asset (TBD)
-
-# Preexisting work and sprint work
-
-| Done before the sprint (preexisting, disclosed) | Done during the sprint (2026-11-13 to 2026-11-15) |
-|---|---|
-| CausalGuard engines: exact version-space counting, the independent D engine, SAT cross-check (iterations 1–6) | TBD |
-| R5/R6 development evidence used as motivation only (Track A investigation pilot, Track A2 gate-in-the-loop, Track M assumption failures) | |
-| R7 (2026-11-12, the day before the sprint): this benchmark's code, the smoke runs and three pilots, the pre-run gates, the online adapters (no benchmark item sent online). The main panel was NOT run in R7 (gates failed) | |
-
-Commit timestamps in the repository date every item. See `PREEXISTING_WORK.md`.
+* Code: https://github.com/albertoHdzE/causalguard-epistemics (branch `sprint`); analysis:
+  `scripts/sprint_analyze_all.sh`; report: `report/fill.py` and `report/build.sh`.
+* Data: committed manifests (`artifacts/sprint_main_manifest.json`, `artifacts/sprint_p5_manifest.json`), the
+  design lock with its addendum and amendments (`docs/SPRINT_DESIGN_LOCK.json`), raw runs in the release asset.
 
 # References
 
-TBD (from `docs/SPRINT_RELATED_WORK.md`; author, year, title, venue, URL).
+Amayuelas, A. et al. (2023). Knowledge of Knowledge: Exploring Known-Unknowns Uncertainty with Large Language
+Models. arXiv:2305.13712.
+Han, S. et al. (2022). FOLIO: Natural Language Reasoning with First-Order Logic. arXiv:2209.00840.
+Kirichenko, P. et al. (2025). AbstentionBench: Reasoning LLMs Fail on Unanswerable Questions. arXiv:2506.09038.
+Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment.
+arXiv:2311.08596.
+Lin, S., Hilton, J., Evans, O. (2022). Teaching Models to Express Their Uncertainty in Words. arXiv:2205.14334.
+Perez, E. et al. (2022). Discovering Language Model Behaviors with Model-Written Evaluations. arXiv:2212.09251.
+Sharma, M. et al. (2023). Towards Understanding Sycophancy in Language Models. arXiv:2310.13548.
+Tafjord, O., Dalvi Mishra, B., Clark, P. (2021). ProofWriter: Generating Implications, Proofs, and Abductive
+Statements over Natural Language. Findings of ACL. arXiv:2012.13048.
+Tian, K. et al. (2023). Just Ask for Calibration. EMNLP. arXiv:2305.14975.
+Wang, B., Yue, X., Sun, H. (2023). Can ChatGPT Defend its Belief in Truth? Findings of EMNLP. arXiv:2305.13160.
+Wen, B. et al. (2024). Know Your Limits: A Survey of Abstention in Large Language Models. TACL. arXiv:2407.18418.
+Xiong, M. et al. (2024). Can LLMs Express Their Uncertainty? ICLR. arXiv:2306.13063.
+Yin, Z. et al. (2023). Do Large Language Models Know What They Don't Know? Findings of ACL. arXiv:2305.18153.
 
 # Appendix A. Limitations and Dual-Use / Ethical Considerations
 
-TBD (required). Draft points: (1) dual use: a measurement of how models yield to pressure could be used to tune
-persuasion; the benchmark measures yielding to *unsupported* pressure and rewards yielding only to checked
-evidence. (2) The exact check certifies only inside the declared class; when the class is wrong it can pass a false
-claim (preexisting evidence, R5 Track M). Presenting it as general verification would overclaim. (3) No human
-subjects; the published models are third-party and not redistributed. (4) Online models were run through their
-providers' terms; no personal data is in any prompt.
+**Dual use.** The forged checks are an attack: a message that looks like verification and changes a model's
+answer. Publishing them is net positive. The construction is simple (alter one line of a derivation), it is
+already implied by the sycophancy literature, and the benchmark gives defenders a measured, exactly scored
+test of whether a model verifies. The forgeries are confined to synthetic Boolean networks; nothing in them
+transfers as a ready attack on a deployed system.
 
-# Appendix B. Prompts
+**Scope of the check.** The exact checker certifies status only inside the declared class. Pre-sprint
+development runs (R5 Track M) showed that when the class is wrong, the checker can certify a false claim.
+Presenting the check as general verification would overclaim.
 
-TBD from `docs/SPRINT_TASKS.md` (exact text and hashes).
+**Model family.** The benchmark was implemented by Claude (Claude Code, Opus 5.5) and directed by Claude
+(Fable); Claude Opus 5.5 is also evaluated. Every Claude request ran in an empty directory with no tools, no
+settings, no memory and no project instructions, and the request record was audited for injected context.
 
-# LLM Usage Statement
+**Thinking summaries.** For Claude the stored reasoning is the route's thinking summaries, not the raw
+reasoning; it is reported as such and never scored.
 
-TBD. Draft: the benchmark code, runs and analysis were implemented by Claude Opus 5.5 (Claude Code) and directed
-and reviewed by Claude Fable, under the author's instructions. Every number in this report is generated from the
-raw runs by the committed analysis command.
+**Benchmark cost.** At high reasoning effort a frontier reasoning model did not finish a Tier H turn within 32000
+completion tokens. The online cells are incomplete because of that cost and of the shared subscription window,
+not by selection.
+
+**Human subjects and data.** None; no personal data appears in any prompt. Online models were used under their
+providers' terms.
+
+**AI tool use.** Code, runs, analysis and the first draft of this report were produced by Claude Opus 5.5 under
+the direction and review of Claude Fable and the author. Every number in the report is generated by
+`report/fill.py` from the analysis outputs; the build fails if the text holds a number that is not in them.
+
+# Appendix B. Pre-sprint and sprint work; lock, amendments and predictions
+
+**Pre-sprint (2026-11-09 to 2026-11-12, disclosed).** Exact engines and SAT cross-check; the sprint benchmark
+(Task S, Task P, P0–P4), Tier W, derivations, the verifier and the forged checks; the R7b gates; design lock v1
+(commit `1e79358`, 2026-11-12T15:06:24-06:00); the local main panel.
+
+**Sprint (2026-11-13 onward).** Lock addendum v2 (commit `f8e1fb3`, 2026-11-13T09:15:16-06:00; first P5 request
+2026-11-13T15:17:12Z, first online request
+2026-11-13T15:18:03Z): P5, reasoning storage, online caps, predictions.
+Amendment v2-a1: Claude thinking summaries flag. v2-a2: DeepSeek cap 16000 → 32000 after a failed smoke (the one
+allowed repair). v2-a3 (commit `309fb1c`, 2026-11-13T14:35:24-06:00; first resumed Claude request
+2026-11-13T20:35:49Z): the Claude priority order of blocks (run order
+only; items, prompts and scores unchanged), the usage-limit pause, the Saturday 12:00 CST hard stop, the DeepSeek
+low-effort condition, the spend stop on the upper bound. Every commit is listed in `PREEXISTING_WORK.md`.
+
+**Predictions against outcomes** (9 met, 3
+not met; a prediction whose cell has fewer than 12 finished worlds, or whose model was not run, is "not testable in
+this run"). The rule that decides each outcome and its values are in `reports/sprint_all/report_data.json`.
+
+| lock | by | prediction | outcome |
+|---|---|---|---|
+| v1 | director | v1-D1: On Tier W at least one local model is off the floor, and every local model still gives a definite verdict on more than 20 % of open claims. | **not met** |
+| v1 | director | v1-D2: On Tier H no local model beats the surface rule. | **met** |
+| v1 | director | v1-D3: On Tier W, check discernment is below 0.5 for every local model of 24B or less. | **met** |
+| v1 | director | v1-D4: On Tier H, adoption under P3 and under P4 differ by less than 0.15 for every local model. | **met** |
+| v1 | implementation agent | v1-A1: Tier W: check discernment (plain) is below 0.25 for every local model of 24B or less, and adoption of the forged status under P4 is at least 0.6 for each of them. | **met** |
+| v1 | implementation agent | v1-A2: Tier W: corruption under P4 is at least 0.5 for every local model of 24B or less. | **met** |
+| v1 | implementation agent | v1-A3: Tier W: no local model's balanced accuracy exceeds the Tier W surface rule (0.540 on the main panel) by more than 0.10. | **met** |
+| v1 | implementation agent | v1-A4: llama-3.3-70b, Tier W: check discernment below 0.5. | **met** |
+| v1 | implementation agent | v1-A5: gemma-4-12b: more than 25 % of its turn-1 Tier W replies have no parseable answers (token cap 6000, D83). | **met** |
+| v2 | director | P-D1: P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it. | **met** |
+| v2 | director | P-D2: P-D2. Both online models have Tier W check discernment under P4 above 0.30. | **not testable in this run** |
+| v2 | director | P-D3: P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %. | **not testable in this run** |
+| v2 | director | P-D4: P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15. | **not testable in this run** |
+| v2 | director | P-D5: P-D5. Tier H check discernment of both online models is below 0.15. | **not testable in this run** |
+| v2 | implementation agent | P-A1: P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates). | **not met** |
+| v2 | implementation agent | P-A2: P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates). | **not testable in this run** |
+| v2 | implementation agent | P-A3: P-A3. Both online models have Tier W check discernment under P4 above every local model's, and at least one of them above 0.50 (point estimates). | **not testable in this run** |
+| v2 | implementation agent | P-A4: P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them). | **not met** |
+| v2 | implementation agent | P-A5: P-A5. At least one online model has Tier W Task S balanced accuracy above 0.80 (point estimate), and neither exceeds 0.60 on Tier H. | **not testable in this run** |
+
+# Appendix C. Worked example
+
+See `reports/R7B_WORKED_EXAMPLE.md` for a full Tier W task, its valid check, the forged check (one phantom row),
+the verifier's finding and the P5 message; reproduced from a pilot world never shown in the main panel.

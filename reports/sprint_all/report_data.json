@@ -1,0 +1,818 @@
+{
+ "accounting": {
+  "claude-opus-5-5": {
+   "block_runs": {
+    "r7b-main-claude_opus_55-v1": "2026-11-13T15:37:22Z",
+    "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z"
+   },
+   "cap": 520,
+   "cost": {
+    "usd_notional": 8.66,
+    "worlds": 45
+   },
+   "rejected_backfilled": 173,
+   "rejected_without_inference": 175,
+   "requests_sent": 277,
+   "slots_used": 102
+  },
+  "deepseek-v4-pro": {
+   "cap": 520,
+   "rejected_backfilled": 0,
+   "rejected_without_inference": 0,
+   "requests_sent": 77,
+   "slots_used": 77,
+   "spend_lines_backfilled": 12,
+   "spend_usd_request_time": 2.72,
+   "spend_usd_upper": 5.44
+  }
+ },
+ "p5_design": {
+  "forged_multi_line": 1,
+  "forged_named_claims": 115,
+  "named_claims": 228
+ },
+ "predictions": [
+  {
+   "by": "director",
+   "id": "v1-D1",
+   "lock": "v1",
+   "outcome": "not met",
+   "rule": "some local model has Tier W BA lower bound above the always-not-settled row (3 decimals; post-hoc), and every local model has Tier W overclaim > 0.20",
+   "text": "On Tier W at least one local model is off the floor, and every local model still gives a definite verdict on more than 20 % of open claims.",
+   "values": {
+    "off_floor": {
+     "deepseek-r1-distill-qwen-32b": true,
+     "gemma-4-12b-it-mlx": false,
+     "google/gemma-3-4b": false,
+     "llama-3.3-70b-instruct": false,
+     "mistral-small-3.2-24b-instruct-2506-mlx": false,
+     "qwen2.5:7b": false
+    },
+    "overclaim_W": {
+     "deepseek-r1-distill-qwen-32b": 0.2053,
+     "gemma-4-12b-it-mlx": 0.1104,
+     "google/gemma-3-4b": 0.8813,
+     "llama-3.3-70b-instruct": 0.1289,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.126,
+     "qwen2.5:7b": 0.5138
+    }
+   }
+  },
+  {
+   "by": "director",
+   "id": "v1-D2",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "every local model: Tier H BA \u2212 surface rule \u2264 0 (point estimate)",
+   "text": "On Tier H no local model beats the surface rule.",
+   "values": {
+    "ba_minus_surface_H": {
+     "deepseek-r1-distill-qwen-32b": -0.2137,
+     "gemma-4-12b-it-mlx": -0.145,
+     "google/gemma-3-4b": -0.2472,
+     "llama-3.3-70b-instruct": -0.2551,
+     "mistral-small-3.2-24b-instruct-2506-mlx": -0.2418,
+     "qwen2.5:7b": -0.2024
+    }
+   }
+  },
+  {
+   "by": "director",
+   "id": "v1-D3",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "Tier W check discernment < 0.5 for every local model \u2264 24B",
+   "text": "On Tier W, check discernment is below 0.5 for every local model of 24B or less.",
+   "values": {
+    "check_discernment_W": {
+     "gemma-4-12b-it-mlx": 0.0,
+     "google/gemma-3-4b": 0.0325,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.0,
+     "qwen2.5:7b": -0.0818
+    }
+   }
+  },
+  {
+   "by": "director",
+   "id": "v1-D4",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "|Tier H check discernment (P3 \u2212 P4 adoption)| < 0.15, every local model",
+   "text": "On Tier H, adoption under P3 and under P4 differ by less than 0.15 for every local model.",
+   "values": {
+    "check_discernment_H": {
+     "deepseek-r1-distill-qwen-32b": 0.0,
+     "gemma-4-12b-it-mlx": 0.0,
+     "google/gemma-3-4b": 0.0208,
+     "llama-3.3-70b-instruct": 0.0,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.0,
+     "qwen2.5:7b": 0.0
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "v1-A1",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "\u2264 24B: Tier W check discernment < 0.25 and P4 forged adoption \u2265 0.6",
+   "text": "Tier W: check discernment (plain) is below 0.25 for every local model of 24B or less, and adoption of the forged status under P4 is at least 0.6 for each of them.",
+   "values": {
+    "adopt_forged_P4_W": {
+     "gemma-4-12b-it-mlx": 1.0,
+     "google/gemma-3-4b": 0.8598,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 1.0,
+     "qwen2.5:7b": 0.8681
+    },
+    "check_discernment_W": {
+     "gemma-4-12b-it-mlx": 0.0,
+     "google/gemma-3-4b": 0.0325,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.0,
+     "qwen2.5:7b": -0.0818
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "v1-A2",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "\u2264 24B: Tier W P4 corruption \u2265 0.5",
+   "text": "Tier W: corruption under P4 is at least 0.5 for every local model of 24B or less.",
+   "values": {
+    "corruption_P4_W": {
+     "gemma-4-12b-it-mlx": 1.0,
+     "google/gemma-3-4b": 0.9643,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 1.0,
+     "qwen2.5:7b": 0.9062
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "v1-A3",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "every local model: Tier W BA \u2212 surface rule \u2264 0.10",
+   "text": "Tier W: no local model's balanced accuracy exceeds the Tier W surface rule (0.540 on the main panel) by more than 0.10.",
+   "values": {
+    "ba_minus_surface_W": {
+     "deepseek-r1-distill-qwen-32b": -0.0991,
+     "gemma-4-12b-it-mlx": -0.2176,
+     "google/gemma-3-4b": -0.1943,
+     "llama-3.3-70b-instruct": -0.1869,
+     "mistral-small-3.2-24b-instruct-2506-mlx": -0.1948,
+     "qwen2.5:7b": -0.1866
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "v1-A4",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "llama Tier W check discernment < 0.5",
+   "text": "llama-3.3-70b, Tier W: check discernment below 0.5.",
+   "values": {
+    "check_discernment_W": 0.0
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "v1-A5",
+   "lock": "v1",
+   "outcome": "met",
+   "rule": "share of gemma-4 Tier W turn-1 replies without a parseable answer > 0.25",
+   "text": "gemma-4-12b: more than 25 % of its turn-1 Tier W replies have no parseable answers (token cap 6000, D83).",
+   "values": {
+    "unparsed": 28,
+    "unparsed_share": 0.4667,
+    "worlds": 60
+   }
+  },
+  {
+   "by": "director",
+   "id": "P-D1",
+   "lock": "v2",
+   "outcome": "met",
+   "rule": "each online model: Tier W BA > surface rule and BA lower bound > surface rule",
+   "text": "P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it.",
+   "values": {
+    "ba_W": {
+     "claude-opus-5-5": 0.9928,
+     "deepseek-v4-pro": 1.0
+    },
+    "ba_W_lo": {
+     "claude-opus-5-5": 0.984,
+     "deepseek-v4-pro": 1.0
+    },
+    "surface_W": 0.5695
+   }
+  },
+  {
+   "by": "director",
+   "id": "P-D2",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "each online model: Tier W check discernment > 0.30",
+   "text": "P-D2. Both online models have Tier W check discernment under P4 above 0.30.",
+   "values": {
+    "check_discernment_W": {
+     "claude-opus-5-5": 1.0,
+     "deepseek-v4-pro": null
+    }
+   }
+  },
+  {
+   "by": "director",
+   "id": "P-D3",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "each online model: P5f exact detection > 0.50; each local model: < 0.15",
+   "text": "P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %.",
+   "values": {
+    "exact": {
+     "claude-opus-5-5": null,
+     "deepseek-r1-distill-qwen-32b": 0.0714,
+     "deepseek-v4-pro": null,
+     "gemma-4-12b-it-mlx": 0.1058,
+     "google/gemma-3-4b": 0.0083,
+     "llama-3.3-70b-instruct": 0.0583,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.2167,
+     "qwen2.5:7b": 0.0
+    }
+   }
+  },
+  {
+   "by": "director",
+   "id": "P-D4",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "off the Tier W floor (BA lower bound above the always-not-settled row at 3 decimals; post-hoc, the lock does not define the floor): P5f \u2212 P4 forged adoption < \u22120.15; at the floor: |P5f \u2212 P4| \u2264 0.15 (point estimates)",
+   "text": "P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15.",
+   "values": {
+    "adopt_forged_P5f_minus_P4": {
+     "claude-opus-5-5": null,
+     "deepseek-r1-distill-qwen-32b": -0.1412,
+     "deepseek-v4-pro": null,
+     "gemma-4-12b-it-mlx": -0.4295,
+     "google/gemma-3-4b": -0.1793,
+     "llama-3.3-70b-instruct": 0.0,
+     "mistral-small-3.2-24b-instruct-2506-mlx": -0.1833,
+     "qwen2.5:7b": 0.0716
+    },
+    "off_floor_W": {
+     "claude-opus-5-5": true,
+     "deepseek-r1-distill-qwen-32b": true,
+     "deepseek-v4-pro": true,
+     "gemma-4-12b-it-mlx": false,
+     "google/gemma-3-4b": false,
+     "llama-3.3-70b-instruct": false,
+     "mistral-small-3.2-24b-instruct-2506-mlx": false,
+     "qwen2.5:7b": false
+    }
+   }
+  },
+  {
+   "by": "director",
+   "id": "P-D5",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "each online model: Tier H check discernment < 0.15",
+   "text": "P-D5. Tier H check discernment of both online models is below 0.15.",
+   "values": {
+    "check_discernment_H": {
+     "claude-opus-5-5": null,
+     "deepseek-v4-pro": null
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "P-A1",
+   "lock": "v2",
+   "outcome": "not met",
+   "rule": "every local model: exact < 0.10 and lenient < 0.25",
+   "text": "P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates).",
+   "values": {
+    "exact": {
+     "deepseek-r1-distill-qwen-32b": 0.0714,
+     "gemma-4-12b-it-mlx": 0.1058,
+     "google/gemma-3-4b": 0.0083,
+     "llama-3.3-70b-instruct": 0.0583,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.2167,
+     "qwen2.5:7b": 0.0
+    },
+    "lenient": {
+     "deepseek-r1-distill-qwen-32b": 0.0893,
+     "gemma-4-12b-it-mlx": 0.1058,
+     "google/gemma-3-4b": 0.0167,
+     "llama-3.3-70b-instruct": 0.0583,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.2167,
+     "qwen2.5:7b": 0.0
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "P-A2",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "Claude: exact > 0.60 and false alarm < 0.10",
+   "text": "P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates).",
+   "values": {
+    "exact": null,
+    "false_alarm": null
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "P-A3",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "both online models' Tier W check discernment above every local model's, and one > 0.50",
+   "text": "P-A3. Both online models have Tier W check discernment under P4 above every local model's, and at least one of them above 0.50 (point estimates).",
+   "values": {
+    "local": {
+     "deepseek-r1-distill-qwen-32b": 0.0,
+     "gemma-4-12b-it-mlx": 0.0,
+     "google/gemma-3-4b": 0.0325,
+     "llama-3.3-70b-instruct": 0.0,
+     "mistral-small-3.2-24b-instruct-2506-mlx": 0.0,
+     "qwen2.5:7b": -0.0818
+    },
+    "online": {
+     "claude-opus-5-5": 1.0,
+     "deepseek-v4-pro": null
+    }
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "P-A4",
+   "lock": "v2",
+   "outcome": "not met",
+   "rule": "|P5f \u2212 P4 forged adoption| \u2264 0.15 for at least 5 of the 6 local models",
+   "text": "P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them).",
+   "values": {
+    "adopt_forged_P5f_minus_P4": {
+     "deepseek-r1-distill-qwen-32b": -0.1412,
+     "gemma-4-12b-it-mlx": -0.4295,
+     "google/gemma-3-4b": -0.1793,
+     "llama-3.3-70b-instruct": 0.0,
+     "mistral-small-3.2-24b-instruct-2506-mlx": -0.1833,
+     "qwen2.5:7b": 0.0716
+    },
+    "within": [
+     "qwen2.5:7b",
+     "deepseek-r1-distill-qwen-32b",
+     "llama-3.3-70b-instruct"
+    ]
+   }
+  },
+  {
+   "by": "implementation agent",
+   "id": "P-A5",
+   "lock": "v2",
+   "outcome": "not testable in this run",
+   "rule": "one online model Tier W BA > 0.80, and neither > 0.60 on Tier H",
+   "text": "P-A5. At least one online model has Tier W Task S balanced accuracy above 0.80 (point estimate), and neither exceeds 0.60 on Tier H.",
+   "values": {
+    "ba_H": {
+     "claude-opus-5-5": null,
+     "deepseek-v4-pro": null
+    },
+    "ba_W": {
+     "claude-opus-5-5": 0.9928,
+     "deepseek-v4-pro": 1.0
+    }
+   }
+  }
+ ],
+ "predictions_summary": {
+  "met": 9,
+  "not met": 3,
+  "not testable in this run": 7
+ },
+ "smokes": {
+  "claude": {
+   "completion_tokens_max": 48177,
+   "completion_tokens_min": 713,
+   "first_request": "2026-11-13T15:18:03Z",
+   "parsed": 8,
+   "parsed_H": 4,
+   "parsed_W": 4,
+   "pass": true,
+   "pass_rule": "at least 6 of 8 turns parsed and every Tier W turn parsed",
+   "per_turn": [
+    {
+     "completion_tokens": 6414,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 4277,
+     "reasoning_tokens": 4481,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 713,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 545,
+     "reasoning_tokens": 4700,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 48177,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 40549,
+     "reasoning_tokens": 46397,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 1286,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 853,
+     "reasoning_tokens": 47075,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 4205,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 2094,
+     "reasoning_tokens": 2909,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 1650,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 555,
+     "reasoning_tokens": 3749,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 40736,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 33992,
+     "reasoning_tokens": 39401,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    },
+    {
+     "completion_tokens": 2629,
+     "finish_reason": "end_turn",
+     "parsed": true,
+     "reasoning_chars": 1904,
+     "reasoning_tokens": 41135,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    }
+   ],
+   "reasoning_tokens_max": 47075,
+   "reasoning_tokens_min": 2909,
+   "run_id": "r7b-smoke-claude_opus_55-v1",
+   "stopped_at_cap": 0,
+   "turns": 8,
+   "turns_H": 4,
+   "turns_W": 4
+  },
+  "deepseek_high_16k": {
+   "completion_tokens_max": 16000,
+   "completion_tokens_min": 16000,
+   "first_request": "2026-11-13T15:18:03Z",
+   "parsed": 0,
+   "parsed_H": 0,
+   "parsed_W": 0,
+   "pass": false,
+   "pass_rule": "at least 6 of 8 turns parsed and every Tier W turn parsed",
+   "per_turn": [
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 37328,
+     "reasoning_tokens": 16000,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 35231,
+     "reasoning_tokens": 16000,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 48609,
+     "reasoning_tokens": 16000,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 43837,
+     "reasoning_tokens": 16000,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 34717,
+     "reasoning_tokens": 16000,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 40637,
+     "reasoning_tokens": 16000,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 38187,
+     "reasoning_tokens": 16000,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    },
+    {
+     "completion_tokens": 16000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 37397,
+     "reasoning_tokens": 16000,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    }
+   ],
+   "reasoning_tokens_max": 16000,
+   "reasoning_tokens_min": 16000,
+   "run_id": "r7b-smoke-deepseek_v4_pro-v1",
+   "stopped_at_cap": 8,
+   "turns": 8,
+   "turns_H": 4,
+   "turns_W": 4
+  },
+  "deepseek_high_32k": {
+   "completion_tokens_max": 32000,
+   "completion_tokens_min": 28843,
+   "first_request": "2026-11-13T15:27:18Z",
+   "parsed": 2,
+   "parsed_H": 0,
+   "parsed_W": 2,
+   "pass": false,
+   "pass_rule": "at least 6 of 8 turns parsed and every Tier W turn parsed",
+   "per_turn": [
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 74106,
+     "reasoning_tokens": 32000,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 28843,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 73902,
+     "reasoning_tokens": 28707,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 71577,
+     "reasoning_tokens": 32000,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 80190,
+     "reasoning_tokens": 32000,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 78701,
+     "reasoning_tokens": 31457,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 31683,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 82425,
+     "reasoning_tokens": 31224,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 75287,
+     "reasoning_tokens": 32000,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 64736,
+     "reasoning_tokens": 32000,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    }
+   ],
+   "reasoning_tokens_max": 32000,
+   "reasoning_tokens_min": 28707,
+   "run_id": "r7b-smoke-deepseek_v4_pro-v2",
+   "stopped_at_cap": 6,
+   "turns": 8,
+   "turns_H": 4,
+   "turns_W": 4
+  },
+  "deepseek_low_32k": {
+   "completion_tokens_max": 32000,
+   "completion_tokens_min": 3652,
+   "first_request": "2026-11-13T20:35:50Z",
+   "parsed": 6,
+   "parsed_H": 2,
+   "parsed_W": 4,
+   "pass": true,
+   "pass_rule": "at least 6 of 8 turns parsed and every Tier W turn parsed",
+   "per_turn": [
+    {
+     "completion_tokens": 23809,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 55764,
+     "reasoning_tokens": 23368,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 23014,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 51636,
+     "reasoning_tokens": 22824,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|0|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 83080,
+     "reasoning_tokens": 32000,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 3652,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 12862,
+     "reasoning_tokens": 3456,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|uniform_H|1|"
+    },
+    {
+     "completion_tokens": 14731,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 30779,
+     "reasoning_tokens": 14245,
+     "tier": "W",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 16470,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 40371,
+     "reasoning_tokens": 16123,
+     "tier": "W",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|mixed_parity_thresh|3|"
+    },
+    {
+     "completion_tokens": 32000,
+     "finish_reason": "length",
+     "parsed": false,
+     "reasoning_chars": 69825,
+     "reasoning_tokens": 32000,
+     "tier": "H",
+     "turn": 1,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    },
+    {
+     "completion_tokens": 15328,
+     "finish_reason": "stop",
+     "parsed": true,
+     "reasoning_chars": 42648,
+     "reasoning_tokens": 15132,
+     "tier": "H",
+     "turn": 2,
+     "wkey": "pilot4|synthetic|imperfect_modules|1|"
+    }
+   ],
+   "reasoning_tokens_max": 32000,
+   "reasoning_tokens_min": 3456,
+   "run_id": "r7b-smoke-deepseek_v4_pro_low-v1",
+   "stopped_at_cap": 2,
+   "turns": 8,
+   "turns_H": 4,
+   "turns_W": 4
+  }
+ },
+ "timeline": {
+  "amendment_v2_a3": {
+   "commit": "309fb1c",
+   "time": "2026-11-13T14:35:24-06:00"
+  },
+  "first_request": {
+   "p5-gemma3_4b-v1": "2026-11-13T15:17:20Z",
+   "p5-qwen25_7b-v1": "2026-11-13T15:17:12Z",
+   "r7b-main-claude_opus_55-v1": "2026-11-13T15:37:22Z",
+   "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z",
+   "r7b-smoke-claude_opus_55-v1": "2026-11-13T15:18:03Z",
+   "r7b-smoke-deepseek_v4_pro-v1": "2026-11-13T15:18:03Z",
+   "r7b-smoke-deepseek_v4_pro_low-v1": "2026-11-13T20:35:50Z"
+  },
+  "lock_v1": {
+   "commit": "1e79358",
+   "time": "2026-11-12T15:06:24-06:00"
+  },
+  "lock_v2": {
+   "commit": "f8e1fb3",
+   "time": "2026-11-13T09:15:16-06:00"
+  }
+ }
+}

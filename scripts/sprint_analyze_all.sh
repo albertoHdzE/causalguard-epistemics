@@ -19,3 +19,4 @@ for r in p5-claude_opus_55-v1 p5-deepseek_v4_pro_low-v1; do [ -f "$R/$r/plan.jso
 mainp=(); for ((i=1; i<${#main[@]}; i+=2)); do mainp+=(--main-run "${main[$i]}"); done
 .venv/bin/python -m causalguard sprint-analyze "${main[@]}" --out "$OUT"
 .venv/bin/python -m causalguard sprint-p5 analyze "${p5[@]}" "${mainp[@]}" --out "$OUT"
+.venv/bin/python -m causalguard sprint-report-data --out "$OUT"
