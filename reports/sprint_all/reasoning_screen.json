@@ -15,6 +15,13 @@
    "with_reasoning": 0,
    "with_turn2": 17,
    "worlds": 18
+  },
+  "P5f": {
+   "screen_reasoning": 27,
+   "screen_reply": 14,
+   "with_reasoning": 28,
+   "with_turn2": 28,
+   "worlds": 30
   }
  },
  "deepseek-v4-pro": {

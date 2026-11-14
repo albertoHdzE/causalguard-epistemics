@@ -189,9 +189,9 @@ worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
 | qwen2.5-7b | 30/30; 30/30 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.940 [0.889, 0.982] | 0.072 [−0.024, 0.179] | −0.029 [−0.093, 0.045] |
 | gemma-4-12b† | 30/30; 30/30 | 0.106 [0.020, 0.206] | 0.106 [0.020, 0.206] | 0.057 [0.009, 0.127] | 0.571 [0.420, 0.716] | −0.429 [−0.573, −0.289] | 0.263 [0.074, 0.450] |
 | mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
-| r1-distill-32b† | 22/30; 23/30 | 0.143 [0.060, 0.239] | 0.167 [0.076, 0.264] | 0.087 [0.018, 0.174] | 0.667 [0.524, 0.807] | −0.242 [−0.417, −0.064] | 0.224 [0.068, 0.392] |
+| r1-distill-32b† | 30/30; 30/30 | 0.143 [0.067, 0.224] | 0.179 [0.095, 0.271] | 0.066 [0.013, 0.134] | 0.679 [0.562, 0.798] | −0.231 [−0.370, −0.079] | 0.238 [0.106, 0.372] |
 | llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
-| Claude Opus 5.5 | 2/30; 2/30 | 1.000* | 1.000* | 0.000* | 0.000* | not testable (n P4 24, n P5f 2) | – |
+| Claude Opus 5.5 | 14/30; 16/30 | 0.875 [0.688, 1.000] | 0.875 [0.688, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
 | DeepSeek V4-Pro (low)‡ | 29/30; 25/30 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
 
 *Table 2. P5 verify-first (Tier W, 60 worlds per model; locked scorer). Exact and lenient detection of the altered
@@ -214,9 +214,9 @@ its detection interval (Figure 2).
 | qwen2.5-7b | 93 of 93 | 0.155 [0.073, 0.242] | 0.376 [0.245, 0.513] | 20 | 19 |
 | gemma-4-12b† | 52 of 68 | 0.330 [0.213, 0.454] | 0.273 [0.176, 0.384] | 40 | 15 |
 | mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
-| r1-distill-32b† | 0 of 33 | 0.143 [0.060, 0.239] | 0.087 [0.018, 0.174] | 14 | 3 |
+| r1-distill-32b† | 0 of 38 | 0.143 [0.067, 0.224] | 0.066 [0.013, 0.134] | 19 | 3 |
 | llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
-| Claude Opus 5.5 | 0 of 8 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 8 | 0 |
+| Claude Opus 5.5 | 0 of 69 | 0.875 [0.688, 1.000] | 0.000 [0.000, 0.000] | 53 | 0 |
 | DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
 
 *Table 3. P5f, post-hoc. Entries the locked parser drops; exact detection and false alarm when integer claim ids
@@ -247,14 +247,14 @@ an AI; disclosed).
 | qwen2.5-7b | 3/8 | 0/8 | 0/8 | 8/8 | 6/8 | 6/8 |
 | gemma-4-12b† | 5/8 | 0/8 | 0/8 | 8/8 | 8/8 | 8/8 |
 | mistral-small-24b | 0/8 | 0/8 | 0/8 | 7/8 | 6/8 | 6/8 |
-| r1-distill-32b† | 0/8 | 0/8 | 0/8 | – | – | – |
+| r1-distill-32b† | 0/8 | 0/8 | 0/8 | 8/8 | 5/8 | 3/8 |
 | llama-3.3-70b | 0/8 | 0/8 | 0/8 | 1/8 | 1/8 | 1/8 |
 | Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | – | – | – |
 | DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | 8/8 | 8/8 | 8/8 |
 
 *Table 4. Coded replies per model and condition (8 per cell, hash-chosen). Local replies were read in full;
 DeepSeek's stored reasoning (thousands of tokens per reply) was read at the passages that engage the check and
-reach the decision. r1's main-run reasoning was not stored.*
+reach the decision. r1's main-run reasoning was not stored (its P5 reasoning was).*
 
 Unprompted (P4), replies restate the check ("row #01 shows that L1 transitions to 1, which matches the claim",
 mistral, `main|published|published|0|`). Several gemma-4-12b replies read the cited row themselves, get a value that
@@ -447,7 +447,7 @@ allowed repair). v2-a3 (commit `309fb1c`, 2026-11-13T14:35:24-06:00; first resum
 only; items, prompts and scores unchanged), the usage-limit pause, the Saturday 12:00 CST hard stop, the DeepSeek
 low-effort condition, the spend stop on the upper bound. Every commit is listed in `PREEXISTING_WORK.md`.
 
-**Predictions against outcomes** (11 met, 3
+**Predictions against outcomes** (12 met, 5
 not met; a prediction whose cell has fewer than 12 finished worlds, or whose model was not run, is "not testable in
 this run"). The lock does not define "the floor" used by two predictions; post-hoc, a model is off the Tier W floor
 when the lower bound of its balanced accuracy exceeds the always-"not settled" row at the reported precision
@@ -466,11 +466,11 @@ when the lower bound of its balanced accuracy exceeds the always-"not settled" r
 | v1 | implementation agent | v1-A5: gemma-4-12b: more than 25 % of its turn-1 Tier W replies have no parseable answers (token cap 6000, D83). | **met** |
 | v2 | director | P-D1: P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it. | **met** |
 | v2 | director | P-D2: P-D2. Both online models have Tier W check discernment under P4 above 0.30. | **met** |
-| v2 | director | P-D3: P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %. | **not testable in this run** |
-| v2 | director | P-D4: P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15. | **not testable in this run** |
+| v2 | director | P-D3: P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %. | **not met** |
+| v2 | director | P-D4: P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15. | **not met** |
 | v2 | director | P-D5: P-D5. Tier H check discernment of both online models is below 0.15. | **not testable in this run** |
 | v2 | implementation agent | P-A1: P-A1. Every local model has P5f exact detection below 0.10 and lenient detection below 0.25 (point estimates). | **not met** |
-| v2 | implementation agent | P-A2: P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates). | **not testable in this run** |
+| v2 | implementation agent | P-A2: P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates). | **met** |
 | v2 | implementation agent | P-A3: P-A3. Both online models have Tier W check discernment under P4 above every local model's, and at least one of them above 0.50 (point estimates). | **met** |
 | v2 | implementation agent | P-A4: P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them). | **not met** |
 | v2 | implementation agent | P-A5: P-A5. At least one online model has Tier W Task S balanced accuracy above 0.80 (point estimate), and neither exceeds 0.60 on Tier H. | **not testable in this run** |
@@ -505,7 +505,7 @@ parsed and every Tier W turn parsed.*
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 300 | 175 | 51/180 / 4/60 | $10.68 (notional, subscription) |
+| Claude Opus 5.5 | 353 | 177 | 51/180 / 30/60 | $15.77 (notional, subscription) |
 | DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted

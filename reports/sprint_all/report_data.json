@@ -8,13 +8,13 @@
    },
    "cap": 520,
    "cost": {
-    "usd_notional": 10.68,
-    "worlds": 56
+    "usd_notional": 15.77,
+    "worlds": 81
    },
    "rejected_backfilled": 173,
-   "rejected_without_inference": 175,
-   "requests_sent": 300,
-   "slots_used": 125
+   "rejected_without_inference": 177,
+   "requests_sent": 353,
+   "slots_used": 176
   },
   "deepseek-v4-pro": {
    "cap": 520,
@@ -29,7 +29,7 @@
   "local": {
    "before_sprint": 2509,
    "cap": 6000,
-   "requests": 3203
+   "requests": 3229
   }
  },
  "p5_design": {
@@ -233,12 +233,12 @@
    "by": "director",
    "id": "P-D3",
    "lock": "v2",
-   "outcome": "not testable in this run",
+   "outcome": "not met",
    "rule": "each online model: P5f exact detection > 0.50; each local model: < 0.15",
    "text": "P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %.",
    "values": {
     "exact": {
-     "claude-opus-5-5": null,
+     "claude-opus-5-5": 0.875,
      "deepseek-r1-distill-qwen-32b": 0.1429,
      "deepseek-v4-pro": 0.9565,
      "gemma-4-12b-it-mlx": 0.1058,
@@ -253,13 +253,13 @@
    "by": "director",
    "id": "P-D4",
    "lock": "v2",
-   "outcome": "not testable in this run",
+   "outcome": "not met",
    "rule": "off the Tier W floor (BA lower bound above the always-not-settled row at 3 decimals; post-hoc, the lock does not define the floor): P5f \u2212 P4 forged adoption < \u22120.15; at the floor: |P5f \u2212 P4| \u2264 0.15 (point estimates)",
    "text": "P-D4. P5 lowers forged adoption relative to P4 by more than 0.15 for every model off the Tier S floor on Tier W; for the floor models the change is within +-0.15.",
    "values": {
     "adopt_forged_P5f_minus_P4": {
-     "claude-opus-5-5": null,
-     "deepseek-r1-distill-qwen-32b": -0.2424,
+     "claude-opus-5-5": 0.0,
+     "deepseek-r1-distill-qwen-32b": -0.2305,
      "deepseek-v4-pro": -0.1042,
      "gemma-4-12b-it-mlx": -0.4295,
      "google/gemma-3-4b": -0.1793,
@@ -310,7 +310,7 @@
      "qwen2.5:7b": 0.0
     },
     "lenient": {
-     "deepseek-r1-distill-qwen-32b": 0.1667,
+     "deepseek-r1-distill-qwen-32b": 0.1786,
      "gemma-4-12b-it-mlx": 0.1058,
      "google/gemma-3-4b": 0.0167,
      "llama-3.3-70b-instruct": 0.0583,
@@ -323,12 +323,12 @@
    "by": "implementation agent",
    "id": "P-A2",
    "lock": "v2",
-   "outcome": "not testable in this run",
+   "outcome": "met",
    "rule": "Claude: exact > 0.60 and false alarm < 0.10",
    "text": "P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates).",
    "values": {
-    "exact": null,
-    "false_alarm": null
+    "exact": 0.875,
+    "false_alarm": 0.0
    }
   },
   {
@@ -362,7 +362,7 @@
    "text": "P-A4. For at least 5 of the 6 local models, forged adoption under P5f is within 0.15 of forged adoption under P4 on Tier W (the instruction to verify alone does not move them).",
    "values": {
     "adopt_forged_P5f_minus_P4": {
-     "deepseek-r1-distill-qwen-32b": -0.2424,
+     "deepseek-r1-distill-qwen-32b": -0.2305,
      "gemma-4-12b-it-mlx": -0.4295,
      "google/gemma-3-4b": -0.1793,
      "llama-3.3-70b-instruct": 0.0,
@@ -395,9 +395,9 @@
   }
  ],
  "predictions_summary": {
-  "met": 11,
-  "not met": 3,
-  "not testable in this run": 5
+  "met": 12,
+  "not met": 5,
+  "not testable in this run": 2
  },
  "smokes": {
   "claude": {

@@ -11,6 +11,12 @@
   "c_names_altered_line": 0,
   "n": 8
  },
+ "deepseek-r1-distill-qwen-32b|P5f": {
+  "a_rederives_lookup": 8,
+  "b_names_mismatch": 5,
+  "c_names_altered_line": 3,
+  "n": 8
+ },
  "deepseek-v4-pro|P4": {
   "a_rederives_lookup": 7,
   "b_names_mismatch": 7,

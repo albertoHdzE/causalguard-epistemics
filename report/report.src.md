@@ -210,7 +210,7 @@ an AI; disclosed).
 
 *Table 4. Coded replies per model and condition (8 per cell, hash-chosen). Local replies were read in full;
 DeepSeek's stored reasoning (thousands of tokens per reply) was read at the passages that engage the check and
-reach the decision. r1's main-run reasoning was not stored.*
+reach the decision. r1's main-run reasoning was not stored (its P5 reasoning was).*
 
 Unprompted (P4), replies restate the check ("row #01 shows that L1 transitions to 1, which matches the claim",
 mistral, `main|published|published|0|`). Several gemma-4-12b replies read the cited row themselves, get a value that
