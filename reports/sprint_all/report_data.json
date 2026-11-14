@@ -5,17 +5,18 @@
     "p5-claude_opus_55-v1": "2026-11-13T22:00:36Z",
     "r7b-main-claude_opus_55-v1": "2026-11-13T15:37:22Z",
     "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z",
-    "r7b-main-claude_opus_55-v2-b3": "2026-11-14T02:17:40Z"
+    "r7b-main-claude_opus_55-v2-b3": "2026-11-14T02:17:40Z",
+    "r7b-main-claude_opus_55-v2-b4": "2026-11-14T17:34:51Z"
    },
    "cap": 520,
    "cost": {
-    "usd_notional": 34.76,
-    "worlds": 180
+    "usd_notional": 36.11,
+    "worlds": 181
    },
    "rejected_backfilled": 173,
    "rejected_without_inference": 179,
-   "requests_sent": 554,
-   "slots_used": 375
+   "requests_sent": 559,
+   "slots_used": 380
   },
   "deepseek-v4-pro": {
    "cap": 520,
@@ -32,6 +33,10 @@
    "cap": 6000,
    "requests": 3229
   }
+ },
+ "degenerate_bound": {
+  "24": 0.1173,
+  "30": 0.095
  },
  "p5_design": {
   "forged_multi_line": 1,
@@ -798,16 +803,112 @@
    "turns_W": 4
   }
  },
+ "supplement": {
+  "adopt_check_P3": {
+   "B": 0,
+   "est": null,
+   "hi": null,
+   "lo": null,
+   "n_worlds": 0
+  },
+  "adopt_forged_P4": {
+   "B": 2000,
+   "est": 0.0,
+   "hi": 0.0,
+   "lo": 0.0,
+   "n_worlds": 1,
+   "se": 0.0
+  },
+  "amendment": {
+   "commit": "5c2b18a",
+   "time": "2026-11-14T11:34:42-06:00"
+  },
+  "balanced_accuracy_H": {
+   "B": 2000,
+   "est": 1.0,
+   "hi": 1.0,
+   "lo": 1.0,
+   "se": 0.0
+  },
+  "both_cells_12": false,
+  "cells": {
+   "P3": {
+    "below_min": true,
+    "finished": 0,
+    "planned": 12
+   },
+   "P4": {
+    "below_min": true,
+    "finished": 1,
+    "planned": 12
+   }
+  },
+  "check_discernment": {
+   "cell_n": {
+    "P3": 0,
+    "P4": 1
+   },
+   "est": null,
+   "hi": null,
+   "lo": null,
+   "not_testable": true
+  },
+  "corruption_P4": {
+   "B": 2000,
+   "est": 0.0,
+   "hi": 0.0,
+   "lo": 0.0,
+   "n_worlds": 1,
+   "se": 0.0
+  },
+  "first_request": "2026-11-14T17:34:51Z",
+  "health": {
+   "answered_t1": 8,
+   "claims": 8,
+   "error_worlds": 0,
+   "parsed_t1": 1,
+   "parsed_t2": 1,
+   "truncated_worlds": 0,
+   "with_probability_t1": 8,
+   "worlds": 1
+  },
+  "label": "post-freeze supplement (amendment v2-a4)",
+  "predictions": [
+   {
+    "id": "P-D5",
+    "outcome": "not testable in this run",
+    "rule": "Claude: Tier H check discernment < 0.15",
+    "scope": "Claude only (DeepSeek ran no Tier H)",
+    "value": null
+   },
+   {
+    "id": "P-A5",
+    "outcome": "not testable in this run",
+    "rule": "Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the P3 + P4 worlds)",
+    "scope": "Claude only (DeepSeek ran no Tier H)",
+    "value": {
+     "ba_H": 1.0,
+     "ba_W": 0.9915
+    }
+   }
+  ],
+  "run_id": "r7b-main-claude_opus_55-v2-b4"
+ },
  "timeline": {
   "amendment_v2_a3": {
    "commit": "309fb1c",
    "time": "2026-11-13T14:35:24-06:00"
+  },
+  "amendment_v2_a4": {
+   "commit": "5c2b18a",
+   "time": "2026-11-14T11:34:42-06:00"
   },
   "first_request": {
    "p5-gemma3_4b-v1": "2026-11-13T15:17:20Z",
    "p5-qwen25_7b-v1": "2026-11-13T15:17:12Z",
    "r7b-main-claude_opus_55-v1": "2026-11-13T15:37:22Z",
    "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z",
+   "r7b-main-claude_opus_55-v2-b4": "2026-11-14T17:34:51Z",
    "r7b-smoke-claude_opus_55-v1": "2026-11-13T15:18:03Z",
    "r7b-smoke-deepseek_v4_pro-v1": "2026-11-13T15:18:03Z",
    "r7b-smoke-deepseek_v4_pro_low-v1": "2026-11-13T20:35:50Z"

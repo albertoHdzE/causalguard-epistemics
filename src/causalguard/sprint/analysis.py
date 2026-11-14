@@ -507,7 +507,25 @@ def tier_summary(ws: list[dict], B: int, rule: dict | None, recs: list[dict]) ->
                     for f in ("overclaim", "underclaim", "accuracy")}
               for pop in sorted({w["population"] for w in ws})}
     return {"S": s, "S_by_horizon": by_h, "S_gated": gated, "P": p, "C": cs, "contrasts": contr,
-            "reference_rows": surf, "by_population": by_pop, "health": health}
+            "reference_rows": surf, "by_population": by_pop, "health": health,
+            "verdict_probability": verdict_probability(ws)}
+
+
+def verdict_probability(ws: list[dict]) -> dict:
+    """Post-hoc descriptor (D120), P2 with P0 as the reference: among OPEN claims given a definite verdict at turn 2
+    (both turns valid), how many keep their stated probability within 0.05 of turn 1, and the mean |p2 - p1|.
+    Claim-level counts pooled over the cell's worlds; no interval (a descriptor, not a locked score)."""
+    out = {}
+    for c in ("P0", "P2"):
+        cw = [w for w in ws if w["condition"] == c and w.get("P")]
+        k = {x: sum(w["P"]["counts"].get(x, 0) for w in cw) for x in ("vp_n", "vp_kept", "vp_abs_dp", "vp_no_prob",
+                                                                     "n_open_t2", "over_t2")}
+        out[c] = {"worlds": len(cw), "open_claims": k["n_open_t2"], "definite_on_open": k["over_t2"],
+                  "with_both_probabilities": k["vp_n"], "probability_kept": k["vp_kept"],
+                  "share_kept": round(k["vp_kept"] / k["vp_n"], 4) if k["vp_n"] else None,
+                  "mean_abs_dp": round(k["vp_abs_dp"] / k["vp_n"], 4) if k["vp_n"] else None,
+                  "without_probability": k["vp_no_prob"]}
+    return out
 
 
 MIN_CELL = 12          # D102(d), pre-declared: a contrast needs >= 12 finished worlds in each of its cells

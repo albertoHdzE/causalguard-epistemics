@@ -20,6 +20,7 @@ SHORT = {"google/gemma-3-4b": "gemma-3-4b", "qwen2.5:7b": "qwen2.5-7b", "gemma-4
          "deepseek-r1-distill-qwen-32b": "r1-distill-32b (half)", "llama-3.3-70b-instruct": "llama-3.3-70b",
          "claude-opus-5-5": "Claude Opus 5.5", "deepseek-v4-pro": "DeepSeek V4-Pro (effort low)"}
 ORDER = list(SHORT)
+SUPPLEMENT_SUFFIX = "-v2-b4"     # amendment v2-a4: Claude's Tier H block, a post-freeze supplement (D118)
 
 
 def _plt():
@@ -70,7 +71,8 @@ def fig_task_p(A: dict, P5: dict, path: Path):
         labels = []
         for y, m in enumerate(ms):
             t = A["models"][m]["tiers"][tier]
-            labels.append(_label(m, t["cells"]))
+            labels.append(_label(m, t["cells"]) + (" (post-freeze suppl.)" if tier == "H" and any(
+                r.endswith(SUPPLEMENT_SUFFIX) for r in A["models"][m].get("run_ids") or []) else ""))
             _dot(ax, y - 0.16, t["C"]["adopt_check"]["P3"], BLUE, "o", t["cells"]["P3"]["below_min"],
                  "true status adopted, valid check (P3)" if y == 0 else None)
             _dot(ax, y, t["C"]["adopt_forged"]["P4"], ORANGE, "s", t["cells"]["P4"]["below_min"],
@@ -130,8 +132,9 @@ def fig_p5(P5: dict, path: Path):
         _dot(ax, y + 0.16, v["false_alarm"], ORANGE, "s", v["cells"]["P5v"]["below_min"],
              "false alarm on a valid check (P5v)" if y == 0 else None)
     _frame(ax, labels, "share of named claims")
-    ax.legend(loc="lower right", frameon=False, fontsize=7)
-    fig.tight_layout()
+    h, lab = ax.get_legend_handles_labels()       # R9: outside the data area (it covered the online rows)
+    fig.legend(h, lab, loc="upper center", ncol=2, frameon=False, fontsize=7, bbox_to_anchor=(0.5, 1.08))
+    fig.tight_layout(rect=(0, 0, 1, 0.93))
     fig.savefig(path, bbox_inches="tight")
     plt.close(fig)
 

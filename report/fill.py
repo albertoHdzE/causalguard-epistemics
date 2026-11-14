@@ -43,7 +43,9 @@ CONSTANTS = {
     "0.10": "prediction threshold (lock)", "0.20": "prediction threshold (lock)", "0.25": "prediction threshold "
     "(lock)", "0.30": "prediction threshold (lock)", "0.50": "prediction threshold (lock)", "0.5": "prediction "
     "threshold (lock)", "0.60": "prediction threshold (lock)", "0.80": "prediction threshold (lock)", "14": "date",
-    "13": "date", "15": "date", "12:00": "hard stop", "2000": "bootstrap replicates (lock)"}
+    "13": "date", "15": "date", "12:00": "hard stop", "2000": "bootstrap replicates (lock)",
+    "0.05": "D120 tolerance and D121 level (fixed by the director before computation)",
+    "23:00": "v2-a4 pause deadline", "23:30": "v2-a4 hard stop"}
 
 
 def _get(D: dict, path: str):
@@ -82,7 +84,7 @@ def fmt(v, f: str | None) -> str:
             return f"{round(100 * v['est'])} %"
         if f in ("lo", "hi"):
             return _num(v[f])
-        return f"{_num(v['est'])} [{_num(v['lo'])}, {_num(v['hi'])}]"
+        return f"{_num(v['est'])} [{_num(v['lo'])},\u00a0{_num(v['hi'])}]"   # R10: never wrap inside the brackets
     if v is None:
         return "–"
     if f == "int" or isinstance(v, bool):
@@ -109,6 +111,12 @@ def _cell(t: dict, c: str) -> str:
     return f"{x['finished']}/{x['planned']}"
 
 
+def _cell_short(t: dict, c: str) -> str:
+    """R10: a complete cell shows its n (planned per cell is in the caption); an incomplete one finished/planned."""
+    x = t["cells"][c]
+    return str(x["finished"]) if x["finished"] == x["planned"] else f"{x['finished']}/{x['planned']}"
+
+
 def _v(b, below=False) -> str:
     if below and b and b.get("est") is not None:
         return _num(b["est"]) + "*"
@@ -118,15 +126,15 @@ def _v(b, below=False) -> str:
 def table_task_p(D) -> str:
     A = D["A"]
     L = ["| model | tier | n P3; P4 | P3: true adopted | P4: forged adopted | P4: corruption | "
-         "check discernment |", "|---|---|---|---|---|---|---|"]
+         "check discernment |", "|" + "|".join("-" * w for w in (16, 3, 6, 20, 20, 20, 23)) + "|"]
     for m in _models(A["models"]):
         for tier in ("W", "H"):
             t = A["models"][m]["tiers"].get(tier)
             if not t:
-                L.append(f"| {NAME.get(m, m)} | {tier} | 0 finished | | | | |")
+                L.append(f"| {NAME.get(m, m)} | {tier} | 0 | | | | |")
                 continue
             b3, b4 = t["cells"]["P3"]["below_min"], t["cells"]["P4"]["below_min"]
-            L.append(f"| {NAME.get(m, m)} | {tier} | {_cell(t, 'P3')}; {_cell(t, 'P4')} | "
+            L.append(f"| {NAME.get(m, m)} | {tier} | {_cell_short(t, 'P3')}; {_cell_short(t, 'P4')} | "
                      f"{_v(t['C']['adopt_check']['P3'], b3)} | {_v(t['C']['adopt_forged']['P4'], b4)} | "
                      f"{_v(t['C']['corruption']['P4'], b4)} | **{fmt(t['contrasts']['check_discernment'], None)}** |")
     return "\n".join(L)
@@ -135,13 +143,13 @@ def table_task_p(D) -> str:
 def table_p5(D) -> str:
     P = D["P"]
     L = ["| model | n P5v; P5f | exact detection | lenient detection | false alarm | P5f: forged adopted | "
-         "P5f − P4 | verified discern. |", "|---|---|---|---|---|---|---|---|"]
+         "P5f − P4 | verified discern. |", "|" + "|".join("-" * w for w in (14, 6, 20, 20, 20, 20, 20, 20)) + "|"]
     for m in _models(P["models"]):
         v = P["models"][m]
         bf, bv = v["cells"]["P5f"]["below_min"], v["cells"]["P5v"]["below_min"]
         c = v.get("vs_main") or {}
         cv, cf = v["cells"]["P5v"], v["cells"]["P5f"]
-        L.append(f"| {NAME.get(m, m)} | {cv['finished']}/{cv['planned']}; {cf['finished']}/{cf['planned']} | "
+        L.append(f"| {NAME.get(m, m)} | {cv['finished']}; {cf['finished']} | "
                  f"{_v(v['exact'], bf)} | {_v(v['lenient'], bf)} | {_v(v['false_alarm'], bv)} | "
                  f"{_v(v['adopt_forged_P5f'], bf)} | {fmt(c.get('adopt_forged_P5f_minus_P4'), None)} | "
                  f"{fmt(v['verified_discernment'], None) if not (bf or bv) else '–'} |")
@@ -151,7 +159,7 @@ def table_p5(D) -> str:
 def table_task_s(D) -> str:
     A = D["A"]
     L = ["| model | tier | worlds | overclaim | underclaim | balanced accuracy | BA − surface rule |",
-         "|---|---|---|---|---|---|---|"]
+         "|" + "|".join("-" * w for w in (18, 3, 7, 20, 20, 20, 20)) + "|"]
     for tier in ("W", "H"):
         ref = next(v["tiers"][tier]["reference_rows"] for v in A["models"].values()
                    if tier in v["tiers"] and v["tiers"][tier]["reference_rows"])
@@ -251,7 +259,64 @@ def table_coding(D) -> str:
     return "\n".join(L)
 
 
-TABLES = {"p5_more": table_p5_more, "coding": table_coding, "task_p": table_task_p, "p5": table_p5, "task_s": table_task_s, "predictions": table_predictions,
+def table_verdict_probability(D) -> str:
+    """D120 (post-hoc): open claims given a definite verdict at turn 2, and whether the stated probability moved."""
+    A = D["A"]
+    L = ["| model | P2 worlds | open claims given a definite verdict (P2) | probability within 0.05 of turn 1 | "
+         "mean abs. change | P0 reference: definite / kept |", "|" + "|".join("-" * w for w in (22, 6, 14, 18, 10, 16)) + "|"]
+    for m in _models(A["models"]):
+        t = A["models"][m]["tiers"].get("W")
+        if not t:
+            continue
+        v, r = t["verdict_probability"]["P2"], t["verdict_probability"]["P0"]
+        L.append(f"| {NAME.get(m, m)} | {v['worlds']} | {v['definite_on_open']} of {v['open_claims']} | "
+                 f"{v['probability_kept']} of {v['with_both_probabilities']} | {fmt(v['mean_abs_dp'], None)} | "
+                 f"{r['definite_on_open']} / {r['probability_kept']} |")
+    return "\n".join(L)
+
+
+def table_p5_cells(D) -> str:
+    """R8: which worlds enter each P5 metric (planned -> finished -> valid turn-2 P5 object -> scored)."""
+    P = D["P"]
+    L = ["| model | P5v: planned / finished / valid turn 2 = in false alarm and adoption | P5f: planned / finished / "
+         "valid turn 2 = in detection and adoption | turn 2 stopped at the token cap (P5v; P5f) |",
+         "|" + "|".join("-" * w for w in (22, 26, 26, 16)) + "|"]
+    for m in _models(P["models"]):
+        h = P["models"][m]["health_by_cell"]
+        v, f = h["P5v"], h["P5f"]
+        L.append(f"| {NAME.get(m, m)} | {v['planned']} / {v['finished']} / {v['in_detection']} | "
+                 f"{f['planned']} / {f['finished']} / {f['in_detection']} | {v['truncated']}; {f['truncated']} |")
+    return "\n".join(L)
+
+
+def table_supplement(D) -> str:
+    """D118: Claude Tier H P3 + P4, post-freeze supplement (amendment v2-a4)."""
+    s = D["R"].get("supplement")
+    L = ["| post-freeze supplement (v2-a4) | n P3; P4 (finished / 12) | P3: true adopted | P4: forged adopted | "
+         "P4: corruption | check discernment | Task S balanced accuracy |",
+         "|" + "|".join("-" * w for w in (18, 12, 14, 14, 14, 18, 16)) + "|"]
+    if not s or not s.get("cells"):
+        L.append("| Claude Opus 5.5, Tier H | 0; 0 | – | – | – | – | – |")
+        return "\n".join(L)
+    c = s["cells"]
+    b3, b4 = c["P3"]["below_min"], c["P4"]["below_min"]
+    L.append(f"| Claude Opus 5.5, Tier H | {c['P3']['finished']}; {c['P4']['finished']} | "
+             f"{_v(s['adopt_check_P3'], b3)} | {_v(s['adopt_forged_P4'], b4)} | {_v(s['corruption_P4'], b4)} | "
+             f"{fmt(s['check_discernment'], None)} | {fmt(s['balanced_accuracy_H'], None)} |")
+    return "\n".join(L)
+
+
+def table_supplement_predictions(D) -> str:
+    s = D["R"].get("supplement") or {}
+    L = ["| prediction (lock v2) | scope | rule | supplement outcome |", "|---|---|---|---|"]
+    for p in s.get("predictions") or []:
+        L.append(f"| {p['id']} | {p['scope']} | {p['rule']} | **{p['outcome']}** |")
+    return "\n".join(L)
+
+
+TABLES = {"verdict_probability": table_verdict_probability, "p5_cells": table_p5_cells,
+          "supplement": table_supplement, "supplement_predictions": table_supplement_predictions,
+          "p5_more": table_p5_more, "coding": table_coding, "task_p": table_task_p, "p5": table_p5, "task_s": table_task_s, "predictions": table_predictions,
           "online": table_online, "cells_online": table_cells_online, "smokes": table_smokes}
 
 PH = re.compile(r"\{\{\s*([^}|]+?)\s*(?:\|\s*([a-z0-9]+)\s*)?\}\}")

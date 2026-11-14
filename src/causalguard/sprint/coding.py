@@ -103,16 +103,66 @@ def summary(out: str) -> dict:
     return res
 
 
+N_SECOND = 2
+
+
+def second_coder_sheet(out: str, runs_root: str = "runs") -> Path:
+    """Iteration 10 (optional): a blind sheet for a second, human coder: per model the N_SECOND rows of the coded
+    sample with the smallest sha256('sprint-second-coder', model, condition, wkey); the visible turn-2 reply in full
+    (stored reasoning only for models whose replies carry no text beyond the JSON), the three code definitions and
+    empty code boxes.  The first coder's codes are not shown."""
+    from .analysis import load
+    rows = list(csv.DictReader((Path(out) / "reasoning_coding.csv").open()))
+    by_model: dict = defaultdict(list)
+    for r in rows:
+        by_model[r["model"]].append(r)
+    pick = [r for m in sorted(by_model) for r in sorted(by_model[m], key=lambda r: hashlib.sha256(
+        f"sprint-second-coder|{r['model']}|{r['condition']}|{r['wkey']}".encode()).hexdigest())[:N_SECOND]]
+    cache: dict = {}
+    L = ["# Second-coder sheet (optional; blind)", "",
+         f"{len(pick)} turn-2 replies, {N_SECOND} per model, hash-chosen from the coded sample of "
+         "`reports/sprint_all/reasoning_coding.csv`. Read each reply in full and mark each code 1 (present) or 0.",
+         "", "Codes:", "",
+         "- **a** re-derives at least one cited lookup (states what a cited row shows, or recomputes an input value)",
+         "- **b** names a mismatch between the check and a row (any line, right or wrong)",
+         "- **c** names the altered line (the line the forgery changed: its node and cited row, or 'no evidence row')",
+         "", "The altered line of each forged claim is given under the reply, so that code c can be judged.", ""]
+    from . import population as P
+    from . import tierw as TW
+    for i, r in enumerate(pick, 1):
+        if r["run_id"] not in cache:
+            cache[r["run_id"]] = {x["wkey"]: x for x in load([str(Path(runs_root) / i) for i in
+                                                               r["run_id"].split("+")])[0]["records"]}
+        rec = cache[r["run_id"]][r["wkey"]]
+        reply, reasoning = _turn2(rec)
+        L += [f"## {i}. `{r['hash']}` ({r['condition']})", "", "Reply:", "", "```text", reply.strip(), "```", ""]
+        if reasoning and len(re.sub(r"\{.*\}", "", reply, flags=re.S).strip()) < 40:
+            L += ["Stored reasoning (the reply has no text beyond the JSON):", "", "```text", reasoning.strip(), "```", ""]
+        asg = rec["episode"]["assignment"]
+        pub = P.tier_public(P.WorldKey.from_json(rec["world"]), "W", asg.get("design_salt"))[1]
+        L += ["Altered line(s) of each named claim's forged check:", ""]
+        for c in asg["named"]:
+            al = TW.altered_lines(pub, c, asg["salt"])
+            L += [f"- {c} ({al['kind']}): " + " / ".join(f"`{x.strip()}`" for x in al["lines"])]
+        L += [""]
+        L += ["| code | a | b | c |", "|---|---|---|---|", "| your mark (0/1) |   |   |   |", ""]
+    f = Path(out) / "second_coder_sheet.md"
+    f.write_text("\n".join(L) + "\n")
+    return f
+
+
 def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="causalguard sprint-coding")
-    ap.add_argument("step", choices=("sample", "summary"))
+    ap.add_argument("step", choices=("sample", "summary", "second-coder"))
     ap.add_argument("--main-run", action="append", default=[])
     ap.add_argument("--p5-run", action="append", default=[])
     ap.add_argument("--out", default="reports/sprint_all")
     ap.add_argument("--add", action="store_true")
     a = ap.parse_args(argv)
-    if a.step == "sample":
+    if a.step == "second-coder":
+        print(second_coder_sheet(a.out))
+    elif a.step == "sample":
         screen_and_sample(a.main_run, a.p5_run, a.out, a.add)
     else:
         print(json.dumps(summary(a.out), indent=1))

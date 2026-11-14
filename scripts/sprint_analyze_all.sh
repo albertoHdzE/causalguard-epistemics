@@ -10,8 +10,10 @@ R="${CAUSALGUARD_RUNS:-runs}"
 LOCAL="gemma3_4b qwen25_7b mistral_small_24b llama33_70b gemma4_12b r1_distill_qwen_32b"
 main=(); p5=()
 for m in $LOCAL; do main+=(--run-dir "$R/r7b-main-$m-v1"); p5+=(--p5-run "$R/p5-$m-v1"); done
+# v2-a4 (D118): r7b-main-claude_opus_55-v2-b4 is a post-freeze supplement; it never enters the frozen analysis
+# (it would change the Tier H Holm adjustment of the local models) and is analysed alone below, into <out>/supplement.
 for r in r7b-main-claude_opus_55-v1 r7b-main-claude_opus_55-v2-b1 r7b-main-claude_opus_55-v2-b3 \
-         r7b-main-claude_opus_55-v2-b4 r7b-main-claude_opus_55-v2-b5 r7b-main-deepseek_v4_pro_low-v1-b1 \
+         r7b-main-claude_opus_55-v2-b5 r7b-main-deepseek_v4_pro_low-v1-b1 \
          r7b-main-deepseek_v4_pro_low-v1-b3 r7b-main-deepseek_v4_pro_low-v1-b4 r7b-main-deepseek_v4_pro_low-v1-b5; do
   [ -f "$R/$r/plan.json" ] && main+=(--run-dir "$R/$r")
 done
@@ -19,4 +21,12 @@ for r in p5-claude_opus_55-v1 p5-deepseek_v4_pro_low-v1; do [ -f "$R/$r/plan.jso
 mainp=(); for ((i=1; i<${#main[@]}; i+=2)); do mainp+=(--main-run "${main[$i]}"); done
 .venv/bin/python -m causalguard sprint-analyze "${main[@]}" --out "$OUT"
 .venv/bin/python -m causalguard sprint-p5 analyze "${p5[@]}" "${mainp[@]}" --out "$OUT"
+SUP="$R/r7b-main-claude_opus_55-v2-b4"
+if [ -f "$SUP/plan.json" ]; then
+  .venv/bin/python -m causalguard sprint-analyze --run-dir "$R/r7b-main-claude_opus_55-v1" \
+    --run-dir "$R/r7b-main-claude_opus_55-v2-b1" --run-dir "$R/r7b-main-claude_opus_55-v2-b3" --run-dir "$SUP" \
+    --out "$OUT/supplement"
+else
+  rm -rf "$OUT/supplement"
+fi
 .venv/bin/python -m causalguard sprint-report-data --out "$OUT"

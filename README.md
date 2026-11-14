@@ -3,10 +3,13 @@
 ## AI x Epistemics sprint submission (branch `sprint`, 2026-11-13 to 2026-11-15)
 
 **Report:** `report/report.pdf` (source `report/report.src.md`; every number is filled from
-`reports/sprint_all/*.json` by `report/fill.py`, which fails on a hand-typed number). *Models adopt forged checks
-they could verify*: six local models and two online models on an exact benchmark of evidence-relative reasoning;
-a forged check differs from the valid one in one line a cited evidence row contradicts; a pre-registered
-verify-first control (P5) separates "cannot verify" from "does not verify".
+`reports/sprint_all/*.json` by `report/fill.py`, which fails on a hand-typed number). *Who checks the check?
+Frontier models verify forged derivations by lookup, open-weight models adopt them*: six local models and two
+online models on an exact benchmark of evidence-relative reasoning; a forged check differs from the valid one in
+one line a cited evidence row contradicts; a pre-registered verify-first control (P5) separates "cannot verify"
+from "does not verify". Raw sprint runs, call ledgers and the spend record: asset of the pre-release
+`v0.8.0-sprint`, SHA-256 manifest `artifacts/manifest_sprint.json`. Claude's Tier H cells are a labelled
+post-freeze supplement (amendment v2-a4), outside the frozen tally.
 
 **What is pre-sprint and what is sprint work.** The engines, the benchmark, Tier W, the forged checks (P0–P4), lock
 v1 and the local main panel were built before the sprint (2026-11-09 to 2026-11-12). Everything committed on

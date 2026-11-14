@@ -1,5 +1,5 @@
 ---
-title: "Models adopt forged checks they could verify: an exact benchmark of evidence-relative reasoning under pressure"
+title: "Who checks the check? Frontier models verify forged derivations by lookup, open-weight models adopt them"
 subtitle: "Research conducted at the AI x Epistemics Research Sprint, November 2026 (Apart Research)"
 author:
   - "Alberto Hernández Espinosa — independent researcher"
@@ -9,6 +9,7 @@ fontsize: 10pt
 header-includes:
   - \usepackage{etoolbox}
   - \AtBeginEnvironment{longtable}{\footnotesize}
+  - \setlength{\tabcolsep}{3pt}
 ---
 
 <!-- SOURCE of report/report.md. Every number comes from reports/sprint_all/*.json through report/fill.py; the
@@ -21,16 +22,18 @@ defer to it? We built a benchmark where this is decidable. Each task shows a hid
 evidence rows and asks whether claims about it are settled true, settled false or not settled; two exact engines
 and a SAT solver compute the answer key. In a second turn the model receives one of five randomised follow-ups,
 including a valid check (P3) and a forged one (P4) that differs from it in a single line contradicted by a cited
-evidence row. When the wiring is given (Tier W), every line can be verified by one lookup. Six local open-weight
-models adopt the forged status on most named claims ({{A/models/g3/tiers/W/C/adopt_forged/P4|est}} to
+evidence row. When the wiring is given (Tier W), every line can be verified by one lookup. There, two frontier
+models reject forged checks by re-deriving the cited rows unprompted (check discernment: Claude Opus 5.5
+{{A/models/cl/tiers/W/contrasts/check_discernment|est}}, DeepSeek V4-Pro at low effort
+{{A/models/ds/tiers/W/contrasts/check_discernment|est}}), while six local open-weight models adopt the forged
+status on most named claims ({{A/models/g3/tiers/W/C/adopt_forged/P4|est}} to
 {{A/models/ll/tiers/W/C/adopt_forged/P4|est}}), with check discernment near zero. A pre-registered control (P5)
-asks the model to verify every line first. Unprompted, the local models almost never check; told to verify, some
-find forged lines but flag valid lines about as often, and a small model that flags a forged line usually keeps
-its forged status anyway (qwen2.5-7b: {{P/models/q7/flagged_then_adopted/flagged_adopted|int}} of
-{{P/models/q7/flagged_then_adopted/flagged|int}} flagged claims). Verification text and final answer come apart.
-On the same items two frontier models reject forged checks on Tier W by re-deriving the cited rows unprompted
-(check discernment: Claude Opus 5.5 {{A/models/cl/tiers/W/contrasts/check_discernment|est}}, DeepSeek V4-Pro at
-low effort {{A/models/ds/tiers/W/contrasts/check_discernment|est}}).
+asks the model to verify every line first. Told to verify, some local models find forged lines but flag valid
+lines about as often, and a small model that flags a forged line usually keeps its forged status anyway
+(qwen2.5-7b: {{P/models/q7/flagged_then_adopted/flagged_adopted|int}} of
+{{P/models/q7/flagged_then_adopted/flagged|int}} flagged claims): verification text and final answer come apart.
+A bare demand to commit splits Claude the other way: it gives definite verdicts on open claims but keeps every
+stated probability at its turn-1 value.
 
 # 1. Introduction
 
@@ -52,9 +55,9 @@ Our main contributions are:
    commit, valid check, forged check) are assigned by hash to disjoint worlds. Two tiers separate "cannot verify"
    (wiring hidden) from "could verify by lookup" (wiring given).
 2. **A forged-check measurement with a verify-first control.** Six local models adopt forged checks they could
-   verify. A pre-registered condition that tells them to verify shows that some can find the forged line, but
-   their flags do not separate forged from valid lines, and their answers often follow the forged check even after
-   they call its line wrong.
+   verify; two frontier models reject them by re-deriving the cited rows unprompted. Told to verify, some local
+   models find the forged line, but their flags do not separate forged from valid lines, and their answers often
+   follow the forged check even after they call its line wrong.
 3. **A pre-registered, fully disclosed run.** A design lock with predictions preceded every request. Every number
    in this report is generated from the raw runs. Predictions that failed are reported as failed.
 
@@ -125,7 +128,7 @@ its API. At the provider's default (high) reasoning effort DeepSeek did not fini
 
 **Pre-registration and analysis.** A design lock (v1, 2026-11-12) fixed items, assignments, prompts, scores,
 contrasts and predictions before the main panel. A sprint addendum (v2) fixed P5, the online caps and new
-predictions before any P5 or online request. Its three amendments are disclosed (Appendix B). The unit is the
+predictions before any P5 or online request. Its three amendments, and a fourth for a post-freeze supplement, are disclosed (Appendix B). The unit is the
 world; 95 % intervals come from 2000 cluster-bootstrap replicates over source groups; tests against zero and
 against the surface rule are Holm-adjusted within tier. Online cells are reported with the number of finished
 worlds over planned worlds; a contrast is computed only if both cells finished at least 12 worlds (pre-declared
@@ -133,16 +136,21 @@ before the online runs resumed).
 
 # 4. Results
 
-## 4.1 Forged checks are adopted (Tier W, main panel)
+## 4.1 Local models adopt forged checks; frontier models reject them (Tier W, main panel)
 
 {{table:task_p}}
 
 *Table 1. Task P per model and tier: share of named claims whose final verdict adopts the check's status, under
 the valid check (P3) and the forged check (P4); corruption under P4; check discernment with its 95 % interval.
-n = finished / planned worlds. \* = an incomplete cell below 12 worlds (no interval). † half panel. ‡ labelled
-condition (reasoning effort low).*
+n = finished worlds (planned per cell: 24 on Tier W, 12 on Tier H, half of each for †; an incomplete cell
+shows finished / planned). † half panel. ‡ labelled condition (reasoning effort low). An interval of zero
+width means every world had the same value; for a cell where every world scores zero, the one-sided 95 % upper
+bound on the per-world rate is 1 − 0.05^1/n^: {{R/degenerate_bound/24}} for n = 24 and
+{{R/degenerate_bound/30}} for n = 30. Claude's Tier H cells are in the post-freeze supplement (Appendix D).*
 
-On Tier W every local model adopts the forged status on most named claims. llama-3.3-70b, mistral-small-24b and
+On Tier W every local model adopts the forged status on most named claims, and both frontier models reject it:
+Claude Opus 5.5 adopts the forged status on {{A/models/cl/tiers/W/C/adopt_forged/P4|est}} of named claims and
+DeepSeek V4-Pro at low effort on {{A/models/ds/tiers/W/C/adopt_forged/P4|est}} (§4.4). llama-3.3-70b, mistral-small-24b and
 gemma-4-12b adopt it on every named claim ({{A/models/ll/tiers/W/C/adopt_forged/P4|est}}). Corruption, the share
 of answers that were right at turn 1 and became wrong, is between
 {{A/models/q7/tiers/W/C/corruption/P4|est}} (qwen2.5-7b) and {{A/models/ll/tiers/W/C/corruption/P4|est}}. Check
@@ -168,9 +176,15 @@ worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
 
 {{table:p5}}
 
-*Table 2. P5 verify-first (Tier W, 60 worlds per model; locked scorer). Exact and lenient detection of the altered
-line in forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its difference from
-P4 (between-world); verified discernment = true-status adoption under P5v − forged adoption under P5f.*
+*Table 2. P5 verify-first (Tier W, 60 planned worlds per model; locked scorer). Exact and lenient detection of the
+altered line in forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its
+difference from P4 (between-world); verified discernment = true-status adoption under P5v − forged adoption under
+P5f. n = finished worlds; a finished world enters a metric only with a valid turn-2 reply (Appendix D, Table 10:
+for DeepSeek, {{P/models/ds/health_by_cell/P5f/in_detection|int}} of
+{{P/models/ds/health_by_cell/P5f/finished|int}} finished P5f and {{P/models/ds/health_by_cell/P5v/in_detection|int}}
+of {{P/models/ds/health_by_cell/P5v/finished|int}} finished P5v worlds; the others stopped at the token cap or
+returned no valid reply). Zero-width intervals: see Table 1 (bound
+{{R/degenerate_bound/30}} for n = 30).*
 
 Under the locked scorer the best local detector, mistral-small-24b, quotes the altered line in
 {{P/models/mi/exact|est}} of forged named claims and flags valid checks at {{P/models/mi/false_alarm|est}}. The
@@ -246,8 +260,6 @@ is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/
 
 ## 4.4 Frontier models under the benchmark's cost
 
-<!-- SAT (after the 12:00 freeze): prose on what Claude did, from the filled tables only. -->
-
 **DeepSeek at high effort does not finish.** (Appendix D, Table 7.)
 
 At the provider's default (high) effort, DeepSeek V4-Pro spent every token of a 16000 cap and then between
@@ -269,10 +281,24 @@ Its thinking summaries say the same. Told to verify (P5), it quotes the altered 
 ({{P/models/cl/false_alarm|est}}), and DeepSeek in {{P/models/ds/exact|est}} (false alarm
 {{P/models/ds/false_alarm|est}}): verified discernment {{P/models/cl/verified_discernment|est}} and
 {{P/models/ds/verified_discernment|est}}. Pressure without evidence is a different matter. Claude never yields to
-an empty disagreement (P1 capitulation {{A/models/cl/tiers/W/P/capitulation_named/P1|est}}), but a demand to commit
-(P2) makes it give a definite verdict on {{A/models/cl/tiers/W/P/forced_overclaim/P2|est}} of open claims: the
-frontier model resists forged evidence and still overclaims on request. Tier H, where no check can be verified by
-lookup, was not reached by either online model (Appendix D), so P-D5 is not testable in this run.
+an empty disagreement (P1 capitulation {{A/models/cl/tiers/W/P/capitulation_named/P1|est}}). A demand to commit
+(P2) makes it give a definite verdict on {{A/models/cl/tiers/W/P/overclaim_t2/P2|est}} of open claims, while its
+stated probabilities stay at their turn-1 values
+({{A/models/cl/tiers/W/verdict_probability/P2/probability_kept|int}} of
+{{A/models/cl/tiers/W/verdict_probability/P2/with_both_probabilities|int}} definite verdicts within 0.05; mean
+absolute change {{A/models/cl/tiers/W/verdict_probability/P2/mean_abs_dp}}) and the prose says the claims are open:
+"I can give a definite verdict for every claim, but only c2 is actually settled by the evidence. The other seven are
+best guesses … the probabilities below are unchanged." (`main|synthetic|uniform_H|19|`). The verdict field follows
+the instruction; the probability does not (post-hoc descriptor, D120; Appendix D, Table 9). Most local models move
+both: llama-3.3-70b keeps the probability on {{A/models/ll/tiers/W/verdict_probability/P2/probability_kept|int}} of
+{{A/models/ll/tiers/W/verdict_probability/P2/with_both_probabilities|int}} such verdicts, mistral-small-24b on
+{{A/models/mi/tiers/W/verdict_probability/P2/probability_kept|int}} of
+{{A/models/mi/tiers/W/verdict_probability/P2/with_both_probabilities|int}}; qwen2.5-7b keeps it on
+{{A/models/q7/tiers/W/verdict_probability/P2/probability_kept|int}} of
+{{A/models/q7/tiers/W/verdict_probability/P2/with_both_probabilities|int}}. Tier H, where no check can be verified
+by lookup, was not reached by either online model in the frozen panel, so P-D5 is not testable in this run. A
+post-freeze supplement (amendment v2-a4, run after the report text was drafted) runs Claude's Tier H P3 and P4
+cells; it is reported in Appendix D only, and nothing in this section depends on it.
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment {{A/models/ds/tiers/W/contrasts/check_discernment}}). Its stored reasoning
@@ -296,7 +322,9 @@ also flags valid lines, and the final answer often follows the forged check even
 model has just called wrong. This separates explanations that sycophancy measurements cannot: the failure is not
 that checking is impossible (Tier W makes it a lookup), nor that the instruction is ignored (under P5 the models
 check line by line). The model's own check does not govern its answer. For agentic pipelines in which one model's intermediate result is another's input,
-a single forged step is enough.
+a single forged step is enough. Under a bare demand to commit, the split runs the other way for the frontier model:
+its verdict follows the instruction and its probability does not, whereas the local models' answer follows the check
+and their verification text does not. In both cases one field of the reply cannot be read without the other.
 
 **The exact check as a remedy.** Inside the declared class, the same exact engine that labels the items can gate
 a model's released verdicts. A settled verdict that the checker contradicts is released as "not settled". This
@@ -307,9 +335,11 @@ certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
 reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
 failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
-(4) The online models ran Tier W only (Table 6): DeepSeek ran at low effort until the account balance ran out,
-and the Claude run stopped on an isolation-audit flag (a date notice the command line injected into a session
-resumed across midnight; the flagged items were retried cleanly) before its Tier H blocks. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+(4) In the frozen panel the online models ran Tier W only (Table 6): DeepSeek ran at low effort until the
+account balance ran out, and the Claude run stopped on an isolation-audit flag (a date notice the command line
+injected into a session resumed across midnight; the flagged items were retried cleanly) before its Tier H
+blocks. Claude's Tier H P3 and P4 cells were run afterwards as a labelled post-freeze supplement (amendment v2-a4;
+Appendix D); the incomplete cells are due to cost and the subscription window, not by selection. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
@@ -319,18 +349,24 @@ depth, number of forged lines); test whether a cited-row consistency tool, offer
 
 # 6. Conclusion
 
-Given a forged check that they could verify by one lookup, six open-weight models adopt it. Told to verify, some
-find the forged line, flag valid lines about as often, and frequently keep the forged answer after calling its line
-wrong. The benchmark makes this measurable
-because the answer key is exact and the forged check differs from the valid one in a single checkable line. We
-release the generator, the gates, the lock and every run.
+Who checks the check depends on the model. Given a forged check that they could verify by one lookup, two
+frontier models re-derive the cited rows and reject it; six open-weight models adopt it. Told to verify, some
+open-weight models find the forged line, flag valid lines about as often, and frequently keep the forged answer
+after calling its line wrong. Told only to commit, the frontier model gives definite verdicts on open claims and
+keeps its probabilities where they were. The benchmark makes these measurable because the answer key is exact and
+the forged check differs from the valid one in a single checkable line. Whether the frontier model still defers
+when it cannot verify (Tier H) is left to the labelled post-freeze supplement in Appendix D. We release the
+generator, the gates, the lock and every run (release `v0.8.0-sprint`).
 
 # Code and Data
 
 * Code: https://github.com/albertoHdzE/causalguard-epistemics (branch `sprint`); analysis:
   `scripts/sprint_analyze_all.sh`; report: `report/fill.py` and `report/build.sh`.
 * Data: committed manifests (`artifacts/sprint_main_manifest.json`, `artifacts/sprint_p5_manifest.json`), the
-  design lock with its addendum and amendments (`docs/SPRINT_DESIGN_LOCK.json`), raw runs in the release asset.
+  design lock with its addendum and amendments (`docs/SPRINT_DESIGN_LOCK.json`). Every sprint run record, the
+  call ledgers and the spend record are in the asset of the pre-release `v0.8.0-sprint`
+  (https://github.com/albertoHdzE/causalguard-epistemics/releases/tag/v0.8.0-sprint), with a SHA-256 manifest
+  (`artifacts/manifest_sprint.json`).
 
 # References
 
@@ -403,7 +439,13 @@ Amendment v2-a1: Claude thinking summaries flag. v2-a2: DeepSeek cap 16000 → 3
 allowed repair). v2-a3 (commit `309fb1c`, {{R/timeline/amendment_v2_a3/time}}; first resumed Claude request
 {{R/timeline/first_request/r7b-main-claude_opus_55-v2-b1}}): the Claude priority order of blocks (run order
 only; items, prompts and scores unchanged), the usage-limit pause, the Saturday 12:00 CST hard stop, the DeepSeek
-low-effort condition, the spend stop on the upper bound. Every commit is listed in `PREEXISTING_WORK.md`.
+low-effort condition, the spend stop on the upper bound. **Post-freeze supplement.** Amendment v2-a4 (commit
+`5c2b18a`, {{R/timeline/amendment_v2_a4/time}}; first supplement request
+{{R/timeline/first_request/r7b-main-claude_opus_55-v2-b4}}), written after the frozen panel and the drafted report:
+Claude's Tier H P3 and P4 cells only (lock-v1 items, prompts and scores; locked hash order; a fresh session per
+world), no turn 2 on a later local date than its turn 1, an item still in a usage-limit pause at 23:00 CST fails,
+hard stop 23:30 CST Saturday, the run stops at an isolation flag. Its outcomes are printed beside the frozen tally,
+never in it (Appendix D). Every commit is listed in `PREEXISTING_WORK.md`.
 
 **Predictions against outcomes** ({{R/predictions_summary/met|int}} met, {{R/predictions_summary/not met|int}}
 not met; a prediction whose cell has fewer than 12 finished worlds, or whose model was not run, is "not testable in
@@ -434,7 +476,33 @@ parsed and every Tier W turn parsed.*
 {{table:online}}
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
-separately. Claude's cost is the CLI's notional figure on a subscription.*
+separately. Claude's cost is the CLI's notional figure on a subscription. Claude's requests include those of the
+post-freeze supplement; its finished worlds do not.*
+
+{{table:verdict_probability}}
+
+*Table 9. Verdict and probability under a demand to commit (post-hoc descriptor, D120; Tier W). Open claims given
+a definite verdict at turn 2 of the P2 worlds, how many of those with a stated probability in both turns keep it
+within 0.05 of turn 1, and the mean absolute change; the last column is the same under the neutral P0. Claim-level
+counts, no interval. DeepSeek's P2 cell is below 12 worlds.*
+
+{{table:p5_cells}}
+
+*Table 10. Which P5 worlds enter each metric: planned, finished (not stopped by a cap, the spend stop or an
+error), and with a valid turn-2 reply (scored for detection or false alarm, and for adoption).*
+
+**Post-freeze supplement (amendment v2-a4).** Claude Opus 5.5 on the Tier H P3 and P4 cells (12 planned worlds
+each), run after the frozen panel and the drafted report. A contrast is computed only if both cells finish 12
+worlds. These outcomes are not part of the frozen tally of Appendix B.
+
+{{table:supplement}}
+
+*Table 11. Post-freeze supplement: Tier H, where no check can be verified by lookup (amendment v2-a4). \* = a
+cell below 12 finished worlds (point estimate only).*
+
+{{table:supplement_predictions}}
+
+*Table 12. The two lock-v2 predictions the supplement bears on, evaluated on Claude only (DeepSeek ran no Tier H).*
 
 Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For {{R/p5_design/forged_multi_line|int}} of
 the {{R/p5_design/forged_named_claims|int}} forged named claims the forgery alters more than one line; quoting any

@@ -1,5 +1,5 @@
 ---
-title: "Models adopt forged checks they could verify: an exact benchmark of evidence-relative reasoning under pressure"
+title: "Who checks the check? Frontier models verify forged derivations by lookup, open-weight models adopt them"
 subtitle: "Research conducted at the AI x Epistemics Research Sprint, November 2026 (Apart Research)"
 author:
   - "Alberto Hernández Espinosa — independent researcher"
@@ -9,6 +9,7 @@ fontsize: 10pt
 header-includes:
   - \usepackage{etoolbox}
   - \AtBeginEnvironment{longtable}{\footnotesize}
+  - \setlength{\tabcolsep}{3pt}
 ---
 
 <!-- SOURCE of report/report.md. Every number comes from reports/sprint_all/*.json through report/fill.py; the
@@ -21,16 +22,18 @@ defer to it? We built a benchmark where this is decidable. Each task shows a hid
 evidence rows and asks whether claims about it are settled true, settled false or not settled; two exact engines
 and a SAT solver compute the answer key. In a second turn the model receives one of five randomised follow-ups,
 including a valid check (P3) and a forged one (P4) that differs from it in a single line contradicted by a cited
-evidence row. When the wiring is given (Tier W), every line can be verified by one lookup. Six local open-weight
-models adopt the forged status on most named claims (0.860 to
+evidence row. When the wiring is given (Tier W), every line can be verified by one lookup. There, two frontier
+models reject forged checks by re-deriving the cited rows unprompted (check discernment: Claude Opus 5.5
+1.000, DeepSeek V4-Pro at low effort
+0.896), while six local open-weight models adopt the forged
+status on most named claims (0.860 to
 1.000), with check discernment near zero. A pre-registered control (P5)
-asks the model to verify every line first. Unprompted, the local models almost never check; told to verify, some
-find forged lines but flag valid lines about as often, and a small model that flags a forged line usually keeps
-its forged status anyway (qwen2.5-7b: 19 of
-20 flagged claims). Verification text and final answer come apart.
-On the same items two frontier models reject forged checks on Tier W by re-deriving the cited rows unprompted
-(check discernment: Claude Opus 5.5 1.000, DeepSeek V4-Pro at
-low effort 0.896).
+asks the model to verify every line first. Told to verify, some local models find forged lines but flag valid
+lines about as often, and a small model that flags a forged line usually keeps its forged status anyway
+(qwen2.5-7b: 19 of
+20 flagged claims): verification text and final answer come apart.
+A bare demand to commit splits Claude the other way: it gives definite verdicts on open claims but keeps every
+stated probability at its turn-1 value.
 
 # 1. Introduction
 
@@ -52,9 +55,9 @@ Our main contributions are:
    commit, valid check, forged check) are assigned by hash to disjoint worlds. Two tiers separate "cannot verify"
    (wiring hidden) from "could verify by lookup" (wiring given).
 2. **A forged-check measurement with a verify-first control.** Six local models adopt forged checks they could
-   verify. A pre-registered condition that tells them to verify shows that some can find the forged line, but
-   their flags do not separate forged from valid lines, and their answers often follow the forged check even after
-   they call its line wrong.
+   verify; two frontier models reject them by re-deriving the cited rows unprompted. Told to verify, some local
+   models find the forged line, but their flags do not separate forged from valid lines, and their answers often
+   follow the forged check even after they call its line wrong.
 3. **A pre-registered, fully disclosed run.** A design lock with predictions preceded every request. Every number
    in this report is generated from the raw runs. Predictions that failed are reported as failed.
 
@@ -125,7 +128,7 @@ its API. At the provider's default (high) reasoning effort DeepSeek did not fini
 
 **Pre-registration and analysis.** A design lock (v1, 2026-11-12) fixed items, assignments, prompts, scores,
 contrasts and predictions before the main panel. A sprint addendum (v2) fixed P5, the online caps and new
-predictions before any P5 or online request. Its three amendments are disclosed (Appendix B). The unit is the
+predictions before any P5 or online request. Its three amendments, and a fourth for a post-freeze supplement, are disclosed (Appendix B). The unit is the
 world; 95 % intervals come from 2000 cluster-bootstrap replicates over source groups; tests against zero and
 against the surface rule are Holm-adjusted within tier. Online cells are reported with the number of finished
 worlds over planned worlds; a contrast is computed only if both cells finished at least 12 worlds (pre-declared
@@ -133,39 +136,44 @@ before the online runs resumed).
 
 # 4. Results
 
-## 4.1 Forged checks are adopted (Tier W, main panel)
+## 4.1 Local models adopt forged checks; frontier models reject them (Tier W, main panel)
 
 | model | tier | n P3; P4 | P3: true adopted | P4: forged adopted | P4: corruption | check discernment |
-|---|---|---|---|---|---|---|
-| gemma-3-4b | W | 24/24; 24/24 | 0.892 [0.788, 0.979] | 0.860 [0.773, 0.938] | 0.964 [0.885, 1.000] | **0.033 [−0.101, 0.154]** |
-| gemma-3-4b | H | 12/12; 12/12 | 0.958 [0.896, 1.000] | 0.938 [0.864, 1.000] | 1.000 [1.000, 1.000] | **0.021 [−0.062, 0.104]** |
-| qwen2.5-7b | W | 24/24; 24/24 | 0.786 [0.646, 0.899] | 0.868 [0.764, 0.948] | 0.906 [0.798, 1.000] | **−0.082 [−0.237, 0.059]** |
-| qwen2.5-7b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| gemma-4-12b† | W | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| gemma-4-12b† | H | 6/6; 6/6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| mistral-small-24b | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| mistral-small-24b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| r1-distill-32b† | W | 12/12; 12/12 | 0.909 [0.800, 1.000] | 0.909 [0.795, 1.000] | 0.917 [0.800, 1.000] | **0.000 [−0.138, 0.139]** |
-| r1-distill-32b† | H | 6/6; 6/6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| llama-3.3-70b | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| llama-3.3-70b | H | 12/12; 12/12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
-| Claude Opus 5.5 | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** |
-| Claude Opus 5.5 | H | 0 finished | | | | |
-| DeepSeek V4-Pro (low)‡ | W | 24/24; 24/24 | 1.000 [1.000, 1.000] | 0.104 [0.010, 0.232] | 0.104 [0.010, 0.232] | **0.896 [0.771, 0.990]** |
-| DeepSeek V4-Pro (low)‡ | H | 0 finished | | | | |
+|----------------|---|------|--------------------|--------------------|--------------------|-----------------------|
+| gemma-3-4b | W | 24; 24 | 0.892 [0.788, 0.979] | 0.860 [0.773, 0.938] | 0.964 [0.885, 1.000] | **0.033 [−0.101, 0.154]** |
+| gemma-3-4b | H | 12; 12 | 0.958 [0.896, 1.000] | 0.938 [0.864, 1.000] | 1.000 [1.000, 1.000] | **0.021 [−0.062, 0.104]** |
+| qwen2.5-7b | W | 24; 24 | 0.786 [0.646, 0.899] | 0.868 [0.764, 0.948] | 0.906 [0.798, 1.000] | **−0.082 [−0.237, 0.059]** |
+| qwen2.5-7b | H | 12; 12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| gemma-4-12b† | W | 12; 12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| gemma-4-12b† | H | 6; 6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| mistral-small-24b | W | 24; 24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| mistral-small-24b | H | 12; 12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| r1-distill-32b† | W | 12; 12 | 0.909 [0.800, 1.000] | 0.909 [0.795, 1.000] | 0.917 [0.800, 1.000] | **0.000 [−0.138, 0.139]** |
+| r1-distill-32b† | H | 6; 6 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| llama-3.3-70b | W | 24; 24 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| llama-3.3-70b | H | 12; 12 | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** |
+| Claude Opus 5.5 | W | 24; 24 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** |
+| Claude Opus 5.5 | H | 0 | | | | |
+| DeepSeek V4-Pro (low)‡ | W | 24; 24 | 1.000 [1.000, 1.000] | 0.104 [0.010, 0.232] | 0.104 [0.010, 0.232] | **0.896 [0.771, 0.990]** |
+| DeepSeek V4-Pro (low)‡ | H | 0 | | | | |
 
 *Table 1. Task P per model and tier: share of named claims whose final verdict adopts the check's status, under
 the valid check (P3) and the forged check (P4); corruption under P4; check discernment with its 95 % interval.
-n = finished / planned worlds. \* = an incomplete cell below 12 worlds (no interval). † half panel. ‡ labelled
-condition (reasoning effort low).*
+n = finished worlds (planned per cell: 24 on Tier W, 12 on Tier H, half of each for †; an incomplete cell
+shows finished / planned). † half panel. ‡ labelled condition (reasoning effort low). An interval of zero
+width means every world had the same value; for a cell where every world scores zero, the one-sided 95 % upper
+bound on the per-world rate is 1 − 0.05^1/n^: 0.117 for n = 24 and
+0.095 for n = 30. Claude's Tier H cells are in the post-freeze supplement (Appendix D).*
 
-On Tier W every local model adopts the forged status on most named claims. llama-3.3-70b, mistral-small-24b and
+On Tier W every local model adopts the forged status on most named claims, and both frontier models reject it:
+Claude Opus 5.5 adopts the forged status on 0.000 of named claims and
+DeepSeek V4-Pro at low effort on 0.104 (§4.4). llama-3.3-70b, mistral-small-24b and
 gemma-4-12b adopt it on every named claim (1.000). Corruption, the share
 of answers that were right at turn 1 and became wrong, is between
 0.906 (qwen2.5-7b) and 1.000. Check
 discernment is indistinguishable from zero for all six (for example mistral
-0.000 [0.000, 0.000], gemma-3
-0.033 [−0.101, 0.154]). The forged line was verifiable with one lookup in a row the
+0.000 [0.000, 0.000], gemma-3
+0.033 [−0.101, 0.154]). The forged line was verifiable with one lookup in a row the
 message itself cites. The same pattern holds on Tier H, where no check can be verified by lookup.
 
 The adoption is not a baseline coincidence. Under the neutral follow-up P0, where no check is shown, the status
@@ -184,19 +192,25 @@ worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
 ## 4.2 Told to verify, local models flag lines but keep the forged answer (P5)
 
 | model | n P5v; P5f | exact detection | lenient detection | false alarm | P5f: forged adopted | P5f − P4 | verified discern. |
-|---|---|---|---|---|---|---|---|
-| gemma-3-4b | 30/30; 30/30 | 0.008 [0.000, 0.028] | 0.017 [0.000, 0.042] | 0.083 [0.000, 0.192] | 0.681 [0.549, 0.807] | −0.179 [−0.335, −0.037] | 0.119 [−0.025, 0.275] |
-| qwen2.5-7b | 30/30; 30/30 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.940 [0.889, 0.982] | 0.072 [−0.024, 0.179] | −0.029 [−0.093, 0.045] |
-| gemma-4-12b† | 30/30; 30/30 | 0.106 [0.020, 0.206] | 0.106 [0.020, 0.206] | 0.057 [0.009, 0.127] | 0.571 [0.420, 0.716] | −0.429 [−0.573, −0.289] | 0.263 [0.074, 0.450] |
-| mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
-| r1-distill-32b† | 30/30; 30/30 | 0.143 [0.067, 0.224] | 0.179 [0.095, 0.271] | 0.066 [0.013, 0.134] | 0.679 [0.562, 0.798] | −0.231 [−0.370, −0.079] | 0.238 [0.106, 0.372] |
-| llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
-| Claude Opus 5.5 | 30/30; 30/30 | 0.900 [0.781, 1.000] | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
-| DeepSeek V4-Pro (low)‡ | 29/30; 25/30 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
+|--------------|------|--------------------|--------------------|--------------------|--------------------|--------------------|--------------------|
+| gemma-3-4b | 30; 30 | 0.008 [0.000, 0.028] | 0.017 [0.000, 0.042] | 0.083 [0.000, 0.192] | 0.681 [0.549, 0.807] | −0.179 [−0.335, −0.037] | 0.119 [−0.025, 0.275] |
+| qwen2.5-7b | 30; 30 | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.940 [0.889, 0.982] | 0.072 [−0.024, 0.179] | −0.029 [−0.093, 0.045] |
+| gemma-4-12b† | 30; 30 | 0.106 [0.020, 0.206] | 0.106 [0.020, 0.206] | 0.057 [0.009, 0.127] | 0.571 [0.420, 0.716] | −0.429 [−0.573, −0.289] | 0.263 [0.074, 0.450] |
+| mistral-small-24b | 30; 30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
+| r1-distill-32b† | 30; 30 | 0.143 [0.067, 0.224] | 0.179 [0.095, 0.271] | 0.066 [0.013, 0.134] | 0.679 [0.562, 0.798] | −0.231 [−0.370, −0.079] | 0.238 [0.106, 0.372] |
+| llama-3.3-70b | 30; 30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
+| Claude Opus 5.5 | 30; 30 | 0.900 [0.781, 1.000] | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
+| DeepSeek V4-Pro (low)‡ | 29; 25 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
 
-*Table 2. P5 verify-first (Tier W, 60 worlds per model; locked scorer). Exact and lenient detection of the altered
-line in forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its difference from
-P4 (between-world); verified discernment = true-status adoption under P5v − forged adoption under P5f.*
+*Table 2. P5 verify-first (Tier W, 60 planned worlds per model; locked scorer). Exact and lenient detection of the
+altered line in forged checks (P5f); false alarm on valid checks (P5v); forged adoption under P5f and its
+difference from P4 (between-world); verified discernment = true-status adoption under P5v − forged adoption under
+P5f. n = finished worlds; a finished world enters a metric only with a valid turn-2 reply (Appendix D, Table 10:
+for DeepSeek, 23 of
+25 finished P5f and 27
+of 29 finished P5v worlds; the others stopped at the token cap or
+returned no valid reply). Zero-width intervals: see Table 1 (bound
+0.095 for n = 30).*
 
 Under the locked scorer the best local detector, mistral-small-24b, quotes the altered line in
 0.217 of forged named claims and flags valid checks at 0.200. The
@@ -210,14 +224,14 @@ its detection interval (Figure 2).
 
 | model | check_errors entries dropped by the locked parser (integer ids) | exact detection, ids accepted | false alarm, ids accepted | flagged the altered line | of those, forged status kept |
 |---|---|---|---|---|---|
-| gemma-3-4b | 86 of 99 | 0.092 [0.042, 0.152] | 0.317 [0.217, 0.429] | 15 | 13 |
-| qwen2.5-7b | 93 of 93 | 0.155 [0.073, 0.242] | 0.376 [0.245, 0.513] | 20 | 19 |
-| gemma-4-12b† | 52 of 68 | 0.330 [0.213, 0.454] | 0.273 [0.176, 0.384] | 40 | 15 |
-| mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
-| r1-distill-32b† | 0 of 38 | 0.143 [0.067, 0.224] | 0.066 [0.013, 0.134] | 19 | 3 |
-| llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
-| Claude Opus 5.5 | 0 of 132 | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 103 | 0 |
-| DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
+| gemma-3-4b | 86 of 99 | 0.092 [0.042, 0.152] | 0.317 [0.217, 0.429] | 15 | 13 |
+| qwen2.5-7b | 93 of 93 | 0.155 [0.073, 0.242] | 0.376 [0.245, 0.513] | 20 | 19 |
+| gemma-4-12b† | 52 of 68 | 0.330 [0.213, 0.454] | 0.273 [0.176, 0.384] | 40 | 15 |
+| mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
+| r1-distill-32b† | 0 of 38 | 0.143 [0.067, 0.224] | 0.066 [0.013, 0.134] | 19 | 3 |
+| llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
+| Claude Opus 5.5 | 0 of 132 | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 103 | 0 |
+| DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
 
 *Table 3. P5f, post-hoc. Entries the locked parser drops; exact detection and false alarm when integer claim ids
 are accepted; named forged claims whose altered line the reply flagged (lenient, ids accepted), and how many of
@@ -233,7 +247,7 @@ of 25 and 15
 of 40. Forgeries that alter a row's value are flagged most often;
 "no evidence row shows these inputs" where a row does is flagged least (`p5_analysis.json`). P5 lowers forged
 adoption for some models (gemma-4-12b by 0.429), but adoption of
-the valid check falls too (−0.167 [−0.311, −0.054] against P3). llama-3.3-70b is
+the valid check falls too (−0.167 [−0.311, −0.054] against P3). llama-3.3-70b is
 unmoved (1.000 forged adoption under P5f).
 
 **Reading the replies (pre-registered coding).** We read 8 hash-chosen P4 and P5f turn-2 replies per local model
@@ -274,23 +288,23 @@ squares). Lines are 95 % intervals.](../reports/sprint_all/fig3_p5.png){width=72
 ## 4.3 Task S: most local models are at the floor
 
 | model | tier | worlds | overclaim | underclaim | balanced accuracy | BA − surface rule |
-|---|---|---|---|---|---|---|
-| *surface rule (reference)* | W | | 0.600 [0.539, 0.664] | 0.226 [0.189, 0.268] | 0.540 [0.507, 0.572] | |
-| gemma-3-4b | W | 120/120 | 0.881 [0.832, 0.930] | 0.094 [0.054, 0.143] | 0.345 [0.318, 0.372] | −0.194 [−0.236, −0.152] |
-| qwen2.5-7b | W | 120/120 | 0.514 [0.423, 0.600] | 0.446 [0.362, 0.534] | 0.353 [0.317, 0.388] | −0.187 [−0.232, −0.141] |
-| gemma-4-12b† | W | 60/60 | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.343 [0.302, 0.386] | −0.218 [−0.272, −0.158] |
-| mistral-small-24b | W | 120/120 | 0.126 [0.077, 0.181] | 0.841 [0.786, 0.891] | 0.345 [0.320, 0.370] | −0.195 [−0.235, −0.152] |
-| r1-distill-32b† | W | 60/60 | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.462 [0.410, 0.513] | −0.099 [−0.166, −0.032] |
-| llama-3.3-70b | W | 120/120 | 0.129 [0.082, 0.179] | 0.845 [0.801, 0.885] | 0.353 [0.333, 0.374] | −0.187 [−0.220, −0.151] |
-| Claude Opus 5.5 | W | 120/120 | 0.022 [0.000, 0.052] | 0.001 [0.000, 0.003] | 0.992 [0.984, 0.998] | 0.452 [0.420, 0.484] |
-| DeepSeek V4-Pro (low)‡ | W | 52/120 | 0.021 [0.000, 0.067] | 0.022 [0.000, 0.068] | 0.995 [0.988, 1.000] | 0.428 [0.381, 0.474] |
-| *surface rule (reference)* | H | | 0.537 [0.442, 0.635] | 0.137 [0.042, 0.248] | 0.548 [0.475, 0.639] | |
-| gemma-3-4b | H | 60/60 | 0.641 [0.548, 0.737] | 0.317 [0.196, 0.437] | 0.343 [0.283, 0.405] | −0.247 [−0.337, −0.153] |
-| qwen2.5-7b | H | 60/60 | 0.421 [0.308, 0.540] | 0.541 [0.405, 0.679] | 0.388 [0.328, 0.448] | −0.202 [−0.288, −0.118] |
-| gemma-4-12b† | H | 30/30 | 0.108 [0.023, 0.219] | 0.823 [0.664, 0.950] | 0.403 [0.335, 0.472] | −0.145 [−0.270, −0.045] |
-| mistral-small-24b | H | 60/60 | 0.117 [0.052, 0.192] | 0.836 [0.726, 0.931] | 0.348 [0.317, 0.385] | −0.242 [−0.304, −0.180] |
-| r1-distill-32b† | H | 30/30 | 0.184 [0.101, 0.283] | 0.828 [0.682, 0.946] | 0.334 [0.274, 0.392] | −0.214 [−0.338, −0.110] |
-| llama-3.3-70b | H | 60/60 | 0.145 [0.088, 0.207] | 0.880 [0.803, 0.948] | 0.335 [0.306, 0.366] | −0.255 [−0.335, −0.174] |
+|------------------|---|-------|--------------------|--------------------|--------------------|--------------------|
+| *surface rule (reference)* | W | | 0.600 [0.539, 0.664] | 0.226 [0.189, 0.268] | 0.540 [0.507, 0.572] | |
+| gemma-3-4b | W | 120/120 | 0.881 [0.832, 0.930] | 0.094 [0.054, 0.143] | 0.345 [0.318, 0.372] | −0.194 [−0.236, −0.152] |
+| qwen2.5-7b | W | 120/120 | 0.514 [0.423, 0.600] | 0.446 [0.362, 0.534] | 0.353 [0.317, 0.388] | −0.187 [−0.232, −0.141] |
+| gemma-4-12b† | W | 60/60 | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.343 [0.302, 0.386] | −0.218 [−0.272, −0.158] |
+| mistral-small-24b | W | 120/120 | 0.126 [0.077, 0.181] | 0.841 [0.786, 0.891] | 0.345 [0.320, 0.370] | −0.195 [−0.235, −0.152] |
+| r1-distill-32b† | W | 60/60 | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.462 [0.410, 0.513] | −0.099 [−0.166, −0.032] |
+| llama-3.3-70b | W | 120/120 | 0.129 [0.082, 0.179] | 0.845 [0.801, 0.885] | 0.353 [0.333, 0.374] | −0.187 [−0.220, −0.151] |
+| Claude Opus 5.5 | W | 120/120 | 0.022 [0.000, 0.052] | 0.001 [0.000, 0.003] | 0.992 [0.984, 0.998] | 0.452 [0.420, 0.484] |
+| DeepSeek V4-Pro (low)‡ | W | 52/120 | 0.021 [0.000, 0.067] | 0.022 [0.000, 0.068] | 0.995 [0.988, 1.000] | 0.428 [0.381, 0.474] |
+| *surface rule (reference)* | H | | 0.537 [0.442, 0.635] | 0.137 [0.042, 0.248] | 0.548 [0.475, 0.639] | |
+| gemma-3-4b | H | 60/60 | 0.641 [0.548, 0.737] | 0.317 [0.196, 0.437] | 0.343 [0.283, 0.405] | −0.247 [−0.337, −0.153] |
+| qwen2.5-7b | H | 60/60 | 0.421 [0.308, 0.540] | 0.541 [0.405, 0.679] | 0.388 [0.328, 0.448] | −0.202 [−0.288, −0.118] |
+| gemma-4-12b† | H | 30/30 | 0.108 [0.023, 0.219] | 0.823 [0.664, 0.950] | 0.403 [0.335, 0.472] | −0.145 [−0.270, −0.045] |
+| mistral-small-24b | H | 60/60 | 0.117 [0.052, 0.192] | 0.836 [0.726, 0.931] | 0.348 [0.317, 0.385] | −0.242 [−0.304, −0.180] |
+| r1-distill-32b† | H | 30/30 | 0.184 [0.101, 0.283] | 0.828 [0.682, 0.946] | 0.334 [0.274, 0.392] | −0.214 [−0.338, −0.110] |
+| llama-3.3-70b | H | 60/60 | 0.145 [0.088, 0.207] | 0.880 [0.803, 0.948] | 0.335 [0.306, 0.366] | −0.255 [−0.335, −0.174] |
 
 *Table 5. Task S (turn 1) per model and tier, with the surface rule fitted on non-panel worlds as the reference.*
 
@@ -298,16 +312,14 @@ Without pressure, five of the six local models are at the floor of Task S on Tie
 balanced accuracy does not exceed that of answering "not settled" everywhere (post-hoc rule, Appendix B). They err in opposite directions: gemma-3-4b gives a definite
 verdict on 0.881 of open claims; llama-3.3-70b answers "not settled" on
 0.845 of settled ones (Figure 3). Only r1-distill is off the floor on Tier W
-(0.462 [0.410, 0.513]), and it too has zero check discernment
-(0.000 [−0.138, 0.139]). A model that cannot trace a claim itself cannot be
+(0.462 [0.410, 0.513]), and it too has zero check discernment
+(0.000 [−0.138, 0.139]). A model that cannot trace a claim itself cannot be
 expected to catch a forged trace; r1 could do better than the floor, and still did not.
 
 ![Task S: overclaim (orange squares) and underclaim (blue circles) per model and tier; the surface rule
 is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/fig2_task_s.png){width=100%}
 
 ## 4.4 Frontier models under the benchmark's cost
-
-<!-- SAT (after the 12:00 freeze): prose on what Claude did, from the filled tables only. -->
 
 **DeepSeek at high effort does not finish.** (Appendix D, Table 7.)
 
@@ -330,13 +342,27 @@ Its thinking summaries say the same. Told to verify (P5), it quotes the altered 
 (0.000), and DeepSeek in 0.957 (false alarm
 0.000): verified discernment 1.000 and
 1.000. Pressure without evidence is a different matter. Claude never yields to
-an empty disagreement (P1 capitulation 0.000), but a demand to commit
-(P2) makes it give a definite verdict on 0.682 of open claims: the
-frontier model resists forged evidence and still overclaims on request. Tier H, where no check can be verified by
-lookup, was not reached by either online model (Appendix D), so P-D5 is not testable in this run.
+an empty disagreement (P1 capitulation 0.000). A demand to commit
+(P2) makes it give a definite verdict on 0.682 of open claims, while its
+stated probabilities stay at their turn-1 values
+(67 of
+67 definite verdicts within 0.05; mean
+absolute change 0.000) and the prose says the claims are open:
+"I can give a definite verdict for every claim, but only c2 is actually settled by the evidence. The other seven are
+best guesses … the probabilities below are unchanged." (`main|synthetic|uniform_H|19|`). The verdict field follows
+the instruction; the probability does not (post-hoc descriptor, D120; Appendix D, Table 9). Most local models move
+both: llama-3.3-70b keeps the probability on 9 of
+98 such verdicts, mistral-small-24b on
+7 of
+62; qwen2.5-7b keeps it on
+61 of
+86. Tier H, where no check can be verified
+by lookup, was not reached by either online model in the frozen panel, so P-D5 is not testable in this run. A
+post-freeze supplement (amendment v2-a4, run after the report text was drafted) runs Claude's Tier H P3 and P4
+cells; it is reported in Appendix D only, and nothing in this section depends on it.
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
-most forged checks (check discernment 0.896 [0.771, 0.990]). Its stored reasoning
+most forged checks (check discernment 0.896 [0.771, 0.990]). Its stored reasoning
 shows how. In 7 of 8 coded P4 replies it rebuilds the cited lookups and names the misread row ("checker says row #01
 shows F3 -> 1. That is definitely misreading", `main|published|published|20|`). The exceptions are the instructive
 ones. In one, it never checks: "We should trust checker if it's correct. Let's double-check each claim manually
@@ -357,7 +383,9 @@ also flags valid lines, and the final answer often follows the forged check even
 model has just called wrong. This separates explanations that sycophancy measurements cannot: the failure is not
 that checking is impossible (Tier W makes it a lookup), nor that the instruction is ignored (under P5 the models
 check line by line). The model's own check does not govern its answer. For agentic pipelines in which one model's intermediate result is another's input,
-a single forged step is enough.
+a single forged step is enough. Under a bare demand to commit, the split runs the other way for the frontier model:
+its verdict follows the instruction and its probability does not, whereas the local models' answer follows the check
+and their verification text does not. In both cases one field of the reply cannot be read without the other.
 
 **The exact check as a remedy.** Inside the declared class, the same exact engine that labels the items can gate
 a model's released verdicts. A settled verdict that the checker contradicts is released as "not settled". This
@@ -368,9 +396,11 @@ certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
 reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
 failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
-(4) The online models ran Tier W only (Table 6): DeepSeek ran at low effort until the account balance ran out,
-and the Claude run stopped on an isolation-audit flag (a date notice the command line injected into a session
-resumed across midnight; the flagged items were retried cleanly) before its Tier H blocks. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+(4) In the frozen panel the online models ran Tier W only (Table 6): DeepSeek ran at low effort until the
+account balance ran out, and the Claude run stopped on an isolation-audit flag (a date notice the command line
+injected into a session resumed across midnight; the flagged items were retried cleanly) before its Tier H
+blocks. Claude's Tier H P3 and P4 cells were run afterwards as a labelled post-freeze supplement (amendment v2-a4;
+Appendix D); the incomplete cells are due to cost and the subscription window, not by selection. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
@@ -380,18 +410,24 @@ depth, number of forged lines); test whether a cited-row consistency tool, offer
 
 # 6. Conclusion
 
-Given a forged check that they could verify by one lookup, six open-weight models adopt it. Told to verify, some
-find the forged line, flag valid lines about as often, and frequently keep the forged answer after calling its line
-wrong. The benchmark makes this measurable
-because the answer key is exact and the forged check differs from the valid one in a single checkable line. We
-release the generator, the gates, the lock and every run.
+Who checks the check depends on the model. Given a forged check that they could verify by one lookup, two
+frontier models re-derive the cited rows and reject it; six open-weight models adopt it. Told to verify, some
+open-weight models find the forged line, flag valid lines about as often, and frequently keep the forged answer
+after calling its line wrong. Told only to commit, the frontier model gives definite verdicts on open claims and
+keeps its probabilities where they were. The benchmark makes these measurable because the answer key is exact and
+the forged check differs from the valid one in a single checkable line. Whether the frontier model still defers
+when it cannot verify (Tier H) is left to the labelled post-freeze supplement in Appendix D. We release the
+generator, the gates, the lock and every run (release `v0.8.0-sprint`).
 
 # Code and Data
 
 * Code: https://github.com/albertoHdzE/causalguard-epistemics (branch `sprint`); analysis:
   `scripts/sprint_analyze_all.sh`; report: `report/fill.py` and `report/build.sh`.
 * Data: committed manifests (`artifacts/sprint_main_manifest.json`, `artifacts/sprint_p5_manifest.json`), the
-  design lock with its addendum and amendments (`docs/SPRINT_DESIGN_LOCK.json`), raw runs in the release asset.
+  design lock with its addendum and amendments (`docs/SPRINT_DESIGN_LOCK.json`). Every sprint run record, the
+  call ledgers and the spend record are in the asset of the pre-release `v0.8.0-sprint`
+  (https://github.com/albertoHdzE/causalguard-epistemics/releases/tag/v0.8.0-sprint), with a SHA-256 manifest
+  (`artifacts/manifest_sprint.json`).
 
 # References
 
@@ -464,7 +500,13 @@ Amendment v2-a1: Claude thinking summaries flag. v2-a2: DeepSeek cap 16000 → 3
 allowed repair). v2-a3 (commit `309fb1c`, 2026-11-13T14:35:24-06:00; first resumed Claude request
 2026-11-13T20:35:49Z): the Claude priority order of blocks (run order
 only; items, prompts and scores unchanged), the usage-limit pause, the Saturday 12:00 CST hard stop, the DeepSeek
-low-effort condition, the spend stop on the upper bound. Every commit is listed in `PREEXISTING_WORK.md`.
+low-effort condition, the spend stop on the upper bound. **Post-freeze supplement.** Amendment v2-a4 (commit
+`5c2b18a`, 2026-11-14T11:34:42-06:00; first supplement request
+2026-11-14T17:34:51Z), written after the frozen panel and the drafted report:
+Claude's Tier H P3 and P4 cells only (lock-v1 items, prompts and scores; locked hash order; a fresh session per
+world), no turn 2 on a later local date than its turn 1, an item still in a usage-limit pause at 23:00 CST fails,
+hard stop 23:30 CST Saturday, the run stops at an isolation flag. Its outcomes are printed beside the frozen tally,
+never in it (Appendix D). Every commit is listed in `PREEXISTING_WORK.md`.
 
 **Predictions against outcomes** (12 met, 5
 not met; a prediction whose cell has fewer than 12 finished worlds, or whose model was not run, is "not testable in
@@ -524,11 +566,60 @@ parsed and every Tier W turn parsed.*
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 554 | 179 | 120/180 / 60/60 | $34.76 (notional, subscription) |
+| Claude Opus 5.5 | 559 | 179 | 120/180 / 60/60 | $36.11 (notional, subscription) |
 | DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
-separately. Claude's cost is the CLI's notional figure on a subscription.*
+separately. Claude's cost is the CLI's notional figure on a subscription. Claude's requests include those of the
+post-freeze supplement; its finished worlds do not.*
+
+| model | P2 worlds | open claims given a definite verdict (P2) | probability within 0.05 of turn 1 | mean abs. change | P0 reference: definite / kept |
+|----------------------|------|--------------|------------------|----------|----------------|
+| gemma-3-4b | 24 | 88 of 89 | 44 of 52 | 0.036 | 61 / 49 |
+| qwen2.5-7b | 24 | 86 of 98 | 61 of 86 | 0.145 | 21 / 21 |
+| gemma-4-12b† | 12 | 23 of 30 | 4 of 23 | 0.413 | 7 / 7 |
+| mistral-small-24b | 24 | 93 of 98 | 7 of 62 | 0.444 | 11 / 11 |
+| r1-distill-32b† | 12 | 25 of 38 | 4 of 24 | 0.417 | 6 / 6 |
+| llama-3.3-70b | 24 | 98 of 98 | 9 of 98 | 0.454 | 27 / 9 |
+| Claude Opus 5.5 | 24 | 67 of 98 | 67 of 67 | 0.000 | 0 / 0 |
+| DeepSeek V4-Pro (low)‡ | 2 | 7 of 7 | 7 of 7 | 0.000 | 0 / 0 |
+
+*Table 9. Verdict and probability under a demand to commit (post-hoc descriptor, D120; Tier W). Open claims given
+a definite verdict at turn 2 of the P2 worlds, how many of those with a stated probability in both turns keep it
+within 0.05 of turn 1, and the mean absolute change; the last column is the same under the neutral P0. Claim-level
+counts, no interval. DeepSeek's P2 cell is below 12 worlds.*
+
+| model | P5v: planned / finished / valid turn 2 = in false alarm and adoption | P5f: planned / finished / valid turn 2 = in detection and adoption | turn 2 stopped at the token cap (P5v; P5f) |
+|----------------------|--------------------------|--------------------------|----------------|
+| gemma-3-4b | 30 / 30 / 30 | 30 / 30 / 30 | 0; 0 |
+| qwen2.5-7b | 30 / 30 / 29 | 30 / 30 / 29 | 0; 0 |
+| gemma-4-12b† | 30 / 30 / 25 | 30 / 30 / 26 | 18; 23 |
+| mistral-small-24b | 30 / 30 / 30 | 30 / 30 / 30 | 0; 0 |
+| r1-distill-32b† | 30 / 30 / 29 | 30 / 30 / 28 | 9; 9 |
+| llama-3.3-70b | 30 / 30 / 30 | 30 / 30 / 30 | 0; 0 |
+| Claude Opus 5.5 | 30 / 30 / 30 | 30 / 30 / 30 | 0; 0 |
+| DeepSeek V4-Pro (low)‡ | 30 / 29 / 27 | 30 / 25 / 23 | 2; 3 |
+
+*Table 10. Which P5 worlds enter each metric: planned, finished (not stopped by a cap, the spend stop or an
+error), and with a valid turn-2 reply (scored for detection or false alarm, and for adoption).*
+
+**Post-freeze supplement (amendment v2-a4).** Claude Opus 5.5 on the Tier H P3 and P4 cells (12 planned worlds
+each), run after the frozen panel and the drafted report. A contrast is computed only if both cells finish 12
+worlds. These outcomes are not part of the frozen tally of Appendix B.
+
+| post-freeze supplement (v2-a4) | n P3; P4 (finished / 12) | P3: true adopted | P4: forged adopted | P4: corruption | check discernment | Task S balanced accuracy |
+|------------------|------------|--------------|--------------|--------------|------------------|----------------|
+| Claude Opus 5.5, Tier H | 0; 1 | – | 0.000* | 0.000* | not testable (n P3 0, n P4 1) | 1.000 [1.000, 1.000] |
+
+*Table 11. Post-freeze supplement: Tier H, where no check can be verified by lookup (amendment v2-a4). \* = a
+cell below 12 finished worlds (point estimate only).*
+
+| prediction (lock v2) | scope | rule | supplement outcome |
+|---|---|---|---|
+| P-D5 | Claude only (DeepSeek ran no Tier H) | Claude: Tier H check discernment < 0.15 | **not testable in this run** |
+| P-A5 | Claude only (DeepSeek ran no Tier H) | Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the P3 + P4 worlds) | **not testable in this run** |
+
+*Table 12. The two lock-v2 predictions the supplement bears on, evaluated on Claude only (DeepSeek ran no Tier H).*
 
 Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For 1 of
 the 115 forged named claims the forgery alters more than one line; quoting any

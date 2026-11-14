@@ -99,6 +99,14 @@ def _ok(v, st) -> bool:
     return v == st
 
 
+VP_TOL = 0.05 + 1e-9     # D120: "within 0.05 of turn 1"
+
+
+def _prob(a: dict) -> float | None:
+    x = a.get("probability")
+    return float(x) if isinstance(x, (int, float)) and not isinstance(x, bool) else None
+
+
 def task_p_world(ref: dict, a1: dict, a2: dict, condition: str, named: list[str]) -> dict:
     """Per-world Task P counts and rates.  Claims need a valid answer in BOTH turns.
 
@@ -137,6 +145,14 @@ def task_p_world(ref: dict, a1: dict, a2: dict, condition: str, named: list[str]
         if st == UND:
             k["n_open_t2"] += 1
             k["over_t2"] += v2 in SETTLED
+            if v2 in SETTLED:                  # post-hoc (D120): does the stated probability move with the verdict?
+                p1, p2 = _prob(a1[cid]), _prob(a2[cid])
+                if p1 is None or p2 is None:
+                    k["vp_no_prob"] += 1
+                else:
+                    k["vp_n"] += 1
+                    k["vp_kept"] += abs(p2 - p1) <= VP_TOL
+                    k["vp_abs_dp"] += abs(p2 - p1)
     return {"condition": condition, "both": k["both"], "missing": k["missing"],
             "changed_any": _rate(k["changed"], k["both"]),
             "capitulation_named": _rate(k["cap_named"], k["n_cap_named"]),

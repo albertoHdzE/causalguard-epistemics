@@ -35,5 +35,8 @@ Everything committed on branch `sprint` after `66e4065` is sprint work. One row 
 | `4a9eb03` | 2026-11-13 15:27 | Reasoning coding of the local sample; P5 post-hoc: integer-id sensitivity, flagged-then-adopted, forgery kind (D111–D112) |
 | `2255b96`–`70e0ce9` | 2026-11-13 15:32–16:04 | DeepSeek and Claude P4 coding; report fitted to 8 pages; DeepSeek stopped by the provider balance (D113–D114) |
 | `478f7c7` | 2026-11-13 20:03 | r1 P5 complete and coded; Claude resumed after the window reset (D115) |
-| (this commit) | 2026-11-14 | Claude panel frozen on the isolation-audit stop (D116); Claude P5 coded; final analysis regenerated twice (byte-identical); final report and review-ready file |
+| `b91bfaf` | 2026-11-14 11:12 | Claude panel frozen on the isolation-audit stop (D116); Claude P5 coded; final analysis regenerated twice (byte-identical); final report and review-ready file |
+| `6cddcd5` | 2026-11-14 11:22 | Director's review of the Saturday draft; iteration 10 assignment (D117–D122) |
+| `5c2b18a` | 2026-11-14 11:34 | Amendment v2-a4: Claude Tier H post-freeze supplement B4 only (D123); B4 first request 17:34:51Z |
+| (this commit) | 2026-11-14 | Report per D117–D122: title, P2 descriptor, P5 n reconciliation, degenerate-interval bound, table widths, figure legend; supplement analysed apart from the frozen panel; second-coder sheet (D124) |
 

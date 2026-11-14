@@ -129,6 +129,18 @@ def model_p5(ws: list[dict], main_w: list[dict] | None, B: int, main_planned: di
                       "with_reasoning": sum(w["reasoning_chars"] > 0 for w in ws),
                       "p5f_messages_with_contradiction": sum(bool(w["contradiction"]) for w in ws),
                       "p5f_worlds": sum(w["condition"] == "P5f" for w in ws)}}
+    # R8 (iteration 10): which worlds enter each P5 metric, per cell (planned -> finished -> parsed turn 2 -> valid
+    # P5 object -> scored): detection/false alarm need a valid P5 object, adoption a valid turn-2 answer
+    res["health_by_cell"] = {c: {"planned": sum(w["condition"] == c for w in ws),
+                                 "finished": sum(w["condition"] == c and w["status"] == "ok" for w in ws),
+                                 "parsed_t2": sum(w["condition"] == c and bool(w["parsed_t2"]) for w in ws),
+                                 "truncated": sum(w["condition"] == c and bool(w["truncated"]) for w in ws),
+                                 "valid_p5_object": sum(w["condition"] == c and bool(w["D"]["valid"]) for w in ws),
+                                 "in_detection": sum(w["condition"] == c and bool(w["D"]["valid"]) and (w["D"].get(
+                                     "exact" if c == "P5f" else "false_alarm") is not None) for w in ws),
+                                 "in_adoption": sum(w["condition"] == c and (w.get("C") or {}).get(
+                                     "adopt_forged" if c == "P5f" else "adopt_check") is not None for w in ws)}
+                             for c in ("P5v", "P5f")}
     res["exact"] = S.bootstrap(ws, _d_mean("exact", "P5f"), B=B)
     res["lenient"] = S.bootstrap(ws, _d_mean("lenient", "P5f"), B=B)
     res["false_alarm"] = S.bootstrap(ws, _d_mean("false_alarm", "P5v"), B=B)

@@ -168,6 +168,26 @@
     "with_reasoning": 60,
     "worlds": 60
    },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    }
+   },
    "lenient": {
     "B": 2000,
     "est": 0.9,
@@ -3500,6 +3520,26 @@
     "with_reasoning": 60,
     "worlds": 60
    },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 28,
+     "in_detection": 28,
+     "parsed_t2": 28,
+     "planned": 30,
+     "truncated": 9,
+     "valid_p5_object": 28
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 29,
+     "in_detection": 29,
+     "parsed_t2": 29,
+     "planned": 30,
+     "truncated": 9,
+     "valid_p5_object": 29
+    }
+   },
    "lenient": {
     "B": 2000,
     "est": 0.1786,
@@ -6781,6 +6821,26 @@
     "with_reasoning": 54,
     "worlds": 60
    },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 25,
+     "in_adoption": 23,
+     "in_detection": 23,
+     "parsed_t2": 23,
+     "planned": 30,
+     "truncated": 3,
+     "valid_p5_object": 23
+    },
+    "P5v": {
+     "finished": 29,
+     "in_adoption": 27,
+     "in_detection": 27,
+     "parsed_t2": 27,
+     "planned": 30,
+     "truncated": 2,
+     "valid_p5_object": 27
+    }
+   },
    "lenient": {
     "B": 2000,
     "est": 0.9565,
@@ -9773,6 +9833,26 @@
     "valid_p5_object": 51,
     "with_reasoning": 0,
     "worlds": 60
+   },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 26,
+     "in_detection": 26,
+     "parsed_t2": 26,
+     "planned": 30,
+     "truncated": 23,
+     "valid_p5_object": 26
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 25,
+     "in_detection": 25,
+     "parsed_t2": 25,
+     "planned": 30,
+     "truncated": 18,
+     "valid_p5_object": 25
+    }
    },
    "lenient": {
     "B": 2000,
@@ -12967,6 +13047,26 @@
     "valid_p5_object": 60,
     "with_reasoning": 0,
     "worlds": 60
+   },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    }
    },
    "lenient": {
     "B": 2000,
@@ -16315,6 +16415,26 @@
     "with_reasoning": 0,
     "worlds": 60
    },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    }
+   },
    "lenient": {
     "B": 2000,
     "est": 0.0583,
@@ -19647,6 +19767,26 @@
     "with_reasoning": 0,
     "worlds": 60
    },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 30,
+     "in_detection": 30,
+     "parsed_t2": 30,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 30
+    }
+   },
    "lenient": {
     "B": 2000,
     "est": 0.2167,
@@ -22978,6 +23118,26 @@
     "valid_p5_object": 58,
     "with_reasoning": 0,
     "worlds": 60
+   },
+   "health_by_cell": {
+    "P5f": {
+     "finished": 30,
+     "in_adoption": 29,
+     "in_detection": 29,
+     "parsed_t2": 29,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 29
+    },
+    "P5v": {
+     "finished": 30,
+     "in_adoption": 29,
+     "in_detection": 29,
+     "parsed_t2": 29,
+     "planned": 30,
+     "truncated": 0,
+     "valid_p5_object": 29
+    }
    },
    "lenient": {
     "B": 2000,

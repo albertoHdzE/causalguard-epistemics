@@ -937,6 +937,28 @@
         "se": 0.0199
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 0,
+       "mean_abs_dp": null,
+       "open_claims": 74,
+       "probability_kept": 0,
+       "share_kept": null,
+       "with_both_probabilities": 0,
+       "without_probability": 0,
+       "worlds": 24
+      },
+      "P2": {
+       "definite_on_open": 67,
+       "mean_abs_dp": 0.0,
+       "open_claims": 98,
+       "probability_kept": 67,
+       "share_kept": 1.0,
+       "with_both_probabilities": 67,
+       "without_probability": 0,
+       "worlds": 24
+      }
      }
     }
    }
@@ -1855,6 +1877,28 @@
         "se": 0.0521
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 13,
+       "mean_abs_dp": 0.0385,
+       "open_claims": 32,
+       "probability_kept": 12,
+       "share_kept": 0.9231,
+       "with_both_probabilities": 13,
+       "without_probability": 0,
+       "worlds": 6
+      },
+      "P2": {
+       "definite_on_open": 24,
+       "mean_abs_dp": 0.31,
+       "open_claims": 32,
+       "probability_kept": 5,
+       "share_kept": 0.25,
+       "with_both_probabilities": 20,
+       "without_probability": 4,
+       "worlds": 6
+      }
      }
     },
     "W": {
@@ -2636,6 +2680,28 @@
         "lo": 0.1489,
         "se": 0.0251
        }
+      }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 6,
+       "mean_abs_dp": 0.0,
+       "open_claims": 35,
+       "probability_kept": 6,
+       "share_kept": 1.0,
+       "with_both_probabilities": 6,
+       "without_probability": 0,
+       "worlds": 12
+      },
+      "P2": {
+       "definite_on_open": 25,
+       "mean_abs_dp": 0.4167,
+       "open_claims": 38,
+       "probability_kept": 4,
+       "share_kept": 0.1667,
+       "with_both_probabilities": 24,
+       "without_probability": 1,
+       "worlds": 12
       }
      }
     }
@@ -3555,6 +3621,28 @@
         "se": 0.0308
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 0,
+       "mean_abs_dp": null,
+       "open_claims": 5,
+       "probability_kept": 0,
+       "share_kept": null,
+       "with_both_probabilities": 0,
+       "without_probability": 0,
+       "worlds": 1
+      },
+      "P2": {
+       "definite_on_open": 7,
+       "mean_abs_dp": 0.0,
+       "open_claims": 7,
+       "probability_kept": 7,
+       "share_kept": 1.0,
+       "with_both_probabilities": 7,
+       "without_probability": 0,
+       "worlds": 2
+      }
      }
     }
    }
@@ -4473,6 +4561,28 @@
         "se": 0.0521
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 2,
+       "mean_abs_dp": 0.0,
+       "open_claims": 32,
+       "probability_kept": 2,
+       "share_kept": 1.0,
+       "with_both_probabilities": 2,
+       "without_probability": 0,
+       "worlds": 6
+      },
+      "P2": {
+       "definite_on_open": 32,
+       "mean_abs_dp": 0.4688,
+       "open_claims": 32,
+       "probability_kept": 2,
+       "share_kept": 0.0625,
+       "with_both_probabilities": 32,
+       "without_probability": 0,
+       "worlds": 6
+      }
      }
     },
     "W": {
@@ -5251,6 +5361,28 @@
         "lo": 0.1489,
         "se": 0.0251
        }
+      }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 7,
+       "mean_abs_dp": 0.0,
+       "open_claims": 30,
+       "probability_kept": 7,
+       "share_kept": 1.0,
+       "with_both_probabilities": 7,
+       "without_probability": 0,
+       "worlds": 12
+      },
+      "P2": {
+       "definite_on_open": 23,
+       "mean_abs_dp": 0.413,
+       "open_claims": 30,
+       "probability_kept": 4,
+       "share_kept": 0.1739,
+       "with_both_probabilities": 23,
+       "without_probability": 0,
+       "worlds": 12
       }
      }
     }
@@ -6170,6 +6302,28 @@
         "se": 0.034
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 42,
+       "mean_abs_dp": 0.1107,
+       "open_claims": 60,
+       "probability_kept": 25,
+       "share_kept": 0.5952,
+       "with_both_probabilities": 42,
+       "without_probability": 0,
+       "worlds": 12
+      },
+      "P2": {
+       "definite_on_open": 55,
+       "mean_abs_dp": 0.1651,
+       "open_claims": 55,
+       "probability_kept": 18,
+       "share_kept": 0.383,
+       "with_both_probabilities": 47,
+       "without_probability": 8,
+       "worlds": 12
+      }
      }
     },
     "W": {
@@ -6951,6 +7105,28 @@
         "lo": 0.1892,
         "se": 0.0199
        }
+      }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 61,
+       "mean_abs_dp": 0.0584,
+       "open_claims": 73,
+       "probability_kept": 49,
+       "share_kept": 0.8033,
+       "with_both_probabilities": 61,
+       "without_probability": 0,
+       "worlds": 24
+      },
+      "P2": {
+       "definite_on_open": 88,
+       "mean_abs_dp": 0.0356,
+       "open_claims": 89,
+       "probability_kept": 44,
+       "share_kept": 0.8462,
+       "with_both_probabilities": 52,
+       "without_probability": 36,
+       "worlds": 24
       }
      }
     }
@@ -7870,6 +8046,28 @@
         "se": 0.034
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 23,
+       "mean_abs_dp": 0.2304,
+       "open_claims": 60,
+       "probability_kept": 10,
+       "share_kept": 0.4348,
+       "with_both_probabilities": 23,
+       "without_probability": 0,
+       "worlds": 12
+      },
+      "P2": {
+       "definite_on_open": 62,
+       "mean_abs_dp": 0.4194,
+       "open_claims": 62,
+       "probability_kept": 10,
+       "share_kept": 0.1613,
+       "with_both_probabilities": 62,
+       "without_probability": 0,
+       "worlds": 12
+      }
      }
     },
     "W": {
@@ -8651,6 +8849,28 @@
         "lo": 0.1892,
         "se": 0.0199
        }
+      }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 27,
+       "mean_abs_dp": 0.3333,
+       "open_claims": 74,
+       "probability_kept": 9,
+       "share_kept": 0.3333,
+       "with_both_probabilities": 27,
+       "without_probability": 0,
+       "worlds": 24
+      },
+      "P2": {
+       "definite_on_open": 98,
+       "mean_abs_dp": 0.4541,
+       "open_claims": 98,
+       "probability_kept": 9,
+       "share_kept": 0.0918,
+       "with_both_probabilities": 98,
+       "without_probability": 0,
+       "worlds": 24
       }
      }
     }
@@ -9570,6 +9790,28 @@
         "se": 0.034
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 8,
+       "mean_abs_dp": 0.0,
+       "open_claims": 60,
+       "probability_kept": 8,
+       "share_kept": 1.0,
+       "with_both_probabilities": 8,
+       "without_probability": 0,
+       "worlds": 12
+      },
+      "P2": {
+       "definite_on_open": 44,
+       "mean_abs_dp": 0.4146,
+       "open_claims": 62,
+       "probability_kept": 7,
+       "share_kept": 0.1707,
+       "with_both_probabilities": 41,
+       "without_probability": 3,
+       "worlds": 12
+      }
      }
     },
     "W": {
@@ -10351,6 +10593,28 @@
         "lo": 0.1892,
         "se": 0.0199
        }
+      }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 11,
+       "mean_abs_dp": 0.0,
+       "open_claims": 74,
+       "probability_kept": 11,
+       "share_kept": 1.0,
+       "with_both_probabilities": 11,
+       "without_probability": 0,
+       "worlds": 24
+      },
+      "P2": {
+       "definite_on_open": 93,
+       "mean_abs_dp": 0.4435,
+       "open_claims": 98,
+       "probability_kept": 7,
+       "share_kept": 0.1129,
+       "with_both_probabilities": 62,
+       "without_probability": 31,
+       "worlds": 24
       }
      }
     }
@@ -11270,6 +11534,28 @@
         "se": 0.034
        }
       }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 24,
+       "mean_abs_dp": 0.0,
+       "open_claims": 60,
+       "probability_kept": 24,
+       "share_kept": 1.0,
+       "with_both_probabilities": 24,
+       "without_probability": 0,
+       "worlds": 12
+      },
+      "P2": {
+       "definite_on_open": 26,
+       "mean_abs_dp": 0.0962,
+       "open_claims": 62,
+       "probability_kept": 21,
+       "share_kept": 0.8077,
+       "with_both_probabilities": 26,
+       "without_probability": 0,
+       "worlds": 12
+      }
      }
     },
     "W": {
@@ -12051,6 +12337,28 @@
         "lo": 0.1892,
         "se": 0.0199
        }
+      }
+     },
+     "verdict_probability": {
+      "P0": {
+       "definite_on_open": 21,
+       "mean_abs_dp": 0.0,
+       "open_claims": 74,
+       "probability_kept": 21,
+       "share_kept": 1.0,
+       "with_both_probabilities": 21,
+       "without_probability": 0,
+       "worlds": 24
+      },
+      "P2": {
+       "definite_on_open": 86,
+       "mean_abs_dp": 0.1453,
+       "open_claims": 98,
+       "probability_kept": 61,
+       "share_kept": 0.7093,
+       "with_both_probabilities": 86,
+       "without_probability": 0,
+       "worlds": 24
       }
      }
     }

@@ -293,6 +293,43 @@ def p5_design() -> dict:
             "forged_multi_line": sum(len(a["lines"]) > 1 for a in f)}
 
 
+def degenerate_bound(n: int) -> float:
+    """D121: one-sided 95 % upper bound on a per-world rate when all n worlds score 0 (1 - 0.05^(1/n))."""
+    return round(1 - 0.05 ** (1 / n), 4)
+
+
+def supplement(o: Path) -> dict | None:
+    """Amendment v2-a4 (D118): Claude Tier H P3 + P4, a post-freeze supplement analysed apart from the frozen panel.
+    Its prediction outcomes are printed beside the frozen tally, never in it."""
+    f = o / "supplement" / "analysis.json"
+    if not f.exists():
+        return None
+    S = json.loads(f.read_text())["models"].get(CLAUDE)
+    t = (S or {}).get("tiers", {}).get("H")
+    if not t:
+        return {"label": "post-freeze supplement (amendment v2-a4)", "finished": 0}
+    cells = {c: t["cells"][c] for c in ("P3", "P4")}
+    full = all(x["finished"] >= 12 for x in cells.values())
+    d = t["contrasts"]["check_discernment"]
+    dv = None if not full or d.get("not_testable") else d.get("est")
+    bw = _est(S["tiers"]["W"]["S"]["balanced_accuracy"])
+    bh = _est(t["S"]["balanced_accuracy"])
+    return {"label": "post-freeze supplement (amendment v2-a4)", "run_id": "r7b-main-claude_opus_55-v2-b4",
+            "first_request": first_request("r7b-main-claude_opus_55-v2-b4"),
+            "amendment": _git_time("5c2b18a"), "cells": cells, "both_cells_12": full,
+            "adopt_check_P3": t["C"]["adopt_check"]["P3"], "adopt_forged_P4": t["C"]["adopt_forged"]["P4"],
+            "corruption_P4": t["C"]["corruption"]["P4"], "check_discernment": d,
+            "balanced_accuracy_H": t["S"]["balanced_accuracy"], "health": t["health"],
+            "predictions": [
+                {"id": "P-D5", "scope": "Claude only (DeepSeek ran no Tier H)",
+                 "rule": "Claude: Tier H check discernment < 0.15", "outcome": _out(None if dv is None else dv < 0.15),
+                 "value": dv},
+                {"id": "P-A5", "scope": "Claude only (DeepSeek ran no Tier H)",
+                 "rule": "Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the P3 + P4 worlds)",
+                 "outcome": _out(None if not full or bw is None or bh is None else (bw > 0.80 and bh <= 0.60)),
+                 "value": {"ba_W": bw, "ba_H": bh}}]}
+
+
 def build(out: str) -> dict:
     o = Path(out)
     A = json.loads((o / "analysis.json").read_text())
@@ -303,12 +340,15 @@ def build(out: str) -> dict:
                                                 ("deepseek_low_32k", "r7b-smoke-deepseek_v4_pro_low-v1"),
                                                 ("claude", "r7b-smoke-claude_opus_55-v1"))},
            "timeline": {"lock_v1": _git_time("1e79358"), "lock_v2": _git_time("f8e1fb3"),
-                        "amendment_v2_a3": _git_time("309fb1c"),
+                        "amendment_v2_a3": _git_time("309fb1c"), "amendment_v2_a4": _git_time("5c2b18a"),
                         "first_request": {r: first_request(r) for r in (
                             "p5-qwen25_7b-v1", "p5-gemma3_4b-v1", "r7b-smoke-claude_opus_55-v1",
                             "r7b-smoke-deepseek_v4_pro-v1", "r7b-main-claude_opus_55-v1",
-                            "r7b-main-claude_opus_55-v2-b1", "r7b-smoke-deepseek_v4_pro_low-v1")}},
-           "p5_design": p5_design(), "predictions": predictions(A, P5)}
+                            "r7b-main-claude_opus_55-v2-b1", "r7b-smoke-deepseek_v4_pro_low-v1",
+                            "r7b-main-claude_opus_55-v2-b4")}},
+           "p5_design": p5_design(), "predictions": predictions(A, P5),
+           "degenerate_bound": {str(n): degenerate_bound(n) for n in (24, 30)},
+           "supplement": supplement(o)}
     res["predictions_summary"] = {k: sum(1 for p in res["predictions"] if p["outcome"] == k)
                                   for k in ("met", "not met", NT)}
     (o / "report_data.json").write_text(json.dumps(res, indent=1, sort_keys=True, default=str) + "\n")
