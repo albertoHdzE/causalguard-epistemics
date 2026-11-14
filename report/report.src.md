@@ -264,7 +264,15 @@ and ran as a labelled condition.
 {{A/models/cl/tiers/W/cells/P4/finished|int}} worlds). All {{C/cl/P4/n|int}} coded P4 replies re-derive every cited
 lookup and name the misreading, with no instruction to verify: "I re-read each row the checker cites, and none of
 them matches the input pattern it claims. So I'm keeping my original answers." (`main|synthetic|uniform_H|9|`).
-Its thinking summaries say the same.
+Its thinking summaries say the same. Told to verify (P5), it quotes the altered line in
+{{P/models/cl/exact|est}} of forged named claims with no false alarm on valid checks
+({{P/models/cl/false_alarm|est}}), and DeepSeek in {{P/models/ds/exact|est}} (false alarm
+{{P/models/ds/false_alarm|est}}): verified discernment {{P/models/cl/verified_discernment|est}} and
+{{P/models/ds/verified_discernment|est}}. Pressure without evidence is a different matter. Claude never yields to
+an empty disagreement (P1 capitulation {{A/models/cl/tiers/W/P/capitulation_named/P1|est}}), but a demand to commit
+(P2) makes it give a definite verdict on {{A/models/cl/tiers/W/P/forced_overclaim/P2|est}} of open claims: the
+frontier model resists forged evidence and still overclaims on request. Tier H, where no check can be verified by
+lookup, was not reached by either online model (Appendix D), so P-D5 is not testable in this run.
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment {{A/models/ds/tiers/W/contrasts/check_discernment}}). Its stored reasoning
@@ -299,12 +307,14 @@ certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
 reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
 failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
-(4) The online cells are incomplete (Table 6): the Claude subscription window was shared with the development
-session, and DeepSeek ran only at low effort. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+(4) The online models ran Tier W only (Table 6): DeepSeek ran at low effort until the account balance ran out,
+and the Claude run stopped on an isolation-audit flag (a date notice the command line injected into a session
+resumed across midnight; the flagged items were retried cleanly) before its Tier H blocks. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
-**Future work.** Measure where between "cannot verify" and "verifies" a model starts to discriminate (lookup
+**Future work.** Run the frontier models on Tier H, where a check cannot be verified by lookup and deference is
+the only option short of abstaining. Measure where between "cannot verify" and "verifies" a model starts to discriminate (lookup
 depth, number of forged lines); test whether a cited-row consistency tool, offered to the model, closes the gap.
 
 # 6. Conclusion
@@ -324,21 +334,30 @@ release the generator, the gates, the lock and every run.
 
 # References
 
-Amayuelas, A. et al. (2023). Knowledge of Knowledge: Exploring Known-Unknowns Uncertainty with Large Language
-Models. arXiv:2305.13712.
+Amayuelas, A. et al. (2023). Knowledge of Knowledge: Exploring Known-Unknowns Uncertainty with Large Language Models. arXiv:2305.13712.
+
 Han, S. et al. (2022). FOLIO: Natural Language Reasoning with First-Order Logic. arXiv:2209.00840.
+
 Kirichenko, P. et al. (2025). AbstentionBench: Reasoning LLMs Fail on Unanswerable Questions. arXiv:2506.09038.
-Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment.
-arXiv:2311.08596.
+
+Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment. arXiv:2311.08596.
+
 Lin, S., Hilton, J., Evans, O. (2022). Teaching Models to Express Their Uncertainty in Words. arXiv:2205.14334.
+
 Perez, E. et al. (2022). Discovering Language Model Behaviors with Model-Written Evaluations. arXiv:2212.09251.
+
 Sharma, M. et al. (2023). Towards Understanding Sycophancy in Language Models. arXiv:2310.13548.
-Tafjord, O., Dalvi Mishra, B., Clark, P. (2021). ProofWriter: Generating Implications, Proofs, and Abductive
-Statements over Natural Language. Findings of ACL. arXiv:2012.13048.
+
+Tafjord, O., Dalvi Mishra, B., Clark, P. (2021). ProofWriter: Generating Implications, Proofs, and Abductive Statements over Natural Language. Findings of ACL. arXiv:2012.13048.
+
 Tian, K. et al. (2023). Just Ask for Calibration. EMNLP. arXiv:2305.14975.
+
 Wang, B., Yue, X., Sun, H. (2023). Can ChatGPT Defend its Belief in Truth? Findings of EMNLP. arXiv:2305.13160.
+
 Wen, B. et al. (2024). Know Your Limits: A Survey of Abstention in Large Language Models. TACL. arXiv:2407.18418.
+
 Xiong, M. et al. (2024). Can LLMs Express Their Uncertainty? ICLR. arXiv:2306.13063.
+
 Yin, Z. et al. (2023). Do Large Language Models Know What They Don't Know? Findings of ACL. arXiv:2305.18153.
 
 # Appendix A. Limitations and Dual-Use / Ethical Considerations

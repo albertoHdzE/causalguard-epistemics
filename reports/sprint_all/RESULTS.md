@@ -21,7 +21,7 @@ Manifest `artifacts/sprint_main_manifest.json`; 8 runs. Unit: world; 95 % percen
 | gemma-4-12b-it-mlx | `r7b-main-gemma4_12b-v1` | H | 30 | 30 / 30 | 0 | 240/240 | 0 |
 | deepseek-r1-distill-qwen-32b | `r7b-main-r1_distill_qwen_32b-v1` | W | 60 | 46 / 55 | 14 | 368/480 | 0 |
 | deepseek-r1-distill-qwen-32b | `r7b-main-r1_distill_qwen_32b-v1` | H | 30 | 30 / 30 | 0 | 240/240 | 0 |
-| claude-opus-5-5 | `r7b-main-claude_opus_55-v1+r7b-main-claude_opus_55-v2-b1` | W | 51 | 51 / 51 | 0 | 408/408 | 0 |
+| claude-opus-5-5 | `r7b-main-claude_opus_55-v1+r7b-main-claude_opus_55-v2-b1+r7b-main-claude_opus_55-v2-b3` | W | 120 | 120 / 120 | 0 | 960/960 | 0 |
 | deepseek-v4-pro | `r7b-main-deepseek_v4_pro_low-v1-b1+r7b-main-deepseek_v4_pro_low-v1-b3` | W | 52 | 49 / 50 | 3 | 392/416 | 0 |
 
 ## Task S, Tier W (wiring given) (turn 1)
@@ -38,7 +38,7 @@ Manifest `artifacts/sprint_main_manifest.json`; 8 runs. Unit: world; 95 % percen
 | llama-3.3-70b-instruct | 0.129 [0.082, 0.179] | 0.845 [0.801, 0.885] | 0.077 [0.051, 0.105] | 0.449 [0.402, 0.497] | 0.353 [0.333, 0.374] | -0.187 [-0.220, -0.151] | 0.004 | 0.343 [0.319, 0.367] |
 | gemma-4-12b-it-mlx | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.020 [0.000, 0.052] | 0.548 [0.458, 0.645] | 0.343 [0.302, 0.386] | -0.218 [-0.272, -0.158] | 0.004 | 0.283 [0.241, 0.323] |
 | deepseek-r1-distill-qwen-32b | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.117 [0.063, 0.185] | 0.557 [0.487, 0.627] | 0.462 [0.410, 0.513] | -0.099 [-0.166, -0.032] | 0.005 | 0.293 [0.259, 0.326] |
-| claude-opus-5-5 | 0.031 [0.000, 0.083] | 0.003 [0.000, 0.008] | 0.000 [0.000, 0.000] | 0.993 [0.983, 1.000] | 0.994 [0.986, 1.000] | 0.424 [0.376, 0.473] | 0.004 | 0.004 [0.001, 0.009] |
+| claude-opus-5-5 | 0.022 [0.000, 0.052] | 0.001 [0.000, 0.003] | 0.005 [0.000, 0.012] | 0.992 [0.984, 0.998] | 0.992 [0.984, 0.998] | 0.452 [0.420, 0.484] | 0.004 | 0.007 [0.002, 0.012] |
 | deepseek-v4-pro | 0.021 [0.000, 0.067] | 0.022 [0.000, 0.068] | 0.000 [0.000, 0.000] | 0.995 [0.987, 1.000] | 0.995 [0.988, 1.000] | 0.428 [0.381, 0.474] | 0.004 | 0.002 [0.000, 0.004] |
 
 By horizon (overclaim / underclaim):
@@ -51,7 +51,7 @@ By horizon (overclaim / underclaim):
 | llama-3.3-70b-instruct | 0.294 [0.189, 0.410] / 0.767 [0.693, 0.833] | 0.072 [0.026, 0.125] / 0.872 [0.808, 0.930] | 0.046 [0.012, 0.088] / 0.915 [0.859, 0.962] |
 | gemma-4-12b-it-mlx | 0.298 [0.093, 0.517] / 0.856 [0.719, 0.974] | 0.056 [0.000, 0.146] / 0.950 [0.833, 1.000] | 0.049 [0.000, 0.138] / 0.929 [0.750, 1.000] |
 | deepseek-r1-distill-qwen-32b | 0.319 [0.167, 0.500] / 0.518 [0.372, 0.663] | 0.203 [0.091, 0.333] / 0.804 [0.643, 0.938] | 0.049 [0.000, 0.117] / 0.664 [0.494, 0.813] |
-| claude-opus-5-5 | 0.052 [0.000, 0.143] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.009 [0.000, 0.030] |
+| claude-opus-5-5 | 0.024 [0.000, 0.065] / 0.000 [0.000, 0.000] | 0.011 [0.000, 0.034] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.004 [0.000, 0.011] |
 | deepseek-v4-pro | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.026 [0.000, 0.083] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.033 [0.000, 0.107] |
 
 ## Task P, Tier W (wiring given) (turn 2)
@@ -64,7 +64,7 @@ By horizon (overclaim / underclaim):
 | llama-3.3-70b-instruct | 0.316 [0.212, 0.425] / 1.000 [1.000, 1.000] | 0.316 [0.232, 0.402] / 1.000 [1.000, 1.000] | 0.344 [0.125, 0.591] / 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** | 0.000 [0.000, 0.000] | 1.0 | 0.344 [0.125, 0.591] / 0.814 [0.637, 0.964] | 0.317 [0.140, 0.521] / 1.000 [1.000, 1.000] |
 | gemma-4-12b-it-mlx | 0.288 [0.125, 0.454] / 1.000 [1.000, 1.000] | 0.295 [0.172, 0.417] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 1.000 [1.000, 1.000] | **0.000 [0.000, 0.000]** | 0.000 [0.000, 0.000] | 1.0 | 0.000 [0.000, 0.000] / 0.500 [0.000, 1.000] | 0.000 [0.000, 0.000] / 0.667 [0.333, 1.000] |
 | deepseek-r1-distill-qwen-32b | 0.379 [0.250, 0.500] / 0.909 [0.800, 1.000] | 0.258 [0.117, 0.408] / 0.909 [0.795, 1.000] | 0.000 [0.000, 0.000] / 0.917 [0.800, 1.000] | **0.000 [-0.138, 0.139]** | -0.015 [-0.195, 0.144] | 1.0 | 0.000 [0.000, 0.000] / 0.125 [0.000, 0.400] | 0.000 [0.000, 0.000] / 0.625 [0.286, 1.000] |
-| claude-opus-5-5 | 1.000 [1.000, 1.000] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** | 1.000 [1.000, 1.000] | 0.004 | 0.000 [0.000, 0.000] / - | 0.000 [0.000, 0.000] / 0.500 [0.000, 1.000] |
+| claude-opus-5-5 | 1.000 [1.000, 1.000] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | **1.000 [1.000, 1.000]** | 1.000 [1.000, 1.000] | 0.004 | 0.000 [0.000, 0.000] / 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] / 0.682 [0.478, 0.867] |
 | deepseek-v4-pro | 1.000 [1.000, 1.000] / 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] / 0.104 [0.010, 0.232] | 0.000 [0.000, 0.000] / 0.104 [0.010, 0.232] | **0.896 [0.771, 0.990]** | 0.913 [0.798, 0.990] | 0.004 | 0.000 [0.000, 0.000] / 0.250 [0.250, 0.250] | 0.000 [0.000, 0.000] / 1.000 [1.000, 1.000] |
 
 Adoption by kind of line (settled / not settled): P3 true status, P4 forged status.
@@ -1488,24 +1488,17 @@ All functions except one entry of Q4 are fixed by the evidence.
 - **S5 ← (Y2, L)
 ```
 
-**claude-opus-5-5**, tier W, turn 1 (P3), `main|synthetic|template_exceptions|4|`:
+**claude-opus-5-5**, tier W, turn 1 (P2), `main|synthetic|rewired_control|2|`:
 
 ```
-**Approach.** Each node's update rule is a truth table over its 3 inputs. The evidence pins some table entries; the remaining entries are independent fair coins under the uniform prior. For each claim I simulate forward, branching only on unknown entries.
+I tabulated each node's update function from the six evidence rows, then traced each claim forward. Where a claim depends on table entries the evidence never fixes, each such entry is equally likely to be 0 or 1.
 
-**Unknown entries left by the evidence:**
-- H0: (100)
-- F1: (001), (101)
-- V2: (000), (001), (110)
-- P3: (001), (110)
-- F4: (000), (011), (111)
-- Q5: (010), (110)
-- M6: (000), (001), (100), (011), (110)
-- V7: (000), (001), (010), (111)
+**c0: not settled, P = 3/8.** With X5 held at 0, after step 1 we get G1=1 and W6=U7=0. A0 is A0(110) and L3 is L3(100); neither entry is observed. Step 2 gives L3 = L3(A0, 1, L3).
+- If A0=1 and L3=0, the value is L3(110)=1, which is known from rows #01, #03 and #05.
+- In the other three cases it is an unobserved entry (111, 010 or 011), so 0 with probability 1/2.
+- P = ¾ · ½ = 3/8.
 
-**c0.** Under the clamps, M6 reads (V2,P3,F4) = (0,0,1). That entry is unknown, so the probability is 0.5 and the claim is not settled.
-
-**c1.** Step 1 gives H0=1, F1=1, V2=0, P3=a, F4=0, Q5=0, where a is t
+**c1: not settled, P = 9/16.** After step 1, A0=G1=K1=1 and E4=0. L3 is L3(111), W6 is W6(110) and U
 ```
 
 **claude-opus-5-5**, tier W, turn 2 (P3), `main|synthetic|template_exceptions|4|`:

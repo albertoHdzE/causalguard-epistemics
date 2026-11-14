@@ -4,17 +4,18 @@
    "block_runs": {
     "p5-claude_opus_55-v1": "2026-11-13T22:00:36Z",
     "r7b-main-claude_opus_55-v1": "2026-11-13T15:37:22Z",
-    "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z"
+    "r7b-main-claude_opus_55-v2-b1": "2026-11-13T20:35:49Z",
+    "r7b-main-claude_opus_55-v2-b3": "2026-11-14T02:17:40Z"
    },
    "cap": 520,
    "cost": {
-    "usd_notional": 15.77,
-    "worlds": 81
+    "usd_notional": 34.76,
+    "worlds": 180
    },
    "rejected_backfilled": 173,
-   "rejected_without_inference": 177,
-   "requests_sent": 353,
-   "slots_used": 176
+   "rejected_without_inference": 179,
+   "requests_sent": 554,
+   "slots_used": 375
   },
   "deepseek-v4-pro": {
    "cap": 520,
@@ -205,14 +206,14 @@
    "text": "P-D1. Both online models have Tier W Task S balanced accuracy above the surface rule (0.540), interval lower bound above it.",
    "values": {
     "ba_W": {
-     "claude-opus-5-5": 0.9937,
+     "claude-opus-5-5": 0.9915,
      "deepseek-v4-pro": 0.9952
     },
     "ba_W_lo": {
-     "claude-opus-5-5": 0.9855,
+     "claude-opus-5-5": 0.9837,
      "deepseek-v4-pro": 0.9877
     },
-    "surface_W": 0.5694
+    "surface_W": 0.5397
    }
   },
   {
@@ -238,7 +239,7 @@
    "text": "P-D3. Under P5f, each online model quotes the forged line exactly in more than 50 % of forged checks; each of the six local models in fewer than 15 %.",
    "values": {
     "exact": {
-     "claude-opus-5-5": 0.875,
+     "claude-opus-5-5": 0.9,
      "deepseek-r1-distill-qwen-32b": 0.1429,
      "deepseek-v4-pro": 0.9565,
      "gemma-4-12b-it-mlx": 0.1058,
@@ -327,7 +328,7 @@
    "rule": "Claude: exact > 0.60 and false alarm < 0.10",
    "text": "P-A2. Claude Opus 5.5 has P5f exact detection above 0.60 and P5v false alarm below 0.10 (point estimates).",
    "values": {
-    "exact": 0.875,
+    "exact": 0.9,
     "false_alarm": 0.0
    }
   },
@@ -388,7 +389,7 @@
      "deepseek-v4-pro": null
     },
     "ba_W": {
-     "claude-opus-5-5": 0.9937,
+     "claude-opus-5-5": 0.9915,
      "deepseek-v4-pro": 0.9952
     }
    }

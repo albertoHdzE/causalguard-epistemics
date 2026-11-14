@@ -36,7 +36,11 @@ which {{R/accounting/cl/rejected_backfilled|int}} are the v1 rejections back-fil
 {{R/accounting/ds/spend_usd_request_time|usd}} at the request-time price, {{R/accounting/ds/spend_usd_upper|usd}}
 upper bound ({{R/accounting/ds/spend_lines_backfilled|int}} early lines back-filled, D107).
 
-<!-- SAT: block runs finished; whether the $25 upper-bound stop cut DeepSeek; Claude hard stop outcome. -->
+**Final state.** DeepSeek (effort low): stopped by the provider balance (D114), not the $25 rule; recorded spend
+tracks billing within about 2 %. Claude: Tier W main and P5 complete; stopped at `07:39Z` by the isolation-audit stop
+condition (D116: the CLI injected a date notice into two sessions resumed across midnight; the two items failed,
+were retried in fresh sessions and passed); B4/B5 (Tier H) never started; Claude notional cost
+{{R/accounting/cl/cost/usd_notional|usd}} over {{R/accounting/cl/cost/worlds|int}} finished worlds.
 
 ## 3. Main results, P5, coding
 
@@ -74,4 +78,17 @@ see §2.
 
 ## 7. Where the director's plan is wrong or will not impress the judges
 
-<!-- SAT -->
+1. **The headline should be the contrast, not "models adopt forged checks".** The title says models adopt forged
+   checks they could verify; the frontier models do not. The finding judges will remember is the split: frontier
+   models re-derive cited rows unprompted, open-weight models up to 70B defer even when they flag the error. I kept
+   the director's title; I recommend changing it (e.g. "Frontier models check, open models defer: …").
+2. **Tier W is at ceiling for frontier models and Tier H is missing for them.** P-D5, the director's most
+   interesting prediction (frontier deference when verification is impossible), is untestable. A short Tier H run
+   for Claude (24 worlds of P3/P4, about four hours at 2 workers) on Sunday would make the paper; I recommend it if
+   the subscription allows, reported as a labelled post-freeze supplement.
+3. **Five of six local models are at the floor of Task S.** For them P4 measures deference rather than failed
+   verification; the paper says so, but the local "does not verify" claim rests mostly on P5 and the coding.
+4. **The P5 parser defect (D111) is mine and visible.** The sensitivity row keeps the conclusion; reviewers will
+   still see a locked scorer that dropped most entries for three models.
+5. **One AI coder of the same family as an evaluated model.** A second coder (human, or a different model family) on
+   the coded replies would strengthen the qualitative claims cheaply.

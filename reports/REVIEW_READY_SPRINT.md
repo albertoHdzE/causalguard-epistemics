@@ -33,23 +33,27 @@ rule; DeepSeek ran as the labelled condition "reasoning effort low" through the 
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 353 | 177 | 51/180 / 30/60 | $15.77 (notional, subscription) |
+| Claude Opus 5.5 | 554 | 179 | 120/180 / 60/60 | $34.76 (notional, subscription) |
 | DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 | model | tier | P0 | P1 | P2 | P3 | P4 |
 |---|---|---|---|---|---|---|
-| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 24/24 | 24/24 |
+| Claude Opus 5.5 | W | 24/24 | 24/24 | 24/24 | 24/24 | 24/24 |
 | Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
 | DeepSeek V4-Pro (low)‡ | W | 1/24 | 1/24 | 2/24 | 24/24 | 24/24 |
 | DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
 
-Usage-limit rejections (no inference; outside the cap): 177, of
+Usage-limit rejections (no inference; outside the cap): 179, of
 which 173 are the v1 rejections back-filled. Claude call-ledger slots used:
-176 of 520. DeepSeek slots: 255 of 520; spend
+375 of 520. DeepSeek slots: 255 of 520; spend
 $8.90 at the request-time price, $17.79
 upper bound (12 early lines back-filled, D107).
 
-<!-- SAT: block runs finished; whether the $25 upper-bound stop cut DeepSeek; Claude hard stop outcome. -->
+**Final state.** DeepSeek (effort low): stopped by the provider balance (D114), not the $25 rule; recorded spend
+tracks billing within about 2 %. Claude: Tier W main and P5 complete; stopped at `07:39Z` by the isolation-audit stop
+condition (D116: the CLI injected a date notice into two sessions resumed across midnight; the two items failed,
+were retried in fresh sessions and passed); B4/B5 (Tier H) never started; Claude notional cost
+$34.76 over 180 finished worlds.
 
 ## 3. Main results, P5, coding
 
@@ -65,7 +69,7 @@ models that flag the forged line often keep its conclusion.
 | mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
 | r1-distill-32b† | 30/30; 30/30 | 0.143 [0.067, 0.224] | 0.179 [0.095, 0.271] | 0.066 [0.013, 0.134] | 0.679 [0.562, 0.798] | −0.231 [−0.370, −0.079] | 0.238 [0.106, 0.372] |
 | llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
-| Claude Opus 5.5 | 14/30; 16/30 | 0.875 [0.688, 1.000] | 0.875 [0.688, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
+| Claude Opus 5.5 | 30/30; 30/30 | 0.900 [0.781, 1.000] | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
 | DeepSeek V4-Pro (low)‡ | 29/30; 25/30 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
 
 | model | check_errors entries dropped by the locked parser (integer ids) | exact detection, ids accepted | false alarm, ids accepted | flagged the altered line | of those, forged status kept |
@@ -76,7 +80,7 @@ models that flag the forged line often keep its conclusion.
 | mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
 | r1-distill-32b† | 0 of 38 | 0.143 [0.067, 0.224] | 0.066 [0.013, 0.134] | 19 | 3 |
 | llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
-| Claude Opus 5.5 | 0 of 69 | 0.875 [0.688, 1.000] | 0.000 [0.000, 0.000] | 53 | 0 |
+| Claude Opus 5.5 | 0 of 132 | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 103 | 0 |
 | DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
 
 | model | P4: (a) own lookup | P4: (b) names a mismatch | P4: (c) names the altered line | P5f: (a) | P5f: (b) | P5f: (c) |
@@ -87,7 +91,7 @@ models that flag the forged line often keep its conclusion.
 | mistral-small-24b | 0/8 | 0/8 | 0/8 | 7/8 | 6/8 | 6/8 |
 | r1-distill-32b† | 0/8 | 0/8 | 0/8 | 8/8 | 5/8 | 3/8 |
 | llama-3.3-70b | 0/8 | 0/8 | 0/8 | 1/8 | 1/8 | 1/8 |
-| Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | – | – | – |
+| Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |
 | DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | 8/8 | 8/8 | 8/8 |
 
 ## 4. Predictions against outcomes
@@ -134,4 +138,17 @@ see §2.
 
 ## 7. Where the director's plan is wrong or will not impress the judges
 
-<!-- SAT -->
+1. **The headline should be the contrast, not "models adopt forged checks".** The title says models adopt forged
+   checks they could verify; the frontier models do not. The finding judges will remember is the split: frontier
+   models re-derive cited rows unprompted, open-weight models up to 70B defer even when they flag the error. I kept
+   the director's title; I recommend changing it (e.g. "Frontier models check, open models defer: …").
+2. **Tier W is at ceiling for frontier models and Tier H is missing for them.** P-D5, the director's most
+   interesting prediction (frontier deference when verification is impossible), is untestable. A short Tier H run
+   for Claude (24 worlds of P3/P4, about four hours at 2 workers) on Sunday would make the paper; I recommend it if
+   the subscription allows, reported as a labelled post-freeze supplement.
+3. **Five of six local models are at the floor of Task S.** For them P4 measures deference rather than failed
+   verification; the paper says so, but the local "does not verify" claim rests mostly on P5 and the coding.
+4. **The P5 parser defect (D111) is mine and visible.** The sensitivity row keeps the conclusion; reviewers will
+   still see a locked scorer that dropped most entries for three models.
+5. **One AI coder of the same family as an evaluated model.** A second coder (human, or a different model family) on
+   the coded replies would strengthen the qualitative claims cheaply.

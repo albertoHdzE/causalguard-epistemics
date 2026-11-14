@@ -191,7 +191,7 @@ worlds.](../reports/sprint_all/fig1_task_p.png){width=100%}
 | mistral-small-24b | 30/30; 30/30 | 0.217 [0.139, 0.300] | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 0.817 [0.714, 0.906] | −0.183 [−0.283, −0.092] | 0.142 [0.042, 0.250] |
 | r1-distill-32b† | 30/30; 30/30 | 0.143 [0.067, 0.224] | 0.179 [0.095, 0.271] | 0.066 [0.013, 0.134] | 0.679 [0.562, 0.798] | −0.231 [−0.370, −0.079] | 0.238 [0.106, 0.372] |
 | llama-3.3-70b | 30/30; 30/30 | 0.058 [0.015, 0.112] | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | −0.008 [−0.025, 0.000] |
-| Claude Opus 5.5 | 14/30; 16/30 | 0.875 [0.688, 1.000] | 0.875 [0.688, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
+| Claude Opus 5.5 | 30/30; 30/30 | 0.900 [0.781, 1.000] | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | 1.000 [1.000, 1.000] |
 | DeepSeek V4-Pro (low)‡ | 29/30; 25/30 | 0.957 [0.857, 1.000] | 0.957 [0.857, 1.000] | 0.000 [0.000, 0.000] | 0.000 [0.000, 0.000] | −0.104 [−0.229, −0.010] | 1.000 [1.000, 1.000] |
 
 *Table 2. P5 verify-first (Tier W, 60 worlds per model; locked scorer). Exact and lenient detection of the altered
@@ -216,7 +216,7 @@ its detection interval (Figure 2).
 | mistral-small-24b | 0 of 82 | 0.217 [0.139, 0.300] | 0.200 [0.090, 0.318] | 25 | 10 |
 | r1-distill-32b† | 0 of 38 | 0.143 [0.067, 0.224] | 0.066 [0.013, 0.134] | 19 | 3 |
 | llama-3.3-70b | 0 of 28 | 0.058 [0.015, 0.112] | 0.061 [0.014, 0.117] | 6 | 6 |
-| Claude Opus 5.5 | 0 of 69 | 0.875 [0.688, 1.000] | 0.000 [0.000, 0.000] | 53 | 0 |
+| Claude Opus 5.5 | 0 of 132 | 0.900 [0.781, 1.000] | 0.000 [0.000, 0.000] | 103 | 0 |
 | DeepSeek V4-Pro (low)‡ | 4 of 98 | 1.000 [1.000, 1.000] | 0.000 [0.000, 0.000] | 90 | 0 |
 
 *Table 3. P5f, post-hoc. Entries the locked parser drops; exact detection and false alarm when integer claim ids
@@ -249,7 +249,7 @@ an AI; disclosed).
 | mistral-small-24b | 0/8 | 0/8 | 0/8 | 7/8 | 6/8 | 6/8 |
 | r1-distill-32b† | 0/8 | 0/8 | 0/8 | 8/8 | 5/8 | 3/8 |
 | llama-3.3-70b | 0/8 | 0/8 | 0/8 | 1/8 | 1/8 | 1/8 |
-| Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | – | – | – |
+| Claude Opus 5.5 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 | 8/8 |
 | DeepSeek V4-Pro (low)‡ | 7/8 | 7/8 | 7/8 | 8/8 | 8/8 | 8/8 |
 
 *Table 4. Coded replies per model and condition (8 per cell, hash-chosen). Local replies were read in full;
@@ -275,14 +275,14 @@ squares). Lines are 95 % intervals.](../reports/sprint_all/fig3_p5.png){width=72
 
 | model | tier | worlds | overclaim | underclaim | balanced accuracy | BA − surface rule |
 |---|---|---|---|---|---|---|
-| *surface rule (reference)* | W | | 0.604 [0.512, 0.689] | 0.201 [0.142, 0.268] | 0.569 [0.521, 0.617] | |
+| *surface rule (reference)* | W | | 0.600 [0.539, 0.664] | 0.226 [0.189, 0.268] | 0.540 [0.507, 0.572] | |
 | gemma-3-4b | W | 120/120 | 0.881 [0.832, 0.930] | 0.094 [0.054, 0.143] | 0.345 [0.318, 0.372] | −0.194 [−0.236, −0.152] |
 | qwen2.5-7b | W | 120/120 | 0.514 [0.423, 0.600] | 0.446 [0.362, 0.534] | 0.353 [0.317, 0.388] | −0.187 [−0.232, −0.141] |
 | gemma-4-12b† | W | 60/60 | 0.110 [0.029, 0.209] | 0.911 [0.814, 0.986] | 0.343 [0.302, 0.386] | −0.218 [−0.272, −0.158] |
 | mistral-small-24b | W | 120/120 | 0.126 [0.077, 0.181] | 0.841 [0.786, 0.891] | 0.345 [0.320, 0.370] | −0.195 [−0.235, −0.152] |
 | r1-distill-32b† | W | 60/60 | 0.205 [0.109, 0.318] | 0.629 [0.515, 0.745] | 0.462 [0.410, 0.513] | −0.099 [−0.166, −0.032] |
 | llama-3.3-70b | W | 120/120 | 0.129 [0.082, 0.179] | 0.845 [0.801, 0.885] | 0.353 [0.333, 0.374] | −0.187 [−0.220, −0.151] |
-| Claude Opus 5.5 | W | 51/120 | 0.031 [0.000, 0.083] | 0.003 [0.000, 0.008] | 0.994 [0.986, 1.000] | 0.424 [0.376, 0.473] |
+| Claude Opus 5.5 | W | 120/120 | 0.022 [0.000, 0.052] | 0.001 [0.000, 0.003] | 0.992 [0.984, 0.998] | 0.452 [0.420, 0.484] |
 | DeepSeek V4-Pro (low)‡ | W | 52/120 | 0.021 [0.000, 0.067] | 0.022 [0.000, 0.068] | 0.995 [0.988, 1.000] | 0.428 [0.381, 0.474] |
 | *surface rule (reference)* | H | | 0.537 [0.442, 0.635] | 0.137 [0.042, 0.248] | 0.548 [0.475, 0.639] | |
 | gemma-3-4b | H | 60/60 | 0.641 [0.548, 0.737] | 0.317 [0.196, 0.437] | 0.343 [0.283, 0.405] | −0.247 [−0.337, −0.153] |
@@ -325,7 +325,15 @@ and ran as a labelled condition.
 24 worlds). All 8 coded P4 replies re-derive every cited
 lookup and name the misreading, with no instruction to verify: "I re-read each row the checker cites, and none of
 them matches the input pattern it claims. So I'm keeping my original answers." (`main|synthetic|uniform_H|9|`).
-Its thinking summaries say the same.
+Its thinking summaries say the same. Told to verify (P5), it quotes the altered line in
+0.900 of forged named claims with no false alarm on valid checks
+(0.000), and DeepSeek in 0.957 (false alarm
+0.000): verified discernment 1.000 and
+1.000. Pressure without evidence is a different matter. Claude never yields to
+an empty disagreement (P1 capitulation 0.000), but a demand to commit
+(P2) makes it give a definite verdict on 0.682 of open claims: the
+frontier model resists forged evidence and still overclaims on request. Tier H, where no check can be verified by
+lookup, was not reached by either online model (Appendix D), so P-D5 is not testable in this run.
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment 0.896 [0.771, 0.990]). Its stored reasoning
@@ -360,12 +368,14 @@ certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
 reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
 failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
-(4) The online cells are incomplete (Table 6): the Claude subscription window was shared with the development
-session, and DeepSeek ran only at low effort. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+(4) The online models ran Tier W only (Table 6): DeepSeek ran at low effort until the account balance ran out,
+and the Claude run stopped on an isolation-audit flag (a date notice the command line injected into a session
+resumed across midnight; the flagged items were retried cleanly) before its Tier H blocks. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
-**Future work.** Measure where between "cannot verify" and "verifies" a model starts to discriminate (lookup
+**Future work.** Run the frontier models on Tier H, where a check cannot be verified by lookup and deference is
+the only option short of abstaining. Measure where between "cannot verify" and "verifies" a model starts to discriminate (lookup
 depth, number of forged lines); test whether a cited-row consistency tool, offered to the model, closes the gap.
 
 # 6. Conclusion
@@ -385,21 +395,30 @@ release the generator, the gates, the lock and every run.
 
 # References
 
-Amayuelas, A. et al. (2023). Knowledge of Knowledge: Exploring Known-Unknowns Uncertainty with Large Language
-Models. arXiv:2305.13712.
+Amayuelas, A. et al. (2023). Knowledge of Knowledge: Exploring Known-Unknowns Uncertainty with Large Language Models. arXiv:2305.13712.
+
 Han, S. et al. (2022). FOLIO: Natural Language Reasoning with First-Order Logic. arXiv:2209.00840.
+
 Kirichenko, P. et al. (2025). AbstentionBench: Reasoning LLMs Fail on Unanswerable Questions. arXiv:2506.09038.
-Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment.
-arXiv:2311.08596.
+
+Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment. arXiv:2311.08596.
+
 Lin, S., Hilton, J., Evans, O. (2022). Teaching Models to Express Their Uncertainty in Words. arXiv:2205.14334.
+
 Perez, E. et al. (2022). Discovering Language Model Behaviors with Model-Written Evaluations. arXiv:2212.09251.
+
 Sharma, M. et al. (2023). Towards Understanding Sycophancy in Language Models. arXiv:2310.13548.
-Tafjord, O., Dalvi Mishra, B., Clark, P. (2021). ProofWriter: Generating Implications, Proofs, and Abductive
-Statements over Natural Language. Findings of ACL. arXiv:2012.13048.
+
+Tafjord, O., Dalvi Mishra, B., Clark, P. (2021). ProofWriter: Generating Implications, Proofs, and Abductive Statements over Natural Language. Findings of ACL. arXiv:2012.13048.
+
 Tian, K. et al. (2023). Just Ask for Calibration. EMNLP. arXiv:2305.14975.
+
 Wang, B., Yue, X., Sun, H. (2023). Can ChatGPT Defend its Belief in Truth? Findings of EMNLP. arXiv:2305.13160.
+
 Wen, B. et al. (2024). Know Your Limits: A Survey of Abstention in Large Language Models. TACL. arXiv:2407.18418.
+
 Xiong, M. et al. (2024). Can LLMs Express Their Uncertainty? ICLR. arXiv:2306.13063.
+
 Yin, Z. et al. (2023). Do Large Language Models Know What They Don't Know? Findings of ACL. arXiv:2305.18153.
 
 # Appendix A. Limitations and Dual-Use / Ethical Considerations
@@ -484,7 +503,7 @@ the verifier's finding and the P5 message; reproduced from a pilot world never s
 
 | model | tier | P0 | P1 | P2 | P3 | P4 |
 |---|---|---|---|---|---|---|
-| Claude Opus 5.5 | W | 1/24 | 0/24 | 2/24 | 24/24 | 24/24 |
+| Claude Opus 5.5 | W | 24/24 | 24/24 | 24/24 | 24/24 | 24/24 |
 | Claude Opus 5.5 | H | 0 | 0 | 0 | 0 | 0 |
 | DeepSeek V4-Pro (low)‡ | W | 1/24 | 1/24 | 2/24 | 24/24 | 24/24 |
 | DeepSeek V4-Pro (low)‡ | H | 0 | 0 | 0 | 0 | 0 |
@@ -505,7 +524,7 @@ parsed and every Tier W turn parsed.*
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 353 | 177 | 51/180 / 30/60 | $15.77 (notional, subscription) |
+| Claude Opus 5.5 | 554 | 179 | 120/180 / 60/60 | $34.76 (notional, subscription) |
 | DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
