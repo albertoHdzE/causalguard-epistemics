@@ -21,10 +21,12 @@
    "effort": "high",
    "thinking_summaries": true,
    "pause_file": "RUNS/sprint-online-calls/claude_pause.json",
-   "hard_stop_utc": "2026-11-14T18:00:00+00:00"
+   "hard_stop_utc": "2026-11-15T05:30:00+00:00",
+   "pause_fail_utc": "2026-11-15T05:00:00+00:00",
+   "no_resume_across_date": true
   }
  },
- "note": "SPRINT amendment v2-a3, Claude priority block B4 Tier H P3+P4 (P-D5): the main-panel worlds of these cells in the locked hash order, minus the worlds finished in r7b-main-claude_opus_55-v1. Usage-limit pause, hard stop Sat 14 Nov 12:00 CST; cap 520 on the shared ledger (rejections void their slot).",
+ "note": "SPRINT amendment v2-a4 (director D118): post-freeze supplement, Claude block B4 Tier H P3+P4 (P-D5) only, the main-panel worlds of these cells in the locked hash order (lock v1 items, prompts, scores). Fresh session per world; no turn 2 on a later local date than its turn 1; an item still in a usage-limit pause at Sat 14 Nov 23:00 CST fails; hard stop Sat 14 Nov 23:30 CST; cap 520 on the shared ledger (rejections void their slot).",
  "task_wording": "v3",
  "cells": [
   [

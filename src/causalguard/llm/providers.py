@@ -486,6 +486,7 @@ class ClaudeCLIProvider(BaseProvider):
         super().__init__(cfg)
         self.binary = cfg.extra.get("binary", "claude")
         self.sessions: dict[str, tuple[str, str]] = {}      # hash(sys, user1, reply) -> (session id, workdir)
+        self.session_day: dict[str, str] = {}               # v2-a4: session id -> local date of its turn 1
         self.last_usage: dict | None = None
         self.usage_rejections: list[dict] = []
         import uuid
@@ -515,6 +516,7 @@ class ClaudeCLIProvider(BaseProvider):
         if len(messages) == 2:
             session, resume = str(uuid.uuid4()), False
             workdir = tempfile.mkdtemp(prefix="r7-claude-")
+            self.session_day[session] = time.strftime("%Y-%m-%d")
         else:
             key = self._conv_hash(messages[:-1])
             if key not in self.sessions:
@@ -564,9 +566,12 @@ class ClaudeCLIProvider(BaseProvider):
         """On a usage-limit rejection: record it (``kind: usage_limit_rejected``, voiding its call-ledger slot), put
         every worker of this model on pause until the reset time the CLI states (else one probe every 15 min),
         restore the conversation to its state before the rejected request, and send the same request again.  No
-        request is sent at or after ``extra.hard_stop_utc``, nor after a pause that would end after it."""
+        request is sent at or after ``extra.hard_stop_utc``, nor after a pause that would end after it.
+        Amendment v2-a4: a pause that would end after ``extra.pause_fail_utc`` (or is still on at it) fails the world,
+        and with ``extra.no_resume_across_date`` a turn 2 is never sent on a later local date than its turn 1."""
         while True:
             self._usage_gate()
+            self._date_gate(messages)
             snap = self._session_snapshot(messages)
             res = super().chat(messages, temperature, seed, before_attempt)
             if res["ok"] or USAGE_LIMIT_MARK not in str(res.get("failure")):
@@ -582,10 +587,25 @@ class ClaudeCLIProvider(BaseProvider):
             self.usage_rejections.append(info)
             self._session_restore(snap)
 
-    def _hard_stop(self) -> float | None:
+    def _hard_stop(self, key: str = "hard_stop_utc") -> float | None:
         import datetime
-        h = self.cfg.extra.get("hard_stop_utc")
+        h = self.cfg.extra.get(key)
         return datetime.datetime.fromisoformat(h).timestamp() if h else None
+
+    def _pause_deadline(self) -> float | None:
+        """v2-a4: no usage-limit pause may last past this time (the earlier of pause_fail_utc and the hard stop)."""
+        d = [t for t in (self._hard_stop(), self._hard_stop("pause_fail_utc")) if t is not None]
+        return min(d) if d else None
+
+    def _date_gate(self, messages) -> None:
+        """v2-a4: the CLI injects a date-change notice into a session resumed on a later date (the two isolation
+        flags of B3); such a turn 2 is not sent, the world fails (not finished, never scored)."""
+        if not self.cfg.extra.get("no_resume_across_date") or len(messages) <= 2:
+            return
+        hit = self.sessions.get(self._conv_hash(messages[:-1]))
+        day = self.session_day.get(hit[0]) if hit else None
+        if day is not None and time.strftime("%Y-%m-%d") != day:
+            raise HardStop(f"v2-a4: turn 2 would resume a session across a local date boundary ({day})")
 
     def _pause_path(self) -> Path | None:
         p = _runs_path(self.cfg.extra.get("pause_file"))
@@ -629,10 +649,12 @@ class ClaudeCLIProvider(BaseProvider):
                 box["wait"] = 20.0
                 return None
             st = self._pause_io(step)
+            dl = self._pause_deadline()
+            if dl is not None and st.get("until") and (st["until"] > dl or now >= dl):
+                raise HardStop("usage-limit pause lasts past the hard stop" if dl == hs else
+                               "v2-a4: usage-limit pause lasts past the pause deadline")
             if box.get("go"):
                 return
-            if hs is not None and st.get("until") and st["until"] > hs:
-                raise HardStop("usage-limit pause lasts past the hard stop")
             time.sleep(min(box["wait"], 60.0))
 
     def _usage_pause(self, msg: str) -> tuple[float, bool]:

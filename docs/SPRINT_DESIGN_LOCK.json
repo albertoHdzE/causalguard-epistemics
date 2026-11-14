@@ -142,6 +142,44 @@
      "id": "v2-a3",
      "reason": "Director decisions D101/D102 (delegation/iteration_9/01_ONLINE_DECISIONS_AND_DAY2_PLAN.md). The run order is not a scientific quantity: items, assignments, prompts, templates and scoring are unchanged; the lock fixed the hash order only as a reproducibility convenience, and it is kept inside each block.",
      "written_at": "2026-11-13T20:34:38+00:00"
+    },
+    {
+     "before": "after the frozen panel and the drafted report (b91bfaf, director 6cddcd5); before the first request of r7b-main-claude_opus_55-v2-b4 (no Tier H request had been sent by any online model)",
+     "change": {
+      "block": [
+       "B4",
+       "r7b-main-claude_opus_55-v2-b4",
+       [
+        [
+         "H",
+         "P3"
+        ],
+        [
+         "H",
+         "P4"
+        ]
+       ],
+       24
+      ],
+      "claude_hard_stop_utc": "2026-11-15T05:30:00+00:00 (Sat 14 Nov 23:30 CST)",
+      "claude_workers": 2,
+      "fresh_session_per_world": true,
+      "isolation": "the driver stops the pass at the first isolation flag; one retry pass (fresh sessions); a flag in the retry pass ends B4",
+      "label": "post-freeze supplement (amendment v2-a4, run after the report text was drafted)",
+      "no_resume_across_date": "a turn 2 is never sent on a later local (CST) date than its turn 1; such a world fails (not finished, never scored)",
+      "pause_fail_utc": "2026-11-15T05:00:00+00:00 (Sat 14 Nov 23:00 CST): a usage-limit pause still on at it, or ending after it, fails the item",
+      "reporting": "own table in Appendix D, one sentence in section 4.4, one in the conclusion, Figure 1 row marked; nothing in the main text depends on it (D103); cells with n finished / 12, contrast only if both reach 12",
+      "unchanged": "lock v1 items, assignments, prompts, templates, scores and analysis; the frozen tally (12 met / 5 not met / 2 not testable); no B5; DeepSeek runs no Tier H"
+     },
+     "files": {
+      "configs/sprint/r7b_online_main_claude_opus_55_b4.json": "cd7240b91362e1a91108914ee9d63886abc0e41e8400c4eb766ba0fba97a7e6b",
+      "scripts/sprint_online_blocks.sh": "4ca05445b3ae60ba0a351de00889ad8980b751561b8a5bb1f5b95d5e7b06bb46",
+      "src/causalguard/llm/providers.py": "aa88633cf0dcf9009e34d91011534aab4ae86e9314931d2b645865fb387b625d",
+      "tests/test_sprint_v2a3.py": "add31cf9f736755e9baedc4820e03e8d57989599a4de119ddf978376f9af6246"
+     },
+     "id": "v2-a4",
+     "reason": "Director decisions D118 (delegation/iteration_10/01_REVIEW_AND_FINAL_PLAN.md). P-D5 is the design's central question; the two B3 isolation flags were the CLI's date-change notice in sessions resumed across midnight, hence the date rule.",
+     "written_at": "2026-11-14T17:34:22+00:00"
     }
    ],
    "changed_files": [

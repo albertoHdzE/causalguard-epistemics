@@ -156,6 +156,47 @@ def test_hard_stop_fails_the_world_item(cli, tmp_path):
                                    "extra": {"binary": binary, "hard_stop_utc": "2020-01-01T00:00:00+00:00"}}})
 
 
+def test_v2a4_pause_past_the_deadline_fails(cli, tmp_path):
+    """v2-a4: a pause ending after pause_fail_utc fails the world at once, even before the hard stop."""
+    binary, home = cli
+    (tmp_path / "pause.json").write_text(json.dumps({"until": 5e9, "reset_parsed": True, "since": 0}))
+    p = _prov(binary, tmp_path, hard_stop_utc="2200-01-01T00:00:00+00:00", pause_fail_utc="2100-01-01T00:00:00+00:00")
+    with pytest.raises(PR.HardStop, match="pause deadline"):
+        p.chat([{"role": "system", "content": "SYS"}, {"role": "user", "content": "T1"}], 0.0, None)
+    assert not (home / "n").exists()
+    q = _prov(binary, tmp_path, pause_fail_utc="2020-01-01T00:00:00+00:00")   # a pause still on at the deadline
+    (tmp_path / "pause.json").write_text(json.dumps({"until": 1.0, "reset_parsed": True, "since": 0}))
+    with pytest.raises(PR.HardStop):
+        q.chat([{"role": "system", "content": "SYS"}, {"role": "user", "content": "T1"}], 0.0, None)
+    (tmp_path / "pause.json").write_text("{}")                                  # no pause: the deadline is not a stop
+    assert q.chat([{"role": "system", "content": "SYS"}, {"role": "user", "content": "T1"}], 0.0, None)["ok"]
+
+
+def test_v2a4_no_turn2_across_a_local_date(cli, tmp_path, monkeypatch):
+    binary, home = cli
+    p = _prov(binary, tmp_path, no_resume_across_date=True)
+    m = [{"role": "system", "content": "SYS"}, {"role": "user", "content": "T1"}]
+    r1 = p.chat(m, 0.0, None)
+    assert r1["ok"]
+    n = (home / "n").read_text() if (home / "n").exists() else None
+    real = PR.time.strftime
+    monkeypatch.setattr(PR.time, "strftime", lambda f, *a: "2999-01-01" if f == "%Y-%m-%d" else real(f, *a))
+    with pytest.raises(PR.HardStop, match="date boundary"):
+        p.chat(m + [{"role": "assistant", "content": r1["raw_output"]}, {"role": "user", "content": "T2"}], 0.0, None)
+    assert ((home / "n").read_text() if (home / "n").exists() else None) == n        # nothing sent
+
+
+def test_v2a4_b4_config():
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    c = json.loads((root / "configs/sprint/r7b_online_main_claude_opus_55_b4.json").read_text())
+    x = c["provider"]["extra"]
+    assert c["run_id"] == "r7b-main-claude_opus_55-v2-b4" and c["cells"] == [["H", "P3"], ["H", "P4"]]
+    assert datetime.datetime.fromisoformat(x["hard_stop_utc"]).astimezone(CST).strftime("%a %H:%M") == "Sat 23:30"
+    assert datetime.datetime.fromisoformat(x["pause_fail_utc"]).astimezone(CST).strftime("%a %H:%M") == "Sat 23:00"
+    assert x["no_resume_across_date"] is True and c["workers"] == 2
+
+
 def test_spend_stop_uses_upper_bound_and_backfill(tmp_path):
     t = datetime.datetime(2026, 11, 13, 15, 20, tzinfo=datetime.timezone.utc).timestamp()      # off-peak
     u = {"prompt_cache_hit_tokens": 896, "prompt_cache_miss_tokens": 94, "completion_tokens": 16000}
@@ -211,7 +252,8 @@ def test_lock_v2_keys_unchanged_except_amendments():
     a2 = json.loads(subprocess.run(["git", "show", "7c923a3:docs/SPRINT_DESIGN_LOCK.json"], cwd=root,
                                    capture_output=True, text=True, check=True).stdout)["addenda"][0]["amendments"]
     assert json.dumps(am[:2], sort_keys=True) == json.dumps(a2, sort_keys=True)
-    assert [a["id"] for a in am] == ["v2-a1", "v2-a2", "v2-a3"]
+    assert [a["id"] for a in am][:3] == ["v2-a1", "v2-a2", "v2-a3"]
+    assert [a["id"] for a in am][3:] in ([], ["v2-a4"])
 
 
 def _w(cond, status="ok", wkey=None):
