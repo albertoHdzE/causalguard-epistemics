@@ -10,6 +10,11 @@ one line a cited evidence row contradicts; a pre-registered verify-first control
 from "does not verify". Raw sprint runs, call ledgers and the spend record: asset of the pre-release
 `v0.8.0-sprint`, SHA-256 manifest `artifacts/manifest_sprint.json`. Claude's Tier H cells are a labelled
 post-freeze supplement (amendment v2-a4), outside the frozen tally.
+Rebuild from the markdown: `python report/fill.py && report/build.sh` (`report.src.md` → `report.md` →
+`report.tex` → `report.pdf`, plus `report.docx`). Rebuild from a hand-edited LaTeX source: edit
+`report/report.tex`, then `report/build.sh --from-tex` (xelatex only; `report/check_tex.py` fails the build if
+the `.tex` holds a number different from those generated into `report.md`). Layout follows the official Apart
+template (`report/apart_official_template.pdf`) through the pandoc template `report/apart.latex`.
 
 **What is pre-sprint and what is sprint work.** The engines, the benchmark, Tier W, the forged checks (P0–P4), lock
 v1 and the local main panel were built before the sprint (2026-11-09 to 2026-11-12). Everything committed on

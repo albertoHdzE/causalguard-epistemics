@@ -1,0 +1,137 @@
+$document-metadata.latex()$
+$passoptions.latex()$
+\documentclass[
+$for(babel-otherlangs)$
+  $babel-otherlangs$,
+$endfor$
+$if(babel-lang)$
+  $babel-lang$,
+$endif$
+$if(fontsize)$
+  $fontsize$,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+$if(beamerarticle)$
+\usepackage{beamerarticle} % needs to be loaded first
+$endif$
+\usepackage{xcolor}
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+\usepackage{amsmath,amssymb}
+$if(cancel)$
+\usepackage{cancel}
+$endif$
+$--
+$-- section numbering
+$--
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+$fonts.latex()$
+$font-settings.latex()$
+$common.latex()$
+$for(header-includes)$
+$header-includes$
+$endfor$
+$after-header-includes.latex()$
+$hypersetup.latex()$
+$if(pdf-trailer-id)$
+
+\ifXeTeX
+\special{pdf:trailerid [ $pdf-trailer-id$ ]}
+\fi
+\ifPDFTeX
+\pdftrailerid{}
+\pdftrailer{/ID [ $pdf-trailer-id$ ]}
+\fi
+\ifLuaTeX
+\pdfvariable trailerid {[ $pdf-trailer-id$ ]}
+\fi
+$endif$
+
+$--
+$-- Apart Research submission template (report/apart_official_template.pdf): title between two rules with
+$-- footnote 1, author over affiliation, "With" / Apart Research, centred Abstract in a narrower measure.
+$-- Metadata: title, apart-footnote, apart-authors (name, affiliation), apart-with; the abstract is the body Div
+$-- of class "abstract", turned into the environment below by apart.lua.
+$--
+\newenvironment{apartabstract}{%
+  \begin{center}\textbf{\large Abstract}\end{center}\vspace{-0.4em}%
+  \begin{list}{}{\setlength{\leftmargin}{0.1\linewidth}\setlength{\rightmargin}{0.1\linewidth}%
+    \setlength{\topsep}{0pt}\setlength{\parsep}{0.5em}}\item\relax\itshape}%
+  {\end{list}\vspace{0.6em}}
+$if(title)$
+\title{$title$}
+$endif$
+\author{$for(apart-authors)$$apart-authors.name$$sep$, $endfor$}
+\date{}
+
+\begin{document}
+\begin{center}
+\rule{\linewidth}{1.2pt}\par\vspace{0.7em}
+{\Large\bfseries $title$$if(apart-footnote)$\footnotemark[1]$endif$\par}\vspace{0.2em}%
+\rule{\linewidth}{1.2pt}%
+\end{center}
+$if(apart-footnote)$
+\footnotetext[1]{$apart-footnote$}\setcounter{footnote}{1}
+$endif$
+\begin{center}
+$for(apart-authors)$
+\begin{tabular}[t]{c}$apart-authors.name$\\ $apart-authors.affiliation$\end{tabular}$sep$\hspace{2em}
+$endfor$
+\par\vspace{0.6em}
+$if(apart-with)$
+\textbf{With}\\
+$apart-with$
+$endif$
+\end{center}
+% --- body (report/check_tex.py compares the numbers from this line to \end{document}) ---
+$for(include-before)$
+$include-before$
+
+$endfor$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+$if(has-frontmatter)$
+\mainmatter
+$endif$
+$body$
+
+$if(has-frontmatter)$
+\backmatter
+$endif$
+$if(nocite-ids)$
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+$if(has-chapters)$
+\renewcommand\bibname{$biblio-title$}
+$else$
+\renewcommand\refname{$biblio-title$}
+$endif$
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+$endif$
+$endif$
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}

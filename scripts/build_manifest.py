@@ -74,7 +74,8 @@ def sprint(asset_rel: str, out_rel: str = "artifacts/manifest_sprint.json") -> d
     files += [entry(f, "report") for f in sorted((ROOT / "reports" / "sprint_all").rglob("*")) if f.is_file()]
     files += [entry(f, "config") for f in sorted((ROOT / "configs" / "sprint").rglob("*.json"))]
     files += [entry(ROOT / x, "doc") for x in ("docs/SPRINT_DESIGN_LOCK.json", "artifacts/sprint_main_manifest.json",
-                                               "artifacts/sprint_p5_manifest.json", "report/report.pdf")]
+                                               "artifacts/sprint_p5_manifest.json", "report/report.pdf",
+                                               "report/report.tex")]
     asset = ROOT / asset_rel
     asset.parent.mkdir(exist_ok=True)
     with tarfile.open(asset, "w:gz") as tf:

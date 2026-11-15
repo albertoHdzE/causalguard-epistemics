@@ -13490,15 +13490,22 @@
   },
   {
    "path": "report/report.pdf",
-   "bytes": 474613,
-   "sha256": "48e26552d2a220f26b1768aadd04b84be17f5e95de258ae60ce279030067892d",
+   "bytes": 470497,
+   "sha256": "8f43bde4490d870782cf3acc64d7604e1da938c0446471912f76ed5099b7c798",
+   "required": true,
+   "group": "doc"
+  },
+  {
+   "path": "report/report.tex",
+   "bytes": 80454,
+   "sha256": "8365f0388637ea86b5c785c7e76987ab95fded4c87102e1eaff20702db27549c",
    "required": true,
    "group": "doc"
   },
   {
    "path": "dist/causalguard-sprint-runs-v0.8.0-sprint.tar.gz",
    "bytes": 7051860,
-   "sha256": "00a48346bd1e5dc56c5498c20acd30267ab1d36120bf58b1a44aafe3c414f35f",
+   "sha256": "939f0db363fa4e447127f10a8dde4375a69e58933dbccee5411d0b5bdf560e82",
    "required": false,
    "group": "release_asset",
    "contents": "sprint run records, call ledgers, spend record (release v0.8.0-sprint)"

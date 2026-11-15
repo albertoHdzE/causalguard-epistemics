@@ -2,8 +2,16 @@
 title: "Who checks the check? Frontier models verify forged derivations by lookup, open-weight models adopt them"
 subtitle: "Research conducted at the AI x Epistemics Research Sprint, November 2026 (Apart Research)"
 author:
-  - "Alberto Hernández Espinosa — independent researcher"
+  - "Alberto Hernández Espinosa"
+  - "Independent researcher"
   - "With Apart Research"
+author-meta: "Alberto Hernández Espinosa"
+# Title block of the official Apart template, rendered by report/apart.latex (the DOCX uses subtitle and author).
+apart-footnote: "Research conducted at the [AI x Epistemics Research Sprint](https://apartresearch.com/sprints/ai-x-epistemics-research-sprint-2026-11-13-to-2026-11-15), November 2026"
+apart-authors:
+  - name: "Alberto Hernández Espinosa"
+    affiliation: "Independent researcher"
+apart-with: "Apart Research"
 geometry: margin=2.0cm
 fontsize: 10pt
 header-includes:
@@ -15,6 +23,7 @@ header-includes:
 <!-- SOURCE of report/report.md. Every number comes from reports/sprint_all/*.json through report/fill.py; the
 build fails on a hand-typed number. Do not edit report.md by hand. -->
 
+::: {.abstract}
 # Abstract
 
 When a model is shown a step-by-step "check" of its answers, does it verify the check against the evidence, or
@@ -34,6 +43,7 @@ status on most named claims (0.860 to
 20 flagged claims): verification text and final answer come apart.
 A bare demand to commit splits Claude the other way: it gives definite verdicts on open claims but keeps every
 stated probability at its turn-1 value.
+:::
 
 # 1. Introduction
 
@@ -405,7 +415,9 @@ every line of a derivation, and can withhold a settled verdict the evidence does
 is to widen the declared class with compressed generative models, so that such a gate reaches systems where
 enumeration is impossible. Until then, this paper claims only the class it declares.
 
-**Limitations.** (1) Status is exact only inside the declared class (synchronous Boolean networks, at most 3
+## Limitations
+
+\(1) Status is exact only inside the declared class (synchronous Boolean networks, at most 3
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
 reasoning. (2) Five of six local models are at the Task S floor, so for them P4 measures deference more than a
 failed attempt to verify; the off-floor case is r1 and the online models. (3) Two local models ran half the panel.
@@ -417,7 +429,9 @@ ran past the 600 s timeout or met the usage window, so its finished worlds may b
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
-**Future work.** Run the frontier models on Tier H, where a check cannot be verified by lookup and deference is
+## Future Work
+
+Run the frontier models on Tier H, where a check cannot be verified by lookup and deference is
 the only option short of abstaining. Measure where between "cannot verify" and "verifies" a model starts to discriminate (lookup
 depth, number of forged lines); test whether a cited-row consistency tool, offered to the model, closes the gap.
 
@@ -441,6 +455,14 @@ release the generator, the gates, the lock and every run.
   call ledgers and the spend record are in the asset of the pre-release `v0.8.0-sprint`
   (https://github.com/albertoHdzE/causalguard-epistemics/releases/tag/v0.8.0-sprint), with a SHA-256 manifest
   (`artifacts/manifest_sprint.json`).
+* Other artifacts: release `v0.8.0-sprint` (runs, ledgers, manifest).
+
+# Author Contributions
+
+A.H.E. conceived the research programme and its lineage, set the research question and the sprint's direction,
+provided the compute, the models and the accounts, took the decisions recorded in `DECISIONS.md` at the director's
+checkpoints, and reviewed and approved the report. Code, runs, analysis and the draft were produced by Claude
+Opus 5.5 under the direction and review of Claude Fable (see LLM Usage Statement).
 
 # References
 
@@ -459,6 +481,8 @@ Kirichenko, P. et al. (2025). AbstentionBench: Reasoning LLMs Fail on Unanswerab
 Kolmogorov, A. N. (1965). Three approaches to the quantitative definition of information. Problems of Information Transmission 1(1). Reprinted (1968) in International Journal of Computer Mathematics 2:157–168, doi:10.1080/00207166808803030.
 
 Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment. arXiv:2311.08596.
+
+Li, M., Vitányi, P. (2008). An Introduction to Kolmogorov Complexity and Its Applications, 3rd ed. Springer. doi:10.1007/978-0-387-49820-1.
 
 Lin, S., Hilton, J., Evans, O. (2022). Teaching Models to Express Their Uncertainty in Words. arXiv:2205.14334.
 
@@ -517,9 +541,7 @@ supplement the timeouts may select the easier worlds (Appendix D).
 **Human subjects and data.** None; no personal data appears in any prompt. Online models were used under their
 providers' terms.
 
-**AI tool use.** Code, runs, analysis and the first draft of this report were produced by Claude Opus 5.5 under
-the direction and review of Claude Fable and the author. Every number in the report is generated by
-`report/fill.py` from the analysis outputs; the build fails if the text holds a number that is not in them.
+**AI tool use.** See the LLM Usage Statement at the end of the report.
 
 # Appendix B. Pre-sprint and sprint work; lock, amendments and predictions
 
@@ -689,7 +711,7 @@ messages with a visible contradiction (10 of
 cells. The world of the worked example (Appendix C) has 8 nodes with two inputs each, so its rules
 are 32 table bits; they fix the next state of all 256 states,
 2048 bits of behaviour. A short rule is not a shortcut: Wolfram argues that many simple
-rules are computationally irreducible, so that their consequences can only be obtained by running them. This is why
+rules are computationally irreducible: in his terms, no shortcut finds their consequences faster than running them. This is why
 the benchmark derives every consequence by enumeration and exact counting rather than by estimate.
 
 ![Short rules against the behaviour they generate, computed from the repository's objects
@@ -702,8 +724,9 @@ for 64 steps (4420 cells). (b) The worked-example world
 **E.2 Description length, algorithmic probability, and what we do not claim.** The Kolmogorov complexity of an
 object is the length of the shortest program that outputs it (Kolmogorov (1965); Chaitin (1966)). Solomonoff
 (1964) weighted every program that reproduces the data by $2^{-\textrm{length}}$, which gives a universal prior for
-induction, and the coding theorem ties the two together: an object's algorithmic probability *m* and its complexity
-*K* determine each other up to a constant, $-\log_2 m(x) = K(x) + O(1)$. Minimum description length (Rissanen
+induction, and Levin's coding theorem ties the two together for prefix complexity: an object's algorithmic
+probability *m* and its prefix complexity *K* determine each other up to a constant, $-\log_2 m(x) = K(x) + O(1)$;
+see Li and Vitányi (2008). Minimum description length (Rissanen
 (1978)) is the computable version, bound to a chosen model class. Both universal quantities are uncomputable. A
 length we compute, of an executable code that a fixed decoder reads back, is an *upper bound* on Kolmogorov
 complexity relative to that decoder; ordering two bounds does not order the complexities, and nothing here measures
@@ -723,9 +746,10 @@ method:
 **E.3 Symbolic computation in this work.** The benchmark is exact because it never samples mechanisms. A set of
 rules is represented symbolically as a schema: a node's truth table with the rows the evidence fixes and the others
 left as don't-cares. The version space V(D), every mechanism of the declared class that reproduces the evidence D,
-is then a product of per-node schema sets and is counted exactly; because a function that ignores an input fits on
+is then a product of per-node schema sets, because every evidence row is a single synchronous step and so
+constrains each node on its own, and is counted exactly; because a function that ignores an input fits on
 several input sets, each mechanism is counted once, by its essential inputs, through Möbius inversion. Two engines
-must agree on every claim (Tier H: an explicit enumeration of the class and the schema-counting engine; Tier W: a
+must agree on every claim (Tier H: a per-node enumeration of the class and the schema-counting engine; Tier W: a
 table-lookup engine and the explicit version space restricted to the given wiring), and a complete SAT encoding must
 agree with them on every status. A derivation is a symbolic trace (step, node, input values, the evidence row it
 cites or "no row"); a verifier replays it line by line, and a forgery is a single-line edit that the verifier
@@ -743,3 +767,12 @@ Random Boolean networks as models of gene regulation (Kauffman (1969)) and block
 algorithmic complexity (Zenil et al. 2018) are the background against which Boolean networks were chosen. The
 programme is under construction: this paper uses its exact part; the compression part is motivation and prior
 work, and the sprint result neither depends on it nor validates it.
+
+# LLM Usage Statement
+
+Claude Opus 5.5 wrote the code, ran the runs and the analysis, and drafted this report; Claude Fable, as director,
+wrote each iteration's assignment, reviewed every delivery and its numbers, and requested the corrections recorded
+in `DECISIONS.md`; the author set the question and the direction, took the decisions at the director's checkpoints,
+and reviewed and approved the report. Every number in the report is generated by `report/fill.py` from the
+analysis outputs, and the build fails if the text holds a number that is not in them. Claude Opus 5.5 is also one
+of the evaluated models; it ran in isolated, audited contexts, separate from the sessions that built the benchmark.
