@@ -18,18 +18,18 @@ build fails on a hand-typed number. Do not edit report.md by hand. -->
 # Abstract
 
 When a model is shown a step-by-step "check" of its answers, does it verify the check against the evidence, or
-defer to it? We built a benchmark where this is decidable. Each task shows a hidden Boolean network through a few
-evidence rows and asks whether claims about it are settled true, settled false or not settled; two exact engines
-and a SAT solver compute the answer key. In a second turn the model receives one of five randomised follow-ups,
-including a valid check (P3) and a forged one (P4) that differs from it in a single line contradicted by a cited
+defer to it? We built a benchmark where this is decidable, inside a programme that models mechanisms as short
+executable rules and derives their consequences exactly (Appendix E). Each task shows a hidden Boolean network
+through a few evidence rows and asks whether claims are settled true, settled false or not settled; exact
+engines compute the answer key. In a second turn the model receives one of five randomised follow-ups,
+including a valid check (P3) and a forged one (P4) that differs in one line contradicted by a cited
 evidence row. When the wiring is given (Tier W), every line can be verified by one lookup. There, two frontier
 models reject forged checks by re-deriving the cited rows unprompted (check discernment: Claude Opus 5.5
 {{A/models/cl/tiers/W/contrasts/check_discernment|est}}, DeepSeek V4-Pro at low effort
 {{A/models/ds/tiers/W/contrasts/check_discernment|est}}), while six local open-weight models adopt the forged
 status on most named claims ({{A/models/g3/tiers/W/C/adopt_forged/P4|est}} to
-{{A/models/ll/tiers/W/C/adopt_forged/P4|est}}), with check discernment near zero. A pre-registered control (P5)
-asks the model to verify every line first. Told to verify, some local models find forged lines but flag valid
-lines about as often, and a small model that flags a forged line usually keeps its forged status anyway
+{{A/models/ll/tiers/W/C/adopt_forged/P4|est}}), with check discernment near zero. In a pre-registered verify-first control
+(P5), some local models find forged lines but flag valid lines about as often, and a small model that flags a forged line usually keeps its forged status
 (qwen2.5-7b: {{P/models/q7/flagged_then_adopted/flagged_adopted|int}} of
 {{P/models/q7/flagged_then_adopted/flagged|int}} flagged claims): verification text and final answer come apart.
 A bare demand to commit splits Claude the other way: it gives definite verdicts on open claims but keeps every
@@ -48,9 +48,18 @@ transitions and asks about claims. The status of every claim relative to the sho
 inside a declared class of mechanisms. A forged check can then be built that is wrong in exactly one verifiable
 line, and nothing else changes between the valid and the forged condition.
 
+**Where the benchmark comes from.** It is the first product of a programme of algorithmic modelling: describe a
+system by short executable rules that generate its behaviour, keep every rule set consistent with the evidence,
+and derive exactly what follows. The view of a mechanism as something learned by perturbing and querying a system
+comes from algorithmic causal deconvolution (Zenil et al. 2019a), and the programme began in the author's earlier
+work with that group (Hernández-Espinosa et al. 2021). Boolean networks come first because inside a declared class
+every status can be computed exactly, so an epistemic question becomes decidable. The sprint uses only this exact
+part; the compression part of the programme is pre-sprint work with mixed results (Appendix E).
+
 Our main contributions are:
 
-1. **An exact benchmark of evidence-relative reasoning under pressure.** Claims are scored against what the
+1. **An exact benchmark of evidence-relative reasoning under pressure, built on an exact symbolic engine over a
+   declared mechanism class.** Claims are scored against what the
    evidence settles, not against what is true. Five randomised follow-ups (neutral, empty disagreement, demand to
    commit, valid check, forged check) are assigned by hash to disjoint worlds. Two tiers separate "cannot verify"
    (wiring hidden) from "could verify by lookup" (wiring given).
@@ -77,9 +86,7 @@ verbalised confidence against correctness (Lin et al. 2022; Tian et al. 2023; Xi
 flip-flop studies show that models yield to empty or invalid challenges (Perez et al. 2022; Sharma et al. 2023;
 Laban et al. 2023; Wang et al. 2023). Those designs have no condition in which yielding is correct, and no
 challenge that is wrong in a checkable way. Our P1 (empty disagreement) reproduces their setting. P3 and P4 add a
-valid and a forged checked challenge on randomised worlds, and P5 asks for verification explicitly. We have not
-found this paired, exactly scored measurement in the work above. That is a statement about these references, not
-a literature-wide claim.
+valid and a forged checked challenge on randomised worlds, and P5 asks for verification explicitly.
 
 # 3. Methods
 
@@ -88,8 +95,9 @@ drawn from synthetic strata or from published regulatory-network fragments. The 
 (one synchronous step each, optionally with clamped nodes) and 8 claims ("from this start state, after k steps,
 node X = 1"). A claim is *settled true* if every mechanism of the declared class that reproduces the evidence makes
 it true, *settled false* if none does, and *not settled* otherwise. For open claims, p\* is the exact share of
-consistent mechanisms making the claim true. Two independent exact engines and a SAT encoding must agree on every
-claim (gates passed on every item).
+consistent mechanisms making the claim true. The engines represent sets of rules symbolically (schema families
+with don't-cares) and count consistent mechanisms exactly; two independent engines and a SAT encoding must agree
+on every claim (gates passed on every item; Appendix E.3).
 
 **Tiers.** On *Tier H* the wiring is hidden. On *Tier W* each node's inputs are listed, so the status of a claim
 can be traced by looking up rows: a *derivation* lists, step by step, which row shows the node's next value for
@@ -252,8 +260,7 @@ balanced accuracy does not exceed that of answering "not settled" everywhere (po
 verdict on {{A/models/g3/tiers/W/S/overclaim|est}} of open claims; llama-3.3-70b answers "not settled" on
 {{A/models/ll/tiers/W/S/underclaim|est}} of settled ones (Figure 3). Only r1-distill is off the floor on Tier W
 ({{A/models/r1/tiers/W/S/balanced_accuracy}}), and it too has zero check discernment
-({{A/models/r1/tiers/W/contrasts/check_discernment}}). A model that cannot trace a claim itself cannot be
-expected to catch a forged trace; r1 could do better than the floor, and still did not.
+({{A/models/r1/tiers/W/contrasts/check_discernment}}).
 
 ![Task S: overclaim (orange squares) and underclaim (blue circles) per model and tier; the surface rule
 is the reference row (hollow). Lines are 95 % intervals.](../reports/sprint_all/fig2_task_s.png){width=100%}
@@ -304,15 +311,13 @@ error ("Its counterexamples show my per-node analysis was wrong in places, thoug
 `main|synthetic|feedforward_hetero|4|`).
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
-most forged checks (check discernment {{A/models/ds/tiers/W/contrasts/check_discernment}}). Its stored reasoning
-shows how. In {{C/ds/P4/c_names_altered_line|int}} of {{C/ds/P4/n|int}} coded P4 replies it rebuilds the cited lookups and names the misread row ("checker says row #01
-shows F3 -> 1. That is definitely misreading", `main|published|published|20|`). The exceptions are the instructive
-ones. In one, it never checks: "We should trust checker if it's correct. Let's double-check each claim manually
-maybe, but … We should accept those corrections." (`main|synthetic|shared_motifs|12|`). In another it finds both
-forged lines wrong ("both user corrections are based on misreading rows") and still concludes "I think the safest
-is to follow the user's explicit correction" (`main|synthetic|uniform_H|0|`), the same decoupling of check and
-answer as the local models, at the level of the reasoning. One reply calls the check "likely a test to see if I
-will catch the inconsistency" (`main|published|published|0|`).
+most forged checks (check discernment {{A/models/ds/tiers/W/contrasts/check_discernment}}); in
+{{C/ds/P4/c_names_altered_line|int}} of {{C/ds/P4/n|int}} coded P4 replies its stored reasoning rebuilds the cited
+lookups and names the misread row ("checker says row #01 shows F3 -> 1. That is definitely misreading",
+`main|published|published|20|`). The exceptions are instructive: once it accepts the check without looking ("We
+should trust checker if it's correct.", `main|synthetic|shared_motifs|12|`), and once it finds both forged lines
+wrong and still concludes "I think the safest is to follow the user's explicit correction"
+(`main|synthetic|uniform_H|0|`), the local models' decoupling of check and answer, at the level of the reasoning.
 
 Requests, rejections and spend per online model are in Appendix D (Tables 6 and 8).
 
@@ -333,6 +338,11 @@ and their verification text does not. In both cases one field of the reply canno
 a model's released verdicts. A settled verdict that the checker contradicts is released as "not settled". This
 removes overclaim by construction but cannot add what the model missed. Outside the class the checker can
 certify a false claim (pre-sprint evidence, Appendix A). It is a remedy for this class, not a general verifier.
+
+**Theory of change.** The same exact engine is answer key, verifier and release gate: it labels the items, checks
+every line of a derivation, and can withhold a settled verdict the evidence does not support. The programme's aim
+is to widen the declared class with compressed generative models, so that such a gate reaches systems where
+enumeration is impossible. Until then, this paper claims only the class it declares.
 
 **Limitations.** (1) Status is exact only inside the declared class (synchronous Boolean networks, at most 3
 inputs per node); the tasks are synthetic and we make no claim that results transfer to natural-language
@@ -375,9 +385,17 @@ release the generator, the gates, the lock and every run.
 
 Amayuelas, A. et al. (2023). Knowledge of Knowledge: Exploring Known-Unknowns Uncertainty with Large Language Models. arXiv:2305.13712.
 
+Chaitin, G. J. (1966). On the Length of Programs for Computing Finite Binary Sequences. Journal of the ACM 13(4):547–569. doi:10.1145/321356.321363.
+
 Han, S. et al. (2022). FOLIO: Natural Language Reasoning with First-Order Logic. arXiv:2209.00840.
 
+Hernández-Espinosa, A., Zenil, H., Kiani, N. A., Tegnér, J. (2021). Estimations of Integrated Information Based on Algorithmic Complexity and Dynamic Querying. In Handbook of Unconventional Computing, World Scientific, 171–219. doi:10.1142/9789811235726_0005.
+
+Kauffman, S. A. (1969). Metabolic stability and epigenesis in randomly constructed genetic nets. Journal of Theoretical Biology 22(3):437–467. doi:10.1016/0022-5193(69)90015-0.
+
 Kirichenko, P. et al. (2025). AbstentionBench: Reasoning LLMs Fail on Unanswerable Questions. arXiv:2506.09038.
+
+Kolmogorov, A. N. (1965). Three approaches to the quantitative definition of information. Problems of Information Transmission 1(1). Reprinted (1968) in International Journal of Computer Mathematics 2:157–168, doi:10.1080/00207166808803030.
 
 Laban, P. et al. (2023). Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment. arXiv:2311.08596.
 
@@ -385,7 +403,11 @@ Lin, S., Hilton, J., Evans, O. (2022). Teaching Models to Express Their Uncertai
 
 Perez, E. et al. (2022). Discovering Language Model Behaviors with Model-Written Evaluations. arXiv:2212.09251.
 
+Rissanen, J. (1978). Modeling by shortest data description. Automatica 14(5):465–471. doi:10.1016/0005-1098(78)90005-5.
+
 Sharma, M. et al. (2023). Towards Understanding Sycophancy in Language Models. arXiv:2310.13548.
+
+Solomonoff, R. J. (1964). A formal theory of inductive inference. Part I. Information and Control 7(1):1–22. doi:10.1016/S0019-9958(64)90223-2.
 
 Tafjord, O., Dalvi Mishra, B., Clark, P. (2021). ProofWriter: Generating Implications, Proofs, and Abductive Statements over Natural Language. Findings of ACL. arXiv:2012.13048.
 
@@ -395,9 +417,17 @@ Wang, B., Yue, X., Sun, H. (2023). Can ChatGPT Defend its Belief in Truth? Findi
 
 Wen, B. et al. (2024). Know Your Limits: A Survey of Abstention in Large Language Models. TACL. arXiv:2407.18418.
 
+Wolfram, S. (2002). A New Kind of Science. Wolfram Media. ISBN 1-57955-008-8; https://www.wolframscience.com/nks/.
+
 Xiong, M. et al. (2024). Can LLMs Express Their Uncertainty? ICLR. arXiv:2306.13063.
 
 Yin, Z. et al. (2023). Do Large Language Models Know What They Don't Know? Findings of ACL. arXiv:2305.18153.
+
+Zenil, H., Hernández-Orozco, S., Kiani, N. A., Soler-Toscano, F., Rueda-Toicen, A., Tegnér, J. (2018). A Decomposition Method for Global Evaluation of Shannon Entropy and Local Estimations of Algorithmic Complexity. Entropy 20(8):605. doi:10.3390/e20080605.
+
+Zenil, H., Kiani, N. A., Zea, A. A., Tegnér, J. (2019a). Causal deconvolution by algorithmic generative models. Nature Machine Intelligence 1:58–66. doi:10.1038/s42256-018-0005-0.
+
+Zenil, H., Kiani, N. A., Marabita, F., Deng, Y., Elias, S., Schmidt, A., Ball, G., Tegnér, J. (2019b). An Algorithmic Information Calculus for Causal Discovery and Reprogramming Systems. iScience 19:1160–1172. doi:10.1016/j.isci.2019.07.043.
 
 # Appendix A. Limitations and Dual-Use / Ethical Considerations
 
@@ -532,3 +562,67 @@ visible without the evidence rows. Such messages are not detected more often: mi
 adopts the forged status in {{P/models/g3/P4_contradiction/adopt_forged_P4_contradiction_true|est}} of P4
 messages with a visible contradiction ({{P/models/g3/P4_contradiction/P4_with_contradiction}} of
 {{P/models/g3/P4_contradiction/P4_messages}}).
+
+# Appendix E. Background: short rules, exact consequences, and how symbolic computation was used
+
+**E.1 Short rules, rich behaviour.** A short executable rule can generate behaviour far larger than itself
+(Wolfram (2002)). Figure 4 shows this with two objects from the repository. Rule {{F/rule110/table|int}}, a rule of
+{{F/rule110/rule_bits|int}} bits that is a fixture of the code's semantics tests, run for
+{{F/rule110/steps|int}} steps from one live cell, draws a space-time diagram of {{F/rule110/diagram_bits|int}}
+cells. The world of the worked example (Appendix C) has {{F/world/n|int}} nodes with two inputs each, so its rules
+are {{F/world/table_bits|int}} table bits; they fix the next state of all {{F/world/states|int}} states,
+{{F/world/behaviour_bits|int}} bits of behaviour. A short rule is not a shortcut: Wolfram argues that many simple
+rules are computationally irreducible, so that their consequences can only be obtained by running them. This is why
+the benchmark derives every consequence by enumeration and exact counting rather than by estimate.
+
+![Short rules against the behaviour they generate, computed from the repository's objects
+(`src/causalguard/sprint/figures.py`). (a) Rule {{F/rule110/table|int}}, {{F/rule110/rule_bits|int}} bits of rule, from one live cell
+for {{F/rule110/steps|int}} steps ({{F/rule110/diagram_bits|int}} cells). (b) The worked-example world
+(`pilot4|synthetic|rewired_control|0|`): each node's truth table over its two inputs,
+{{F/world/table_bits|int}} bits in all. (c) Its behaviour: the next value of every node for each of the
+{{F/world/states|int}} states ({{F/world/behaviour_bits|int}} bits).](../reports/sprint_all/fig4_background.png){width=100%}
+
+**E.2 Description length, algorithmic probability, and what we do not claim.** The Kolmogorov complexity of an
+object is the length of the shortest program that outputs it (Kolmogorov (1965); Chaitin (1966)). Solomonoff
+(1964) weighted every program that reproduces the data by $2^{-\textrm{length}}$, which gives a universal prior for
+induction, and the coding theorem ties the two together: an object's algorithmic probability *m* and its complexity
+*K* determine each other up to a constant, $-\log_2 m(x) = K(x) + O(1)$. Minimum description length (Rissanen
+(1978)) is the computable version, bound to a chosen model class. Both universal quantities are uncomputable. A
+length we compute, of an executable code that a fixed decoder reads back, is an *upper bound* on Kolmogorov
+complexity relative to that decoder; ordering two bounds does not order the complexities, and nothing here measures
+universal algorithmic probability. Choosing or weighting mechanisms by short code is an inductive policy, not a test
+of truth. The programme used it before the sprint as a prior over the mechanisms consistent with the evidence.
+Development runs, not confirmatory; Brier-score differences with 95 % intervals, positive favouring the first-named
+method:
+
+* release `v0.5.0-dev` (`reports/development_r5/g_evaluation.json`), {{X/r5_g/n_worlds|int}} held-out synthetic
+  worlds: weighting consistent mechanisms by their length under the hierarchical code against uniform averaging, {{X/r5_uniform|ci4}}; weighting
+  against predicting from the single shortest consistent mechanism, {{X/r5_shortest|ci4}}; the full hierarchical
+  code against the best generic code chosen on calibration, {{X/r5_g|ci4}}, no detected advantage.
+* release `v0.6.0-dev` (`reports/development_r6/s_evaluation.json`), {{X/r6_s/n_worlds|int}} held-out fragments of
+  published models ({{X/r6_s/n_groups|int}} source lineages): a code whose rule-type weights are fitted to the
+  evidence against the best fixed code, {{X/r6_s|ci4}}, a small effect.
+
+**E.3 Symbolic computation in this work.** The benchmark is exact because it never samples mechanisms. A set of
+rules is represented symbolically as a schema: a node's truth table with the rows the evidence fixes and the others
+left as don't-cares. The version space V(D), every mechanism of the declared class that reproduces the evidence D,
+is then a product of per-node schema sets and is counted exactly; because a function that ignores an input fits on
+several input sets, each mechanism is counted once, by its essential inputs, through Möbius inversion. Two engines
+must agree on every claim (Tier H: an explicit enumeration of the class and the schema-counting engine; Tier W: a
+table-lookup engine and the explicit version space restricted to the given wiring), and a complete SAT encoding must
+agree with them on every status. A derivation is a symbolic trace (step, node, input values, the evidence row it
+cites or "no row"); a verifier replays it line by line, and a forgery is a single-line edit that the verifier
+rejects at exactly that line. Counting gave the sprint its answer key and p\*; the agreement of engines and SAT, its
+gates; traces and verifier, the valid and forged checks; and the same exact verdicts, the remedy of §5.
+
+**E.4 Lineage and status.** The line runs from the author's chapter with Zenil, Kiani and Tegnér on algorithmic
+complexity and dynamic querying (Hernández-Espinosa et al. 2021), through algorithmic causal deconvolution and the
+algorithmic information calculus of that group (Zenil et al. 2019a; Zenil et al. 2019b), to the author's index-set
+calculus for Boolean networks (an unpublished manuscript, not part of this submission), to the CausalGuard
+development iterations (pre-sprint, releases `v0.1.0-dev` to `v0.6.0-dev`, 2026-11-09 to 2026-11-12), and to this
+benchmark (pre-sprint) and the sprint's verify-first control, online runs and report. The biological applications
+of algorithmic causal deconvolution are those authors' results; we have not applied our method to biological data.
+Random Boolean networks as models of gene regulation (Kauffman (1969)) and block-decomposition estimates of
+algorithmic complexity (Zenil et al. 2018) are the background against which Boolean networks were chosen. The
+programme is under construction: this paper uses its exact part; the compression part is motivation and prior
+work, and the sprint result neither depends on it nor validates it.

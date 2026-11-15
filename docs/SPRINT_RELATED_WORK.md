@@ -85,3 +85,23 @@ motivation only.
 
 Three-valued (True/False/Unknown) entailment labels; abstention benchmarks; verbalised-confidence calibration;
 sycophancy and flip-under-challenge measurements; synthetic, procedurally generated reasoning items.
+
+## 6. Lineage and background of the programme (Appendix E; added 2026-11-15, iteration 12, D129)
+
+Each identifier below was resolved on 2026-11-15 by the implementation agent through the Crossref API
+(`https://api.crossref.org/works/<doi>`), which returned the title, authors, venue, volume and pages shown; the book
+was checked on Open Library (ISBN record) and on the publisher's online edition. Corrections to the director's list
+(iteration 12 plan §3) are marked. These references support Appendix E only; none bears on a sprint result.
+
+| Reference | Identifier (resolved) | Checked | Used for |
+|---|---|---|---|
+| Kolmogorov, A. N. *Three approaches to the quantitative definition of information.* Problems of Information Transmission 1(1), 1965; reprinted Int. J. Computer Mathematics 2(1–4):157–168, 1968. | doi:10.1080/00207166808803030 (the 1968 reprint; the 1965 original has no DOI) | title, author, reprint venue/pages | definition of Kolmogorov complexity |
+| Chaitin, G. J. *On the Length of Programs for Computing Finite Binary Sequences.* Journal of the ACM 13(4):547–569, 1966. | doi:10.1145/321356.321363 | title, author, venue, pages | same |
+| Solomonoff, R. J. *A formal theory of inductive inference. Part I.* Information and Control 7(1):1–22, 1964. | doi:10.1016/S0019-9958(64)90223-2 | title (Part I), author, venue, pages | algorithmic probability as a prior for induction |
+| Rissanen, J. *Modeling by shortest data description.* Automatica 14(5):465–471, 1978. | doi:10.1016/0005-1098(78)90005-5 | title, author, venue, pages | minimum description length |
+| Wolfram, S. *A New Kind of Science.* Wolfram Media, 2002. | ISBN 1-57955-008-8 (Open Library record, publisher Wolfram Media); https://www.wolframscience.com/nks/ (online edition) — no DOI exists | publisher, ISBN, online edition | short rules, rich behaviour; computational irreducibility (as Wolfram's argument) |
+| Kauffman, S. A. *Metabolic stability and epigenesis in randomly constructed genetic nets.* J. Theoretical Biology 22(3):437–467, 1969. | doi:10.1016/0022-5193(69)90015-0 | title, author, venue, pages | random Boolean networks as models of gene regulation |
+| Zenil, H., Kiani, N. A., **Zea, A. A.**, Tegnér, J. *Causal deconvolution by algorithmic generative models.* Nature Machine Intelligence 1:58–66, 2019. | doi:10.1038/s42256-018-0005-0 | title, all four authors (the plan omitted Zea), venue, pages | algorithmic causal deconvolution (lineage) |
+| Zenil, H., Kiani, N. A., Marabita, F., Deng, Y., Elias, S., Schmidt, A., Ball, G., Tegnér, J. *An Algorithmic Information Calculus for Causal Discovery and Reprogramming Systems.* iScience 19:1160–1172, 2019. | doi:10.1016/j.isci.2019.07.043 | title, authors, venue, pages | lineage; its biological results are the authors', cited as such |
+| Zenil, H., **Hernández-Orozco, S., Kiani, N. A., Soler-Toscano, F., Rueda-Toicen, A., Tegnér, J.** *A Decomposition Method for Global Evaluation of Shannon Entropy and Local Estimations of Algorithmic Complexity.* Entropy 20(8):605, 2018. | doi:10.3390/e20080605 | title, authors in Crossref order (the plan's order differed and omitted Tegnér), venue | background (block decomposition) |
+| Hernández-Espinosa, A., Zenil, H., Kiani, N. A., Tegnér, J. *Estimations of Integrated Information Based on Algorithmic Complexity and Dynamic Querying.* In Handbook of Unconventional Computing, World Scientific, 2021, pp. 171–219. | doi:10.1142/9789811235726_0005 | title, authors, book, pages | the author's earlier work with that group (inception of the programme) |

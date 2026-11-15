@@ -1,4 +1,4 @@
-"""SPRINT report figures 1-3, drawn from ``analysis.json`` and ``p5_analysis.json`` (no number computed here).
+"""SPRINT report figures 1-4, drawn from ``analysis.json`` and ``p5_analysis.json`` (no number computed here).
 
 Dot plots, one row per model (names on the axis, so no label collides), 95 % intervals as thin lines.  Categorical
 slots 1-3 of the dataviz reference palette (validated: CVD worst adjacent dE 9.2; the aqua slot's contrast warning
@@ -8,6 +8,7 @@ D102(d) minimum is drawn hollow and its row label carries n finished / n planned
   Fig 1  Task P: adoption of the true status under P3, of the forged status under P4 and under P5f; Tier W, Tier H
   Fig 2  Task S: overclaim and underclaim per model, Tier W and Tier H, with the surface rule as a reference row
   Fig 3  P5: exact and lenient detection of the forged line (P5f) and false alarm (P5v)
+  Fig 4  Appendix E.1 (D128): Rule 110 and the worked-example world against the behaviour they generate (no run read)
 """
 from __future__ import annotations
 
@@ -148,6 +149,105 @@ def fig_p5(P5: dict, path: Path):
     plt.close(fig)
 
 
+WORKED_WORLD = "pilot4|synthetic|rewired_control|0|"     # the worked example's world (Appendix C), never main panel
+CA_STEPS = 64
+
+
+def background_data() -> dict:
+    """Figure 4 (Appendix E.1, D128): short rules against the behaviour they generate, from the repository's own
+    objects and owners only (no dynamics re-implemented here).
+
+    (a) Rule 110 = the semantics fixture ``Rule((0, 1, 2), 110)`` (docs/CODEC.md; tests/test_index_repr.py: inputs
+        (right, centre, left), so the local table IS the Wolfram number), placed on a line of cells whose two end
+        cells are constant 0; one seed cell at the right; stepped by ``index_repr.from_network(...).step`` through
+        ``semantics.trajectory``.  The line is wide enough that the pattern never reaches an end cell (asserted),
+        so every interior cell runs Rule 110 unmodified.
+    (b) the worked-example world's canonical rules (``population.tier_public``; hidden mechanism, canonical form).
+    (c) its whole behaviour: F(x) for all 2^n states, stepped by the same owner."""
+    from ..index_repr import from_network
+    from ..schema import Intervention, Network, Rule
+    from ..semantics import trajectory
+    from . import population as P
+
+    r110 = Rule((0, 1, 2), 110)
+    w = CA_STEPS + 4
+    net = Network(w, (Rule((), 0),) + tuple(Rule((i - 1, i, i + 1), r110.table) for i in range(1, w - 1))
+                  + (Rule((), 0),))
+    ca = trajectory(from_network(net).step, 1 << 1, Intervention(), CA_STEPS)
+    if any((s >> (w - 2)) & 1 for s in ca):
+        raise AssertionError("Rule 110 pattern reached the constant end cell")
+    m = json.loads((Path(__file__).resolve().parents[3] / "artifacts" / "sprint_pilot4_manifest.json").read_text())
+    x = next(x for x in m["items"] if x["wkey"] == WORKED_WORLD and x["tier"] == "W")
+    ev, pub = P.tier_public(P.WorldKey.from_json(x), "W")
+    wn = ev.world.net.canonical()
+    step = from_network(wn).step
+    n = wn.n
+    return {"rule110": {"rule_bits": 1 << r110.arity, "table": r110.table, "cells": w, "steps": CA_STEPS,
+                        "diagram_bits": w * (CA_STEPS + 1), "rows": [format(s, f"0{w}b") for s in ca]},
+            "world": {"wkey": WORKED_WORLD, "n": n, "labels": pub["node_labels"],
+                      "rules": [r.to_json() for r in wn.rules],
+                      "arity": sorted({r.arity for r in wn.rules}),
+                      "table_bits": sum(1 << r.arity for r in wn.rules), "states": 1 << n,
+                      "behaviour_bits": n << n, "successor": [step(s) for s in range(1 << n)]}}
+
+
+def fig_background(B: dict, path: Path):
+    plt = _plt()
+    import numpy as np
+    from matplotlib.colors import ListedColormap
+    cm = ListedColormap(["white", INK])
+    fig = plt.figure(figsize=(7.2, 2.8))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1.0, 0.5, 1.45], wspace=0.75)
+    r = B["rule110"]
+    a = fig.add_subplot(gs[0])
+    img = np.array([[int(c) for c in row] for row in r["rows"]])        # string MSB first = leftmost = highest node
+    a.imshow(img, cmap=cm, interpolation="nearest", aspect="auto")
+    a.set_title(f"(a) Rule 110: {r['rule_bits']}-bit rule,\n{r['steps']} steps from one cell", fontsize=8)
+    a.set_xticks([])
+    a.set_ylabel("time step")
+    W = B["world"]
+    b = fig.add_subplot(gs[1])
+    tab = np.array([[(ru["table"] >> y) & 1 for y in range(1 << max(W["arity"]))] for ru in W["rules"]])
+    b.imshow(tab, cmap=cm, interpolation="nearest", aspect="auto", vmin=0, vmax=1)
+    b.set_yticks(range(W["n"]))
+    b.set_yticklabels([f"{W['labels'][j]} ← {','.join(W['labels'][i] for i in ru['inputs'])}"
+                       for j, ru in enumerate(W["rules"])], fontsize=6.5)
+    b.set_xticks(range(tab.shape[1]))
+    b.set_xticklabels([format(y, f"0{max(W['arity'])}b")[::-1] for y in range(tab.shape[1])], fontsize=6.5)
+    b.set_xticks(np.arange(-0.5, tab.shape[1]), minor=True)
+    b.set_yticks(np.arange(-0.5, W["n"]), minor=True)
+    b.grid(which="minor", color=MUTED, linewidth=0.4)
+    b.tick_params(which="minor", length=0)
+    b.set_xlabel("input values", fontsize=7)
+    b.set_title(f"(b) world: {len(W['rules'])} tables,\n{W['table_bits']} bits", fontsize=8)
+    c = fig.add_subplot(gs[2])
+    beh = np.array([[(s >> j) & 1 for s in W["successor"]] for j in range(W["n"])])
+    c.imshow(beh, cmap=cm, interpolation="nearest", aspect="auto")
+    c.set_yticks(range(W["n"]))
+    c.set_yticklabels(W["labels"], fontsize=6.5)
+    c.set_xticks([0, W["states"] - 1])
+    c.set_xlabel("state x (all of them)", fontsize=7)
+    c.set_title(f"(c) its behaviour: next state of\nall {W['states']} states, {W['behaviour_bits']} bits",
+                fontsize=8)
+    for ax in (a, b, c):
+        for s in ax.spines.values():
+            s.set_visible(True)
+            s.set_color(MUTED)
+            s.set_linewidth(0.5)
+        ax.tick_params(length=0)
+    fig.savefig(path, bbox_inches="tight", metadata={"Software": None})
+    plt.close(fig)
+
+
+def draw_background(out: str) -> None:
+    """Figure 4 and its numbers (fig4_background.json, read by report/fill.py as root F)."""
+    o = Path(out)
+    B = background_data()
+    (o / "fig4_background.json").write_text(json.dumps(B, indent=1, sort_keys=True) + "\n")
+    fig_background(B, o / "fig4_background.png")
+    print(f"figure 4 -> {o}")
+
+
 def draw(out: str) -> None:
     o = Path(out)
     A = json.loads((o / "analysis.json").read_text())
@@ -157,3 +257,9 @@ def draw(out: str) -> None:
     fig_task_s(A, o / "fig2_task_s.png")
     fig_p5(P5, o / "fig3_p5.png")
     print(f"figures 1-3 -> {o}")
+    draw_background(out)
+
+
+if __name__ == "__main__":     # Figure 4 alone (it reads no run): python -m causalguard.sprint.figures [out]
+    import sys
+    draw_background(sys.argv[1] if len(sys.argv) > 1 else "reports/sprint_all")

@@ -12901,6 +12901,20 @@
    "group": "report"
   },
   {
+   "path": "reports/sprint_all/fig4_background.json",
+   "bytes": 7681,
+   "sha256": "afb25493dc0235120e5dce1339a74a5c510a6548cc31818b8df8a5bda5dbf68b",
+   "required": true,
+   "group": "report"
+  },
+  {
+   "path": "reports/sprint_all/fig4_background.png",
+   "bytes": 58680,
+   "sha256": "309700ba27b8ce55c52992416ae1e0c23c3fc6b958106aac63c814f8abf758cc",
+   "required": true,
+   "group": "report"
+  },
+  {
    "path": "reports/sprint_all/fig_adoption_p3_p4.png",
    "bytes": 71109,
    "sha256": "bcdcd655029e34d658c1f4b5d9cc040e750586b12da8b4952f03806d485dc7f9",
@@ -13476,15 +13490,15 @@
   },
   {
    "path": "report/report.pdf",
-   "bytes": 401382,
-   "sha256": "355e309fc1b9967659b158d1d10c8a2bd1295d7185a577367c919032d8df89c4",
+   "bytes": 474613,
+   "sha256": "48e26552d2a220f26b1768aadd04b84be17f5e95de258ae60ce279030067892d",
    "required": true,
    "group": "doc"
   },
   {
    "path": "dist/causalguard-sprint-runs-v0.8.0-sprint.tar.gz",
    "bytes": 7051860,
-   "sha256": "a43fa21d1ea63456d85b6704fef76f49629148df1e6ebd855a4094f2e5fb4acb",
+   "sha256": "00a48346bd1e5dc56c5498c20acd30267ab1d36120bf58b1a44aafe3c414f35f",
    "required": false,
    "group": "release_asset",
    "contents": "sprint run records, call ledgers, spend record (release v0.8.0-sprint)"

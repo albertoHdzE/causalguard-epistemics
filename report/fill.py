@@ -3,11 +3,14 @@
 
 Data roots (from reports/sprint_all unless --data is given):
   A = analysis.json (main panel)   P = p5_analysis.json (P5)   R = report_data.json (accounting, smokes, predictions)
+  F = fig4_background.json (Figure 4, Appendix E.1; bit counts of the objects drawn)
+  X = pre-sprint development results, read from their committed analysis files (PRESPRINT; Appendix E.2, D128)
 
 Placeholders
   {{A/models/q7/tiers/W/S/overclaim}}          a bootstrap record -> "0.514 [0.423, 0.600]"
   {{...|est}} point estimate   {{...|lo}} {{...|hi}}   {{...|n}} its n_worlds   {{...|int}}   {{...|usd}}
   {{...|pct}} a share as a percentage (no decimals)   {{...|abs}} absolute value of the estimate
+  {{X/...|ci4}} a pre-sprint contrast record (estimate, ci95) -> "+0.0087 [0.0037, 0.0148]" (signed, 4 decimals)
   {{table:NAME}}                               a generated table (see TABLES)
 Model aliases inside paths: g3 q7 g4 mi r1 ll cl ds (see ALIAS).
 
@@ -31,6 +34,12 @@ NAME = {"google/gemma-3-4b": "gemma-3-4b", "qwen2.5:7b": "qwen2.5-7b", "gemma-4-
         "llama-3.3-70b-instruct": "llama-3.3-70b", "claude-opus-5-5": "Claude Opus 5.5",
         "deepseek-v4-pro": "DeepSeek V4-Pro (low)‡"}
 ORDER = list(NAME)
+# Pre-sprint development results cited in Appendix E.2 (label, release, file, record path).  Read, never retyped.
+PRESPRINT = {"r6_s": ("reports/development_r6/s_evaluation.json", "sub24/primary"),
+             "r5_g": ("reports/development_r5/g_evaluation.json", "primary"),
+             "r5_uniform": ("reports/development_r5/g_evaluation.json", "budgets/16/contrasts/uniform_minus_full_cgh"),
+             "r5_shortest": ("reports/development_r5/g_evaluation.json",
+                             "budgets/16/contrasts/shortest_cgh_prior_minus_full_cgh")}
 # Numbers allowed in the prose without a placeholder: design constants fixed before any data, with the reason.
 CONSTANTS = {
     "0": "zero as a bound or a share", "1": "list / one", "2": "list, two turns", "3": "list, three inputs per node, "
@@ -67,6 +76,10 @@ def _num(x, nd=3) -> str:
 
 
 def fmt(v, f: str | None) -> str:
+    if f == "ci4":
+        def sg(x):
+            return ("+" if x > 0 else "") + _num(x, 4)
+        return f"{sg(v['estimate'])} [{_num(v['ci95'][0], 4)},\u00a0{_num(v['ci95'][1], 4)}]"
     if isinstance(v, dict) and v.get("not_testable"):
         return "not testable (" + ", ".join(f"n {c} {n}" for c, n in v["cell_n"].items()) + ")"
     if isinstance(v, dict) and "est" in v:
@@ -126,7 +139,7 @@ def _v(b, below=False) -> str:
 def table_task_p(D) -> str:
     A = D["A"]
     L = ["| model | tier | n P3; P4 | P3: true adopted | P4: forged adopted | P4: corruption | "
-         "check discernment |", "|" + "|".join("-" * w for w in (16, 3, 6, 20, 20, 20, 23)) + "|"]
+         "check discernment |", "|" + "|".join("-" * w for w in (25, 3, 6, 17, 17, 17, 26)) + "|"]
     for m in _models(A["models"]):
         for tier in ("W", "H"):
             t = A["models"][m]["tiers"].get(tier)
@@ -143,7 +156,7 @@ def table_task_p(D) -> str:
 def table_p5(D) -> str:
     P = D["P"]
     L = ["| model | n P5v; P5f | exact detection | lenient detection | false alarm | P5f: forged adopted | "
-         "P5f − P4 | verified discern. |", "|" + "|".join("-" * w for w in (14, 6, 20, 20, 20, 20, 20, 20)) + "|"]
+         "P5f − P4 | verified discern. |", "|" + "|".join("-" * w for w in (27, 6, 15, 15, 15, 15, 15, 15)) + "|"]
     for m in _models(P["models"]):
         v = P["models"][m]
         bf, bv = v["cells"]["P5f"]["below_min"], v["cells"]["P5v"]["below_min"]
@@ -159,7 +172,7 @@ def table_p5(D) -> str:
 def table_task_s(D) -> str:
     A = D["A"]
     L = ["| model | tier | worlds | overclaim | underclaim | balanced accuracy | BA − surface rule |",
-         "|" + "|".join("-" * w for w in (18, 3, 7, 20, 20, 20, 20)) + "|"]
+         "|" + "|".join("-" * w for w in (22, 3, 7, 18, 18, 18, 25)) + "|"]
     for tier in ("W", "H"):
         ref = next(v["tiers"][tier]["reference_rows"] for v in A["models"].values()
                    if tier in v["tiers"] and v["tiers"][tier]["reference_rows"])
@@ -375,6 +388,13 @@ def main(argv=None) -> int:
         for k, v in json.loads((d / "reasoning_coding_summary.json").read_text()).items():
             m, cond = k.split("|")
             D["C"].setdefault(m, {})[cond] = v
+    if (d / "fig4_background.json").exists():
+        D["F"] = json.loads((d / "fig4_background.json").read_text())
+    D["X"] = {}
+    for k, (f, path) in PRESPRINT.items():
+        D["X"][k] = json.loads((HERE.parent / f).read_text())
+        for p in path.split("/"):
+            D["X"][k] = D["X"][k][p]
     src = Path(a.src).read_text()
     bad = check_prose(src)
     out, errs = fill(src, D)

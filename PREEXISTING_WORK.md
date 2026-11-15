@@ -40,4 +40,7 @@ Everything committed on branch `sprint` after `66e4065` is sprint work. One row 
 | `5c2b18a` | 2026-11-14 11:34 | Amendment v2-a4: Claude Tier H post-freeze supplement B4 only (D123); B4 first request 17:34:51Z |
 | `d9d9503` | 2026-11-14 16:01 | Report per D117–D122: title, P2 descriptor, P5 n reconciliation, degenerate-interval bound, table widths, figure legend; supplement analysed apart from the frozen panel; second-coder sheet (D124) |
 
-| (this commit, tag `v0.8.0-sprint`) | 2026-11-15 | B4 supplement finished (13/24) and reported in Appendix D; P-A5 Claude half; release manifest and asset; REVIEW_READY v2 (D125) |
+| `191ccf1` | 2026-11-15 02:15 | B4 supplement finished (13/24) and reported in Appendix D; P-A5 Claude half; release manifest and asset; REVIEW_READY v2 (D125) |
+| `7c659ab` | 2026-11-15 | Director's final review; iteration 11 assignment (D126) |
+| `23ff2d6` | 2026-11-15 | Director: framing requested by Alberto; iteration 12 assignment (D127) |
+| (this commit, tag `v0.8.0-sprint` moved here) | 2026-11-15 | Framing (D127): introduction paragraph on the programme, Methods sentence on the symbolic engines, theory of change, Appendix E with Figure 4 from repository objects, pre-sprint figures wired from committed R5/R6 JSON, ten verified references; table model columns widened; release manifest and asset refreshed (D128–D131) |
