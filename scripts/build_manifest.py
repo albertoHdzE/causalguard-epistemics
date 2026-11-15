@@ -57,7 +57,43 @@ def run_files(rid: str) -> list[Path]:
     return sorted(p for p in d.rglob("*") if p.is_file())
 
 
+SPRINT_RUN_PREFIXES = ("r7b-main-", "p5-", "r7b-smoke-")
+SPRINT_LEDGERS = ("sprint-calls/ledger.jsonl", "sprint-online-calls/claude_opus_55.jsonl",
+                  "sprint-online-calls/claude_opus_55.jsonl.pre-v2-a3", "sprint-online-calls/deepseek_v4_pro.jsonl",
+                  "sprint-online-calls/deepseek_spend.jsonl", "sprint-online-calls/deepseek_spend.jsonl.pre-v2-a3")
+
+
+def sprint(asset_rel: str, out_rel: str = "artifacts/manifest_sprint.json") -> dict:
+    """D122: every sprint run record (local main, P5, online main blocks and smokes), the call ledgers, the spend
+    record and the pre-v2-a3 originals, in ONE asset; manifest = {path, bytes, sha256} of every archived file, the
+    committed analyses and configs, and the asset itself."""
+    runs = sorted(d.name for d in (ROOT / "runs").iterdir() if d.is_dir() and d.name.startswith(SPRINT_RUN_PREFIXES))
+    raw = [f for rid in runs for f in run_files(rid)] + [ROOT / "runs" / x for x in SPRINT_LEDGERS
+                                                         if (ROOT / "runs" / x).exists()]
+    files = [entry(f, "raw_run_sprint") for f in raw]
+    files += [entry(f, "report") for f in sorted((ROOT / "reports" / "sprint_all").rglob("*")) if f.is_file()]
+    files += [entry(f, "config") for f in sorted((ROOT / "configs" / "sprint").rglob("*.json"))]
+    files += [entry(ROOT / x, "doc") for x in ("docs/SPRINT_DESIGN_LOCK.json", "artifacts/sprint_main_manifest.json",
+                                               "artifacts/sprint_p5_manifest.json", "report/report.pdf")]
+    asset = ROOT / asset_rel
+    asset.parent.mkdir(exist_ok=True)
+    with tarfile.open(asset, "w:gz") as tf:
+        for f in raw:
+            tf.add(f, arcname=str(f.relative_to(ROOT)))
+    man = {"manifest_version": "sprint", "runs": runs, "files": files + [
+        {"path": asset_rel, "bytes": asset.stat().st_size, "sha256": sha(asset), "required": False,
+         "group": "release_asset", "contents": "sprint run records, call ledgers, spend record (release "
+                                               "v0.8.0-sprint)"}]}
+    (ROOT / out_rel).write_text(json.dumps(man, indent=1) + "\n")
+    return {"runs": len(runs), "files": len(man["files"]), "raw_files": len(raw), "asset_bytes": asset.stat().st_size,
+            "asset_sha256": sha(asset)}
+
+
 def main() -> None:
+    import sys
+    if sys.argv[1:2] == ["sprint"]:
+        print(json.dumps(sprint(sys.argv[2] if len(sys.argv) > 2 else "dist/causalguard-sprint-runs-v0.8.0-sprint.tar.gz")))
+        return
     ap = argparse.ArgumentParser()
     ap.add_argument("version", choices=["r2", "r3", "r4", "r5", "r6"])
     ap.add_argument("--runs", nargs="+", required=True)

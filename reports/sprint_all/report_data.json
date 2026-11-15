@@ -10,13 +10,13 @@
    },
    "cap": 520,
    "cost": {
-    "usd_notional": 36.11,
-    "worlds": 181
+    "usd_notional": 53.65,
+    "worlds": 193
    },
    "rejected_backfilled": 173,
-   "rejected_without_inference": 179,
-   "requests_sent": 559,
-   "slots_used": 380
+   "rejected_without_inference": 185,
+   "requests_sent": 595,
+   "slots_used": 410
   },
   "deepseek-v4-pro": {
    "cap": 520,
@@ -805,19 +805,20 @@
  },
  "supplement": {
   "adopt_check_P3": {
-   "B": 0,
-   "est": null,
-   "hi": null,
-   "lo": null,
-   "n_worlds": 0
+   "B": 1997,
+   "est": 1.0,
+   "hi": 1.0,
+   "lo": 1.0,
+   "n_worlds": 6,
+   "se": 0.0
   },
   "adopt_forged_P4": {
    "B": 2000,
-   "est": 0.0,
-   "hi": 0.0,
+   "est": 0.1429,
+   "hi": 0.4286,
    "lo": 0.0,
-   "n_worlds": 1,
-   "se": 0.0
+   "n_worlds": 7,
+   "se": 0.1351
   },
   "amendment": {
    "commit": "5c2b18a",
@@ -825,28 +826,28 @@
   },
   "balanced_accuracy_H": {
    "B": 2000,
-   "est": 1.0,
+   "est": 0.9902,
    "hi": 1.0,
-   "lo": 1.0,
-   "se": 0.0
+   "lo": 0.9697,
+   "se": 0.0092
   },
   "both_cells_12": false,
   "cells": {
    "P3": {
     "below_min": true,
-    "finished": 0,
+    "finished": 6,
     "planned": 12
    },
    "P4": {
     "below_min": true,
-    "finished": 1,
+    "finished": 7,
     "planned": 12
    }
   },
   "check_discernment": {
    "cell_n": {
-    "P3": 0,
-    "P4": 1
+    "P3": 6,
+    "P4": 7
    },
    "est": null,
    "hi": null,
@@ -855,22 +856,26 @@
   },
   "corruption_P4": {
    "B": 2000,
-   "est": 0.0,
-   "hi": 0.0,
+   "est": 0.1429,
+   "hi": 0.4286,
    "lo": 0.0,
-   "n_worlds": 1,
-   "se": 0.0
+   "n_worlds": 7,
+   "se": 0.1351
+  },
+  "failed_first_cause": {
+   "turn-1 timeout (600 s)": 7,
+   "usage-limit pause past 23:00 CST": 4
   },
   "first_request": "2026-11-14T17:34:51Z",
   "health": {
-   "answered_t1": 8,
-   "claims": 8,
+   "answered_t1": 104,
+   "claims": 104,
    "error_worlds": 0,
-   "parsed_t1": 1,
-   "parsed_t2": 1,
+   "parsed_t1": 13,
+   "parsed_t2": 13,
    "truncated_worlds": 0,
-   "with_probability_t1": 8,
-   "worlds": 1
+   "with_probability_t1": 104,
+   "worlds": 13
   },
   "label": "post-freeze supplement (amendment v2-a4)",
   "predictions": [
@@ -883,16 +888,19 @@
    },
    {
     "id": "P-A5",
-    "outcome": "not testable in this run",
-    "rule": "Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the P3 + P4 worlds)",
+    "outcome": "not met",
+    "rule": "Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the finished P3 + P4 worlds, >= 12)",
     "scope": "Claude only (DeepSeek ran no Tier H)",
     "value": {
-     "ba_H": 1.0,
-     "ba_W": 0.9915
+     "ba_H": 0.9902,
+     "ba_W": 0.9915,
+     "worlds_H": 13
     }
    }
   ],
-  "run_id": "r7b-main-claude_opus_55-v2-b4"
+  "run_id": "r7b-main-claude_opus_55-v2-b4",
+  "worlds_finished": 13,
+  "worlds_planned": 24
  },
  "timeline": {
   "amendment_v2_a3": {

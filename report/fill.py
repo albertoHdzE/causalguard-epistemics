@@ -45,7 +45,7 @@ CONSTANTS = {
     "threshold (lock)", "0.60": "prediction threshold (lock)", "0.80": "prediction threshold (lock)", "14": "date",
     "13": "date", "15": "date", "12:00": "hard stop", "2000": "bootstrap replicates (lock)",
     "0.05": "D120 tolerance and D121 level (fixed by the director before computation)",
-    "23:00": "v2-a4 pause deadline", "23:30": "v2-a4 hard stop"}
+    "23:00": "v2-a4 pause deadline", "23:30": "v2-a4 hard stop", "600": "Claude request timeout (s), configs since v2-a3"}
 
 
 def _get(D: dict, path: str):

@@ -63,16 +63,25 @@ def _label(m, cells: dict | None) -> str:
     return s
 
 
-def fig_task_p(A: dict, P5: dict, path: Path):
+def fig_task_p(A: dict, P5: dict, path: Path, SUP: dict | None = None):
     plt = _plt()
     fig, axs = plt.subplots(1, 2, figsize=(9.2, 3.9), sharex=True)
     for ax, tier in zip(axs, ("W", "H")):
         ms = [m for m in _models(A["models"]) if tier in A["models"][m]["tiers"]]
+        src = {m: A for m in ms}
+        if tier == "H" and SUP:              # v2-a4 (D118): the post-freeze supplement row, marked, drawn last
+            for m in _models(SUP["models"]):
+                if "H" in SUP["models"][m]["tiers"] and m not in src:
+                    ms.append(m)
+                    src[m] = SUP
         labels = []
         for y, m in enumerate(ms):
-            t = A["models"][m]["tiers"][tier]
-            labels.append(_label(m, t["cells"]) + (" (post-freeze suppl.)" if tier == "H" and any(
-                r.endswith(SUPPLEMENT_SUFFIX) for r in A["models"][m].get("run_ids") or []) else ""))
+            D = src[m]
+            t = D["models"][m]["tiers"][tier]
+            sup = tier == "H" and any(r.endswith(SUPPLEMENT_SUFFIX) for r in D["models"][m].get("run_ids") or [])
+            # the supplement planned only P3 + P4 (v2-a4): its n counts those cells
+            labels.append(_label(m, {c: t["cells"][c] for c in ("P3", "P4")}) + " (post-freeze suppl.)" if sup
+                          else _label(m, t["cells"]))
             _dot(ax, y - 0.16, t["C"]["adopt_check"]["P3"], BLUE, "o", t["cells"]["P3"]["below_min"],
                  "true status adopted, valid check (P3)" if y == 0 else None)
             _dot(ax, y, t["C"]["adopt_forged"]["P4"], ORANGE, "s", t["cells"]["P4"]["below_min"],
@@ -143,7 +152,8 @@ def draw(out: str) -> None:
     o = Path(out)
     A = json.loads((o / "analysis.json").read_text())
     P5 = json.loads((o / "p5_analysis.json").read_text())
-    fig_task_p(A, P5, o / "fig1_task_p.png")
+    sp = o / "supplement" / "analysis.json"
+    fig_task_p(A, P5, o / "fig1_task_p.png", json.loads(sp.read_text()) if sp.exists() else None)
     fig_task_s(A, o / "fig2_task_s.png")
     fig_p5(P5, o / "fig3_p5.png")
     print(f"figures 1-3 -> {o}")

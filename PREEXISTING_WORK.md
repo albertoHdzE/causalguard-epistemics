@@ -38,5 +38,6 @@ Everything committed on branch `sprint` after `66e4065` is sprint work. One row 
 | `b91bfaf` | 2026-11-14 11:12 | Claude panel frozen on the isolation-audit stop (D116); Claude P5 coded; final analysis regenerated twice (byte-identical); final report and review-ready file |
 | `6cddcd5` | 2026-11-14 11:22 | Director's review of the Saturday draft; iteration 10 assignment (D117–D122) |
 | `5c2b18a` | 2026-11-14 11:34 | Amendment v2-a4: Claude Tier H post-freeze supplement B4 only (D123); B4 first request 17:34:51Z |
-| (this commit) | 2026-11-14 | Report per D117–D122: title, P2 descriptor, P5 n reconciliation, degenerate-interval bound, table widths, figure legend; supplement analysed apart from the frozen panel; second-coder sheet (D124) |
+| `d9d9503` | 2026-11-14 16:01 | Report per D117–D122: title, P2 descriptor, P5 n reconciliation, degenerate-interval bound, table widths, figure legend; supplement analysed apart from the frozen panel; second-coder sheet (D124) |
 
+| (this commit, tag `v0.8.0-sprint`) | 2026-11-15 | B4 supplement finished (13/24) and reported in Appendix D; P-A5 Claude half; release manifest and asset; REVIEW_READY v2 (D125) |

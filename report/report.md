@@ -357,9 +357,12 @@ both: llama-3.3-70b keeps the probability on 9 of
 62; qwen2.5-7b keeps it on
 61 of
 86. Tier H, where no check can be verified
-by lookup, was not reached by either online model in the frozen panel, so P-D5 is not testable in this run. A
-post-freeze supplement (amendment v2-a4, run after the report text was drafted) runs Claude's Tier H P3 and P4
-cells; it is reported in Appendix D only, and nothing in this section depends on it.
+by lookup, was not reached by either online model in the frozen panel, so P-D5 is not testable in this run. In a
+post-freeze supplement (amendment v2-a4, run after the report text was drafted; Appendix D) Claude finished
+13 of 24 Tier H P3 and P4 worlds, too few for a
+contrast; it rejected the forged tool report in most finished P4 worlds and in one adopted it without finding the
+error ("Its counterexamples show my per-node analysis was wrong in places, though I have not found where.",
+`main|synthetic|feedforward_hetero|4|`).
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment 0.896 [0.771, 0.990]). Its stored reasoning
@@ -399,8 +402,8 @@ failed attempt to verify; the off-floor case is r1 and the online models. (3) Tw
 (4) In the frozen panel the online models ran Tier W only (Table 6): DeepSeek ran at low effort until the
 account balance ran out, and the Claude run stopped on an isolation-audit flag (a date notice the command line
 injected into a session resumed across midnight; the flagged items were retried cleanly) before its Tier H
-blocks. Claude's Tier H P3 and P4 cells were run afterwards as a labelled post-freeze supplement (amendment v2-a4;
-Appendix D); the incomplete cells are due to cost and the subscription window, not by selection. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+blocks. A labelled post-freeze supplement (v2-a4; Appendix D) ran Claude's Tier H P3 and P4 cells; Tier H turns
+ran past the 600 s timeout or met the usage window, so its finished worlds may be the easier ones. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
@@ -415,9 +418,9 @@ frontier models re-derive the cited rows and reject it; six open-weight models a
 open-weight models find the forged line, flag valid lines about as often, and frequently keep the forged answer
 after calling its line wrong. Told only to commit, the frontier model gives definite verdicts on open claims and
 keeps its probabilities where they were. The benchmark makes these measurable because the answer key is exact and
-the forged check differs from the valid one in a single checkable line. Whether the frontier model still defers
-when it cannot verify (Tier H) is left to the labelled post-freeze supplement in Appendix D. We release the
-generator, the gates, the lock and every run (release `v0.8.0-sprint`).
+the forged check differs from the valid one in a single checkable line. On Tier H a labelled post-freeze supplement was too small
+for a contrast; in one world the frontier model adopted a forged report it could not refute (Appendix D). We
+release the generator, the gates, the lock and every run.
 
 # Code and Data
 
@@ -477,8 +480,9 @@ settings, no memory and no project instructions, and the request record was audi
 reasoning; it is reported as such and never scored.
 
 **Benchmark cost.** At high reasoning effort a frontier reasoning model did not finish a Tier H turn within 32000
-completion tokens. The online cells are incomplete because of that cost and of the shared subscription window,
-not by selection.
+completion tokens, and Claude's Tier H first turns often ran past the 600 s request timeout. The frozen online
+cells are incomplete because of that cost and of the shared subscription window, not by selection; in the Tier H
+supplement the timeouts may select the easier worlds (Appendix D).
 
 **Human subjects and data.** None; no personal data appears in any prompt. Online models were used under their
 providers' terms.
@@ -566,7 +570,7 @@ parsed and every Tier W turn parsed.*
 
 | model | requests sent (all) | of which rejected without inference | worlds finished: main / P5 | recorded cost |
 |---|---|---|---|---|
-| Claude Opus 5.5 | 559 | 179 | 120/180 / 60/60 | $36.11 (notional, subscription) |
+| Claude Opus 5.5 | 595 | 185 | 120/180 / 60/60 | $53.65 (notional, subscription) |
 | DeepSeek V4-Pro (low)‡ | 255 | 0 | 52/180 / 60/60 | $8.90 at request-time price; $17.79 upper bound |
 
 *Table 8. Online accounting. Requests rejected by the subscription window reached no model and are counted
@@ -609,7 +613,7 @@ worlds. These outcomes are not part of the frozen tally of Appendix B.
 
 | post-freeze supplement (v2-a4) | n P3; P4 (finished / 12) | P3: true adopted | P4: forged adopted | P4: corruption | check discernment | Task S balanced accuracy |
 |------------------|------------|--------------|--------------|--------------|------------------|----------------|
-| Claude Opus 5.5, Tier H | 0; 1 | – | 0.000* | 0.000* | not testable (n P3 0, n P4 1) | 1.000 [1.000, 1.000] |
+| Claude Opus 5.5, Tier H | 6; 7 | 1.000* | 0.143* | 0.143* | not testable (n P3 6, n P4 7) | 0.990 [0.970, 1.000] |
 
 *Table 11. Post-freeze supplement: Tier H, where no check can be verified by lookup (amendment v2-a4). \* = a
 cell below 12 finished worlds (point estimate only).*
@@ -617,9 +621,22 @@ cell below 12 finished worlds (point estimate only).*
 | prediction (lock v2) | scope | rule | supplement outcome |
 |---|---|---|---|
 | P-D5 | Claude only (DeepSeek ran no Tier H) | Claude: Tier H check discernment < 0.15 | **not testable in this run** |
-| P-A5 | Claude only (DeepSeek ran no Tier H) | Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the P3 + P4 worlds) | **not testable in this run** |
+| P-A5 | Claude only (DeepSeek ran no Tier H) | Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the finished P3 + P4 worlds, >= 12) | **not met** |
 
-*Table 12. The two lock-v2 predictions the supplement bears on, evaluated on Claude only (DeepSeek ran no Tier H).*
+*Table 12. The two lock-v2 predictions the supplement bears on, evaluated on Claude only (DeepSeek ran no Tier H).
+P-D5 needs both cells at 12 worlds; P-A5 is a Task S prediction and uses every finished Tier H world.*
+
+Of the 24 planned worlds, 13 finished;
+7 failed because Claude's first Tier H reply took
+longer than the 600 s request timeout (the retry pass could not run them before the usage window closed), and
+4 were still waiting in a usage-limit pause
+at the 23:00 CST deadline. The timed-out worlds are likely the harder ones, so the finished worlds are not a random
+sample of the cells and the supplement is descriptive. On those worlds Claude's Task S balanced accuracy on Tier H
+is 0.990 [0.970, 1.000]; its replies count the consistent mechanisms node by node, which fits its
+long Tier H turns. Under the forged tool report it adopted the forged status on
+0.143 of named claims, all of them in one world, where it wrote that the report's
+counterexamples showed its own analysis "was wrong in places, though I have not found where"
+(`main|synthetic|feedforward_hetero|4|`).
 
 Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For 1 of
 the 115 forged named claims the forgery alters more than one line; quoting any

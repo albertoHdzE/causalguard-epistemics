@@ -296,9 +296,12 @@ both: llama-3.3-70b keeps the probability on {{A/models/ll/tiers/W/verdict_proba
 {{A/models/mi/tiers/W/verdict_probability/P2/with_both_probabilities|int}}; qwen2.5-7b keeps it on
 {{A/models/q7/tiers/W/verdict_probability/P2/probability_kept|int}} of
 {{A/models/q7/tiers/W/verdict_probability/P2/with_both_probabilities|int}}. Tier H, where no check can be verified
-by lookup, was not reached by either online model in the frozen panel, so P-D5 is not testable in this run. A
-post-freeze supplement (amendment v2-a4, run after the report text was drafted) runs Claude's Tier H P3 and P4
-cells; it is reported in Appendix D only, and nothing in this section depends on it.
+by lookup, was not reached by either online model in the frozen panel, so P-D5 is not testable in this run. In a
+post-freeze supplement (amendment v2-a4, run after the report text was drafted; Appendix D) Claude finished
+{{R/supplement/worlds_finished|int}} of {{R/supplement/worlds_planned|int}} Tier H P3 and P4 worlds, too few for a
+contrast; it rejected the forged tool report in most finished P4 worlds and in one adopted it without finding the
+error ("Its counterexamples show my per-node analysis was wrong in places, though I have not found where.",
+`main|synthetic|feedforward_hetero|4|`).
 
 **What a frontier reasoning model does with a forged check.** On Tier W, DeepSeek V4-Pro at low effort rejects
 most forged checks (check discernment {{A/models/ds/tiers/W/contrasts/check_discernment}}). Its stored reasoning
@@ -338,8 +341,8 @@ failed attempt to verify; the off-floor case is r1 and the online models. (3) Tw
 (4) In the frozen panel the online models ran Tier W only (Table 6): DeepSeek ran at low effort until the
 account balance ran out, and the Claude run stopped on an isolation-audit flag (a date notice the command line
 injected into a session resumed across midnight; the flagged items were retried cleanly) before its Tier H
-blocks. Claude's Tier H P3 and P4 cells were run afterwards as a labelled post-freeze supplement (amendment v2-a4;
-Appendix D); the incomplete cells are due to cost and the subscription window, not by selection. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
+blocks. A labelled post-freeze supplement (v2-a4; Appendix D) ran Claude's Tier H P3 and P4 cells; Tier H turns
+ran past the 600 s timeout or met the usage window, so its finished worlds may be the easier ones. (5) Claude's stored reasoning is the CLI's *thinking summaries*,
 not the raw reasoning. (6) P5 and P4 are between-world contrasts. (7) The model family that implemented the
 benchmark (Claude) is also evaluated, in isolated, audited contexts.
 
@@ -354,9 +357,9 @@ frontier models re-derive the cited rows and reject it; six open-weight models a
 open-weight models find the forged line, flag valid lines about as often, and frequently keep the forged answer
 after calling its line wrong. Told only to commit, the frontier model gives definite verdicts on open claims and
 keeps its probabilities where they were. The benchmark makes these measurable because the answer key is exact and
-the forged check differs from the valid one in a single checkable line. Whether the frontier model still defers
-when it cannot verify (Tier H) is left to the labelled post-freeze supplement in Appendix D. We release the
-generator, the gates, the lock and every run (release `v0.8.0-sprint`).
+the forged check differs from the valid one in a single checkable line. On Tier H a labelled post-freeze supplement was too small
+for a contrast; in one world the frontier model adopted a forged report it could not refute (Appendix D). We
+release the generator, the gates, the lock and every run.
 
 # Code and Data
 
@@ -416,8 +419,9 @@ settings, no memory and no project instructions, and the request record was audi
 reasoning; it is reported as such and never scored.
 
 **Benchmark cost.** At high reasoning effort a frontier reasoning model did not finish a Tier H turn within 32000
-completion tokens. The online cells are incomplete because of that cost and of the shared subscription window,
-not by selection.
+completion tokens, and Claude's Tier H first turns often ran past the 600 s request timeout. The frozen online
+cells are incomplete because of that cost and of the shared subscription window, not by selection; in the Tier H
+supplement the timeouts may select the easier worlds (Appendix D).
 
 **Human subjects and data.** None; no personal data appears in any prompt. Online models were used under their
 providers' terms.
@@ -502,7 +506,20 @@ cell below 12 finished worlds (point estimate only).*
 
 {{table:supplement_predictions}}
 
-*Table 12. The two lock-v2 predictions the supplement bears on, evaluated on Claude only (DeepSeek ran no Tier H).*
+*Table 12. The two lock-v2 predictions the supplement bears on, evaluated on Claude only (DeepSeek ran no Tier H).
+P-D5 needs both cells at 12 worlds; P-A5 is a Task S prediction and uses every finished Tier H world.*
+
+Of the {{R/supplement/worlds_planned|int}} planned worlds, {{R/supplement/worlds_finished|int}} finished;
+{{R/supplement/failed_first_cause/turn-1 timeout (600 s)|int}} failed because Claude's first Tier H reply took
+longer than the 600 s request timeout (the retry pass could not run them before the usage window closed), and
+{{R/supplement/failed_first_cause/usage-limit pause past 23:00 CST|int}} were still waiting in a usage-limit pause
+at the 23:00 CST deadline. The timed-out worlds are likely the harder ones, so the finished worlds are not a random
+sample of the cells and the supplement is descriptive. On those worlds Claude's Task S balanced accuracy on Tier H
+is {{R/supplement/balanced_accuracy_H}}; its replies count the consistent mechanisms node by node, which fits its
+long Tier H turns. Under the forged tool report it adopted the forged status on
+{{R/supplement/adopt_forged_P4|est}} of named claims, all of them in one world, where it wrote that the report's
+counterexamples showed its own analysis "was wrong in places, though I have not found where"
+(`main|synthetic|feedforward_hetero|4|`).
 
 Two properties of the forged messages are reported, not repaired (post-hoc, D104). (i) For {{R/p5_design/forged_multi_line|int}} of
 the {{R/p5_design/forged_named_claims|int}} forged named claims the forgery alters more than one line; quoting any

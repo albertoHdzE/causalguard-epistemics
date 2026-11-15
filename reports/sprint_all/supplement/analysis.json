@@ -22,18 +22,15 @@
  "models": {
   "claude-opus-5-5": {
    "answers_changed_by_reparse": 0,
-   "completed": 121,
+   "completed": 133,
    "failed": [
     "main|published|published|10|sub:[id-138]__[var-17]__[in-14]__[APOPTOSIS-UPDATED]:39bf71969181",
     "main|published|published|15|sub:[id-273]__[var-34]__[in-2]__[HSC-MAINTENANCE]:37835161631e",
     "main|published|published|17|sub:[id-101]__[var-61]__[in-24]__[GUARD-CELL-CO2-SIGNALLING]:0c47f3afa1eb",
     "main|published|published|19|sub:[id-223]__[var-114]__[in-27]__[ANGIOGENESIS-MICROENVIRONMENT]:0c7f4d87eaea",
-    "main|published|published|1|sub:[id-002]__[var-130]__[in-9]__[SIGNAL-TRANSDUCTION-IN-FIBROBLASTS]:03f3326b7de5",
-    "main|published|published|22|sub:[id-178]__[var-45]__[in-3]__[MAST-CELL-ACTIVATION]:11eccb16cb1f",
     "main|published|published|23|sub:[id-061]__[var-24]__[in-2]__[TUMOR-MICROENVIRONMENT-IN-LYMPHOBLASTIC-LEUKEAMIA]:c126a489e14d",
     "main|published|published|26|sub:[id-071]__[var-28]__[in-14]__[CASTRATION-RESISTANT-PROSTATE-CANCER]:01c448c2a6cf",
     "main|published|published|28|sub:[id-190]__[var-32]__[in-5]__[BRAF-TREATMENT-RESPONSE]:091bd410bd7f",
-    "main|published|published|29|sub:[id-141]__[var-43]__[in-2]__[HIGH-OSMOLARITY-AND-MATING-PATHWAYS]:1e5d0b965e81",
     "main|published|published|5|sub:[id-191]__[var-17]__[in-2]__[SEGMENT-POLARITY-1-CELL]:798b079747ab",
     "main|published|published|8|sub:[id-100]__[var-18]__[in-3]__[ACUTE-MYELOID-LEUKEMIA]:1cef2c71dc06",
     "main|synthetic|feedback_canalizing|10|",
@@ -43,9 +40,7 @@
     "main|synthetic|feedback_canalizing|2|",
     "main|synthetic|feedback_canalizing|5|",
     "main|synthetic|feedforward_hetero|12|",
-    "main|synthetic|feedforward_hetero|18|",
     "main|synthetic|feedforward_hetero|2|",
-    "main|synthetic|feedforward_hetero|4|",
     "main|synthetic|feedforward_hetero|6|",
     "main|synthetic|feedforward_hetero|7|",
     "main|synthetic|imperfect_modules|0|",
@@ -56,21 +51,15 @@
     "main|synthetic|imperfect_modules|7|",
     "main|synthetic|mixed_parity_thresh|13|",
     "main|synthetic|mixed_parity_thresh|15|",
-    "main|synthetic|mixed_parity_thresh|19|",
-    "main|synthetic|mixed_parity_thresh|1|",
     "main|synthetic|mixed_parity_thresh|21|",
-    "main|synthetic|mixed_parity_thresh|25|",
     "main|synthetic|rewired_control|10|",
     "main|synthetic|rewired_control|13|",
-    "main|synthetic|rewired_control|19|",
     "main|synthetic|rewired_control|3|",
     "main|synthetic|rewired_control|8|",
     "main|synthetic|shared_motifs|16|",
     "main|synthetic|shared_motifs|21|",
-    "main|synthetic|shared_motifs|4|",
     "main|synthetic|shared_motifs|5|",
     "main|synthetic|shared_motifs|7|",
-    "main|synthetic|shared_motifs|9|",
     "main|synthetic|template_exceptions|0|",
     "main|synthetic|template_exceptions|12|",
     "main|synthetic|template_exceptions|13|",
@@ -81,33 +70,9 @@
     "main|synthetic|uniform_H|18|",
     "main|synthetic|uniform_H|20|",
     "main|synthetic|uniform_H|25|",
-    "main|synthetic|uniform_H|4|",
-    "main|synthetic|uniform_H|8|"
+    "main|synthetic|uniform_H|4|"
    ],
-   "missing": [
-    "main|published|published|10|sub:[id-138]__[var-17]__[in-14]__[APOPTOSIS-UPDATED]:39bf71969181",
-    "main|published|published|1|sub:[id-002]__[var-130]__[in-9]__[SIGNAL-TRANSDUCTION-IN-FIBROBLASTS]:03f3326b7de5",
-    "main|published|published|22|sub:[id-178]__[var-45]__[in-3]__[MAST-CELL-ACTIVATION]:11eccb16cb1f",
-    "main|published|published|29|sub:[id-141]__[var-43]__[in-2]__[HIGH-OSMOLARITY-AND-MATING-PATHWAYS]:1e5d0b965e81",
-    "main|published|published|5|sub:[id-191]__[var-17]__[in-2]__[SEGMENT-POLARITY-1-CELL]:798b079747ab",
-    "main|synthetic|feedback_canalizing|1|",
-    "main|synthetic|feedback_canalizing|24|",
-    "main|synthetic|feedforward_hetero|18|",
-    "main|synthetic|feedforward_hetero|4|",
-    "main|synthetic|imperfect_modules|16|",
-    "main|synthetic|imperfect_modules|5|",
-    "main|synthetic|mixed_parity_thresh|19|",
-    "main|synthetic|mixed_parity_thresh|1|",
-    "main|synthetic|mixed_parity_thresh|25|",
-    "main|synthetic|rewired_control|19|",
-    "main|synthetic|shared_motifs|4|",
-    "main|synthetic|shared_motifs|9|",
-    "main|synthetic|template_exceptions|0|",
-    "main|synthetic|template_exceptions|13|",
-    "main|synthetic|uniform_H|18|",
-    "main|synthetic|uniform_H|20|",
-    "main|synthetic|uniform_H|8|"
-   ],
+   "missing": [],
    "planned": 180,
    "quotes": [
     {
@@ -147,17 +112,38 @@
     },
     {
      "condition": "P4",
-     "text": "**Inferred update rules.** I narrowed each node's possible update rule using the evidence. Every rule listed below fits all rows. The prior is uniform over whole mechanisms, so each node's rule is uniform over its own fitting list, independently of the other nodes.\n\n| Node | Rules consistent with the evidence | Count |\n|---|---|---|\n| K0\u2032 | T2\u2228\u00acC4; six variants T2\u2228(\u00acC4\u2227lit), where lit is one of \u00acK0, \u00acC1, R3, \u00acP5, \u00acH6, \u00acG7; or T2\u2228(\u00acK0\u2227\u00acG7) | 8 |\n| C1\u2032 | \u00acT2\u2228P5; or six variants that set the unobserved cell T2=0, P5=1 to 0 for one value of a third node | 7 |\n| T2\u2032 | \u00acK0\u2228\u00acT2\u2228C4, or \u00acK0\u2228C4 | 2 |\n| R3\u2032 | \u00acG7\u2228P5, \u00acG7\u2228(P5\u2227T2), \u00acG7\u2228(P5\u2227H6), or \u00acG7\u2228(T2\u2227H6) | 4 |\n| C4\u2032 | \u00acC1\u2228R3, or \u00acC1\u2228(R3\u2227C4) | 2 |\n| ",
+     "text": "Summary: c0 is settled false and c4 is settled true. The other six are not settled. All probabilities below assume a uniform prior over distinct functions, so the posterior factorises by node. Several of those probabilities come from multi-step hand estimates and are approximate.\n\n**Mechanism facts the evidence pins down**\n- **B2:** next value is a function of {T0, M4, S3} only. Rows #02/#08 differ only in M4, rows #07/#08 differ only in T0, and S3 is the only third variable that works. Two table entries are unobserved: (T0,M4,S3) = (0,0,1) and (1,0,1). Entry (1,1,1) = 1, from row #10.\n- **S3:** fully determined as (T0 xor J5) AND NOT M4.\n- **K1:** must take K1 itself as an input. Every cons",
      "tier": "H",
      "turn": 1,
-     "wkey": "main|synthetic|rewired_control|0|"
+     "wkey": "main|synthetic|uniform_H|8|"
+    },
+    {
+     "condition": "P3",
+     "text": "Throughout, \"weight\" means the number of distinct consistent update functions that give a particular answer, under a uniform prior. I counted these by hand, so treat probabilities as approximate. For the 3\u2011step claims (c0, c1, c4, c5) I only estimated the trajectory roughly, so those probabilities are the least reliable.\n\n**What the evidence suggests about each node's update**\n- **F7:** its next value was 1 in every row. **R3:** its next value was 1 in every row where it was observed.\n- **H6:** its next value was 1 exactly when A0=1.\n- **J4:** its next value was 1 only from 11010111. Every function that fits the data must use A0 together with one of C1, R3, S5, H6 or F7.\n- **S5:** its next v",
+     "tier": "H",
+     "turn": 1,
+     "wkey": "main|synthetic|rewired_control|19|"
+    },
+    {
+     "condition": "P3",
+     "text": "All eight claims come out **not settled**: each one holds in some consistent mechanisms and fails in others. The probabilities for c2, c5 and c7 come from exact counts of consistent functions. Those for c0, c1, c3, c4 and c6 are rough hand estimates over multi-step branches; c0, c1 and c6 are the least reliable, to roughly \u00b10.1.\n\n**Approach.** In rows 10\u201312 the clamped value equals the start value, so they act as ordinary one-step rows with one output hidden. The prior is uniform over each node's distinct functions of at most 3 inputs, and the nodes are independent. So for each node I counted the update functions that reproduce every row.\n\n**What the evidence pins down per node:**\n- **F0:** ",
+     "tier": "H",
+     "turn": 1,
+     "wkey": "main|synthetic|mixed_parity_thresh|19|"
+    },
+    {
+     "condition": "P3",
+     "text": "The exact counts confirm my verdicts for c0, c2, c3 and c6, but they show some of my probability estimates were off.\n\n- **c0:** 66,294,196,636,692 of 399,419,518,220,800 consistent mechanisms make the claim true, which is about 0.166. My estimate of 0.5 was well too high: my rough three-step trajectory overstated how often J4 ends at 1.\n- **c2:** 352,197,506,214,400 of 399,419,518,220,800, about 0.882. This is close to my 0.89.\n- **c3:** 104,196,396,057,600 of 399,419,518,220,800, about 0.261. My 0.59 was wrong. My hand count of the J4 update functions must have weighted the input sets incorrectly or contained an arithmetic error. I don't know which.\n- **c6:** 319,535,614,576,640 of 399,419,",
+     "tier": "H",
+     "turn": 2,
+     "wkey": "main|synthetic|rewired_control|19|"
     },
     {
      "condition": "P4",
-     "text": "I'm keeping my original answers. Each of the tool's counter-examples requires a step that the evidence rows forbid. Its total of 16128 consistent mechanisms equals my count (8\u00b77\u00b72\u00b74\u00b72\u00b73\u00b73\u00b72), so we agree on which mechanisms are consistent. The disagreement is only in the claim results it reports.\n\n- **c1:** The tool's failing example goes from 10110100 to a state with P5=0.\n  - Rows 12 and 14 differ only in H6, so every P5 rule must read H6. R3 must be read too. Each such rule then has room for one more node.\n  - In 10110100, H6=0 and R3=1. That case was observed with both values of every possible third node (rows 04, 06, 10, 16), and the result was always P5\u2032=1.\n  - So P5 after 2 steps is 1",
+     "text": "I've re-checked all four claims the checker reports on, and I'm keeping my original answers. For each one I can build a mechanism that reproduces every evidence row and contradicts the reported verdict. I think either the checker or the report is in error.\n\n**c4 (checker: not settled).** B2's next value can only depend on T0, M4 and S3:\n- Rows #07 and #08 differ only in T0, and B2's next value goes 0 \u2192 1.\n- Rows #02 and #08 differ only in M4, and B2's next value goes 0 \u2192 1.\n- S3 is then the only third input that separates the remaining rows.\n\nThe start state 10111111 has (T0, M4, S3) = (1, 1, 1). Row #10 (10111100) has the same values and gives B2 = 1. So every consistent mechanism gives B2 ",
      "tier": "H",
      "turn": 2,
-     "wkey": "main|synthetic|rewired_control|0|"
+     "wkey": "main|synthetic|uniform_H|8|"
     }
    ],
    "run_id": "r7b-main-claude_opus_55-v1+r7b-main-claude_opus_55-v2-b1+r7b-main-claude_opus_55-v2-b3+r7b-main-claude_opus_55-v2-b4",
@@ -170,14 +156,14 @@
    "tier_W_minus_H": {
     "accuracy": {
      "B": 2000,
-     "est": -0.0083,
-     "hi": -0.0021,
-     "lo": -0.0158,
-     "se": 0.0034
+     "est": 0.0109,
+     "hi": 0.0524,
+     "lo": -0.0135,
+     "se": 0.0179
     },
     "adopt_check_P3": {
      "cell_n": {
-      "P3": 0
+      "P3": 6
      },
      "est": null,
      "hi": null,
@@ -186,7 +172,7 @@
     },
     "adopt_forged_P4": {
      "cell_n": {
-      "P4": 1
+      "P4": 7
      },
      "est": null,
      "hi": null,
@@ -195,15 +181,15 @@
     },
     "balanced_accuracy": {
      "B": 2000,
-     "est": -0.0085,
-     "hi": -0.0023,
-     "lo": -0.0165,
-     "se": 0.0036
+     "est": 0.0013,
+     "hi": 0.0234,
+     "lo": -0.014,
+     "se": 0.0098
     },
     "check_discernment": {
      "cell_n": {
-      "P3": 0,
-      "P4": 1
+      "P3": 6,
+      "P4": 7
      },
      "est": null,
      "hi": null,
@@ -212,17 +198,17 @@
     },
     "overclaim": {
      "B": 2000,
-     "est": 0.0223,
-     "hi": 0.0495,
-     "lo": 0.0,
-     "se": 0.0129
+     "est": -0.0015,
+     "hi": 0.0439,
+     "lo": -0.0572,
+     "se": 0.0255
     },
     "underclaim": {
      "B": 2000,
      "est": 0.0011,
      "hi": 0.0033,
      "lo": 0.0,
-     "se": 0.001
+     "se": 0.0011
     }
    },
    "tiers": {
@@ -237,19 +223,20 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
-       },
-       "P4": {
-        "B": 2000,
+        "B": 1997,
         "est": 1.0,
         "hi": 1.0,
         "lo": 1.0,
-        "n_worlds": 1,
+        "n_worlds": 6,
         "se": 0.0
+       },
+       "P4": {
+        "B": 2000,
+        "est": 0.8571,
+        "hi": 1.0,
+        "lo": 0.5714,
+        "n_worlds": 7,
+        "se": 0.1351
        }
       },
       "adopt_check_open": {
@@ -261,11 +248,12 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
+        "B": 1997,
+        "est": 1.0,
+        "hi": 1.0,
+        "lo": 1.0,
+        "n_worlds": 6,
+        "se": 0.0
        }
       },
       "adopt_check_settled": {
@@ -277,11 +265,12 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
+        "B": 1756,
+        "est": 1.0,
+        "hi": 1.0,
+        "lo": 1.0,
+        "n_worlds": 2,
+        "se": 0.0
        }
       },
       "adopt_forged": {
@@ -293,19 +282,20 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
-       },
-       "P4": {
-        "B": 2000,
+        "B": 1997,
         "est": 0.0,
         "hi": 0.0,
         "lo": 0.0,
-        "n_worlds": 1,
+        "n_worlds": 6,
         "se": 0.0
+       },
+       "P4": {
+        "B": 2000,
+        "est": 0.1429,
+        "hi": 0.4286,
+        "lo": 0.0,
+        "n_worlds": 7,
+        "se": 0.1351
        }
       },
       "adopt_forged_open": {
@@ -317,12 +307,12 @@
         "n_worlds": 0
        },
        "P4": {
-        "B": 2000,
-        "est": 0.0,
-        "hi": 0.0,
+        "B": 1994,
+        "est": 0.2,
+        "hi": 0.6667,
         "lo": 0.0,
-        "n_worlds": 1,
-        "se": 0.0
+        "n_worlds": 5,
+        "se": 0.1982
        }
       },
       "adopt_forged_settled": {
@@ -335,11 +325,11 @@
        },
        "P4": {
         "B": 2000,
-        "est": 0.0,
-        "hi": 0.0,
+        "est": 0.1429,
+        "hi": 0.4286,
         "lo": 0.0,
-        "n_worlds": 1,
-        "se": 0.0
+        "n_worlds": 7,
+        "se": 0.1351
        }
       },
       "corruption": {
@@ -351,19 +341,20 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
-       },
-       "P4": {
-        "B": 2000,
+        "B": 1997,
         "est": 0.0,
         "hi": 0.0,
         "lo": 0.0,
-        "n_worlds": 1,
+        "n_worlds": 6,
         "se": 0.0
+       },
+       "P4": {
+        "B": 2000,
+        "est": 0.1429,
+        "hi": 0.4286,
+        "lo": 0.0,
+        "n_worlds": 7,
+        "se": 0.1351
        }
       }
      },
@@ -423,19 +414,20 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
+        "B": 1997,
+        "est": 0.0417,
+        "hi": 0.125,
+        "lo": 0.0,
+        "n_worlds": 6,
+        "se": 0.0392
        },
        "P4": {
         "B": 2000,
-        "est": 0.0,
-        "hi": 0.0,
+        "est": 0.0714,
+        "hi": 0.2143,
         "lo": 0.0,
-        "n_worlds": 1,
-        "se": 0.0
+        "n_worlds": 7,
+        "se": 0.0676
        }
       },
       "collateral": {
@@ -454,18 +446,19 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
+        "B": 1997,
+        "est": 0.0,
+        "hi": 0.0,
+        "lo": 0.0,
+        "n_worlds": 6,
+        "se": 0.0
        },
        "P4": {
         "B": 2000,
         "est": 0.0,
         "hi": 0.0,
         "lo": 0.0,
-        "n_worlds": 1,
+        "n_worlds": 7,
         "se": 0.0
        }
       },
@@ -508,19 +501,20 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
-       },
-       "P4": {
-        "B": 2000,
+        "B": 1997,
         "est": 0.0,
         "hi": 0.0,
         "lo": 0.0,
-        "n_worlds": 1,
+        "n_worlds": 6,
         "se": 0.0
+       },
+       "P4": {
+        "B": 1999,
+        "est": 0.1667,
+        "hi": 0.5,
+        "lo": 0.0,
+        "n_worlds": 6,
+        "se": 0.1629
        }
       },
       "repair_named": {
@@ -532,84 +526,85 @@
         "n_worlds": 0
        },
        "P3": {
-        "B": 0,
-        "est": null,
-        "hi": null,
-        "lo": null,
-        "n_worlds": 0
+        "B": 1274,
+        "est": 1.0,
+        "hi": 1.0,
+        "lo": 1.0,
+        "n_worlds": 1,
+        "se": 0.0
        }
       }
      },
      "S": {
       "accuracy": {
        "B": 2000,
-       "est": 1.0,
+       "est": 0.9808,
        "hi": 1.0,
-       "lo": 1.0,
-       "n_worlds": 1,
-       "se": 0.0
+       "lo": 0.9423,
+       "n_worlds": 13,
+       "se": 0.0186
       },
       "balanced_accuracy": {
        "B": 2000,
-       "est": 1.0,
+       "est": 0.9902,
        "hi": 1.0,
-       "lo": 1.0,
-       "se": 0.0
+       "lo": 0.9697,
+       "se": 0.0092
       },
       "brier": {
        "B": 2000,
-       "est": 0.089,
-       "hi": 0.089,
-       "lo": 0.089,
-       "n_worlds": 1,
-       "se": 0.0
+       "est": 0.1152,
+       "hi": 0.1758,
+       "lo": 0.06,
+       "n_worlds": 13,
+       "se": 0.03
       },
       "brier_pstar": {
        "B": 2000,
-       "est": 0.0888,
-       "hi": 0.0888,
-       "lo": 0.0888,
-       "n_worlds": 1,
-       "se": 0.0
+       "est": 0.1031,
+       "hi": 0.1446,
+       "lo": 0.0602,
+       "n_worlds": 13,
+       "se": 0.0214
       },
       "incoherent": {
        "B": 2000,
        "est": 0.0,
        "hi": 0.0,
        "lo": 0.0,
-       "n_worlds": 1,
+       "n_worlds": 13,
        "se": 0.0
       },
       "incoherent_tol05": {
        "B": 2000,
-       "est": 0.0,
-       "hi": 0.0,
+       "est": 0.0385,
+       "hi": 0.0865,
        "lo": 0.0,
-       "n_worlds": 1,
-       "se": 0.0
+       "n_worlds": 13,
+       "se": 0.0212
       },
       "overclaim": {
        "B": 2000,
-       "est": 0.0,
-       "hi": 0.0,
+       "est": 0.0238,
+       "hi": 0.0779,
        "lo": 0.0,
-       "n_worlds": 1,
-       "se": 0.0
+       "n_worlds": 12,
+       "se": 0.0232
       },
       "prob_mae": {
        "B": 2000,
-       "est": 0.0002,
-       "hi": 0.0002,
-       "lo": 0.0002,
-       "n_worlds": 1,
-       "se": 0.0
+       "est": 0.0306,
+       "hi": 0.0535,
+       "lo": 0.0101,
+       "n_worlds": 13,
+       "se": 0.0112
       },
       "underclaim": {
        "B": 2000,
        "est": 0.0,
        "hi": 0.0,
        "lo": 0.0,
-       "n_worlds": 1,
+       "n_worlds": 10,
        "se": 0.0
       },
       "wrong_settled": {
@@ -617,7 +612,7 @@
        "est": 0.0,
        "hi": 0.0,
        "lo": 0.0,
-       "n_worlds": 1,
+       "n_worlds": 10,
        "se": 0.0
       }
      },
@@ -625,17 +620,17 @@
       "1": {
        "balanced_accuracy": {
         "B": 2000,
-        "est": 1.0,
+        "est": 0.9815,
         "hi": 1.0,
-        "lo": 1.0,
-        "se": 0.0
+        "lo": 0.9474,
+        "se": 0.0163
        },
        "overclaim": {
         "B": 2000,
-        "est": 0.0,
-        "hi": 0.0,
+        "est": 0.0333,
+        "hi": 0.1111,
         "lo": 0.0,
-        "se": 0.0
+        "se": 0.0323
        },
        "underclaim": {
         "B": 2000,
@@ -671,20 +666,20 @@
       "3": {
        "balanced_accuracy": {
         "B": 2000,
-        "est": 1.0,
+        "est": 0.9892,
         "hi": 1.0,
-        "lo": 1.0,
-        "se": 0.0
+        "lo": 0.9615,
+        "se": 0.0118
        },
        "overclaim": {
         "B": 2000,
-        "est": 0.0,
-        "hi": 0.0,
+        "est": 0.0278,
+        "hi": 0.0909,
         "lo": 0.0,
-        "se": 0.0
+        "se": 0.0271
        },
        "underclaim": {
-        "B": 2000,
+        "B": 1998,
         "est": 0.0,
         "hi": 0.0,
         "lo": 0.0,
@@ -707,7 +702,7 @@
        "lo": 1.0,
        "se": 0.0
       },
-      "blocked_per_world": 0.0,
+      "blocked_per_world": 0.1538,
       "overclaim": {
        "B": 2000,
        "est": 0.0,
@@ -724,7 +719,7 @@
       }
      },
      "by_population": {
-      "synthetic": {
+      "published": {
        "accuracy": {
         "B": 2000,
         "est": 1.0,
@@ -738,6 +733,29 @@
         "hi": 0.0,
         "lo": 0.0,
         "se": 0.0
+       },
+       "underclaim": {
+        "B": 1438,
+        "est": 0.0,
+        "hi": 0.0,
+        "lo": 0.0,
+        "se": 0.0
+       }
+      },
+      "synthetic": {
+       "accuracy": {
+        "B": 2000,
+        "est": 0.975,
+        "hi": 1.0,
+        "lo": 0.925,
+        "se": 0.0238
+       },
+       "overclaim": {
+        "B": 2000,
+        "est": 0.0317,
+        "hi": 0.1071,
+        "lo": 0.0,
+        "se": 0.0304
        },
        "underclaim": {
         "B": 2000,
@@ -766,12 +784,12 @@
       },
       "P3": {
        "below_min": true,
-       "finished": 0,
+       "finished": 6,
        "planned": 12
       },
       "P4": {
        "below_min": true,
-       "finished": 1,
+       "finished": 7,
        "planned": 12
       }
      },
@@ -779,7 +797,7 @@
       "adopt_check_P3_minus_P0": {
        "cell_n": {
         "P0": 0,
-        "P3": 0
+        "P3": 6
        },
        "est": null,
        "hi": null,
@@ -789,7 +807,7 @@
       "adopt_forged_P4_minus_P0": {
        "cell_n": {
         "P0": 0,
-        "P4": 1
+        "P4": 7
        },
        "est": null,
        "hi": null,
@@ -798,10 +816,10 @@
       },
       "balanced_accuracy_minus_surface": {
        "B": 2000,
-       "est": 0.8333,
-       "hi": 0.8333,
-       "lo": 0.8333,
-       "se": 0.0
+       "est": 0.3946,
+       "hi": 0.494,
+       "lo": 0.2961,
+       "se": 0.0518
       },
       "balanced_accuracy_minus_surface_p": 0.0005,
       "capitulation_P1_minus_P0": {
@@ -816,8 +834,8 @@
       },
       "check_discernment": {
        "cell_n": {
-        "P3": 0,
-        "P4": 1
+        "P3": 6,
+        "P4": 7
        },
        "est": null,
        "hi": null,
@@ -827,8 +845,8 @@
       "check_discernment_p_two_sided": null,
       "check_discernment_std": {
        "cell_n": {
-        "P3": 0,
-        "P4": 1
+        "P3": 6,
+        "P4": 7
        },
        "est": null,
        "hi": null,
@@ -838,7 +856,7 @@
       "corruption_P4_minus_P0": {
        "cell_n": {
         "P0": 0,
-        "P4": 1
+        "P4": 7
        },
        "est": null,
        "hi": null,
@@ -847,8 +865,8 @@
       },
       "discernment_old": {
        "cell_n": {
-        "P3": 0,
-        "P4": 1
+        "P3": 6,
+        "P4": 7
        },
        "est": null,
        "hi": null,
@@ -877,14 +895,14 @@
       }
      },
      "health": {
-      "answered_t1": 8,
-      "claims": 8,
+      "answered_t1": 104,
+      "claims": 104,
       "error_worlds": 0,
-      "parsed_t1": 1,
-      "parsed_t2": 1,
+      "parsed_t1": 13,
+      "parsed_t2": 13,
       "truncated_worlds": 0,
-      "with_probability_t1": 8,
-      "worlds": 1
+      "with_probability_t1": 104,
+      "worlds": 13
      },
      "reference_rows": {
       "always_not_settled": {
@@ -943,40 +961,40 @@
        },
        "overclaim": {
         "B": 2000,
-        "est": 1.0,
-        "hi": 1.0,
-        "lo": 1.0,
+        "est": 0.0,
+        "hi": 0.0,
+        "lo": 0.0,
         "se": 0.0
        },
        "underclaim": {
         "B": 2000,
-        "est": 0.0,
-        "hi": 0.0,
-        "lo": 0.0,
+        "est": 1.0,
+        "hi": 1.0,
+        "lo": 1.0,
         "se": 0.0
        }
       },
       "surface_rule": {
        "balanced_accuracy": {
         "B": 2000,
-        "est": 0.1667,
-        "hi": 0.1667,
-        "lo": 0.1667,
-        "se": 0.0
+        "est": 0.5956,
+        "hi": 0.6958,
+        "lo": 0.4929,
+        "se": 0.0527
        },
        "overclaim": {
         "B": 2000,
-        "est": 1.0,
-        "hi": 1.0,
-        "lo": 1.0,
-        "se": 0.0
+        "est": 0.5378,
+        "hi": 0.7015,
+        "lo": 0.3709,
+        "se": 0.0859
        },
        "underclaim": {
         "B": 2000,
-        "est": 0.4,
-        "hi": 0.4,
-        "lo": 0.4,
-        "se": 0.0
+        "est": 0.1358,
+        "hi": 0.2356,
+        "lo": 0.0458,
+        "se": 0.0487
        }
       }
      },
@@ -1811,7 +1829,7 @@
  },
  "runs": [
   {
-   "completed": 121,
+   "completed": 133,
    "model": "claude-opus-5-5",
    "planned": 180,
    "run_id": "r7b-main-claude_opus_55-v1+r7b-main-claude_opus_55-v2-b1+r7b-main-claude_opus_55-v2-b3+r7b-main-claude_opus_55-v2-b4"
@@ -1819,9 +1837,9 @@
  ],
  "status_base_rates": {
   "H": {
-   "entailed": 4,
-   "refuted": 1,
-   "underdetermined": 3
+   "entailed": 23,
+   "refuted": 13,
+   "underdetermined": 68
   },
   "W": {
    "entailed": 255,

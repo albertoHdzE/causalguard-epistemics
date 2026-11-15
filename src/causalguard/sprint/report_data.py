@@ -314,6 +314,15 @@ def supplement(o: Path) -> dict | None:
     dv = None if not full or d.get("not_testable") else d.get("est")
     bw = _est(S["tiers"]["W"]["S"]["balanced_accuracy"])
     bh = _est(t["S"]["balanced_accuracy"])
+    nh = sum(x["finished"] for x in cells.values())      # Task S is not a cell contrast: all finished worlds count
+    failed = {a["item_id"] for a in _attempts("r7b-main-claude_opus_55-v2-b4") if a.get("status") != "ok"}
+    first = {}                                           # why each failed world failed (its FIRST attempt)
+    for f in sorted(glob.glob(str(_runs() / "r7b-main-claude_opus_55-v2-b4" / "attempts" / "*" / "001.json"))):
+        a = json.loads(Path(f).read_text())
+        if a.get("status") != "ok" and a["item_id"] in failed:
+            err = str((a.get("output") or {}).get("error"))
+            first[a["item_id"]] = "turn-1 timeout (600 s)" if "timeout" in err else (
+                "usage-limit pause past 23:00 CST" if "pause deadline" in err else err[:80])
     return {"label": "post-freeze supplement (amendment v2-a4)", "run_id": "r7b-main-claude_opus_55-v2-b4",
             "first_request": first_request("r7b-main-claude_opus_55-v2-b4"),
             "amendment": _git_time("5c2b18a"), "cells": cells, "both_cells_12": full,
@@ -325,9 +334,12 @@ def supplement(o: Path) -> dict | None:
                  "rule": "Claude: Tier H check discernment < 0.15", "outcome": _out(None if dv is None else dv < 0.15),
                  "value": dv},
                 {"id": "P-A5", "scope": "Claude only (DeepSeek ran no Tier H)",
-                 "rule": "Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the P3 + P4 worlds)",
-                 "outcome": _out(None if not full or bw is None or bh is None else (bw > 0.80 and bh <= 0.60)),
-                 "value": {"ba_W": bw, "ba_H": bh}}]}
+                 "rule": "Claude Tier W BA > 0.80 and Claude Tier H BA <= 0.60 (Task S on the finished P3 + P4 "
+                         "worlds, >= 12)",
+                 "outcome": _out(None if nh < 12 or bw is None or bh is None else (bw > 0.80 and bh <= 0.60)),
+                 "value": {"ba_W": bw, "ba_H": bh, "worlds_H": nh}}],
+            "worlds_finished": nh, "worlds_planned": sum(x["planned"] for x in cells.values()),
+            "failed_first_cause": {k: sum(1 for v in first.values() if v == k) for k in sorted(set(first.values()))}}
 
 
 def build(out: str) -> dict:
